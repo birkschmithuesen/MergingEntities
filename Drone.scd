@@ -1,3 +1,10 @@
+ServerOptions.devices; // all devices
+
+Server.local.options.numOutputBusChannels = 4;
+Server.default.options.outDevice_("Fireface UC Mac (23557042)");
+s.reboot;
+
+
 (
 /*
 A lush drone using a waveshaping algorithm for interpolating between multiple wavetables. This code is based off of a similar code example by totalgee:
