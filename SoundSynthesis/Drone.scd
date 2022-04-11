@@ -1,7 +1,7 @@
 ServerOptions.devices; // all devices
 
-Server.local.options.numOutputBusChannels = 4;
-Server.default.options.outDevice_("Fireface UC Mac (23557042)");
+Server.local.options.numOutputBusChannels = 12;
+Server.default.options.outDevice_("Soundflower (64ch)");
 s.reboot;
 
 
@@ -145,18 +145,18 @@ s.waitForBoot({
 s.meter;
 
 (
-OSCdef.new(\Positionx0, {
+OSCdef.new(\Positionx1, {
 	arg msg;
 	~synths.do(_.set(\freq, msg[1].linlin(0,7,10,100)));
-}, '/Positionx0'
+}, '/Positionx1'
 );
 
 
 
-OSCdef.new(\Positiony0, {
+OSCdef.new(\Positiony1, {
 	arg msg;
 	~synths.do(_.set(\filter, msg[1].linexp(0,3,20,8000)));
-}, '/Positiony0'
+}, '/Positiony1'
 );
 )
 
@@ -167,6 +167,7 @@ OSCdef.new(\Positiony0, {
 /////////////////////////
 
 (
+
 	/*
 	Create two Osc Synths, reading their wavetable
 	data from ~i0Buf and ~i1Buf
