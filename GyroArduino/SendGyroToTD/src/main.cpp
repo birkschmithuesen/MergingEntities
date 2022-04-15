@@ -27,6 +27,9 @@ MPU9250Setting setting;
 float qX1 = 0, qY1 = 0, qZ1 = 0, qW1 = 0;
 float qX2 = 0, qY2 = 0, qZ2 = 0, qW2 = 0;
 
+float oX1 = 0, oY1 = 0, oZ1 = 0;
+float oX2 = 0, oY2 = 0, oZ2 = 0;
+
 int deltaT = 50; //Communication rate
 
 //Function to connect WiFi
@@ -68,8 +71,8 @@ void startUdp() {
 void setup() {
   Serial.begin(115200);
 
-  //connectWiFi();
-  //startUdp();
+  connectWiFi();
+  startUdp();
   
   Wire.begin();
   delay(2000);
@@ -84,32 +87,33 @@ void setup() {
   setting.accel_dlpf_cfg = ACCEL_DLPF_CFG::DLPF_45HZ;
 
   mpu1.setup(0x68, setting);  // change to your own address
-  mpu2.setup(0x69, setting);
+  //mpu2.setup(0x69, setting);
 
   Serial.println("Calibration of acceleration : don't move devices");
   mpu1.calibrateAccelGyro();
-  mpu2.calibrateAccelGyro();
+  //mpu2.calibrateAccelGyro();
   Serial.println("Calibration of mag 1");
   mpu1.setMagneticDeclination(2.53);
   mpu1.calibrateMag();
 
   Serial.println("Calibration of mag 2");
-  mpu2.setMagneticDeclination(2.53);
-  mpu2.calibrateMag();
+  //mpu2.setMagneticDeclination(2.53);
+  //mpu2.calibrateMag();
 
   mpu1.setFilterIterations(10);
-  mpu2.setFilterIterations(10);
+  //mpu2.setFilterIterations(10);
 
-  QuatFilterSel sel{QuatFilterSel::MAHONY};
+  QuatFilterSel sel{QuatFilterSel::MADGWICK};
 
   mpu1.selectFilter(sel);
-  mpu2.selectFilter(sel);
+  //mpu2.selectFilter(sel);
+
 
 }
 
 void loop() {
   //--------MPU recording--------
-  mpu2.update();
+  //mpu2.update();
   mpu1.update();
 
   static unsigned long last_print=0;
@@ -119,38 +123,64 @@ void loop() {
         Serial.print(mpu1.getQuaternionX()); Serial.print(", ");
         Serial.print(mpu1.getQuaternionY()); Serial.print(", ");
         Serial.print(mpu1.getQuaternionZ()); Serial.print(" /////");
-        Serial.print(mpu2.getQuaternionX()); Serial.print(", ");
-        Serial.print(mpu2.getQuaternionY()); Serial.print(", ");
-        Serial.println(mpu2.getQuaternionZ());
+        //Serial.print(mpu2.getQuaternionX()); Serial.print(", ");
+        //Serial.print(mpu2.getQuaternionY()); Serial.print(", ");
+        //Serial.println(mpu2.getQuaternionZ());
 
         qX1 = mpu1.getQuaternionX();
         qY1 = mpu1.getQuaternionY();
         qZ1 = mpu1.getQuaternionZ();
         qW1 = mpu1.getQuaternionW();
 
-        qX2 = mpu2.getQuaternionX();
-        qY2 = mpu2.getQuaternionY();
-        qZ2 = mpu2.getQuaternionZ();
-        qW2 = mpu2.getQuaternionW();
+        //qX2 = mpu2.getQuaternionX();
+        //qY2 = mpu2.getQuaternionY();
+        //qZ2 = mpu2.getQuaternionZ();
+        //qW2 = mpu2.getQuaternionW();
+
+        oX1 = mpu1.getEulerX();
+        oY1 = mpu1.getEulerY();
+        oZ1 = mpu1.getEulerZ();
+
+        //oX2 = mpu2.getEulerX();
+        //oY2 = mpu2.getEulerY();
+        //oZ2 = mpu2.getEulerZ();
+
+
         last_print=millis();
   }
 
   //-------OSC comm--------
-  /*
-  OSCMessage gyro1("/gyro1/quater");
-  OSCMessage gyro2("/gyro2/quater");
+  OSCMessage gyroQuater1("/gyro1/quater");
+  OSCMessage gyroQuater2("/gyro2/quater");
+
+  OSCMessage gyroAngle1("/gyro1/angle");
+  OSCMessage gyroAngle2("/gyro2/angle");
   
-  gyro1.add(qX1).add(qY1).add(qZ1).add(qW1);//We put the quater data into the message
-  gyro2.add(qX2).add(qY2).add(qZ2).add(qW2);
+  gyroQuater1.add(qX1).add(qY1).add(qZ1).add(qW1);//We put the quater data into the message
+  //gyroQuater2.add(qX2).add(qY2).add(qZ2).add(qW2);
+
+  gyroAngle1.add(oX1).add(oY1).add(oZ1);//We put the angle data into the message
+  //gyroAngle2.add(oX2).add(oY2).add(oZ2);
 
   Udp.beginPacket(outIp, outPort); //intitializes packet transmission -- by giving the IP and the port = UDP way to communicate
-  gyro1.send(Udp); //sends the message
+  gyroQuater1.send(Udp); //sends the message
   Udp.endPacket();//terminates the connection
 
   Udp.beginPacket(outIp, outPort); //intitializes packet transmission -- by giving the IP and the port = UDP way to communicate
-  gyro2.send(Udp); //sends the message
+  //gyroQuater2.send(Udp); //sends the message
   Udp.endPacket();
 
-  gyro1.empty();
-  gyro2.empty();*/
+  Udp.beginPacket(outIp, outPort); //intitializes packet transmission -- by giving the IP and the port = UDP way to communicate
+  gyroAngle1.send(Udp); //sends the message
+  Udp.endPacket();//terminates the connection
+
+  Udp.beginPacket(outIp, outPort); //intitializes packet transmission -- by giving the IP and the port = UDP way to communicate
+  //gyroAngle2.send(Udp); //sends the message
+  Udp.endPacket();
+
+  gyroQuater1.empty();
+  gyroQuater2.empty();
+
+  gyroAngle1.empty();
+  gyroAngle2.empty();
 }
