@@ -89,28 +89,39 @@ void setup() {
   Serial.println("Calibration of acceleration : don't move devices");
   mpu1.calibrateAccelGyro();
   mpu2.calibrateAccelGyro();
-  Serial.println("Calibration of mags");
+  Serial.println("Calibration of mag 1");
   mpu1.setMagneticDeclination(2.53);
   mpu1.calibrateMag();
 
+  Serial.println("Calibration of mag 2");
+  mpu2.setMagneticDeclination(2.53);
+  mpu2.calibrateMag();
+
+  mpu1.setFilterIterations(10);
+  mpu2.setFilterIterations(10);
+
+  QuatFilterSel sel{QuatFilterSel::MAHONY};
+
+  mpu1.selectFilter(sel);
+  mpu2.selectFilter(sel);
 
 }
 
 void loop() {
   //--------MPU recording--------
-  mpu1.update();
   mpu2.update();
+  mpu1.update();
 
   static unsigned long last_print=0;
   
   
   if (millis()-last_print > 100) {
-        Serial.print(mpu1.getEulerX()); Serial.print(", ");
-        Serial.print(mpu1.getEulerY()); Serial.print(", ");
-        Serial.print(mpu1.getEulerZ()); Serial.print(" /////");
-        Serial.print(mpu2.getEulerX()); Serial.print(", ");
-        Serial.print(mpu2.getEulerY()); Serial.print(", ");
-        Serial.println(mpu2.getEulerZ());
+        Serial.print(mpu1.getQuaternionX()); Serial.print(", ");
+        Serial.print(mpu1.getQuaternionY()); Serial.print(", ");
+        Serial.print(mpu1.getQuaternionZ()); Serial.print(" /////");
+        Serial.print(mpu2.getQuaternionX()); Serial.print(", ");
+        Serial.print(mpu2.getQuaternionY()); Serial.print(", ");
+        Serial.println(mpu2.getQuaternionZ());
 
         qX1 = mpu1.getQuaternionX();
         qY1 = mpu1.getQuaternionY();
