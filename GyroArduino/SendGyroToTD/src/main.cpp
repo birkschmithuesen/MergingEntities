@@ -68,14 +68,14 @@ void startUdp() {
 void setup() {
   Serial.begin(115200);
 
-  connectWiFi();
-  startUdp();
+  //connectWiFi();
+  //startUdp();
   
   Wire.begin();
   delay(2000);
 
-  setting.accel_fs_sel = ACCEL_FS_SEL::A2G;
-  setting.gyro_fs_sel = GYRO_FS_SEL::G250DPS;
+  setting.accel_fs_sel = ACCEL_FS_SEL::A4G;
+  setting.gyro_fs_sel = GYRO_FS_SEL::G500DPS;
   setting.mag_output_bits = MAG_OUTPUT_BITS::M16BITS;
   setting.fifo_sample_rate = FIFO_SAMPLE_RATE::SMPL_200HZ;
   setting.gyro_fchoice = 0x03;
@@ -86,21 +86,25 @@ void setup() {
   mpu1.setup(0x68, setting);  // change to your own address
   mpu2.setup(0x69, setting);
 
-  mpu1.setMagneticDeclination(2.53);
-  mpu2.setMagneticDeclination(2.53);
   Serial.println("Calibration of acceleration : don't move devices");
   mpu1.calibrateAccelGyro();
   mpu2.calibrateAccelGyro();
-  Serial.println("Calibration of 1 : round the MPU");
+  Serial.println("Calibration of mags");
+  mpu1.setMagneticDeclination(2.53);
   mpu1.calibrateMag();
-  Serial.println("Calibration of 2 : round the MPU");
-  mpu2.calibrateMag();
-  
+
+
 }
 
 void loop() {
   //--------MPU recording--------
-  if (mpu1.update() && mpu2.update()) {
+  mpu1.update();
+  mpu2.update();
+
+  static unsigned long last_print=0;
+  
+  
+  if (millis()-last_print > 100) {
         Serial.print(mpu1.getEulerX()); Serial.print(", ");
         Serial.print(mpu1.getEulerY()); Serial.print(", ");
         Serial.print(mpu1.getEulerZ()); Serial.print(" /////");
@@ -117,9 +121,11 @@ void loop() {
         qY2 = mpu2.getQuaternionY();
         qZ2 = mpu2.getQuaternionZ();
         qW2 = mpu2.getQuaternionW();
-    }
+        last_print=millis();
+  }
 
   //-------OSC comm--------
+  /*
   OSCMessage gyro1("/gyro1/quater");
   OSCMessage gyro2("/gyro2/quater");
   
@@ -135,5 +141,5 @@ void loop() {
   Udp.endPacket();
 
   gyro1.empty();
-  gyro2.empty();
+  gyro2.empty();*/
 }
