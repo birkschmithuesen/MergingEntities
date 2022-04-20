@@ -2,6 +2,7 @@ ServerOptions.devices; // all devices
 
 Server.local.options.numOutputBusChannels = 2;
 Server.default.options.outDevice_("Fireface UC Mac (23557042)");
+Server.default.options.outDevice_("External Headphones");
 s.reboot;
 
 (
