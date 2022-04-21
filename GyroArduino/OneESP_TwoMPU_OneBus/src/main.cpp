@@ -22,7 +22,8 @@ int localPort = 8888; //Port of ESP
 //Setting to initialiye gyro recording
 MPU9250 mpu1; // You can also use MPU9255 as is
 MPU9250 mpu2;
-MPU9250Setting setting;
+MPU9250Setting setting1;
+MPU9250Setting setting2;
 
 float qX1 = 0, qY1 = 0, qZ1 = 0, qW1 = 0;
 float qX2 = 0, qY2 = 0, qZ2 = 0, qW2 = 0;
@@ -77,44 +78,52 @@ void setup() {
   Wire.begin();
   delay(2000);
 
-  setting.accel_fs_sel = ACCEL_FS_SEL::A4G;
-  setting.gyro_fs_sel = GYRO_FS_SEL::G500DPS;
-  setting.mag_output_bits = MAG_OUTPUT_BITS::M16BITS;
-  setting.fifo_sample_rate = FIFO_SAMPLE_RATE::SMPL_200HZ;
-  setting.gyro_fchoice = 0x03;
-  setting.gyro_dlpf_cfg = GYRO_DLPF_CFG::DLPF_41HZ;
-  setting.accel_fchoice = 0x01;
-  setting.accel_dlpf_cfg = ACCEL_DLPF_CFG::DLPF_45HZ;
+  setting1.accel_fs_sel = ACCEL_FS_SEL::A4G;
+  setting1.gyro_fs_sel = GYRO_FS_SEL::G500DPS;
+  setting1.mag_output_bits = MAG_OUTPUT_BITS::M16BITS;
+  setting1.fifo_sample_rate = FIFO_SAMPLE_RATE::SMPL_200HZ;
+  setting1.gyro_fchoice = 0x03;
+  setting1.gyro_dlpf_cfg = GYRO_DLPF_CFG::DLPF_41HZ;
+  setting1.accel_fchoice = 0x01;
+  setting1.accel_dlpf_cfg = ACCEL_DLPF_CFG::DLPF_45HZ;
 
-  mpu1.setup(0x68, setting);  // change to your own address
-  mpu2.setup(0x69, setting);
+  setting2.accel_fs_sel = ACCEL_FS_SEL::A4G;
+  setting2.gyro_fs_sel = GYRO_FS_SEL::G500DPS;
+  setting2.mag_output_bits = MAG_OUTPUT_BITS::M16BITS;
+  setting2.fifo_sample_rate = FIFO_SAMPLE_RATE::SMPL_200HZ;
+  setting2.gyro_fchoice = 0x03;
+  setting2.gyro_dlpf_cfg = GYRO_DLPF_CFG::DLPF_41HZ;
+  setting2.accel_fchoice = 0x01;
+  setting2.accel_dlpf_cfg = ACCEL_DLPF_CFG::DLPF_45HZ;
+
+  mpu1.setup(0x68, setting1);  // change to your own address
+  mpu2.setup(0x69, setting2);
 
   Serial.println("Calibration of acceleration : don't move devices");
   mpu1.calibrateAccelGyro();
   mpu2.calibrateAccelGyro();
   Serial.println("Calibration of mag 1");
   mpu1.setMagneticDeclination(2.53);
-  mpu1.calibrateMag();
+  //mpu1.calibrateMag();
 
   Serial.println("Calibration of mag 2");
   mpu2.setMagneticDeclination(2.53);
-  mpu2.calibrateMag();
+  //mpu2.calibrateMag();
+
+  QuatFilterSel sel1{QuatFilterSel::MADGWICK};
+  QuatFilterSel sel2{QuatFilterSel::MADGWICK};
+  
+  mpu1.selectFilter(sel1);
+  mpu2.selectFilter(sel2);
 
   mpu1.setFilterIterations(10);
   mpu2.setFilterIterations(10);
-
-  QuatFilterSel sel{QuatFilterSel::NONE};
-
-  mpu1.selectFilter(sel);
-  mpu2.selectFilter(sel);
-
-
 }
 
 void loop() {
   //--------MPU recording--------
   mpu2.update();
-  mpu1.update();
+  //mpu1.update();
 
   static unsigned long last_print=0;
   

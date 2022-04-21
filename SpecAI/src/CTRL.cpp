@@ -1,4 +1,5 @@
 #include <Arduino.h>
+
 #include <SPI.h>
 #include <Ethernet.h>
 #include <EthernetUdp.h>         // UDP library from: bjoern@cs.stanford.edu 12/30/2008
@@ -187,7 +188,7 @@ void loop() {
       }
 
       //if its DMX data we will read it now
-      if (is_opcode_is_dmx = 1) {
+      if (is_opcode_is_dmx == 1) {
         last_incoming_universe = incoming_universe;
         //read incoming universe
         incoming_universe = bytes_to_short(packetBuffer[15], packetBuffer[14])
