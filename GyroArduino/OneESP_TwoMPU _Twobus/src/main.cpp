@@ -10,15 +10,15 @@
 #include "MPU9250.h"
 
 //Settings to connect to WiFi
-#define WIFI_SSID "TheaterDo-GAST"
-#define WIFI_PASS "theaterdortmund"
+#define WIFI_SSID "ArtNet4Hans"
+#define WIFI_PASS "kaesimira"
 
 #define SDA_PIN 27
 #define SCL_PIN 26
 
 //Settings to communicate through WiFi
 WiFiUDP Udp;
-IPAddress outIp(192,168,193,221); //IP of the computer
+IPAddress outIp(192,168,0,2); //IP of the computer
 int outPort = 8000; //Port on PC
 int localPort = 8888; //Port of ESP
 
@@ -78,8 +78,8 @@ void setup() {
   connectWiFi();
   startUdp();
   
-  Wire.begin(); 
-  Wire1.begin(SDA_PIN,SCL_PIN); //Do not modify names of Wire and Wire1
+  Wire.begin(); //SDA =21 SCL = 22 SDA WHITE SCL YELLOW, ADRESS = 0x68 
+  Wire1.begin(SDA_PIN,SCL_PIN); //Do not modify names of Wire and Wire1 SDA = 27  SCL = 26
   delay(2000);
 
   setting1.accel_fs_sel = ACCEL_FS_SEL::A4G;
