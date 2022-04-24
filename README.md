@@ -6,6 +6,7 @@ A research project at Academy for theatre and digitality: https://theater.digita
 Produced by ArtesMobiles https://artesmobiles.art
 
 ## Software Parts
+Get an overview in the flowchart.PDF
 * GyropArduino: Arduino (Platformio) Code for gyroscopes
 * SoundSynthesis: SuperCollider
 * touchdesigner: Tracking, MachineLearning
@@ -20,3 +21,5 @@ Produced by ArtesMobiles https://artesmobiles.art
   * open a textport and try to "import Keras"
 
 More infos: https://derivative.ca/community-post/tutorial/anaconda-managing-python-environments-and-3rd-party-libraries-touchdesigner
+
+
