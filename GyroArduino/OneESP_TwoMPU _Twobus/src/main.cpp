@@ -13,8 +13,8 @@
 #define WIFI_SSID "ArtNet4Hans"
 #define WIFI_PASS "kaesimira"
 
-#define SDA_PIN 27
-#define SCL_PIN 26
+#define SDA_PIN 26
+#define SCL_PIN 27
 
 //Settings to communicate through WiFi
 WiFiUDP Udp;
@@ -101,18 +101,18 @@ void setup() {
   setting2.accel_dlpf_cfg = ACCEL_DLPF_CFG::DLPF_45HZ;
 
   mpu1.setup(0x68, setting1, Wire);  // connect to default PIN SDA SCL
-  mpu2.setup(0x69, setting2, Wire1);// connect to SCL_PIN, SDA_PIN
+  mpu2.setup(0x68, setting2, Wire1);// connect to SCL_PIN, SDA_PIN
 
   Serial.println("Calibration of acceleration : don't move devices");
   mpu1.calibrateAccelGyro();
   mpu2.calibrateAccelGyro();
   Serial.println("Calibration of mag 1");
   mpu1.setMagneticDeclination(2.53);
-  //mpu1.calibrateMag();
+  mpu1.calibrateMag();
 
   Serial.println("Calibration of mag 2");
   mpu2.setMagneticDeclination(2.53);
-  //mpu2.calibrateMag();
+  mpu2.calibrateMag();
 
   QuatFilterSel sel1{QuatFilterSel::MADGWICK};
   QuatFilterSel sel2{QuatFilterSel::MADGWICK};
@@ -141,27 +141,26 @@ void loop() {
         Serial.print(mpu2.getQuaternionY()); Serial.print(", ");
         Serial.println(mpu2.getQuaternionZ());
 
-        qX1 = mpu1.getQuaternionX();
-        qY1 = mpu1.getQuaternionY();
-        qZ1 = mpu1.getQuaternionZ();
-        qW1 = mpu1.getQuaternionW();
-
-        qX2 = mpu2.getQuaternionX();
-        qY2 = mpu2.getQuaternionY();
-        qZ2 = mpu2.getQuaternionZ();
-        qW2 = mpu2.getQuaternionW();
-
-        oX1 = mpu1.getEulerX();
-        oY1 = mpu1.getEulerY();
-        oZ1 = mpu1.getEulerZ();
-
-        oX2 = mpu2.getEulerX();
-        oY2 = mpu2.getEulerY();
-        oZ2 = mpu2.getEulerZ();
-
-
         last_print=millis();
   }
+
+  qX1 = mpu1.getQuaternionX();
+  qY1 = mpu1.getQuaternionY();
+  qZ1 = mpu1.getQuaternionZ();
+  qW1 = mpu1.getQuaternionW();
+
+  qX2 = mpu2.getQuaternionX();
+  qY2 = mpu2.getQuaternionY();
+  qZ2 = mpu2.getQuaternionZ();
+  qW2 = mpu2.getQuaternionW();
+
+  oX1 = mpu1.getEulerX();
+  oY1 = mpu1.getEulerY();
+  oZ1 = mpu1.getEulerZ();
+
+  oX2 = mpu2.getEulerX();
+  oY2 = mpu2.getEulerY();
+  oZ2 = mpu2.getEulerZ();
 
   //-------OSC comm--------
   OSCMessage gyroQuater1("/gyro1/quater");
