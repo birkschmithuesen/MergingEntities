@@ -12,9 +12,12 @@
 //Settings to connect to WiFi
 #define WIFI_SSID "ArtNet4Hans"
 #define WIFI_PASS "kaesimira"
+#define LED_BUILTIN 2
 
 #define SDA_PIN 26
 #define SCL_PIN 27
+
+
 
 //Settings to communicate through WiFi
 WiFiUDP Udp;
@@ -35,6 +38,9 @@ float oX1 = 0, oY1 = 0, oZ1 = 0;
 float oX2 = 0, oY2 = 0, oZ2 = 0;
 
 int deltaT = 50; //Communication rate
+
+int redPin = 4; //Pin to indicate when its calibrating
+int greenPin = 25; 
 
 //Function to connect WiFi
 void connectWiFi() //Let's connect a WiFi
@@ -82,6 +88,16 @@ void setup() {
   Wire1.begin(SDA_PIN,SCL_PIN); //Do not modify names of Wire and Wire1 SDA = 27  SCL = 26
   delay(2000);
 
+  /*pinMode(greenPin, OUTPUT);
+  digitalWrite(greenPin, LOW);
+
+  pinMode(redPin, OUTPUT);
+  digitalWrite(redPin, LOW);*/
+
+  pinMode(LED_BUILTIN, OUTPUT);
+
+  
+
   setting1.accel_fs_sel = ACCEL_FS_SEL::A4G;
   setting1.gyro_fs_sel = GYRO_FS_SEL::G500DPS;
   setting1.mag_output_bits = MAG_OUTPUT_BITS::M16BITS;
@@ -103,16 +119,24 @@ void setup() {
   mpu1.setup(0x68, setting1, Wire);  // connect to default PIN SDA SCL
   mpu2.setup(0x68, setting2, Wire1);// connect to SCL_PIN, SDA_PIN
 
+  digitalWrite(LED_BUILTIN, HIGH);
   Serial.println("Calibration of acceleration : don't move devices");
   mpu1.calibrateAccelGyro();
   mpu2.calibrateAccelGyro();
+
+  digitalWrite(LED_BUILTIN, LOW);
+
   Serial.println("Calibration of mag 1");
   mpu1.setMagneticDeclination(2.53);
   mpu1.calibrateMag();
 
+  digitalWrite(LED_BUILTIN, HIGH);
+
   Serial.println("Calibration of mag 2");
   mpu2.setMagneticDeclination(2.53);
   mpu2.calibrateMag();
+
+  digitalWrite(LED_BUILTIN, LOW);
 
   QuatFilterSel sel1{QuatFilterSel::MADGWICK};
   QuatFilterSel sel2{QuatFilterSel::MADGWICK};

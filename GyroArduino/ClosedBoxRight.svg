@@ -27,8 +27,8 @@
      inkscape:document-units="mm"
      showgrid="false"
      inkscape:zoom="2.9589847"
-     inkscape:cx="517.91413"
-     inkscape:cy="245.5234"
+     inkscape:cx="492.22965"
+     inkscape:cy="290.80921"
      inkscape:window-width="1920"
      inkscape:window-height="1001"
      inkscape:window-x="-9"
@@ -125,6 +125,18 @@ SettingsUrl: http://www.festi.info/ClosedBox?FingerJoint_angle=90.0&amp;FingerJo
        stroke-width="0.2"
        id="path6787"
        sodipodi:nodetypes="csssssssssssssssssssssssssscccsssssssssssssssssssssssssssscccsc" />
+    <circle
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.264583;stroke-opacity:1"
+       id="path165"
+       cx="121.91998"
+       cy="94.871361"
+       r="5" />
+    <circle
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.264583;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1"
+       id="path165-5"
+       cx="159.51981"
+       cy="95.050201"
+       r="5" />
   </g>
   <g
      id="p-3"
