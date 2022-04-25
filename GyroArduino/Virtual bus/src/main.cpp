@@ -8,13 +8,17 @@
 
 //MPU library
 #include "MPU9250.h"
+#include <BitBang_I2C.h> //Simulate i2c bus
+
+#define SDA_PIN 25
+#define SCL_PIN 26
 
 //Settings to connect to WiFi
 #define WIFI_SSID "TheaterDo-GAST"
 #define WIFI_PASS "theaterdortmund"
 
-#define SDA_PIN 26
-#define SCL_PIN 27
+//Seting to simulqte i2c bus
+BBI2C bbi2c;
 
 //Settings to communicate through WiFi
 WiFiUDP Udp;
@@ -23,16 +27,12 @@ int outPort = 8000; //Port on PC
 int localPort = 8888; //Port of ESP
 
 //Setting to initialiye gyro recording
+#define MPU_ADDRESS 0x68 //Set 0x68 or 0x69
 MPU9250 mpu1; // You can also use MPU9255 as is
-MPU9250 mpu2;
-MPU9250Setting setting1;
-MPU9250Setting setting2;
+MPU9250Setting setting;
 
 float qX1 = 0, qY1 = 0, qZ1 = 0, qW1 = 0;
-float qX2 = 0, qY2 = 0, qZ2 = 0, qW2 = 0;
-
 float oX1 = 0, oY1 = 0, oZ1 = 0;
-float oX2 = 0, oY2 = 0, oZ2 = 0;
 
 int deltaT = 50; //Communication rate
 
@@ -75,59 +75,49 @@ void startUdp() {
 void setup() {
   Serial.begin(115200);
 
+  //Wireless communication setup
   connectWiFi();
   startUdp();
-  
-  Wire.begin(); 
-  Wire1.begin(SDA_PIN,SCL_PIN); //Do not modify names of Wire and Wire1
-  delay(2000);
 
-  setting1.accel_fs_sel = ACCEL_FS_SEL::A4G;
-  setting1.gyro_fs_sel = GYRO_FS_SEL::G500DPS;
-  setting1.mag_output_bits = MAG_OUTPUT_BITS::M16BITS;
-  setting1.fifo_sample_rate = FIFO_SAMPLE_RATE::SMPL_200HZ;
-  setting1.gyro_fchoice = 0x03;
-  setting1.gyro_dlpf_cfg = GYRO_DLPF_CFG::DLPF_41HZ;
-  setting1.accel_fchoice = 0x01;
-  setting1.accel_dlpf_cfg = ACCEL_DLPF_CFG::DLPF_45HZ;
+  //Virtual I2C setup
+  bbi2c.bWire = 0; // use bit bang, not wire library
+  bbi2c.iSDA = SDA_PIN;
+  bbi2c.iSCL = SCL_PIN;
+  I2CInit(&bbi2c, 100000L);
+  delay(100);
 
-  setting2.accel_fs_sel = ACCEL_FS_SEL::A4G;
-  setting2.gyro_fs_sel = GYRO_FS_SEL::G500DPS;
-  setting2.mag_output_bits = MAG_OUTPUT_BITS::M16BITS;
-  setting2.fifo_sample_rate = FIFO_SAMPLE_RATE::SMPL_200HZ;
-  setting2.gyro_fchoice = 0x03;
-  setting2.gyro_dlpf_cfg = GYRO_DLPF_CFG::DLPF_41HZ;
-  setting2.accel_fchoice = 0x01;
-  setting2.accel_dlpf_cfg = ACCEL_DLPF_CFG::DLPF_45HZ;
+  //Mpu setup
+  setting.accel_fs_sel = ACCEL_FS_SEL::A4G;
+  setting.gyro_fs_sel = GYRO_FS_SEL::G500DPS;
+  setting.mag_output_bits = MAG_OUTPUT_BITS::M16BITS;
+  setting.fifo_sample_rate = FIFO_SAMPLE_RATE::SMPL_200HZ;
+  setting.gyro_fchoice = 0x03;
+  setting.gyro_dlpf_cfg = GYRO_DLPF_CFG::DLPF_41HZ;
+  setting.accel_fchoice = 0x01;
+  setting.accel_dlpf_cfg = ACCEL_DLPF_CFG::DLPF_45HZ;
 
-  mpu1.setup(0x68, setting1, Wire);  // connect to default PIN SDA SCL
-  mpu2.setup(0x68, setting2, Wire1);// connect to SCL_PIN, SDA_PIN
+  mpu1.setup(MPU_ADDRESS, setting, &bbi2c);  // change to your own address
 
   Serial.println("Calibration of acceleration : don't move devices");
   mpu1.calibrateAccelGyro();
-  mpu2.calibrateAccelGyro();
+  Serial.println("Acceleration calibration done.");
   Serial.println("Calibration of mag 1");
   mpu1.setMagneticDeclination(2.53);
   mpu1.calibrateMag();
 
-  Serial.println("Calibration of mag 2");
-  mpu2.setMagneticDeclination(2.53);
-  mpu2.calibrateMag();
-
-  QuatFilterSel sel1{QuatFilterSel::MADGWICK};
-  QuatFilterSel sel2{QuatFilterSel::MADGWICK};
-  
-  mpu1.selectFilter(sel1);
-  mpu2.selectFilter(sel2);
 
   mpu1.setFilterIterations(10);
-  mpu2.setFilterIterations(10);
+
+  QuatFilterSel sel{QuatFilterSel::MADGWICK};
+
+  mpu1.selectFilter(sel);
+
+
 }
 
 void loop() {
   //--------MPU recording--------
-
-  mpu2.update();
+  
   mpu1.update();
 
   static unsigned long last_print=0;
@@ -136,64 +126,36 @@ void loop() {
   if (millis()-last_print > 100) {
         Serial.print(mpu1.getQuaternionX()); Serial.print(", ");
         Serial.print(mpu1.getQuaternionY()); Serial.print(", ");
-        Serial.print(mpu1.getQuaternionZ()); Serial.print(" /////");
-        Serial.print(mpu2.getQuaternionX()); Serial.print(", ");
-        Serial.print(mpu2.getQuaternionY()); Serial.print(", ");
-        Serial.println(mpu2.getQuaternionZ());
+        Serial.println(mpu1.getQuaternionZ());
+
+        qX1 = mpu1.getQuaternionX();
+        qY1 = mpu1.getQuaternionY();
+        qZ1 = mpu1.getQuaternionZ();
+        qW1 = mpu1.getQuaternionW();
+
+        oX1 = mpu1.getEulerX();
+        oY1 = mpu1.getEulerY();
+        oZ1 = mpu1.getEulerZ();
+
 
         last_print=millis();
   }
 
-  qX1 = mpu1.getQuaternionX();
-  qY1 = mpu1.getQuaternionY();
-  qZ1 = mpu1.getQuaternionZ();
-  qW1 = mpu1.getQuaternionW();
-
-  qX2 = mpu2.getQuaternionX();
-  qY2 = mpu2.getQuaternionY();
-  qZ2 = mpu2.getQuaternionZ();
-  qW2 = mpu2.getQuaternionW();
-
-  oX1 = mpu1.getEulerX();
-  oY1 = mpu1.getEulerY();
-  oZ1 = mpu1.getEulerZ();
-
-  oX2 = mpu2.getEulerX();
-  oY2 = mpu2.getEulerY();
-  oZ2 = mpu2.getEulerZ();
-
   //-------OSC comm--------
   OSCMessage gyroQuater1("/gyro1/quater");
-  OSCMessage gyroQuater2("/gyro2/quater");
-
   OSCMessage gyroAngle1("/gyro1/angle");
-  OSCMessage gyroAngle2("/gyro2/angle");
   
   gyroQuater1.add(qX1).add(qY1).add(qZ1).add(qW1);//We put the quater data into the message
-  gyroQuater2.add(qX2).add(qY2).add(qZ2).add(qW2);
-
   gyroAngle1.add(oX1).add(oY1).add(oZ1);//We put the angle data into the message
-  gyroAngle2.add(oX2).add(oY2).add(oZ2);
 
   Udp.beginPacket(outIp, outPort); //intitializes packet transmission -- by giving the IP and the port = UDP way to communicate
   gyroQuater1.send(Udp); //sends the message
   Udp.endPacket();//terminates the connection
 
   Udp.beginPacket(outIp, outPort); //intitializes packet transmission -- by giving the IP and the port = UDP way to communicate
-  gyroQuater2.send(Udp); //sends the message
-  Udp.endPacket();
-
-  Udp.beginPacket(outIp, outPort); //intitializes packet transmission -- by giving the IP and the port = UDP way to communicate
   gyroAngle1.send(Udp); //sends the message
   Udp.endPacket();//terminates the connection
 
-  Udp.beginPacket(outIp, outPort); //intitializes packet transmission -- by giving the IP and the port = UDP way to communicate
-  gyroAngle2.send(Udp); //sends the message
-  Udp.endPacket();
-
   gyroQuater1.empty();
-  gyroQuater2.empty();
-
   gyroAngle1.empty();
-  gyroAngle2.empty();
 }

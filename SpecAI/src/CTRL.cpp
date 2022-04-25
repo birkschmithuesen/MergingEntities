@@ -131,6 +131,7 @@ char OpLbyteReceive = 0;
 //short artnet_physical=0;
 short incoming_universe = 0;
 short last_incoming_universe = 0;
+short last_universe_to_display = start_universe + number_of_universe - 1;
 boolean is_opcode_is_dmx = 0;
 boolean is_opcode_is_artpoll = 0;
 boolean match_artnet = 1;
@@ -193,8 +194,8 @@ void loop() {
         //read incoming universe
         incoming_universe = bytes_to_short(packetBuffer[15], packetBuffer[14])
 
-        Serial.print("Universe: ");
-        Serial.println(incoming_universe);
+        //Serial.print("Universe: ");
+        //Serial.println(incoming_universe);
 
         for (int i = start_universe; i < number_of_universe + start_universe; i++) {
           if (incoming_universe == i) {
@@ -205,7 +206,7 @@ void loop() {
         }
 
         
-        if (incoming_universe == 27) {
+        if (incoming_universe == (last_universe_to_display)) {
           //  if(incoming_universe<last_incoming_universe){
           for (int i = 0; i < NUM_LEDS; i++) {
             leds[i] = CRGB(pgm_read_byte(&gammaB[buffer_dmx[i * 3]]), pgm_read_byte(&gammaB[buffer_dmx[(i * 3) + 1]]), pgm_read_byte(&gammaB[buffer_dmx[(i * 3) + 2]]));       
