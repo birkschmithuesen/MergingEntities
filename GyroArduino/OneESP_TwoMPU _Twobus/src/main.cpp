@@ -131,13 +131,13 @@ void setup() {
 
   Serial.println("Calibration of mag 1");
   mpu1.setMagneticDeclination(2.53);
-  //mpu1.calibrateMag();
+  mpu1.calibrateMag();
 
   digitalWrite(LED_BUILTIN, HIGH);
 
   Serial.println("Calibration of mag 2");
   mpu2.setMagneticDeclination(2.53);
-  //mpu2.calibrateMag();
+  mpu2.calibrateMag();
 
   digitalWrite(LED_BUILTIN, LOW);
 
