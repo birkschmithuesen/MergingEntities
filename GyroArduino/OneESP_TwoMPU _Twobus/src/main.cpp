@@ -37,6 +37,9 @@ float qX2 = 0, qY2 = 0, qZ2 = 0, qW2 = 0;
 float oX1 = 0, oY1 = 0, oZ1 = 0;
 float oX2 = 0, oY2 = 0, oZ2 = 0;
 
+float aX1 = 0, aY1 = 0, aZ1 = 0;
+float aX2 = 0, aY2 = 0, aZ2 = 0;
+
 int deltaT = 50; //Communication rate
 
 int redPin = 4; //Pin to indicate when its calibrating
@@ -186,18 +189,32 @@ void loop() {
   oY2 = mpu2.getEulerY();
   oZ2 = mpu2.getEulerZ();
 
+  aX1 = mpu1.getAccX();
+  aY1 = mpu1.getAccY();
+  aZ1 = mpu1.getAccZ();
+
+  aX2 = mpu2.getAccX();
+  aY2 = mpu2.getAccY();
+  aZ2 = mpu2.getAccZ();
+
   //-------OSC comm--------
   OSCMessage gyroQuater1("/gyro1/quater");
   OSCMessage gyroQuater2("/gyro2/quater");
 
   OSCMessage gyroAngle1("/gyro1/angle");
   OSCMessage gyroAngle2("/gyro2/angle");
+
+  OSCMessage gyroAcc1("/gyro1/acc");
+  OSCMessage gyroAcce2("/gyro2/acc");
   
   gyroQuater1.add(qX1).add(qY1).add(qZ1).add(qW1);//We put the quater data into the message
   gyroQuater2.add(qX2).add(qY2).add(qZ2).add(qW2);
 
   gyroAngle1.add(oX1).add(oY1).add(oZ1);//We put the angle data into the message
   gyroAngle2.add(oX2).add(oY2).add(oZ2);
+
+  gyroAcc1.add(aX1).add(aY1).add(aZ1);//We put the angle data into the message
+  gyroAcc2.add(aX2).add(aY2).add(aZ2);
 
   Udp.beginPacket(outIp, outPort); //intitializes packet transmission -- by giving the IP and the port = UDP way to communicate
   gyroQuater1.send(Udp); //sends the message
@@ -215,9 +232,20 @@ void loop() {
   gyroAngle2.send(Udp); //sends the message
   Udp.endPacket();
 
+  Udp.beginPacket(outIp, outPort); //intitializes packet transmission -- by giving the IP and the port = UDP way to communicate
+  gyroAcc1.send(Udp); //sends the message
+  Udp.endPacket();
+
+  Udp.beginPacket(outIp, outPort); //intitializes packet transmission -- by giving the IP and the port = UDP way to communicate
+  gyroAcc2.send(Udp); //sends the message
+  Udp.endPacket();
+
   gyroQuater1.empty();
   gyroQuater2.empty();
 
   gyroAngle1.empty();
   gyroAngle2.empty();
+
+  gyroAcc1.empty();
+  gyroAcc2.empty();
 }
