@@ -8,7 +8,8 @@
 
 //MPU library
 #include "MPU9250.h"
-#include <BitBang_I2C.h> //Simulate i2c bus
+#include <SoftWire.h>
+#include <AsyncDelay.h>
 
 #define SDA_PIN 25
 #define SCL_PIN 26
@@ -17,8 +18,8 @@
 #define WIFI_SSID "TheaterDo-GAST"
 #define WIFI_PASS "theaterdortmund"
 
-//Seting to simulqte i2c bus
-BBI2C bbi2c;
+//Seting to simulate i2c bus
+SoftWire i2c(SDA_PIN, SCL_PIN);
 
 //Settings to communicate through WiFi
 WiFiUDP Udp;
@@ -79,12 +80,6 @@ void setup() {
   connectWiFi();
   startUdp();
 
-  //Virtual I2C setup
-  bbi2c.bWire = 0; // use bit bang, not wire library
-  bbi2c.iSDA = SDA_PIN;
-  bbi2c.iSCL = SCL_PIN;
-  I2CInit(&bbi2c, 100000L);
-  delay(100);
 
   //Mpu setup
   setting.accel_fs_sel = ACCEL_FS_SEL::A4G;
@@ -96,7 +91,7 @@ void setup() {
   setting.accel_fchoice = 0x01;
   setting.accel_dlpf_cfg = ACCEL_DLPF_CFG::DLPF_45HZ;
 
-  mpu1.setup(MPU_ADDRESS, setting, &bbi2c);  // change to your own address
+  mpu1.setup(MPU_ADDRESS, setting, i2c);  // change to your own address
 
   Serial.println("Calibration of acceleration : don't move devices");
   mpu1.calibrateAccelGyro();

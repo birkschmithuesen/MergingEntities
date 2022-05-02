@@ -131,13 +131,13 @@ void setup() {
 
   Serial.println("Calibration of mag 1");
   mpu1.setMagneticDeclination(2.53);
-  mpu1.calibrateMag();
+  //mpu1.calibrateMag();
 
   digitalWrite(LED_BUILTIN, HIGH);
 
   Serial.println("Calibration of mag 2");
   mpu2.setMagneticDeclination(2.53);
-  mpu2.calibrateMag();
+  //mpu2.calibrateMag();
 
   digitalWrite(LED_BUILTIN, LOW);
 
@@ -161,12 +161,10 @@ void loop() {
   
   
   if (millis()-last_print > 100) {
-        Serial.print(mpu1.getQuaternionX()); Serial.print(", ");
-        Serial.print(mpu1.getQuaternionY()); Serial.print(", ");
-        Serial.print(mpu1.getQuaternionZ()); Serial.print(" /////");
-        Serial.print(mpu2.getQuaternionX()); Serial.print(", ");
-        Serial.print(mpu2.getQuaternionY()); Serial.print(", ");
-        Serial.println(mpu2.getQuaternionZ());
+        Serial.print(mpu1.getAccX()*9.81); Serial.print(", ");
+        Serial.print(mpu1.getAccY()*9.81); Serial.print(", ");
+        Serial.print(mpu1.getAccZ()*9.81);
+        Serial.println(mpu1.getAccBiasX() * 1000.f / (float)MPU9250::CALIB_ACCEL_SENSITIVITY);
 
         last_print=millis();
   }
@@ -189,13 +187,13 @@ void loop() {
   oY2 = mpu2.getEulerY();
   oZ2 = mpu2.getEulerZ();
 
-  aX1 = mpu1.getAccX();
-  aY1 = mpu1.getAccY();
-  aZ1 = mpu1.getAccZ();
+  aX1 = mpu1.getAccX()*9,81;
+  aY1 = mpu1.getAccY()*9,81;
+  aZ1 = mpu1.getAccZ()*9,81;
 
-  aX2 = mpu2.getAccX();
-  aY2 = mpu2.getAccY();
-  aZ2 = mpu2.getAccZ();
+  aX2 = mpu2.getAccX()*9,81;
+  aY2 = mpu2.getAccY()*9,81;
+  aZ2 = mpu2.getAccZ()*9,81;
 
   //-------OSC comm--------
   OSCMessage gyroQuater1("/gyro1/quater");
@@ -205,7 +203,7 @@ void loop() {
   OSCMessage gyroAngle2("/gyro2/angle");
 
   OSCMessage gyroAcc1("/gyro1/acc");
-  OSCMessage gyroAcce2("/gyro2/acc");
+  OSCMessage gyroAcc2("/gyro2/acc");
   
   gyroQuater1.add(qX1).add(qY1).add(qZ1).add(qW1);//We put the quater data into the message
   gyroQuater2.add(qX2).add(qY2).add(qZ2).add(qW2);
