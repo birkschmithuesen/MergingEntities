@@ -11,15 +11,12 @@
 #include <SoftWire.h>
 #include <AsyncDelay.h>
 
-#define SDA_PIN 25
-#define SCL_PIN 26
+#define SDA_PIN 21
+#define SCL_PIN 22
 
 //Settings to connect to WiFi
 #define WIFI_SSID "TheaterDo-GAST"
 #define WIFI_PASS "theaterdortmund"
-
-//Seting to simulate i2c bus
-SoftWire i2c(SDA_PIN, SCL_PIN);
 
 //Settings to communicate through WiFi
 WiFiUDP Udp;
@@ -29,7 +26,9 @@ int localPort = 8888; //Port of ESP
 
 //Setting to initialiye gyro recording
 #define MPU_ADDRESS 0x68 //Set 0x68 or 0x69
-MPU9250 mpu1; // You can also use MPU9255 as is
+MPU9250_<SoftWire> mpu1;
+SoftWire sw(SDA_PIN, SCL_PIN);
+ // You can also use MPU9255 as is
 MPU9250Setting setting;
 
 float qX1 = 0, qY1 = 0, qZ1 = 0, qW1 = 0;
@@ -91,14 +90,14 @@ void setup() {
   setting.accel_fchoice = 0x01;
   setting.accel_dlpf_cfg = ACCEL_DLPF_CFG::DLPF_45HZ;
 
-  mpu1.setup(MPU_ADDRESS, setting, i2c);  // change to your own address
+  mpu1.setup(MPU_ADDRESS, setting, sw);  // change to your own address
 
   Serial.println("Calibration of acceleration : don't move devices");
   mpu1.calibrateAccelGyro();
   Serial.println("Acceleration calibration done.");
   Serial.println("Calibration of mag 1");
   mpu1.setMagneticDeclination(2.53);
-  mpu1.calibrateMag();
+  //mpu1.calibrateMag();
 
 
   mpu1.setFilterIterations(10);
@@ -119,9 +118,9 @@ void loop() {
   
   
   if (millis()-last_print > 100) {
-        Serial.print(mpu1.getQuaternionX()); Serial.print(", ");
-        Serial.print(mpu1.getQuaternionY()); Serial.print(", ");
-        Serial.println(mpu1.getQuaternionZ());
+        Serial.print(mpu1.getEulerX()); Serial.print(", ");
+        Serial.print(mpu1.getEulerY()); Serial.print(", ");
+        Serial.println(mpu1.getEulerZ());
 
         qX1 = mpu1.getQuaternionX();
         qY1 = mpu1.getQuaternionY();
