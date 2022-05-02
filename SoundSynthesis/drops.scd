@@ -45,31 +45,4 @@ OSCdef.new(\Positiony0, {
 )
 
 
-(
-y = Synth.new(\drops, [\out, 2]);
-
-///////////////////////////////////////////
-// MACHINE
-///////////////////////////////////////////
-
-OSCdef.new(\Positionx1, {
-	arg msg;
-	y.set(
-		\freq, msg[1].linlin(0,6.8,40,1000)
-	);
-}, '/Positionx1'
-);
-
-
-
-OSCdef.new(\Positiony1, {
-	arg msg;
-	y.set(
-		\trigFreq, msg[1].linlin(0,3.6,1,20)
-	);
-}, '/Positiony1'
-);
-)
-
-
 s.plotTree;
