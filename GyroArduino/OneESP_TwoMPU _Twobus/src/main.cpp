@@ -31,6 +31,21 @@ MPU9250 mpu2;
 MPU9250Setting setting1;
 MPU9250Setting setting2;
 
+//Initialize messages for OSC
+OSCMessage gyroQuater1("/gyro1/quater");
+OSCMessage gyroQuater2("/gyro2/quater");
+
+OSCMessage gyroAngle1("/gyro1/angle");
+OSCMessage gyroAngle2("/gyro2/angle");
+
+OSCMessage gyroAcc1("/gyro1/acc");
+OSCMessage gyroAcc2("/gyro2/acc");
+
+OSCMessage gyroGyro1("/gyro1/gyro");
+OSCMessage gyroGyro2("/gyro2/gyro");
+
+
+
 float qX1 = 0, qY1 = 0, qZ1 = 0, qW1 = 0;
 float qX2 = 0, qY2 = 0, qZ2 = 0, qW2 = 0;
 
@@ -39,6 +54,9 @@ float oX2 = 0, oY2 = 0, oZ2 = 0;
 
 float aX1 = 0, aY1 = 0, aZ1 = 0;
 float aX2 = 0, aY2 = 0, aZ2 = 0;
+
+float gX1 = 0, gY1 = 0, gZ1 = 0;
+float gX2 = 0, gY2 = 0, gZ2 = 0;
 
 int deltaT = 50; //Communication rate
 
@@ -153,24 +171,10 @@ void setup() {
 
 void loop() {
   //--------MPU recording--------
-
-  mpu2.update();
   mpu1.update();
+  mpu2.update();
 
-  static unsigned long last_print=0;
-  
-  
-  if (millis()-last_print > 100) {
-        Serial.print(mpu1.getQuaternionX()); Serial.print(", ");
-        Serial.print(mpu1.getQuaternionY()); Serial.print(", ");
-        Serial.print(mpu1.getQuaternionZ()); Serial.print(" /////");
-        Serial.print(mpu2.getQuaternionX()); Serial.print(", ");
-        Serial.print(mpu2.getQuaternionY()); Serial.print(", ");
-        Serial.println(mpu2.getQuaternionZ());
-
-        last_print=millis();
-  }
-
+  //Storage
   qX1 = mpu1.getQuaternionX();
   qY1 = mpu1.getQuaternionY();
   qZ1 = mpu1.getQuaternionZ();
@@ -189,24 +193,40 @@ void loop() {
   oY2 = mpu2.getEulerY();
   oZ2 = mpu2.getEulerZ();
 
-  aX1 = mpu1.getAccX();
-  aY1 = mpu1.getAccY();
-  aZ1 = mpu1.getAccZ();
+  aX1 = mpu1.getAccX()*9.81;
+  aY1 = mpu1.getAccY()*9.81;
+  aZ1 = mpu1.getAccZ()*9.81;
 
-  aX2 = mpu2.getAccX();
-  aY2 = mpu2.getAccY();
-  aZ2 = mpu2.getAccZ();
+  aX2 = mpu2.getAccX()*9.81;
+  aY2 = mpu2.getAccY()*9.81;
+  aZ2 = mpu2.getAccZ()*9.81;
+
+  gX1 = mpu1.getGyroX();
+  gY1 = mpu1.getGyroY();
+  gZ1 = mpu1.getGyroZ();
+
+  gX2 = mpu2.getGyroX();
+  gY2 = mpu2.getGyroY();
+  gZ2 = mpu2.getGyroZ();
+
+  //Printings
+  static unsigned long last_print=0;
+  
+    if (millis()-last_print > 50) {
+        Serial.print(oX1); Serial.print(", ");
+        Serial.print(oY1); Serial.print(", ");
+        Serial.print(oZ1); Serial.print(", ");
+
+        Serial.println();
+
+        last_print=millis();
+  }
+
+  
+
+
 
   //-------OSC comm--------
-  OSCMessage gyroQuater1("/gyro1/quater");
-  OSCMessage gyroQuater2("/gyro2/quater");
-
-  OSCMessage gyroAngle1("/gyro1/angle");
-  OSCMessage gyroAngle2("/gyro2/angle");
-
-  OSCMessage gyroAcc1("/gyro1/acc");
-  OSCMessage gyroAcce2("/gyro2/acc");
-  
   gyroQuater1.add(qX1).add(qY1).add(qZ1).add(qW1);//We put the quater data into the message
   gyroQuater2.add(qX2).add(qY2).add(qZ2).add(qW2);
 
@@ -215,6 +235,9 @@ void loop() {
 
   gyroAcc1.add(aX1).add(aY1).add(aZ1);//We put the angle data into the message
   gyroAcc2.add(aX2).add(aY2).add(aZ2);
+
+  gyroGyro1.add(gX1).add(gY1).add(gZ1);//We put the gyrospeed  data into the message
+  gyroGyro2.add(gX2).add(gY2).add(gZ2);
 
   Udp.beginPacket(outIp, outPort); //intitializes packet transmission -- by giving the IP and the port = UDP way to communicate
   gyroQuater1.send(Udp); //sends the message
@@ -240,6 +263,14 @@ void loop() {
   gyroAcc2.send(Udp); //sends the message
   Udp.endPacket();
 
+  Udp.beginPacket(outIp, outPort); //intitializes packet transmission -- by giving the IP and the port = UDP way to communicate
+  gyroGyro1.send(Udp); //sends the message
+  Udp.endPacket();
+
+  Udp.beginPacket(outIp, outPort); //intitializes packet transmission -- by giving the IP and the port = UDP way to communicate
+  gyroGyro2.send(Udp); //sends the message
+  Udp.endPacket();
+
   gyroQuater1.empty();
   gyroQuater2.empty();
 
@@ -248,4 +279,9 @@ void loop() {
 
   gyroAcc1.empty();
   gyroAcc2.empty();
+
+  gyroGyro1.empty();
+  gyroGyro2.empty();
+
+
 }
