@@ -82,7 +82,7 @@ class MPU9250_ {
     // settings
     MPU9250Setting setting;
     // TODO: this should be configured!!
-    static constexpr uint8_t MAG_MODE {0x06};  // 0x02 for 8 Hz, 0x06 for 100 Hz continuous magnetometer data read
+    static constexpr uint8_t MAG_MODE {0x02};  // 0x02 for 8 Hz, 0x06 for 100 Hz continuous magnetometer data read
     float acc_resolution {0.f};                // scale resolutions per LSB for the sensors
     float gyro_resolution {0.f};               // scale resolutions per LSB for the sensors
     float mag_resolution {0.f};                // scale resolutions per LSB for the sensors

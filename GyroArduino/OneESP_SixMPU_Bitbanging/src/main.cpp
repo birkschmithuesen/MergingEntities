@@ -1,3 +1,8 @@
+//Connections : Please always connect 2 hard mpu (builtin I2C bus) to your specified pins
+//Indicate the numbers of hard, soft I2C, connect the soft I2C in the order of the specified pins
+//Specify your IP address and Wifi
+//Mag calibration desactivated right now, see if it's usefull
+
 //-------LIBRARIES-------
 //Library to use Arduino cmd
 #include <Arduino.h>
@@ -13,20 +18,28 @@
 
 //-------MPU SETTINGS-------
 //Parameters of the setup
-#define nbrSoftMpu 4
+#define nbrSoftMpu 0
 #define nbrHardMpu 2
+
 #define nbrMpu nbrSoftMpu + nbrHardMpu
 
 //Addresses and pin of MPU's
 #define MPU_ADDRESS_1 0x68 //Set 0x68 or 0x69
 #define MPU_ADDRESS_2 0x69 //Set 0x68 or 0x69
 
-int SDA_PIN[nbrSoftMpu + nbrHardMpu] = {16, 18, 5, 32, 21, 26}; //16 = RX2, 26 and 27 should't be used with Wifi ...
-int SCL_PIN[nbrSoftMpu + nbrHardMpu] = {17, 19, 23, 33, 22, 27}; //17 = TX2
+//Number of the suit where this code is flashed - 1,2 or 3
+#define BODY_ADDRESS "/body/1"
+
+//SDA and SCL pin of the soft and hard wire mode
+int SSDA_PIN[] = {16, 18, 5, 26}; //16 = RX2, 26 and 27 should't be used with Wifi ..., add a couple for 6th I2C
+int SSCL_PIN[] = {17, 19, 23, 27}; //17 = TX2
+
+int HSDA_PIN[] = {21,32}; //Careful to these pins and your own pins !
+int HSCL_PIN[] = {22,33};
 
 //Software I2c
-MPU9250_<SoftWire> Smpu[nbrSoftMpu]; //Mpu objects for I2c
-SoftWire sw[] = {SoftWire(SDA_PIN[0],SCL_PIN[0]), SoftWire(SDA_PIN[1],SCL_PIN[1]), SoftWire(SDA_PIN[2],SCL_PIN[2]), SoftWire(SDA_PIN[3],SCL_PIN[3])}; //Wire objects for I2C
+MPU9250_<SoftWire> Smpu[nbrSoftMpu]; //Mpu objects for soft I2c - MAX 4 SOFT I2C
+SoftWire sw[] = {SoftWire(SSDA_PIN[0],SSCL_PIN[0]), SoftWire(SSDA_PIN[1],SSCL_PIN[1]), SoftWire(SSDA_PIN[2],SSCL_PIN[2]), SoftWire(SSDA_PIN[3],SSCL_PIN[3])}; //Wire objects for I2C, add a SoftWire for 6 I2C
 
 char swTxBuffer[nbrSoftMpu][64]; //Buffers for softReading, as big as the biggest reading/writing
 char swRxBuffer[nbrSoftMpu][64];
@@ -58,8 +71,7 @@ IPAddress outIp(192,168,0,2); //IP of the computer
 int outPort = 8000; //Port on PC
 int localPort = 8888; //Port of ESP
 
-OSCMessage gyroQ[nbrMpu] = {OSCMessage("/gyro0/quater"), OSCMessage("/gyro1/quater"),OSCMessage("/gyro2/quater"),OSCMessage("/gyro3/quater"),OSCMessage("/gyro4/quater"),OSCMessage("/gyro5/quater")};
-OSCMessage gyroA[nbrMpu] = {OSCMessage("/gyro0/angle"), OSCMessage("/gyro1/angle"),OSCMessage("/gyro2/angle"),OSCMessage("/gyro3/angle"),OSCMessage("/gyro4/angle"),OSCMessage("/gyro5/angle")};
+OSCMessage gyro(BODY_ADDRESS);
 
 //Function to connect WiFi
 void connectWiFi() //Let's connect a WiFi
@@ -108,22 +120,22 @@ void setup() {
   //-------MPU SETUP------
   //Software I2C
   for(int i=0; i<nbrSoftMpu; i++) {
-    sw[i].setTxBuffer(swTxBuffer[i], sizeof(swTxBuffer[i]));//Initialisze buffers and connections
+    sw[i].setTxBuffer(swTxBuffer[i], sizeof(swTxBuffer[i]));//Initialize buffers and connections
     sw[i].setRxBuffer(swRxBuffer[i], sizeof(swRxBuffer[i]));
     sw[i].setDelay_us(5);
     sw[i].begin();//Initialize I2C comm
   }
 
   //Hardware I2c
-  Wire.begin(SDA_PIN[4],SCL_PIN[4]);
-  Wire1.begin(SDA_PIN[5], SCL_PIN[5]);
+  Wire.begin(HSDA_PIN[0],HSCL_PIN[0]); //The two last pin, change to 4,5 for 6 I2C
+  Wire1.begin(HSDA_PIN[1], HSCL_PIN[1]);
   delay(2000);
 
   //MPU parameters (sensitivity, etc)
   setting.accel_fs_sel = ACCEL_FS_SEL::A4G;
   setting.gyro_fs_sel = GYRO_FS_SEL::G500DPS;
   setting.mag_output_bits = MAG_OUTPUT_BITS::M16BITS;
-  setting.fifo_sample_rate = FIFO_SAMPLE_RATE::SMPL_200HZ;
+  setting.fifo_sample_rate = FIFO_SAMPLE_RATE::SMPL_125HZ;
   setting.gyro_fchoice = 0x03;
   setting.gyro_dlpf_cfg = GYRO_DLPF_CFG::DLPF_41HZ;
   setting.accel_fchoice = 0x01;
@@ -133,29 +145,43 @@ void setup() {
   for(int i=0; i<nbrSoftMpu; i++) {
     Smpu[i].setup(MPU_ADDRESS_1, setting, sw[i]);
   }
+
   Hmpu[0].setup(MPU_ADDRESS_1, setting, Wire);
   Hmpu[1].setup(MPU_ADDRESS_1, setting, Wire1);
 
   //Selection of filters
-  /*QuatFilterSel sel{QuatFilterSel::MADGWICK};
-  mpu1.selectFilter(sel);
-  mpu1.setFilterIterations(10);*/
   
-
-
-  /*Serial.println("Calibration of acceleration : don't move devices");
-  //mpu1.calibrateAccelGyro();
+  QuatFilterSel sel{QuatFilterSel::MADGWICK};
+  for(int i=0; i<nbrSoftMpu; i++) {
+    Smpu[i].selectFilter(sel);
+    Smpu[i].setFilterIterations(10);
+  }
+  for(int i=0; i<nbrHardMpu; i++) {
+    Hmpu[i].selectFilter(sel);
+    Hmpu[i].setFilterIterations(10);
+  }
+  
+  //Calibration of acceleration and magnetic offsets
+  
+  Serial.println("Calibration of acceleration : don't move devices");
+  for(int i=0; i<nbrSoftMpu; i++) {
+    Smpu[i].calibrateAccelGyro();
+  }
+  for(int i=0; i<nbrHardMpu; i++) {
+    Hmpu[i].calibrateAccelGyro();
+  }
   Serial.println("Acceleration calibration done.");
 
-  Serial.println("Calibration of mag 1");
-  mpu1.setMagneticDeclination(2.53);
-  //mpu1.calibrateMag();
+  Serial.println("Calibration of mag");
+  for(int i=0; i<nbrSoftMpu; i++) {
+    Smpu[i].setMagneticDeclination(2.53);
+    //Hmpu[i].calibrateMag();
+  }
+  for(int i=0; i<nbrHardMpu; i++) {
+    Hmpu[i].setMagneticDeclination(2.53);
+    //Hmpu[i].calibrateMag();
+  }
   Serial.println("Mag calibration done.");
-
-  mpu1.setFilterIterations(10);
-  QuatFilterSel sel{QuatFilterSel::MADGWICK};
-  mpu1.selectFilter(sel);*/
-
 
 }
 
@@ -163,23 +189,21 @@ void loop() {
   //--------MPU recording--------
   
   //Read mpu data
-  Smpu[0].update();
-  Smpu[1].update();
-  Smpu[2].update();
-  Smpu[3].update();
+  for(int i=0; i<nbrSoftMpu; i++) {
+    Smpu[i].update();
+  }
+
   Hmpu[0].update();
   Hmpu[1].update();
 
   //Print values for debugging
+  
   static unsigned long last_print=0;
   if (millis()-last_print > 100) {
 
-        Serial.print(Smpu[0].getEulerX()); Serial.print("// ");
-        Serial.print(Smpu[1].getEulerX()); Serial.print("// ");
-        Serial.print(Smpu[2].getEulerX()); Serial.print("// ");
-        Serial.print(Smpu[3].getEulerX()); Serial.print("// ");
-        Serial.print(Hmpu[0].getEulerX()); Serial.print("// ");
-        Serial.print(Hmpu[1].getEulerX()); Serial.print("// ");
+        for(int i=0;i<nbrMpu;i++) {
+          Serial.print(oX[i]); Serial.print("// ");
+        }
 
         Serial.println();
 
@@ -199,34 +223,29 @@ void loop() {
   }
 
   for(int i=0; i<nbrHardMpu; i++) {
-    qX[i] = Hmpu[i].getQuaternionX();
-    qY[i] = Hmpu[i].getQuaternionY();
-    qZ[i] = Hmpu[i].getQuaternionZ();
-    qW[i] = Hmpu[i].getQuaternionW();
+    qX[i+nbrSoftMpu] = Hmpu[i].getQuaternionX();
+    qY[i+nbrSoftMpu] = Hmpu[i].getQuaternionY();
+    qZ[i+nbrSoftMpu] = Hmpu[i].getQuaternionZ();
+    qW[i+nbrSoftMpu] = Hmpu[i].getQuaternionW();
 
-    oX[i] = Hmpu[i].getEulerX();
-    oY[i] = Hmpu[i].getEulerY();
-    oZ[i] = Hmpu[i].getEulerZ();
+    oX[i+nbrSoftMpu] = Hmpu[i].getEulerX();
+    oY[i+nbrSoftMpu] = Hmpu[i].getEulerY();
+    oZ[i+nbrSoftMpu] = Hmpu[i].getEulerZ();
   }
+
+
 
   //-------OSC communication--------
 
-
-  for(int i=0; i<nbrHardMpu; i++) {
-    gyroQ[i].add(qX[i]).add(qY[i]).add(qZ[i]).add(qW[i]); //Fill OSC message with data
-    gyroA[i].add(oX[i]).add(oY[i]).add(oZ[i]);
-
-    Udp.beginPacket(outIp, outPort); //intitializes packet transmission -- by giving the IP and the port = UDP way to communicate
-    gyroQ[i].send(Udp); //sends the message
-    Udp.endPacket(); //Finish the packet
-
-    Udp.beginPacket(outIp, outPort);
-    gyroA[i].send(Udp);
-    Udp.endPacket();
-
-    gyroQ[i].empty(); //Empty the OSC message
-    gyroA[i].empty();
+  //Send all the data in one OSCMessage - Work "okay"
+  for(int i=0; i<nbrMpu; i++) {
+    gyro.add(qX[i]).add(qY[i]).add(qZ[i]).add(qW[i]); //Fill OSC message with data
+    gyro.add(oX[i]).add(oY[i]).add(oZ[i]);
   }
 
+  Udp.beginPacket(outIp, outPort);
+  gyro.send(Udp);
+  Udp.endPacket();
 
+  gyro.empty(); //Empty the OSC message
 }
