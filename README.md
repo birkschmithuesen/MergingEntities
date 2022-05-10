@@ -22,4 +22,5 @@ Get an overview in the flowchart.PDF
 
 More infos: https://derivative.ca/community-post/tutorial/anaconda-managing-python-environments-and-3rd-party-libraries-touchdesigner
 
-
+## Bodysuite / Gyroscopes OSC Interface
+* each bodysuite with $id (counting from 1) sends it's gyroscope data like this: /body/$id/gyro/1...6/[quartanians, angles, rotation-speed], where quartanians has 4 dims and angles and rotation-speed has 3 dims x,y,z
