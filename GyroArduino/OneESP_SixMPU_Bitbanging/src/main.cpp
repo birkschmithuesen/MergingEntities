@@ -28,14 +28,14 @@
 #define MPU_ADDRESS_2 0x69 //Set 0x68 or 0x69
 
 //Number of the suit where this code is flashed - 1,2 or 3
-#define BODY_ADDRESS "/body/1"
+#define BODY_ADDRESS "/body/1/"
 
 //SDA and SCL pin of the soft and hard wire mode
 int SSDA_PIN[] = {16, 18, 5, 26}; //16 = RX2, 26 and 27 should't be used with Wifi ..., add a couple for 6th I2C
 int SSCL_PIN[] = {17, 19, 23, 27}; //17 = TX2
 
-int HSDA_PIN[] = {21,32}; //Careful to these pins and your own pins !
-int HSCL_PIN[] = {22,33};
+int HSDA_PIN[] = {21,26}; //Careful to these pins and your own pins !
+int HSCL_PIN[] = {22,27};
 
 //Software I2c
 MPU9250_<SoftWire> Smpu[nbrSoftMpu]; //Mpu objects for soft I2c - MAX 4 SOFT I2C
@@ -60,18 +60,27 @@ float oX[nbrMpu] = {0};
 float oY[nbrMpu] = {0};
 float oZ[nbrMpu] = {0};
 
+float gX[nbrMpu] = {0};
+float gY[nbrMpu] = {0};
+float gZ[nbrMpu] = {0};
+
 //-------WIFI SETTINGS AND FUNCTIONS-------
 //Settings to connect to WiFi
 #define WIFI_SSID "ArtNet4Hans"
 #define WIFI_PASS "kaesimira"
 #define LED_BUILTIN 2
 
+//Settings to other WiFi
+/*#define WIFI_SSID "TheaterDo-GAST"
+#define WIFI_PASS "theaterdortmund"*/
+
 WiFiUDP Udp;
 IPAddress outIp(192,168,0,2); //IP of the computer
 int outPort = 8000; //Port on PC
 int localPort = 8888; //Port of ESP
 
-OSCMessage gyro(BODY_ADDRESS);
+OSCMessage body(BODY_ADDRESS);
+OSCMessage body1[] = {OSCMessage ("/body/1/gyro1"), OSCMessage ("/body/1/gyro2"), OSCMessage ("/body/1/gyro3"), OSCMessage ("/body/1/gyro4"), OSCMessage ("/body/1/gyro5"), OSCMessage ("/body/1/gyro6")};
 
 //Function to connect WiFi
 void connectWiFi() //Let's connect a WiFi
@@ -220,6 +229,10 @@ void loop() {
     oX[i] = Smpu[i].getEulerX();
     oY[i] = Smpu[i].getEulerY();
     oZ[i] = Smpu[i].getEulerZ();
+
+    gX[i] = Smpu[i].getGyroX();
+    gY[i] = Smpu[i].getGyroY();
+    gZ[i] = Smpu[i].getGyroZ();
   }
 
   for(int i=0; i<nbrHardMpu; i++) {
@@ -231,6 +244,10 @@ void loop() {
     oX[i+nbrSoftMpu] = Hmpu[i].getEulerX();
     oY[i+nbrSoftMpu] = Hmpu[i].getEulerY();
     oZ[i+nbrSoftMpu] = Hmpu[i].getEulerZ();
+
+    gX[i+nbrSoftMpu] = Hmpu[i].getGyroX();
+    gY[i+nbrSoftMpu] = Hmpu[i].getGyroY();
+    gZ[i+nbrSoftMpu] = Hmpu[i].getGyroZ();
   }
 
 
@@ -238,14 +255,33 @@ void loop() {
   //-------OSC communication--------
 
   //Send all the data in one OSCMessage - Work "okay"
+  /*
   for(int i=0; i<nbrMpu; i++) {
-    gyro.add(qX[i]).add(qY[i]).add(qZ[i]).add(qW[i]); //Fill OSC message with data
-    gyro.add(oX[i]).add(oY[i]).add(oZ[i]);
+    body.add(qX[i]).add(qY[i]).add(qZ[i]).add(qW[i]); //Fill OSC message with data
+    body.add(oX[i]).add(oY[i]).add(oZ[i]);
+    body.add(gX[i]).add(gY[i]).add(gZ[i]);
+
   }
 
   Udp.beginPacket(outIp, outPort);
-  gyro.send(Udp);
+  body.send(Udp);
   Udp.endPacket();
 
-  gyro.empty(); //Empty the OSC message
+  body.empty(); //Empty the OSC message
+  */
+
+ //Send data in a 6 separated messages, working okay
+  for(int i=0; i<nbrMpu; i++) {
+    body1[i].add(qX[i]).add(qY[i]).add(qZ[i]).add(qW[i]); //Fill OSC message with data
+    body1[i].add(oX[i]).add(oY[i]).add(oZ[i]);
+    body1[i].add(gX[i]).add(gY[i]).add(gZ[i]);
+
+    Udp.beginPacket(outIp, outPort);
+    body1[i].send(Udp);
+    Udp.endPacket();
+
+    body1[i].empty();
+  }
+
+
 }
