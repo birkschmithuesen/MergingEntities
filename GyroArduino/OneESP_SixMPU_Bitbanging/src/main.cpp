@@ -80,7 +80,7 @@ int outPort = 8000; //Port on PC
 int localPort = 8888; //Port of ESP
 
 OSCMessage body(BODY_ADDRESS);
-OSCMessage body1[] = {OSCMessage ("/body/1/gyro1"), OSCMessage ("/body/1/gyro2"), OSCMessage ("/body/1/gyro3"), OSCMessage ("/body/1/gyro4"), OSCMessage ("/body/1/gyro5"), OSCMessage ("/body/1/gyro6")};
+OSCMessage body1[] = {OSCMessage ("/body/1/gyro/1"), OSCMessage ("/body/1/gyro/2"), OSCMessage ("/body/1/gyro/3"), OSCMessage ("/body/1/gyro/4"), OSCMessage ("/body/1/gyro/5"), OSCMessage ("/body/1/gyro/6")};
 
 //Function to connect WiFi
 void connectWiFi() //Let's connect a WiFi
