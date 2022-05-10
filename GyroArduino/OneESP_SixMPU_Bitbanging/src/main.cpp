@@ -18,7 +18,7 @@
 
 //-------MPU SETTINGS-------
 //Parameters of the setup
-#define nbrSoftMpu 0
+#define nbrSoftMpu 4
 #define nbrHardMpu 2
 
 #define nbrMpu nbrSoftMpu + nbrHardMpu
@@ -34,8 +34,8 @@
 int SSDA_PIN[] = {16, 18, 5, 26}; //16 = RX2, 26 and 27 should't be used with Wifi ..., add a couple for 6th I2C
 int SSCL_PIN[] = {17, 19, 23, 27}; //17 = TX2
 
-int HSDA_PIN[] = {21,26}; //Careful to these pins and your own pins !
-int HSCL_PIN[] = {22,27};
+int HSDA_PIN[] = {21,32}; //Careful to these pins and your own pins !
+int HSCL_PIN[] = {22,33};
 
 //Software I2c
 MPU9250_<SoftWire> Smpu[nbrSoftMpu]; //Mpu objects for soft I2c - MAX 4 SOFT I2C
@@ -80,7 +80,7 @@ int outPort = 8000; //Port on PC
 int localPort = 8888; //Port of ESP
 
 OSCMessage body(BODY_ADDRESS);
-OSCMessage body1[] = {OSCMessage ("/body/1/gyro/1"), OSCMessage ("/body/1/gyro/2"), OSCMessage ("/body/1/gyro/3"), OSCMessage ("/body/1/gyro/4"), OSCMessage ("/body/1/gyro/5"), OSCMessage ("/body/1/gyro/6")};
+OSCMessage body1[] = {OSCMessage ("/body/1/gyro/1/"), OSCMessage ("/body/1/gyro/2/"), OSCMessage ("/body/1/gyro/3/"), OSCMessage ("/body/1/gyro/4/"), OSCMessage ("/body/1/gyro/5/"), OSCMessage ("/body/1/gyro/6/")};
 
 //Function to connect WiFi
 void connectWiFi() //Let's connect a WiFi
