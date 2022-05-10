@@ -28,14 +28,14 @@
 #define MPU_ADDRESS_2 0x69 //Set 0x68 or 0x69
 
 //Number of the suit where this code is flashed - 1,2 or 3
-#define BODY_ADDRESS "/body/1"
+#define BODY_ADDRESS "/body/1/"
 
 //SDA and SCL pin of the soft and hard wire mode
 int SSDA_PIN[] = {16, 18, 5, 26}; //16 = RX2, 26 and 27 should't be used with Wifi ..., add a couple for 6th I2C
 int SSCL_PIN[] = {17, 19, 23, 27}; //17 = TX2
 
-int HSDA_PIN[] = {21,32}; //Careful to these pins and your own pins !
-int HSCL_PIN[] = {22,33};
+int HSDA_PIN[] = {21,26}; //Careful to these pins and your own pins !
+int HSCL_PIN[] = {22,27};
 
 //Software I2c
 MPU9250_<SoftWire> Smpu[nbrSoftMpu]; //Mpu objects for soft I2c - MAX 4 SOFT I2C
