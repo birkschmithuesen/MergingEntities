@@ -142,6 +142,14 @@ class MLExtension:
 		self.Model.fit(self.Features,self.Targets,epochs=self.INITIAL_EPOCHS,batch_size=self.BATCH_SIZE,shuffle=True)
 		self.Model.summary()
 		debug("Initial Training finished... ")
+	
+	def SaveModel(self):
+		location = parent.Ml.par.Modelname
+		self.Model.save('Models/' + location) #saving as SavedModel format
+
+	def LoadModel(self):
+		model_file = str(parent.Ml.par.Selectmodel)
+		self.Model = keras.models.load_model(model_file)
 
 	def PredictTargets(self,features):
 		return self.Model.predict(np.array([features]))
