@@ -17,6 +17,7 @@ import keras
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense, LSTM, Dropout, Activation
 from tensorflow.keras.optimizers import SGD
+from tensorflow.python.client import device_lib
 
 import numpy as np
 
@@ -73,7 +74,14 @@ class MLExtension:
 						   readOnly=False)
 		TDF.createProperty(self, 'Targets', value='', dependable=True,
 						   readOnly=False)
+		
+		self.GetEnvSettings()
 
+		debug('Is TensorFlow built with CUDA: ', tf.test.is_built_with_cuda())
+		debug('Is GPU available: ', tf.test.is_gpu_available(cuda_only=False, min_cuda_compute_capability=None))
+		debug('Num GPUs Available: ', len(tf.config.experimental.list_physical_devices('GPU')))
+		debug('List of local devices: ', device_lib.list_local_devices())
+		
 
 	def GetEnvSettings(self):
 		self.Username = parent.Ml.par.Windowsusername
