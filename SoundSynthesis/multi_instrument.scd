@@ -21,7 +21,7 @@ SynthDef(\drops, {
 	sig = sig * dropEg;
 	sig = (sig * dist).fold2(1);
 	sig = RLPF.ar(sig, lpf, 0.2);
-	sig = FreeVerb.ar(sig, mix: 0.33, room:room)*amp*0.5;
+	sig = FreeVerb.ar(sig, mix: 0.33, room:room)*amp*0.2;
 	Out.ar(out, sig!2);
 }).add;
 
@@ -31,7 +31,7 @@ SynthDef(\drops, {
 	\room, 0.75,
 	\trigFreq, 1,
 	\dist, 1,
-	\freq, 60,
+	\freq, 110,
 ]);
 
 OSCdef.new(\drops1, {
@@ -45,7 +45,7 @@ OSCdef.new(\drops1, {
 OSCdef.new(\lpf1, {
 	arg msg;
 	~drops_1.set(
-		\lpf, msg[1].linexp(0,1,30,30000)
+		\lpf, msg[1].linexp(0,1,60,30000)
 	);
 }, '/lpf/1'
 );
@@ -63,7 +63,7 @@ OSCdef.new(\dist1, {
 	\room, 0.75,
 	\trigFreq, 1.75,
 	\dist, 1,
-	\freq, 200,
+	\freq, 220,
 ]);
 
 OSCdef.new(\drops2, {
@@ -77,7 +77,7 @@ OSCdef.new(\drops2, {
 OSCdef.new(\lpf2, {
 	arg msg;
 	~drops_2.set(
-		\lpf, msg[1].linexp(0,1,30,30000)
+		\lpf, msg[1].linexp(0,1,60,30000)
 	);
 }, '/lpf/2'
 );
@@ -90,6 +90,37 @@ OSCdef.new(\dist2, {
 }, '/dist/2'
 );
 
+~drops_3= Synth.new(\drops, [
+	\out, 0,
+	\room, 0.75,
+	\trigFreq, 2.5,
+	\dist, 1,
+	\freq, 350,
+]);
+
+OSCdef.new(\drops3, {
+	arg msg;
+	~drops_3.set(
+		\amp, msg[1]
+	);
+}, '/drops/3'
+);
+
+OSCdef.new(\lpf3, {
+	arg msg;
+	~drops_3.set(
+		\lpf, msg[1].linexp(0,1,60,30000)
+	);
+}, '/lpf/3'
+);
+
+OSCdef.new(\dist3, {
+	arg msg;
+	~drops_3.set(
+		\dist, msg[1].linexp(0,1,1,10)
+	);
+}, '/dist/3'
+);
 
 )
 
