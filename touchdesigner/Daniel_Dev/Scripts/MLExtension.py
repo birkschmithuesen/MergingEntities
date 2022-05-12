@@ -148,8 +148,8 @@ class MLExtension:
 		self.Model.save('Models/' + location) #saving as SavedModel format
 
 	def LoadModel(self):
-		model_file = str(parent.Ml.par.Selectmodel)
-		self.Model = keras.models.load_model(model_file)
+		model_folder = str(parent.Ml.par.Selectmodel)
+		self.Model = keras.models.load_model(model_folder)
 
 	def PredictTargets(self,features):
 		return self.Model.predict(np.array([features]))
