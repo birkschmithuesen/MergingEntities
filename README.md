@@ -24,3 +24,6 @@ More infos: https://derivative.ca/community-post/tutorial/anaconda-managing-pyth
 
 ## Bodysuite / Gyroscopes OSC Interface
 * each bodysuite with $id (counting from 1) sends it's gyroscope data like this: /body/$id/gyro/1...6/[quartanians, angles, rotation-speed], where quartanians has 4 dims and angles and rotation-speed has 3 dims x,y,z
+
+## Pharus / LiDAR Tracking Interface
+* for each ID there comes an OSC message with: [id, Posx, Posy, Normalx, Normaly, Orientationx, Orientationy, Speed]
