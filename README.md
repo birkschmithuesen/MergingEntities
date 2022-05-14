@@ -14,11 +14,8 @@ Get an overview in the flowchart.PDF
 * Light: MagicQ (chamsys) to calibrate the Movingheads
 
 ## Machine Learning Install
-1. Setup an Andaconda environment with the name "merging"
-2. Install Keras or ML framework of your choice
-3. Check if your environment was loaded by TouchDesigner:
-  * Go in Component "ML" and check if "execute1" compiled correctly
-  * open a textport and try to "import Keras"
+Setup an Andaconda environment from the requirements file /touchdesigner/environment.yml with "conda env create -f environment.yml -n MY-NAME"
+
 
 More infos: https://derivative.ca/community-post/tutorial/anaconda-managing-python-environments-and-3rd-party-libraries-touchdesigner
 

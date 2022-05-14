@@ -1,0 +1,799 @@
+19811	/_samplerate 60 /drops_1 0 0 /energy 0.3173835 0.341994 /char1 0.2000014 0.2001285 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+19813	/_samplerate 60 /drops_1 0 0 /energy 0.3670375 0.3924455 /char1 0.2004611 0.200999 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+19816	/_samplerate 60 /drops_1 0 0 /energy 0.4181483 0.4440754 /char1 0.2017419 0.2026891 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+19818	/_samplerate 60 /drops_1 0 0 0 /energy 0.4701559 0.4963181 0.5224904 /char1 0.2038401 0.205194 0.2067501 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+19820	/_samplerate 60 /drops_1 0 0 /energy 0.5486011 0.5745785 /char1 0.208507 0.2104638 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+19823	/_samplerate 60 /drops_1 0 0 /energy 0.6003516 0.6258495 /char1 0.212619 0.2149712 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+19825	/_samplerate 60 /drops_1 0 0 0 /energy 0.6510026 0.6757417 0.6999992 /char1 0.2175187 0.2202598 0.2231926 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+19827	/_samplerate 60 /drops_1 0 0 /energy 0.7237085 0.7468046 /char1 0.2263151 0.2296252 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+19830	/_samplerate 60 /drops_1 0 0 /energy 0.7692242 0.790906 /char1 0.2331206 0.2367989 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+19832	/_samplerate 60 /drops_1 0 0 0 /energy 0.8117903 0.83182 0.8509403 /char1 0.2406576 0.2446941 0.2489055 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+19834	/_samplerate 60 /drops_1 0 0 /energy 0.8690987 0.8862454 /char1 0.253289 0.2578415 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+19836	/_samplerate 60 /drops_1 0 0 /energy 0.9023334 0.9173186 /char1 0.2625601 0.2674413 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+19839	/_samplerate 60 /drops_1 0 0 /energy 0.93116 0.9438196 /char1 0.272482 0.2776786 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+19841	/_samplerate 60 /drops_1 0 0 0 /energy 0.9552628 0.9654581 0.9743776 /char1 0.2830275 0.2885252 0.2941678 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+19844	/_samplerate 60 /drops_1 0 0 /energy 0.9819969 0.988295 /char1 0.2999514 0.3058722 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+19846	/_samplerate 60 /drops_1 0 0 0 /energy 0.9932548 0.9968626 0.9991086 /char1 0.311926 0.3181087 0.324416 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+19848	/_samplerate 60 /drops_1 0 0 /energy 0.9999865 0.9994939 /char1 0.3308437 0.3373874 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+19851	/_samplerate 60 /drops_1 0 0 /energy 0.9976323 0.9944068 /char1 0.3440425 0.3508044 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+19853	/_samplerate 60 /drops_1 0 0 0 /energy 0.989826 0.9839028 0.9766532 /char1 0.3576686 0.3646304 0.3716849 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+19855	/_samplerate 60 /drops_1 0 0 /energy 0.968097 0.9582579 /char1 0.3788274 0.3860529 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+19858	/_samplerate 60 /drops_1 0 0 /energy 0.9471627 0.9348419 /char1 0.3933565 0.4007332 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+19860	/_samplerate 60 /drops_1 0 0 0 /energy 0.9213292 0.9066617 0.8908796 /char1 0.4081779 0.4156856 0.4232511 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+19862	/_samplerate 60 /drops_1 0 0 /energy 0.874026 0.8561473 /char1 0.4308691 0.4385345 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+19865	/_samplerate 60 /drops_1 0 0 /energy 0.8372924 0.817513 /char1 0.4462421 0.4539865 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+19867	/_samplerate 60 /drops_1 0 0 0 /energy 0.7968634 0.7754 0.7531819 /char1 0.4617624 0.4695646 0.4773875 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+19869	/_samplerate 60 /drops_1 0 0 /energy 0.7302697 0.7067264 /char1 0.485226 0.4930747 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+19872	/_samplerate 60 /drops_1 0 0 /energy 0.6826165 0.658006 /char1 0.500928 0.5087808 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+19874	/_samplerate 60 /drops_1 0 0 0 /energy 0.6329625 0.6075545 0.5818517 /char1 0.5166275 0.5244628 0.5322813 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+19876	/_samplerate 60 /drops_1 0 0 /energy 0.5559245 0.5298442 /char1 0.5400777 0.5478467 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+19879	/_samplerate 60 /drops_1 0 0 /energy 0.5036819 0.4775096 /char1 0.5555829 0.5632809 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+19881	/_samplerate 60 /drops_1 0 0 0 /energy 0.4513989 0.4254215 0.3996484 /char1 0.5709357 0.5785418 0.586094 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+19883	/_samplerate 60 /drops_1 0 0 /energy 0.3741505 0.3489974 /char1 0.5935873 0.6010164 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+19886	/_samplerate 60 /drops_1 0 0 /energy 0.3242582 0.3000008 /char1 0.6083763 0.6156619 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+19888	/_samplerate 60 /drops_1 0 0 0 /energy 0.2762915 0.2531954 0.2307758 /char1 0.6228682 0.6299903 0.6370234 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+19890	/_samplerate 60 /drops_1 0 0 /energy 0.2090941 0.1882097 /char1 0.6439625 0.650803 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+19896	/_samplerate 60 /drops_1 0 0 /energy 0.16818 0.1490597 /char1 0.6575401 0.6641693 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+19898	/_samplerate 60 /drops_1 0 0 0 0 0 0 /energy 0.1309013 0.1137547 0.09766664 0.0826814 0.06884 0.05618037 /char1 0.6706859 0.6770855 0.6833638 0.6895164 0.6955392 0.7014279 /char2 0.181 0.181 0.181 0.181 0.181 0.181 /drops_2 0 0 0 0 0 0 /tube 0.77 0.77 0.77 0.77 0.77 0.77 /drops_3 0 0 0 0 0 0 /chan1 0 0 0 0 0 0
+19900	/_samplerate 60 /drops_1 0 0 /energy 0.04473722 0.03454192 /char1 0.7071785 0.7127872 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+19903	/_samplerate 60 /drops_1 0 0 /energy 0.02562241 0.01800313 /char1 0.7182501 0.7235634 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+19905	/_samplerate 60 /drops_1 0 0 0 /energy 0.01170497 0.006745198 0.003137399 /char1 0.7287234 0.7337267 0.7385698 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+19907	/_samplerate 60 /drops_1 0 0 /energy 0.0008914671 1.355667e-05 /char1 0.7432494 0.7477623 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+19909	/_samplerate 60 /drops_1 0 0 /energy 0.0005060743 0.00236767 /char1 0.7521054 0.7562757 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+19912	/_samplerate 60 /drops_1 0 0 /energy 0.005593241 0.01017395 /char1 0.7602704 0.7640867 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+19914	/_samplerate 60 /drops_1 0 0 0 /energy 0.01609723 0.02334686 0.03190296 /char1 0.767722 0.7711738 0.7744398 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+19916	/_samplerate 60 /drops_1 0 0 /energy 0.04174209 0.05283726 /char1 0.7775177 0.7804054 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+19919	/_samplerate 60 /drops_1 0 0 /energy 0.06515808 0.07867077 /char1 0.7831009 0.7856024 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+19921	/_samplerate 60 /drops_1 0 0 0 /energy 0.0933383 0.1091205 0.125974 /char1 0.7879081 0.7900166 0.7919263 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+19923	/_samplerate 60 /drops_1 0 0 /energy 0.1438527 0.1627076 /char1 0.7936358 0.7951442 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+19926	/_samplerate 60 /drops_1 0 0 /energy 0.182487 0.2031366 /char1 0.7964503 0.7975532 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+19928	/_samplerate 60 /drops_1 0 0 0 /energy 0.2246 0.2468182 0.2697303 /char1 0.7984521 0.7991466 0.799636 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+19930	/_samplerate 60 /drops_1 0 0 /energy 0.2932736 0.3173835 /char1 0.7999201 0.7999986 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+19933	/_samplerate 60 /drops_1 0 0 /energy 0.341994 0.3670375 /char1 0.7998715 0.7995389 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+19935	/_samplerate 60 /drops_1 0 0 0 /energy 0.3924455 0.4181483 0.4440754 /char1 0.799001 0.7982581 0.7973109 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+19937	/_samplerate 60 /drops_1 0 0 /energy 0.4701559 0.4963181 /char1 0.7961599 0.7948059 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+19940	/_samplerate 60 /drops_1 0 0 /energy 0.5224904 0.5486011 /char1 0.79325 0.7914929 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+19942	/_samplerate 60 /drops_1 0 0 0 /energy 0.5745785 0.6003516 0.6258495 /char1 0.7895362 0.787381 0.7850288 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+19944	/_samplerate 60 /drops_1 0 0 /energy 0.6510026 0.6757417 /char1 0.7824813 0.7797402 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+19947	/_samplerate 60 /drops_1 0 0 /energy 0.6999992 0.7237085 /char1 0.7768074 0.7736849 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+19949	/_samplerate 60 /drops_1 0 0 0 /energy 0.7468046 0.7692242 0.790906 /char1 0.7703748 0.7668794 0.7632011 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+19951	/_samplerate 60 /drops_1 0 0 /energy 0.8117903 0.83182 /char1 0.7593424 0.7553059 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+19954	/_samplerate 60 /drops_1 0 0 /energy 0.8509403 0.8690987 /char1 0.7510945 0.746711 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+19956	/_samplerate 60 /drops_1 0 0 0 /energy 0.8862454 0.9023334 0.9173186 /char1 0.7421585 0.7374399 0.7325587 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+19958	/_samplerate 60 /drops_1 0 0 /energy 0.93116 0.9438196 /char1 0.727518 0.7223214 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+19960	/_samplerate 60 /drops_1 0 0 /energy 0.9552628 0.9654581 /char1 0.7169725 0.7114748 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+19963	/_samplerate 60 /drops_1 0 0 /energy 0.9743776 0.9819969 /char1 0.7058322 0.7000486 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+19965	/_samplerate 60 /drops_1 0 0 0 /energy 0.988295 0.9932548 0.9968626 /char1 0.6941278 0.688074 0.6818913 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+19968	/_samplerate 60 /drops_1 0 0 /energy 0.9991086 0.9999865 /char1 0.675584 0.6691563 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+19970	/_samplerate 60 /drops_1 0 0 0 /energy 0.9994939 0.9976323 0.9944068 /char1 0.6626126 0.6559576 0.6491956 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+19972	/_samplerate 60 /drops_1 0 0 /energy 0.989826 0.9839028 /char1 0.6423314 0.6353696 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+19975	/_samplerate 60 /drops_1 0 0 /energy 0.9766532 0.968097 /char1 0.6283151 0.6211726 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+19977	/_samplerate 60 /drops_1 0 0 0 /energy 0.9582579 0.9471627 0.9348419 /char1 0.6139471 0.6066435 0.5992668 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+19979	/_samplerate 60 /drops_1 0 0 /energy 0.9213292 0.9066617 /char1 0.591822 0.5843144 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+19982	/_samplerate 60 /drops_1 0 0 /energy 0.8908796 0.874026 /char1 0.576749 0.5691309 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+19984	/_samplerate 60 /drops_1 0 0 0 /energy 0.8561473 0.8372924 0.817513 /char1 0.5614654 0.5537579 0.5460135 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+19986	/_samplerate 60 /drops_1 0 0 /energy 0.7968634 0.7754 /char1 0.5382376 0.5304354 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+19989	/_samplerate 60 /drops_1 0 0 /energy 0.7531819 0.7302697 /char1 0.5226125 0.514774 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+19991	/_samplerate 60 /drops_1 0 0 0 /energy 0.7067264 0.6826165 0.658006 /char1 0.5069253 0.499072 0.4912193 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+19993	/_samplerate 60 /drops_1 0 0 /energy 0.6329625 0.6075545 /char1 0.4833725 0.4755372 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+19995	/_samplerate 60 /drops_1 0 0 /energy 0.5818517 0.5559245 /char1 0.4677187 0.4599223 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+19998	/_samplerate 60 /drops_1 0 0 /energy 0.5298442 0.5036819 /char1 0.4521533 0.4444171 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20000	/_samplerate 60 /drops_1 0 0 0 /energy 0.4775096 0.4513989 0.4254215 /char1 0.436719 0.4290643 0.4214582 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+20002	/_samplerate 60 /drops_1 0 0 /energy 0.3996484 0.3741505 /char1 0.413906 0.4064128 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20005	/_samplerate 60 /drops_1 0 0 /energy 0.3489974 0.3242582 /char1 0.3989836 0.3916237 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20007	/_samplerate 60 /drops_1 0 0 0 /energy 0.3000008 0.2762915 0.2531954 /char1 0.3843381 0.3771318 0.3700097 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+20009	/_samplerate 60 /drops_1 0 0 /energy 0.2307758 0.2090941 /char1 0.3629766 0.3560375 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20012	/_samplerate 60 /drops_1 0 0 /energy 0.1882097 0.16818 /char1 0.349197 0.3424599 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20014	/_samplerate 60 /drops_1 0 0 0 /energy 0.1490597 0.1309013 0.1137547 /char1 0.3358307 0.3293141 0.3229145 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+20016	/_samplerate 60 /drops_1 0 0 /energy 0.09766664 0.0826814 /char1 0.3166362 0.3104836 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20018	/_samplerate 60 /drops_1 0 0 /energy 0.06884 0.05618037 /char1 0.3044608 0.2985721 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20021	/_samplerate 60 /drops_1 0 0 /energy 0.04473722 0.03454192 /char1 0.2928214 0.2872128 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20023	/_samplerate 60 /drops_1 0 0 0 /energy 0.02562241 0.01800313 0.01170497 /char1 0.2817499 0.2764366 0.2712766 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+20025	/_samplerate 60 /drops_1 0 0 /energy 0.006745198 0.003137399 /char1 0.2662733 0.2614302 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20028	/_samplerate 60 /drops_1 0 0 /energy 0.0008914671 1.355667e-05 /char1 0.2567506 0.2522377 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20030	/_samplerate 60 /drops_1 0 0 0 /energy 0.0005060743 0.00236767 0.005593241 /char1 0.2478946 0.2437243 0.2397296 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+20032	/_samplerate 60 /drops_1 0 0 /energy 0.01017395 0.01609723 /char1 0.2359133 0.232278 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20035	/_samplerate 60 /drops_1 0 0 /energy 0.02334686 0.03190296 /char1 0.2288262 0.2255602 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20037	/_samplerate 60 /drops_1 0 0 0 /energy 0.04174209 0.05283726 0.06515808 /char1 0.2224823 0.2195946 0.2168991 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+20039	/_samplerate 60 /drops_1 0 0 /energy 0.07867077 0.0933383 /char1 0.2143976 0.2120919 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20042	/_samplerate 60 /drops_1 0 0 /energy 0.1091205 0.125974 /char1 0.2099834 0.2080738 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20044	/_samplerate 60 /drops_1 0 0 0 /energy 0.1438527 0.1627076 0.182487 /char1 0.2063642 0.2048558 0.2035497 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+20046	/_samplerate 60 /drops_1 0 0 /energy 0.2031366 0.2246 /char1 0.2024468 0.2015478 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20048	/_samplerate 60 /drops_1 0 0 /energy 0.2468182 0.2697303 /char1 0.2008534 0.200364 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20051	/_samplerate 60 /drops_1 0 0 /energy 0.2932736 0.3173835 /char1 0.2000799 0.2000014 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20053	/_samplerate 60 /drops_1 0 0 0 /energy 0.341994 0.3670375 0.3924455 /char1 0.2001285 0.2004611 0.200999 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+20055	/_samplerate 60 /drops_1 0 0 /energy 0.4181483 0.4440754 /char1 0.2017419 0.2026891 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20058	/_samplerate 60 /drops_1 0 0 /energy 0.4701559 0.4963181 /char1 0.2038401 0.205194 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20060	/_samplerate 60 /drops_1 0 0 0 /energy 0.5224904 0.5486011 0.5745785 /char1 0.2067501 0.208507 0.2104638 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+20062	/_samplerate 60 /drops_1 0 0 /energy 0.6003516 0.6258495 /char1 0.212619 0.2149712 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20065	/_samplerate 60 /drops_1 0 0 /energy 0.6510026 0.6757417 /char1 0.2175187 0.2202598 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20067	/_samplerate 60 /drops_1 0 0 0 /energy 0.6999992 0.7237085 0.7468046 /char1 0.2231926 0.2263151 0.2296252 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+20069	/_samplerate 60 /drops_1 0 0 /energy 0.7692242 0.790906 /char1 0.2331206 0.2367989 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20072	/_samplerate 60 /drops_1 0 0 /energy 0.8117903 0.83182 /char1 0.2406576 0.2446941 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20074	/_samplerate 60 /drops_1 0 0 0 /energy 0.8509403 0.8690987 0.8862454 /char1 0.2489055 0.253289 0.2578415 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+20076	/_samplerate 60 /drops_1 0 0 /energy 0.9023334 0.9173186 /char1 0.2625601 0.2674413 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20079	/_samplerate 60 /drops_1 0 0 /energy 0.93116 0.9438196 /char1 0.272482 0.2776786 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20081	/_samplerate 60 /drops_1 0 0 0 /energy 0.9552628 0.9654581 0.9743776 /char1 0.2830275 0.2885252 0.2941678 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+20083	/_samplerate 60 /drops_1 0 0 /energy 0.9819969 0.988295 /char1 0.2999514 0.3058722 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20086	/_samplerate 60 /drops_1 0 0 /energy 0.9932548 0.9968626 /char1 0.311926 0.3181087 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20088	/_samplerate 60 /drops_1 0 0 0 /energy 0.9991086 0.9999865 0.9994939 /char1 0.324416 0.3308437 0.3373874 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+20090	/_samplerate 60 /drops_1 0 0 /energy 0.9976323 0.9944068 /char1 0.3440425 0.3508044 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20092	/_samplerate 60 /drops_1 0 0 /energy 0.989826 0.9839028 /char1 0.3576686 0.3646304 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20095	/_samplerate 60 /drops_1 0 0 /energy 0.9766532 0.968097 /char1 0.3716849 0.3788274 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20097	/_samplerate 60 /drops_1 0 0 0 /energy 0.9582579 0.9471627 0.9348419 /char1 0.3860529 0.3933565 0.4007332 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+20099	/_samplerate 60 /drops_1 0 0 /energy 0.9213292 0.9066617 /char1 0.4081779 0.4156856 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20102	/_samplerate 60 /drops_1 0 0 /energy 0.8908796 0.874026 /char1 0.4232511 0.4308691 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20104	/_samplerate 60 /drops_1 0 0 0 /energy 0.8561473 0.8372924 0.817513 /char1 0.4385345 0.4462421 0.4539865 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+20106	/_samplerate 60 /drops_1 0 0 /energy 0.7968634 0.7754 /char1 0.4617624 0.4695646 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20109	/_samplerate 60 /drops_1 0 0 /energy 0.7531819 0.7302697 /char1 0.4773875 0.485226 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20111	/_samplerate 60 /drops_1 0 0 0 /energy 0.7067264 0.6826165 0.658006 /char1 0.4930747 0.500928 0.5087808 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+20113	/_samplerate 60 /drops_1 0 0 /energy 0.6329625 0.6075545 /char1 0.5166275 0.5244628 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20116	/_samplerate 60 /drops_1 0 0 /energy 0.5818517 0.5559245 /char1 0.5322813 0.5400777 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20118	/_samplerate 60 /drops_1 0 0 0 /energy 0.5298442 0.5036819 0.4775096 /char1 0.5478467 0.5555829 0.5632809 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+20120	/_samplerate 60 /drops_1 0 0 /energy 0.4513989 0.4254215 /char1 0.5709357 0.5785418 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20123	/_samplerate 60 /drops_1 0 0 /energy 0.3996484 0.3741505 /char1 0.586094 0.5935873 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20125	/_samplerate 60 /drops_1 0 0 0 /energy 0.3489974 0.3242582 0.3000008 /char1 0.6010164 0.6083763 0.6156619 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+20127	/_samplerate 60 /drops_1 0 0 /energy 0.2762915 0.2531954 /char1 0.6228682 0.6299903 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20130	/_samplerate 60 /drops_1 0 0 /energy 0.2307758 0.2090941 /char1 0.6370234 0.6439625 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20132	/_samplerate 60 /drops_1 0 0 0 /energy 0.1882097 0.16818 0.1490597 /char1 0.650803 0.6575401 0.6641693 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+20134	/_samplerate 60 /drops_1 0 0 /energy 0.1309013 0.1137547 /char1 0.6706859 0.6770855 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20137	/_samplerate 60 /drops_1 0 0 /energy 0.09766664 0.0826814 /char1 0.6833638 0.6895164 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20139	/_samplerate 60 /drops_1 0 0 0 /energy 0.06884 0.05618037 0.04473722 /char1 0.6955392 0.7014279 0.7071785 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+20141	/_samplerate 60 /drops_1 0 0 /energy 0.03454192 0.02562241 /char1 0.7127872 0.7182501 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20144	/_samplerate 60 /drops_1 0 0 /energy 0.01800313 0.01170497 /char1 0.7235634 0.7287234 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20146	/_samplerate 60 /drops_1 0 0 0 /energy 0.006745198 0.003137399 0.0008914671 /char1 0.7337267 0.7385698 0.7432494 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+20148	/_samplerate 60 /drops_1 0 0 /energy 1.355667e-05 0.0005060743 /char1 0.7477623 0.7521054 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20151	/_samplerate 60 /drops_1 0 0 /energy 0.00236767 0.005593241 /char1 0.7562757 0.7602704 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20153	/_samplerate 60 /drops_1 0 0 0 /energy 0.01017395 0.01609723 0.02334686 /char1 0.7640867 0.767722 0.7711738 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+20155	/_samplerate 60 /drops_1 0 0 /energy 0.03190296 0.04174209 /char1 0.7744398 0.7775177 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20157	/_samplerate 60 /drops_1 0 0 /energy 0.05283726 0.06515808 /char1 0.7804054 0.7831009 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20160	/_samplerate 60 /drops_1 0 0 /energy 0.07867077 0.0933383 /char1 0.7856024 0.7879081 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20162	/_samplerate 60 /drops_1 0 0 0 /energy 0.1091205 0.125974 0.1438527 /char1 0.7900166 0.7919263 0.7936358 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+20165	/_samplerate 60 /drops_1 0 0 /energy 0.1627076 0.182487 /char1 0.7951442 0.7964503 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20167	/_samplerate 60 /drops_1 0 0 0 /energy 0.2031366 0.2246 0.2468182 /char1 0.7975532 0.7984521 0.7991466 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+20169	/_samplerate 60 /drops_1 0 0 /energy 0.2697303 0.2932736 /char1 0.799636 0.7999201 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20171	/_samplerate 60 /drops_1 0 0 /energy 0.3173835 0.341994 /char1 0.7999986 0.7998715 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20174	/_samplerate 60 /drops_1 0 0 /energy 0.3670375 0.3924455 /char1 0.7995389 0.799001 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20176	/_samplerate 60 /drops_1 0 0 0 /energy 0.4181483 0.4440754 0.4701559 /char1 0.7982581 0.7973109 0.7961599 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+20178	/_samplerate 60 /drops_1 0 0 /energy 0.4963181 0.5224904 /char1 0.7948059 0.79325 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20181	/_samplerate 60 /drops_1 0 0 /energy 0.5486011 0.5745785 /char1 0.7914929 0.7895362 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20183	/_samplerate 60 /drops_1 0 0 0 /energy 0.6003516 0.6258495 0.6510026 /char1 0.787381 0.7850288 0.7824813 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+20185	/_samplerate 60 /drops_1 0 0 /energy 0.6757417 0.6999992 /char1 0.7797402 0.7768074 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20188	/_samplerate 60 /drops_1 0 0 /energy 0.7237085 0.7468046 /char1 0.7736849 0.7703748 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20190	/_samplerate 60 /drops_1 0 0 0 /energy 0.7692242 0.790906 0.8117903 /char1 0.7668794 0.7632011 0.7593424 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+20192	/_samplerate 60 /drops_1 0 0 /energy 0.83182 0.8509403 /char1 0.7553059 0.7510945 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20195	/_samplerate 60 /drops_1 0 0 /energy 0.8690987 0.8862454 /char1 0.746711 0.7421585 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20197	/_samplerate 60 /drops_1 0 0 0 /energy 0.9023334 0.9173186 0.93116 /char1 0.7374399 0.7325587 0.727518 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+20199	/_samplerate 60 /drops_1 0 0 /energy 0.9438196 0.9552628 /char1 0.7223214 0.7169725 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20202	/_samplerate 60 /drops_1 0 0 /energy 0.9654581 0.9743776 /char1 0.7114748 0.7058322 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20204	/_samplerate 60 /drops_1 0 0 0 /energy 0.9819969 0.988295 0.9932548 /char1 0.7000486 0.6941278 0.688074 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+20206	/_samplerate 60 /drops_1 0 0 /energy 0.9968626 0.9991086 /char1 0.6818913 0.675584 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20209	/_samplerate 60 /drops_1 0 0 /energy 0.9999865 0.9994939 /char1 0.6691563 0.6626126 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20211	/_samplerate 60 /drops_1 0 0 0 /energy 0.9976323 0.9944068 0.989826 /char1 0.6559576 0.6491956 0.6423314 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+20213	/_samplerate 60 /drops_1 0 0 /energy 0.9839028 0.9766532 /char1 0.6353696 0.6283151 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20216	/_samplerate 60 /drops_1 0 0 /energy 0.968097 0.9582579 /char1 0.6211726 0.6139471 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20218	/_samplerate 60 /drops_1 0 0 0 /energy 0.9471627 0.9348419 0.9213292 /char1 0.6066435 0.5992668 0.591822 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+20220	/_samplerate 60 /drops_1 0 0 /energy 0.9066617 0.8908796 /char1 0.5843144 0.576749 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20223	/_samplerate 60 /drops_1 0 0 /energy 0.874026 0.8561473 /char1 0.5691309 0.5614654 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20225	/_samplerate 60 /drops_1 0 0 0 /energy 0.8372924 0.817513 0.7968634 /char1 0.5537579 0.5460135 0.5382376 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+20227	/_samplerate 60 /drops_1 0 0 /energy 0.7754 0.7531819 /char1 0.5304354 0.5226125 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20230	/_samplerate 60 /drops_1 0 0 /energy 0.7302697 0.7067264 /char1 0.514774 0.5069253 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20232	/_samplerate 60 /drops_1 0 0 0 /energy 0.6826165 0.658006 0.6329625 /char1 0.499072 0.4912193 0.4833725 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+20235	/_samplerate 60 /drops_1 0 0 /energy 0.6075545 0.5818517 /char1 0.4755372 0.4677187 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20237	/_samplerate 60 /drops_1 0 0 0 /energy 0.5559245 0.5298442 0.5036819 /char1 0.4599223 0.4521533 0.4444171 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+20239	/_samplerate 60 /drops_1 0 0 /energy 0.4775096 0.4513989 /char1 0.436719 0.4290643 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20241	/_samplerate 60 /drops_1 0 0 /energy 0.4254215 0.3996484 /char1 0.4214582 0.413906 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20244	/_samplerate 60 /drops_1 0 0 /energy 0.3741505 0.3489974 /char1 0.4064128 0.3989836 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20246	/_samplerate 60 /drops_1 0 0 0 /energy 0.3242582 0.3000008 0.2762915 /char1 0.3916237 0.3843381 0.3771318 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+20248	/_samplerate 60 /drops_1 0 0 /energy 0.2531954 0.2307758 /char1 0.3700097 0.3629766 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20251	/_samplerate 60 /drops_1 0 0 /energy 0.2090941 0.1882097 /char1 0.3560375 0.349197 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20253	/_samplerate 60 /drops_1 0 0 0 /energy 0.16818 0.1490597 0.1309013 /char1 0.3424599 0.3358307 0.3293141 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+20255	/_samplerate 60 /drops_1 0 0 /energy 0.1137547 0.09766664 /char1 0.3229145 0.3166362 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20258	/_samplerate 60 /drops_1 0 0 /energy 0.0826814 0.06884 /char1 0.3104836 0.3044608 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20260	/_samplerate 60 /drops_1 0 0 0 /energy 0.05618037 0.04473722 0.03454192 /char1 0.2985721 0.2928214 0.2872128 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+20262	/_samplerate 60 /drops_1 0 0 /energy 0.02562241 0.01800313 /char1 0.2817499 0.2764366 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20265	/_samplerate 60 /drops_1 0 0 /energy 0.01170497 0.006745198 /char1 0.2712766 0.2662733 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20267	/_samplerate 60 /drops_1 0 0 0 /energy 0.003137399 0.0008914671 1.355667e-05 /char1 0.2614302 0.2567506 0.2522377 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+20269	/_samplerate 60 /drops_1 0 0 /energy 0.0005060743 0.00236767 /char1 0.2478946 0.2437243 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20272	/_samplerate 60 /drops_1 0 0 /energy 0.005593241 0.01017395 /char1 0.2397296 0.2359133 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20274	/_samplerate 60 /drops_1 0 0 0 /energy 0.01609723 0.02334686 0.03190296 /char1 0.232278 0.2288262 0.2255602 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+20276	/_samplerate 60 /drops_1 0 0 /energy 0.04174209 0.05283726 /char1 0.2224823 0.2195946 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20279	/_samplerate 60 /drops_1 0 0 /energy 0.06515808 0.07867077 /char1 0.2168991 0.2143976 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20281	/_samplerate 60 /drops_1 0 0 0 /energy 0.0933383 0.1091205 0.125974 /char1 0.2120919 0.2099834 0.2080738 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+20283	/_samplerate 60 /drops_1 0 0 /energy 0.1438527 0.1627076 /char1 0.2063642 0.2048558 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20286	/_samplerate 60 /drops_1 0 0 /energy 0.182487 0.2031366 /char1 0.2035497 0.2024468 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20288	/_samplerate 60 /drops_1 0 0 0 /energy 0.2246 0.2468182 0.2697303 /char1 0.2015478 0.2008534 0.200364 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+20290	/_samplerate 60 /drops_1 0 0 /energy 0.2932736 0.3173835 /char1 0.2000799 0.2000014 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20292	/_samplerate 60 /drops_1 0 0 /energy 0.341994 0.3670375 /char1 0.2001285 0.2004611 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20295	/_samplerate 60 /drops_1 0 0 /energy 0.3924455 0.4181483 /char1 0.200999 0.2017419 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20297	/_samplerate 60 /drops_1 0 0 0 /energy 0.4440754 0.4701559 0.4963181 /char1 0.2026891 0.2038401 0.205194 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+20299	/_samplerate 60 /drops_1 0 0 /energy 0.5224904 0.5486011 /char1 0.2067501 0.208507 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20302	/_samplerate 60 /drops_1 0 0 /energy 0.5745785 0.6003516 /char1 0.2104638 0.212619 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20304	/_samplerate 60 /drops_1 0 0 0 /energy 0.6258495 0.6510026 0.6757417 /char1 0.2149712 0.2175187 0.2202598 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+20306	/_samplerate 60 /drops_1 0 0 /energy 0.6999992 0.7237085 /char1 0.2231926 0.2263151 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20309	/_samplerate 60 /drops_1 0 0 /energy 0.7468046 0.7692242 /char1 0.2296252 0.2331206 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20311	/_samplerate 60 /drops_1 0 0 0 /energy 0.790906 0.8117903 0.83182 /char1 0.2367989 0.2406576 0.2446941 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+20313	/_samplerate 60 /drops_1 0 0 /energy 0.8509403 0.8690987 /char1 0.2489055 0.253289 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20316	/_samplerate 60 /drops_1 0 0 /energy 0.8862454 0.9023334 /char1 0.2578415 0.2625601 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20318	/_samplerate 60 /drops_1 0 0 0 /energy 0.9173186 0.93116 0.9438196 /char1 0.2674413 0.272482 0.2776786 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+20320	/_samplerate 60 /drops_1 0 0 /energy 0.9552628 0.9654581 /char1 0.2830275 0.2885252 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20323	/_samplerate 60 /drops_1 0 0 /energy 0.9743776 0.9819969 /char1 0.2941678 0.2999514 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20325	/_samplerate 60 /drops_1 0 0 0 /energy 0.988295 0.9932548 0.9968626 /char1 0.3058722 0.311926 0.3181087 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+20327	/_samplerate 60 /drops_1 0 0 /energy 0.9991086 0.9999865 /char1 0.324416 0.3308437 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20330	/_samplerate 60 /drops_1 0 0 /energy 0.9994939 0.9976323 /char1 0.3373874 0.3440425 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20332	/_samplerate 60 /drops_1 0 0 0 /energy 0.9944068 0.989826 0.9839028 /char1 0.3508044 0.3576686 0.3646304 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+20334	/_samplerate 60 /drops_1 0 0 /energy 0.9766532 0.968097 /char1 0.3716849 0.3788274 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20337	/_samplerate 60 /drops_1 0 0 /energy 0.9582579 0.9471627 /char1 0.3860529 0.3933565 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20339	/_samplerate 60 /drops_1 0 0 0 /energy 0.9348419 0.9213292 0.9066617 /char1 0.4007332 0.4081779 0.4156856 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+20341	/_samplerate 60 /drops_1 0 0 /energy 0.8908796 0.874026 /char1 0.4232511 0.4308691 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20344	/_samplerate 60 /drops_1 0 0 /energy 0.8561473 0.8372924 /char1 0.4385345 0.4462421 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20346	/_samplerate 60 /drops_1 0 0 0 /energy 0.817513 0.7968634 0.7754 /char1 0.4539865 0.4617624 0.4695646 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+20349	/_samplerate 60 /drops_1 0 0 /energy 0.7531819 0.7302697 /char1 0.4773875 0.485226 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20351	/_samplerate 60 /drops_1 0 0 0 /energy 0.7067264 0.6826165 0.658006 /char1 0.4930747 0.500928 0.5087808 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+20353	/_samplerate 60 /drops_1 0 0 /energy 0.6329625 0.6075545 /char1 0.5166275 0.5244628 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20356	/_samplerate 60 /drops_1 0 0 /energy 0.5818517 0.5559245 /char1 0.5322813 0.5400777 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20358	/_samplerate 60 /drops_1 0 0 0 /energy 0.5298442 0.5036819 0.4775096 /char1 0.5478467 0.5555829 0.5632809 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+20360	/_samplerate 60 /drops_1 0 0 /energy 0.4513989 0.4254215 /char1 0.5709357 0.5785418 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20363	/_samplerate 60 /drops_1 0 0 /energy 0.3996484 0.3741505 /char1 0.586094 0.5935873 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20365	/_samplerate 60 /drops_1 0 0 0 /energy 0.3489974 0.3242582 0.3000008 /char1 0.6010164 0.6083763 0.6156619 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+20367	/_samplerate 60 /drops_1 0 0 /energy 0.2762915 0.2531954 /char1 0.6228682 0.6299903 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20370	/_samplerate 60 /drops_1 0 0 /energy 0.2307758 0.2090941 /char1 0.6370234 0.6439625 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20372	/_samplerate 60 /drops_1 0 0 0 /energy 0.1882097 0.16818 0.1490597 /char1 0.650803 0.6575401 0.6641693 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+20374	/_samplerate 60 /drops_1 0 0 /energy 0.1309013 0.1137547 /char1 0.6706859 0.6770855 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20377	/_samplerate 60 /drops_1 0 0 /energy 0.09766664 0.0826814 /char1 0.6833638 0.6895164 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20379	/_samplerate 60 /drops_1 0 0 0 /energy 0.06884 0.05618037 0.04473722 /char1 0.6955392 0.7014279 0.7071785 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+20381	/_samplerate 60 /drops_1 0 0 /energy 0.03454192 0.02562241 /char1 0.7127872 0.7182501 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20384	/_samplerate 60 /drops_1 0 0 /energy 0.01800313 0.01170497 /char1 0.7235634 0.7287234 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20386	/_samplerate 60 /drops_1 0 0 0 /energy 0.006745198 0.003137399 0.0008914671 /char1 0.7337267 0.7385698 0.7432494 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+20388	/_samplerate 60 /drops_1 0 0 /energy 1.355667e-05 0.0005060743 /char1 0.7477623 0.7521054 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20391	/_samplerate 60 /drops_1 0 0 /energy 0.00236767 0.005593241 /char1 0.7562757 0.7602704 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20393	/_samplerate 60 /drops_1 0 0 0 /energy 0.01017395 0.01609723 0.02334686 /char1 0.7640867 0.767722 0.7711738 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+20395	/_samplerate 60 /drops_1 0 0 /energy 0.03190296 0.04174209 /char1 0.7744398 0.7775177 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20398	/_samplerate 60 /drops_1 0 0 /energy 0.05283726 0.06515808 /char1 0.7804054 0.7831009 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20400	/_samplerate 60 /drops_1 0 0 0 /energy 0.07867077 0.0933383 0.1091205 /char1 0.7856024 0.7879081 0.7900166 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+20402	/_samplerate 60 /drops_1 0 0 /energy 0.125974 0.1438527 /char1 0.7919263 0.7936358 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20404	/_samplerate 60 /drops_1 0 0 /energy 0.1627076 0.182487 /char1 0.7951442 0.7964503 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20407	/_samplerate 60 /drops_1 0 0 /energy 0.2031366 0.2246 /char1 0.7975532 0.7984521 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20409	/_samplerate 60 /drops_1 0 0 0 /energy 0.2468182 0.2697303 0.2932736 /char1 0.7991466 0.799636 0.7999201 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+20411	/_samplerate 60 /drops_1 0 0 /energy 0.3173835 0.341994 /char1 0.7999986 0.7998715 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20414	/_samplerate 60 /drops_1 0 0 /energy 0.3670375 0.3924455 /char1 0.7995389 0.799001 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20416	/_samplerate 60 /drops_1 0 0 0 /energy 0.4181483 0.4440754 0.4701559 /char1 0.7982581 0.7973109 0.7961599 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+20419	/_samplerate 60 /drops_1 0 0 /energy 0.4963181 0.5224904 /char1 0.7948059 0.79325 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20421	/_samplerate 60 /drops_1 0 0 0 /energy 0.5486011 0.5745785 0.6003516 /char1 0.7914929 0.7895362 0.787381 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+20423	/_samplerate 60 /drops_1 0 0 /energy 0.6258495 0.6510026 /char1 0.7850288 0.7824813 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20426	/_samplerate 60 /drops_1 0 0 /energy 0.6757417 0.6999992 /char1 0.7797402 0.7768074 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20428	/_samplerate 60 /drops_1 0 0 0 /energy 0.7237085 0.7468046 0.7692242 /char1 0.7736849 0.7703748 0.7668794 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+20430	/_samplerate 60 /drops_1 0 0 /energy 0.790906 0.8117903 /char1 0.7632011 0.7593424 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20433	/_samplerate 60 /drops_1 0 0 /energy 0.83182 0.8509403 /char1 0.7553059 0.7510945 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20435	/_samplerate 60 /drops_1 0 0 0 /energy 0.8690987 0.8862454 0.9023334 /char1 0.746711 0.7421585 0.7374399 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+20437	/_samplerate 60 /drops_1 0 0 /energy 0.9173186 0.93116 /char1 0.7325587 0.727518 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20440	/_samplerate 60 /drops_1 0 0 /energy 0.9438196 0.9552628 /char1 0.7223214 0.7169725 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20442	/_samplerate 60 /drops_1 0 0 0 /energy 0.9654581 0.9743776 0.9819969 /char1 0.7114748 0.7058322 0.7000486 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+20444	/_samplerate 60 /drops_1 0 0 /energy 0.988295 0.9932548 /char1 0.6941278 0.688074 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20447	/_samplerate 60 /drops_1 0 0 /energy 0.9968626 0.9991086 /char1 0.6818913 0.675584 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20449	/_samplerate 60 /drops_1 0 0 0 /energy 0.9999865 0.9994939 0.9976323 /char1 0.6691563 0.6626126 0.6559576 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+20451	/_samplerate 60 /drops_1 0 0 /energy 0.9944068 0.989826 /char1 0.6491956 0.6423314 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20453	/_samplerate 60 /drops_1 0 0 /energy 0.9839028 0.9766532 /char1 0.6353696 0.6283151 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20456	/_samplerate 60 /drops_1 0 0 /energy 0.968097 0.9582579 /char1 0.6211726 0.6139471 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20458	/_samplerate 60 /drops_1 0 0 0 /energy 0.9471627 0.9348419 0.9213292 /char1 0.6066435 0.5992668 0.591822 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+20461	/_samplerate 60 /drops_1 0 0 /energy 0.9066617 0.8908796 /char1 0.5843144 0.576749 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20463	/_samplerate 60 /drops_1 0 0 0 /energy 0.874026 0.8561473 0.8372924 /char1 0.5691309 0.5614654 0.5537579 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+20465	/_samplerate 60 /drops_1 0 0 /energy 0.817513 0.7968634 /char1 0.5460135 0.5382376 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20467	/_samplerate 60 /drops_1 0 0 /energy 0.7754 0.7531819 /char1 0.5304354 0.5226125 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20470	/_samplerate 60 /drops_1 0 0 /energy 0.7302697 0.7067264 /char1 0.514774 0.5069253 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20472	/_samplerate 60 /drops_1 0 0 0 /energy 0.6826165 0.658006 0.6329625 /char1 0.499072 0.4912193 0.4833725 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+20474	/_samplerate 60 /drops_1 0 0 /energy 0.6075545 0.5818517 /char1 0.4755372 0.4677187 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20477	/_samplerate 60 /drops_1 0 0 /energy 0.5559245 0.5298442 /char1 0.4599223 0.4521533 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20479	/_samplerate 60 /drops_1 0 0 0 /energy 0.5036819 0.4775096 0.4513989 /char1 0.4444171 0.436719 0.4290643 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+20481	/_samplerate 60 /drops_1 0 0 /energy 0.4254215 0.3996484 /char1 0.4214582 0.413906 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20484	/_samplerate 60 /drops_1 0 0 /energy 0.3741505 0.3489974 /char1 0.4064128 0.3989836 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20486	/_samplerate 60 /drops_1 0 0 0 /energy 0.3242582 0.3000008 0.2762915 /char1 0.3916237 0.3843381 0.3771318 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+20489	/_samplerate 60 /drops_1 0 0 /energy 0.2531954 0.2307758 /char1 0.3700097 0.3629766 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20491	/_samplerate 60 /drops_1 0 0 0 /energy 0.2090941 0.1882097 0.16818 /char1 0.3560375 0.349197 0.3424599 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+20493	/_samplerate 60 /drops_1 0 0 /energy 0.1490597 0.1309013 /char1 0.3358307 0.3293141 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20496	/_samplerate 60 /drops_1 0 0 /energy 0.1137547 0.09766664 /char1 0.3229145 0.3166362 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20498	/_samplerate 60 /drops_1 0 0 0 /energy 0.0826814 0.06884 0.05618037 /char1 0.3104836 0.3044608 0.2985721 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+20500	/_samplerate 60 /drops_1 0 0 /energy 0.04473722 0.03454192 /char1 0.2928214 0.2872128 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20502	/_samplerate 60 /drops_1 0 0 /energy 0.02562241 0.01800313 /char1 0.2817499 0.2764366 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20505	/_samplerate 60 /drops_1 0 0 /energy 0.01170497 0.006745198 /char1 0.2712766 0.2662733 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20507	/_samplerate 60 /drops_1 0 0 0 /energy 0.003137399 0.0008914671 1.355667e-05 /char1 0.2614302 0.2567506 0.2522377 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+20510	/_samplerate 60 /drops_1 0 0 /energy 0.0005060743 0.00236767 /char1 0.2478946 0.2437243 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20512	/_samplerate 60 /drops_1 0 0 0 /energy 0.005593241 0.01017395 0.01609723 /char1 0.2397296 0.2359133 0.232278 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+20514	/_samplerate 60 /drops_1 0 0 /energy 0.02334686 0.03190296 /char1 0.2288262 0.2255602 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20517	/_samplerate 60 /drops_1 0 0 /energy 0.04174209 0.05283726 /char1 0.2224823 0.2195946 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20519	/_samplerate 60 /drops_1 0 0 0 /energy 0.06515808 0.07867077 0.0933383 /char1 0.2168991 0.2143976 0.2120919 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+20521	/_samplerate 60 /drops_1 0 0 /energy 0.1091205 0.125974 /char1 0.2099834 0.2080738 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20524	/_samplerate 60 /drops_1 0 0 /energy 0.1438527 0.1627076 /char1 0.2063642 0.2048558 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20526	/_samplerate 60 /drops_1 0 0 0 /energy 0.182487 0.2031366 0.2246 /char1 0.2035497 0.2024468 0.2015478 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+20528	/_samplerate 60 /drops_1 0 0 /energy 0.2468182 0.2697303 /char1 0.2008534 0.200364 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20531	/_samplerate 60 /drops_1 0 0 /energy 0.2932736 0.3173835 /char1 0.2000799 0.2000014 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20533	/_samplerate 60 /drops_1 0 0 0 /energy 0.341994 0.3670375 0.3924455 /char1 0.2001285 0.2004611 0.200999 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+20535	/_samplerate 60 /drops_1 0 0 /energy 0.4181483 0.4440754 /char1 0.2017419 0.2026891 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20538	/_samplerate 60 /drops_1 0 0 /energy 0.4701559 0.4963181 /char1 0.2038401 0.205194 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20540	/_samplerate 60 /drops_1 0 0 0 /energy 0.5224904 0.5486011 0.5745785 /char1 0.2067501 0.208507 0.2104638 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+20542	/_samplerate 60 /drops_1 0 0 /energy 0.6003516 0.6258495 /char1 0.212619 0.2149712 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20545	/_samplerate 60 /drops_1 0 0 /energy 0.6510026 0.6757417 /char1 0.2175187 0.2202598 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20547	/_samplerate 60 /drops_1 0 0 0 /energy 0.6999992 0.7237085 0.7468046 /char1 0.2231926 0.2263151 0.2296252 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+20549	/_samplerate 60 /drops_1 0 0 /energy 0.7692242 0.790906 /char1 0.2331206 0.2367989 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20552	/_samplerate 60 /drops_1 0 0 /energy 0.8117903 0.83182 /char1 0.2406576 0.2446941 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20554	/_samplerate 60 /drops_1 0 0 0 /energy 0.8509403 0.8690987 0.8862454 /char1 0.2489055 0.253289 0.2578415 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+20556	/_samplerate 60 /drops_1 0 0 /energy 0.9023334 0.9173186 /char1 0.2625601 0.2674413 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20559	/_samplerate 60 /drops_1 0 0 /energy 0.93116 0.9438196 /char1 0.272482 0.2776786 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20561	/_samplerate 60 /drops_1 0 0 0 /energy 0.9552628 0.9654581 0.9743776 /char1 0.2830275 0.2885252 0.2941678 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+20563	/_samplerate 60 /drops_1 0 0 /energy 0.9819969 0.988295 /char1 0.2999514 0.3058722 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20566	/_samplerate 60 /drops_1 0 0 /energy 0.9932548 0.9968626 /char1 0.311926 0.3181087 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20568	/_samplerate 60 /drops_1 0 0 0 /energy 0.9991086 0.9999865 0.9994939 /char1 0.324416 0.3308437 0.3373874 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+20570	/_samplerate 60 /drops_1 0 0 /energy 0.9976323 0.9944068 /char1 0.3440425 0.3508044 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20572	/_samplerate 60 /drops_1 0 0 /energy 0.989826 0.9839028 /char1 0.3576686 0.3646304 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20575	/_samplerate 60 /drops_1 0 0 /energy 0.9766532 0.968097 /char1 0.3716849 0.3788274 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20577	/_samplerate 60 /drops_1 0 0 0 /energy 0.9582579 0.9471627 0.9348419 /char1 0.3860529 0.3933565 0.4007332 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+20580	/_samplerate 60 /drops_1 0 0 /energy 0.9213292 0.9066617 /char1 0.4081779 0.4156856 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20582	/_samplerate 60 /drops_1 0 0 0 /energy 0.8908796 0.874026 0.8561473 /char1 0.4232511 0.4308691 0.4385345 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+20584	/_samplerate 60 /drops_1 0 0 /energy 0.8372924 0.817513 /char1 0.4462421 0.4539865 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20587	/_samplerate 60 /drops_1 0 0 /energy 0.7968634 0.7754 /char1 0.4617624 0.4695646 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20589	/_samplerate 60 /drops_1 0 0 0 /energy 0.7531819 0.7302697 0.7067264 /char1 0.4773875 0.485226 0.4930747 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+20591	/_samplerate 60 /drops_1 0 0 /energy 0.6826165 0.658006 /char1 0.500928 0.5087808 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20594	/_samplerate 60 /drops_1 0 0 /energy 0.6329625 0.6075545 /char1 0.5166275 0.5244628 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20596	/_samplerate 60 /drops_1 0 0 0 /energy 0.5818517 0.5559245 0.5298442 /char1 0.5322813 0.5400777 0.5478467 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+20599	/_samplerate 60 /drops_1 0 0 /energy 0.5036819 0.4775096 /char1 0.5555829 0.5632809 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20601	/_samplerate 60 /drops_1 0 0 0 /energy 0.4513989 0.4254215 0.3996484 /char1 0.5709357 0.5785418 0.586094 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+20603	/_samplerate 60 /drops_1 0 0 /energy 0.3741505 0.3489974 /char1 0.5935873 0.6010164 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20606	/_samplerate 60 /drops_1 0 0 /energy 0.3242582 0.3000008 /char1 0.6083763 0.6156619 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20608	/_samplerate 60 /drops_1 0 0 0 /energy 0.2762915 0.2531954 0.2307758 /char1 0.6228682 0.6299903 0.6370234 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+20610	/_samplerate 60 /drops_1 0 0 /energy 0.2090941 0.1882097 /char1 0.6439625 0.650803 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20613	/_samplerate 60 /drops_1 0 0 /energy 0.16818 0.1490597 /char1 0.6575401 0.6641693 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20615	/_samplerate 60 /drops_1 0 0 0 /energy 0.1309013 0.1137547 0.09766664 /char1 0.6706859 0.6770855 0.6833638 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+20617	/_samplerate 60 /drops_1 0 0 /energy 0.0826814 0.06884 /char1 0.6895164 0.6955392 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20620	/_samplerate 60 /drops_1 0 0 /energy 0.05618037 0.04473722 /char1 0.7014279 0.7071785 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20622	/_samplerate 60 /drops_1 0 0 0 /energy 0.03454192 0.02562241 0.01800313 /char1 0.7127872 0.7182501 0.7235634 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+20624	/_samplerate 60 /drops_1 0 0 /energy 0.01170497 0.006745198 /char1 0.7287234 0.7337267 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20627	/_samplerate 60 /drops_1 0 0 /energy 0.003137399 0.0008914671 /char1 0.7385698 0.7432494 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20629	/_samplerate 60 /drops_1 0 0 0 /energy 1.355667e-05 0.0005060743 0.00236767 /char1 0.7477623 0.7521054 0.7562757 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+20631	/_samplerate 60 /drops_1 0 0 /energy 0.005593241 0.01017395 /char1 0.7602704 0.7640867 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20634	/_samplerate 60 /drops_1 0 0 /energy 0.01609723 0.02334686 /char1 0.767722 0.7711738 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20636	/_samplerate 60 /drops_1 0 0 0 /energy 0.03190296 0.04174209 0.05283726 /char1 0.7744398 0.7775177 0.7804054 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+20638	/_samplerate 60 /drops_1 0 0 /energy 0.06515808 0.07867077 /char1 0.7831009 0.7856024 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20641	/_samplerate 60 /drops_1 0 0 /energy 0.0933383 0.1091205 /char1 0.7879081 0.7900166 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20643	/_samplerate 60 /drops_1 0 0 0 /energy 0.125974 0.1438527 0.1627076 /char1 0.7919263 0.7936358 0.7951442 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+20645	/_samplerate 60 /drops_1 0 0 /energy 0.182487 0.2031366 /char1 0.7964503 0.7975532 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20648	/_samplerate 60 /drops_1 0 0 /energy 0.2246 0.2468182 /char1 0.7984521 0.7991466 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20650	/_samplerate 60 /drops_1 0 0 0 /energy 0.2697303 0.2932736 0.3173835 /char1 0.799636 0.7999201 0.7999986 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+20652	/_samplerate 60 /drops_1 0 0 /energy 0.341994 0.3670375 /char1 0.7998715 0.7995389 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20655	/_samplerate 60 /drops_1 0 0 /energy 0.3924455 0.4181483 /char1 0.799001 0.7982581 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20657	/_samplerate 60 /drops_1 0 0 0 /energy 0.4440754 0.4701559 0.4963181 /char1 0.7973109 0.7961599 0.7948059 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+20659	/_samplerate 60 /drops_1 0 0 /energy 0.5224904 0.5486011 /char1 0.79325 0.7914929 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20661	/_samplerate 60 /drops_1 0 0 /energy 0.5745785 0.6003516 /char1 0.7895362 0.787381 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20664	/_samplerate 60 /drops_1 0 0 /energy 0.6258495 0.6510026 /char1 0.7850288 0.7824813 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20666	/_samplerate 60 /drops_1 0 0 0 /energy 0.6757417 0.6999992 0.7237085 /char1 0.7797402 0.7768074 0.7736849 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+20668	/_samplerate 60 /drops_1 0 0 /energy 0.7468046 0.7692242 /char1 0.7703748 0.7668794 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20671	/_samplerate 60 /drops_1 0 0 /energy 0.790906 0.8117903 /char1 0.7632011 0.7593424 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20673	/_samplerate 60 /drops_1 0 0 0 /energy 0.83182 0.8509403 0.8690987 /char1 0.7553059 0.7510945 0.746711 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+20675	/_samplerate 60 /drops_1 0 0 /energy 0.8862454 0.9023334 /char1 0.7421585 0.7374399 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20678	/_samplerate 60 /drops_1 0 0 /energy 0.9173186 0.93116 /char1 0.7325587 0.727518 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20680	/_samplerate 60 /drops_1 0 0 0 /energy 0.9438196 0.9552628 0.9654581 /char1 0.7223214 0.7169725 0.7114748 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+20682	/_samplerate 60 /drops_1 0 0 /energy 0.9743776 0.9819969 /char1 0.7058322 0.7000486 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20685	/_samplerate 60 /drops_1 0 0 /energy 0.988295 0.9932548 /char1 0.6941278 0.688074 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20687	/_samplerate 60 /drops_1 0 0 0 /energy 0.9968626 0.9991086 0.9999865 /char1 0.6818913 0.675584 0.6691563 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+20689	/_samplerate 60 /drops_1 0 0 /energy 0.9994939 0.9976323 /char1 0.6626126 0.6559576 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20692	/_samplerate 60 /drops_1 0 0 /energy 0.9944068 0.989826 /char1 0.6491956 0.6423314 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20694	/_samplerate 60 /drops_1 0 0 0 /energy 0.9839028 0.9766532 0.968097 /char1 0.6353696 0.6283151 0.6211726 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+20696	/_samplerate 60 /drops_1 0 0 /energy 0.9582579 0.9471627 /char1 0.6139471 0.6066435 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20699	/_samplerate 60 /drops_1 0 0 /energy 0.9348419 0.9213292 /char1 0.5992668 0.591822 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20701	/_samplerate 60 /drops_1 0 0 0 /energy 0.9066617 0.8908796 0.874026 /char1 0.5843144 0.576749 0.5691309 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+20703	/_samplerate 60 /drops_1 0 0 /energy 0.8561473 0.8372924 /char1 0.5614654 0.5537579 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20706	/_samplerate 60 /drops_1 0 0 /energy 0.817513 0.7968634 /char1 0.5460135 0.5382376 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20708	/_samplerate 60 /drops_1 0 0 0 /energy 0.7754 0.7531819 0.7302697 /char1 0.5304354 0.5226125 0.514774 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+20711	/_samplerate 60 /drops_1 0 0 /energy 0.7067264 0.6826165 /char1 0.5069253 0.499072 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20713	/_samplerate 60 /drops_1 0 0 0 /energy 0.658006 0.6329625 0.6075545 /char1 0.4912193 0.4833725 0.4755372 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+20715	/_samplerate 60 /drops_1 0 0 /energy 0.5818517 0.5559245 /char1 0.4677187 0.4599223 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20717	/_samplerate 60 /drops_1 0 0 /energy 0.5298442 0.5036819 /char1 0.4521533 0.4444171 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20720	/_samplerate 60 /drops_1 0 0 /energy 0.4775096 0.4513989 /char1 0.436719 0.4290643 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20722	/_samplerate 60 /drops_1 0 0 0 /energy 0.4254215 0.3996484 0.3741505 /char1 0.4214582 0.413906 0.4064128 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+20724	/_samplerate 60 /drops_1 0 0 /energy 0.3489974 0.3242582 /char1 0.3989836 0.3916237 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20727	/_samplerate 60 /drops_1 0 0 /energy 0.3000008 0.2762915 /char1 0.3843381 0.3771318 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20729	/_samplerate 60 /drops_1 0 0 0 /energy 0.2531954 0.2307758 0.2090941 /char1 0.3700097 0.3629766 0.3560375 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+20732	/_samplerate 60 /drops_1 0 0 /energy 0.1882097 0.16818 /char1 0.349197 0.3424599 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20734	/_samplerate 60 /drops_1 0 0 0 /energy 0.1490597 0.1309013 0.1137547 /char1 0.3358307 0.3293141 0.3229145 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+20736	/_samplerate 60 /drops_1 0 0 /energy 0.09766664 0.0826814 /char1 0.3166362 0.3104836 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20739	/_samplerate 60 /drops_1 0 0 /energy 0.06884 0.05618037 /char1 0.3044608 0.2985721 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20741	/_samplerate 60 /drops_1 0 0 0 /energy 0.04473722 0.03454192 0.02562241 /char1 0.2928214 0.2872128 0.2817499 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+20743	/_samplerate 60 /drops_1 0 0 /energy 0.01800313 0.01170497 /char1 0.2764366 0.2712766 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20746	/_samplerate 60 /drops_1 0 0 /energy 0.006745198 0.003137399 /char1 0.2662733 0.2614302 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20748	/_samplerate 60 /drops_1 0 0 0 /energy 0.0008914671 1.355667e-05 0.0005060743 /char1 0.2567506 0.2522377 0.2478946 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+20750	/_samplerate 60 /drops_1 0 0 /energy 0.00236767 0.005593241 /char1 0.2437243 0.2397296 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20753	/_samplerate 60 /drops_1 0 0 /energy 0.01017395 0.01609723 /char1 0.2359133 0.232278 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20755	/_samplerate 60 /drops_1 0 0 0 /energy 0.02334686 0.03190296 0.04174209 /char1 0.2288262 0.2255602 0.2224823 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+20757	/_samplerate 60 /drops_1 0 0 /energy 0.05283726 0.06515808 /char1 0.2195946 0.2168991 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20760	/_samplerate 60 /drops_1 0 0 /energy 0.07867077 0.0933383 /char1 0.2143976 0.2120919 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20762	/_samplerate 60 /drops_1 0 0 0 /energy 0.1091205 0.125974 0.1438527 /char1 0.2099834 0.2080738 0.2063642 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+20764	/_samplerate 60 /drops_1 0 0 /energy 0.1627076 0.182487 /char1 0.2048558 0.2035497 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20767	/_samplerate 60 /drops_1 0 0 /energy 0.2031366 0.2246 /char1 0.2024468 0.2015478 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20769	/_samplerate 60 /drops_1 0 0 0 /energy 0.2468182 0.2697303 0.2932736 /char1 0.2008534 0.200364 0.2000799 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+20771	/_samplerate 60 /drops_1 0 0 /energy 0.3173835 0.341994 /char1 0.2000014 0.2001285 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20774	/_samplerate 60 /drops_1 0 0 /energy 0.3670375 0.3924455 /char1 0.2004611 0.200999 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20776	/_samplerate 60 /drops_1 0 0 0 /energy 0.4181483 0.4440754 0.4701559 /char1 0.2017419 0.2026891 0.2038401 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+20778	/_samplerate 60 /drops_1 0 0 /energy 0.4963181 0.5224904 /char1 0.205194 0.2067501 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20781	/_samplerate 60 /drops_1 0 0 /energy 0.5486011 0.5745785 /char1 0.208507 0.2104638 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20783	/_samplerate 60 /drops_1 0 0 0 /energy 0.6003516 0.6258495 0.6510026 /char1 0.212619 0.2149712 0.2175187 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+20785	/_samplerate 60 /drops_1 0 0 /energy 0.6757417 0.6999992 /char1 0.2202598 0.2231926 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20788	/_samplerate 60 /drops_1 0 0 /energy 0.7237085 0.7468046 /char1 0.2263151 0.2296252 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20790	/_samplerate 60 /drops_1 0 0 0 /energy 0.7692242 0.790906 0.8117903 /char1 0.2331206 0.2367989 0.2406576 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+20792	/_samplerate 60 /drops_1 0 0 /energy 0.83182 0.8509403 /char1 0.2446941 0.2489055 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20795	/_samplerate 60 /drops_1 0 0 /energy 0.8690987 0.8862454 /char1 0.253289 0.2578415 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20797	/_samplerate 60 /drops_1 0 0 0 /energy 0.9023334 0.9173186 0.93116 /char1 0.2625601 0.2674413 0.272482 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+20799	/_samplerate 60 /drops_1 0 0 /energy 0.9438196 0.9552628 /char1 0.2776786 0.2830275 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20802	/_samplerate 60 /drops_1 0 0 /energy 0.9654581 0.9743776 /char1 0.2885252 0.2941678 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20804	/_samplerate 60 /drops_1 0 0 0 /energy 0.9819969 0.988295 0.9932548 /char1 0.2999514 0.3058722 0.311926 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+20806	/_samplerate 60 /drops_1 0 0 /energy 0.9968626 0.9991086 /char1 0.3181087 0.324416 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20809	/_samplerate 60 /drops_1 0 0 /energy 0.9999865 0.9994939 /char1 0.3308437 0.3373874 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20811	/_samplerate 60 /drops_1 0 0 0 /energy 0.9976323 0.9944068 0.989826 /char1 0.3440425 0.3508044 0.3576686 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+20813	/_samplerate 60 /drops_1 0 0 /energy 0.9839028 0.9766532 /char1 0.3646304 0.3716849 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20816	/_samplerate 60 /drops_1 0 0 /energy 0.968097 0.9582579 /char1 0.3788274 0.3860529 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20818	/_samplerate 60 /drops_1 0 0 0 /energy 0.9471627 0.9348419 0.9213292 /char1 0.3933565 0.4007332 0.4081779 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+20820	/_samplerate 60 /drops_1 0 0 /energy 0.9066617 0.8908796 /char1 0.4156856 0.4232511 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20823	/_samplerate 60 /drops_1 0 0 /energy 0.874026 0.8561473 /char1 0.4308691 0.4385345 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20825	/_samplerate 60 /drops_1 0 0 0 /energy 0.8372924 0.817513 0.7968634 /char1 0.4462421 0.4539865 0.4617624 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+20827	/_samplerate 60 /drops_1 0 0 /energy 0.7754 0.7531819 /char1 0.4695646 0.4773875 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20830	/_samplerate 60 /drops_1 0 0 /energy 0.7302697 0.7067264 /char1 0.485226 0.4930747 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20832	/_samplerate 60 /drops_1 0 0 0 /energy 0.6826165 0.658006 0.6329625 /char1 0.500928 0.5087808 0.5166275 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+20834	/_samplerate 60 /drops_1 0 0 /energy 0.6075545 0.5818517 /char1 0.5244628 0.5322813 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20837	/_samplerate 60 /drops_1 0 0 /energy 0.5559245 0.5298442 /char1 0.5400777 0.5478467 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20839	/_samplerate 60 /drops_1 0 0 0 /energy 0.5036819 0.4775096 0.4513989 /char1 0.5555829 0.5632809 0.5709357 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+20841	/_samplerate 60 /drops_1 0 0 /energy 0.4254215 0.3996484 /char1 0.5785418 0.586094 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20844	/_samplerate 60 /drops_1 0 0 /energy 0.3741505 0.3489974 /char1 0.5935873 0.6010164 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20846	/_samplerate 60 /drops_1 0 0 0 /energy 0.3242582 0.3000008 0.2762915 /char1 0.6083763 0.6156619 0.6228682 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+20848	/_samplerate 60 /drops_1 0 0 /energy 0.2531954 0.2307758 /char1 0.6299903 0.6370234 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20851	/_samplerate 60 /drops_1 0 0 /energy 0.2090941 0.1882097 /char1 0.6439625 0.650803 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20853	/_samplerate 60 /drops_1 0 0 0 /energy 0.16818 0.1490597 0.1309013 /char1 0.6575401 0.6641693 0.6706859 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+20855	/_samplerate 60 /drops_1 0 0 /energy 0.1137547 0.09766664 /char1 0.6770855 0.6833638 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20858	/_samplerate 60 /drops_1 0 0 /energy 0.0826814 0.06884 /char1 0.6895164 0.6955392 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20860	/_samplerate 60 /drops_1 0 0 0 /energy 0.05618037 0.04473722 0.03454192 /char1 0.7014279 0.7071785 0.7127872 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+20862	/_samplerate 60 /drops_1 0 0 /energy 0.02562241 0.01800313 /char1 0.7182501 0.7235634 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20864	/_samplerate 60 /drops_1 0 0 /energy 0.01170497 0.006745198 /char1 0.7287234 0.7337267 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20867	/_samplerate 60 /drops_1 0 0 /energy 0.003137399 0.0008914671 /char1 0.7385698 0.7432494 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20869	/_samplerate 60 /drops_1 0 0 0 /energy 1.355667e-05 0.0005060743 0.00236767 /char1 0.7477623 0.7521054 0.7562757 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+20872	/_samplerate 60 /drops_1 0 0 /energy 0.005593241 0.01017395 /char1 0.7602704 0.7640867 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20874	/_samplerate 60 /drops_1 0 0 0 /energy 0.01609723 0.02334686 0.03190296 /char1 0.767722 0.7711738 0.7744398 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+20876	/_samplerate 60 /drops_1 0 0 /energy 0.04174209 0.05283726 /char1 0.7775177 0.7804054 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20879	/_samplerate 60 /drops_1 0 0 /energy 0.06515808 0.07867077 /char1 0.7831009 0.7856024 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20881	/_samplerate 60 /drops_1 0 0 0 /energy 0.0933383 0.1091205 0.125974 /char1 0.7879081 0.7900166 0.7919263 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+20883	/_samplerate 60 /drops_1 0 0 /energy 0.1438527 0.1627076 /char1 0.7936358 0.7951442 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20886	/_samplerate 60 /drops_1 0 0 /energy 0.182487 0.2031366 /char1 0.7964503 0.7975532 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20888	/_samplerate 60 /drops_1 0 0 0 /energy 0.2246 0.2468182 0.2697303 /char1 0.7984521 0.7991466 0.799636 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+20890	/_samplerate 60 /drops_1 0 0 /energy 0.2932736 0.3173835 /char1 0.7999201 0.7999986 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20893	/_samplerate 60 /drops_1 0 0 /energy 0.341994 0.3670375 /char1 0.7998715 0.7995389 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20895	/_samplerate 60 /drops_1 0 0 0 /energy 0.3924455 0.4181483 0.4440754 /char1 0.799001 0.7982581 0.7973109 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+20898	/_samplerate 60 /drops_1 0 0 /energy 0.4701559 0.4963181 /char1 0.7961599 0.7948059 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20900	/_samplerate 60 /drops_1 0 0 0 /energy 0.5224904 0.5486011 0.5745785 /char1 0.79325 0.7914929 0.7895362 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+20902	/_samplerate 60 /drops_1 0 0 /energy 0.6003516 0.6258495 /char1 0.787381 0.7850288 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20904	/_samplerate 60 /drops_1 0 0 /energy 0.6510026 0.6757417 /char1 0.7824813 0.7797402 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20907	/_samplerate 60 /drops_1 0 0 /energy 0.6999992 0.7237085 /char1 0.7768074 0.7736849 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20909	/_samplerate 60 /drops_1 0 0 0 /energy 0.7468046 0.7692242 0.790906 /char1 0.7703748 0.7668794 0.7632011 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+20911	/_samplerate 60 /drops_1 0 0 /energy 0.8117903 0.83182 /char1 0.7593424 0.7553059 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20914	/_samplerate 60 /drops_1 0 0 /energy 0.8509403 0.8690987 /char1 0.7510945 0.746711 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20916	/_samplerate 60 /drops_1 0 0 0 /energy 0.8862454 0.9023334 0.9173186 /char1 0.7421585 0.7374399 0.7325587 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+20919	/_samplerate 60 /drops_1 0 0 /energy 0.93116 0.9438196 /char1 0.727518 0.7223214 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20921	/_samplerate 60 /drops_1 0 0 0 /energy 0.9552628 0.9654581 0.9743776 /char1 0.7169725 0.7114748 0.7058322 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+20923	/_samplerate 60 /drops_1 0 0 /energy 0.9819969 0.988295 /char1 0.7000486 0.6941278 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20926	/_samplerate 60 /drops_1 0 0 /energy 0.9932548 0.9968626 /char1 0.688074 0.6818913 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20928	/_samplerate 60 /drops_1 0 0 0 /energy 0.9991086 0.9999865 0.9994939 /char1 0.675584 0.6691563 0.6626126 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+20930	/_samplerate 60 /drops_1 0 0 /energy 0.9976323 0.9944068 /char1 0.6559576 0.6491956 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20932	/_samplerate 60 /drops_1 0 0 /energy 0.989826 0.9839028 /char1 0.6423314 0.6353696 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20935	/_samplerate 60 /drops_1 0 0 /energy 0.9766532 0.968097 /char1 0.6283151 0.6211726 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20937	/_samplerate 60 /drops_1 0 0 0 /energy 0.9582579 0.9471627 0.9348419 /char1 0.6139471 0.6066435 0.5992668 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+20940	/_samplerate 60 /drops_1 0 0 /energy 0.9213292 0.9066617 /char1 0.591822 0.5843144 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20942	/_samplerate 60 /drops_1 0 0 0 /energy 0.8908796 0.874026 0.8561473 /char1 0.576749 0.5691309 0.5614654 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+20944	/_samplerate 60 /drops_1 0 0 /energy 0.8372924 0.817513 /char1 0.5537579 0.5460135 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20946	/_samplerate 60 /drops_1 0 0 /energy 0.7968634 0.7754 /char1 0.5382376 0.5304354 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20949	/_samplerate 60 /drops_1 0 0 /energy 0.7531819 0.7302697 /char1 0.5226125 0.514774 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20951	/_samplerate 60 /drops_1 0 0 0 /energy 0.7067264 0.6826165 0.658006 /char1 0.5069253 0.499072 0.4912193 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+20953	/_samplerate 60 /drops_1 0 0 /energy 0.6329625 0.6075545 /char1 0.4833725 0.4755372 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20956	/_samplerate 60 /drops_1 0 0 /energy 0.5818517 0.5559245 /char1 0.4677187 0.4599223 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20958	/_samplerate 60 /drops_1 0 0 0 /energy 0.5298442 0.5036819 0.4775096 /char1 0.4521533 0.4444171 0.436719 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+20960	/_samplerate 60 /drops_1 0 0 /energy 0.4513989 0.4254215 /char1 0.4290643 0.4214582 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20963	/_samplerate 60 /drops_1 0 0 /energy 0.3996484 0.3741505 /char1 0.413906 0.4064128 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20965	/_samplerate 60 /drops_1 0 0 0 /energy 0.3489974 0.3242582 0.3000008 /char1 0.3989836 0.3916237 0.3843381 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+20967	/_samplerate 60 /drops_1 0 0 /energy 0.2762915 0.2531954 /char1 0.3771318 0.3700097 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20970	/_samplerate 60 /drops_1 0 0 /energy 0.2307758 0.2090941 /char1 0.3629766 0.3560375 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20972	/_samplerate 60 /drops_1 0 0 0 /energy 0.1882097 0.16818 0.1490597 /char1 0.349197 0.3424599 0.3358307 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+20975	/_samplerate 60 /drops_1 0 0 /energy 0.1309013 0.1137547 /char1 0.3293141 0.3229145 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20977	/_samplerate 60 /drops_1 0 0 0 /energy 0.09766664 0.0826814 0.06884 /char1 0.3166362 0.3104836 0.3044608 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+20979	/_samplerate 60 /drops_1 0 0 /energy 0.05618037 0.04473722 /char1 0.2985721 0.2928214 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20981	/_samplerate 60 /drops_1 0 0 /energy 0.03454192 0.02562241 /char1 0.2872128 0.2817499 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20984	/_samplerate 60 /drops_1 0 0 /energy 0.01800313 0.01170497 /char1 0.2764366 0.2712766 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20989	/_samplerate 60 /drops_1 0 0 0 /energy 0.006745198 0.003137399 0.0008914671 /char1 0.2662733 0.2614302 0.2567506 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+20992	/_samplerate 60 /drops_1 0 0 0 0 0 /energy 1.355667e-05 0.0005060743 0.00236767 0.005593241 0.01017395 /char1 0.2522377 0.2478946 0.2437243 0.2397296 0.2359133 /char2 0.181 0.181 0.181 0.181 0.181 /drops_2 0 0 0 0 0 /tube 0.77 0.77 0.77 0.77 0.77 /drops_3 0 0 0 0 0 /chan1 0 0 0 0 0
+20994	/_samplerate 60 /drops_1 0 0 0 /energy 0.01609723 0.02334686 0.03190296 /char1 0.232278 0.2288262 0.2255602 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+20996	/_samplerate 60 /drops_1 0 0 /energy 0.04174209 0.05283726 /char1 0.2224823 0.2195946 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+20998	/_samplerate 60 /drops_1 0 0 /energy 0.06515808 0.07867077 /char1 0.2168991 0.2143976 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+21001	/_samplerate 60 /drops_1 0 0 /energy 0.0933383 0.1091205 /char1 0.2120919 0.2099834 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+21003	/_samplerate 60 /drops_1 0 0 0 /energy 0.125974 0.1438527 0.1627076 /char1 0.2080738 0.2063642 0.2048558 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+21005	/_samplerate 60 /drops_1 0 0 /energy 0.182487 0.2031366 /char1 0.2035497 0.2024468 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+21008	/_samplerate 60 /drops_1 0 0 /energy 0.2246 0.2468182 /char1 0.2015478 0.2008534 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+21010	/_samplerate 60 /drops_1 0 0 0 /energy 0.2697303 0.2932736 0.3173835 /char1 0.200364 0.2000799 0.2000014 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+21012	/_samplerate 60 /drops_1 0 0 /energy 0.341994 0.3670375 /char1 0.2001285 0.2004611 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+21015	/_samplerate 60 /drops_1 0 0 /energy 0.3924455 0.4181483 /char1 0.200999 0.2017419 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+21017	/_samplerate 60 /drops_1 0 0 0 /energy 0.4440754 0.4701559 0.4963181 /char1 0.2026891 0.2038401 0.205194 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+21019	/_samplerate 60 /drops_1 0 0 /energy 0.5224904 0.5486011 /char1 0.2067501 0.208507 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+21022	/_samplerate 60 /drops_1 0 0 /energy 0.5745785 0.6003516 /char1 0.2104638 0.212619 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+21024	/_samplerate 60 /drops_1 0 0 0 /energy 0.6258495 0.6510026 0.6757417 /char1 0.2149712 0.2175187 0.2202598 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+21026	/_samplerate 60 /drops_1 0 0 /energy 0.6999992 0.7237085 /char1 0.2231926 0.2263151 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+21029	/_samplerate 60 /drops_1 0 0 /energy 0.7468046 0.7692242 /char1 0.2296252 0.2331206 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+21031	/_samplerate 60 /drops_1 0 0 0 /energy 0.790906 0.8117903 0.83182 /char1 0.2367989 0.2406576 0.2446941 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+21033	/_samplerate 60 /drops_1 0 0 /energy 0.8509403 0.8690987 /char1 0.2489055 0.253289 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+21036	/_samplerate 60 /drops_1 0 0 /energy 0.8862454 0.9023334 /char1 0.2578415 0.2625601 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+21038	/_samplerate 60 /drops_1 0 0 0 /energy 0.9173186 0.93116 0.9438196 /char1 0.2674413 0.272482 0.2776786 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+21040	/_samplerate 60 /drops_1 0 0 /energy 0.9552628 0.9654581 /char1 0.2830275 0.2885252 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+21043	/_samplerate 60 /drops_1 0 0 /energy 0.9743776 0.9819969 /char1 0.2941678 0.2999514 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+21045	/_samplerate 60 /drops_1 0 0 0 /energy 0.988295 0.9932548 0.9968626 /char1 0.3058722 0.311926 0.3181087 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+21047	/_samplerate 60 /drops_1 0 0 /energy 0.9991086 0.9999865 /char1 0.324416 0.3308437 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+21049	/_samplerate 60 /drops_1 0 0 /energy 0.9994939 0.9976323 /char1 0.3373874 0.3440425 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+21052	/_samplerate 60 /drops_1 0 0 /energy 0.9944068 0.989826 /char1 0.3508044 0.3576686 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+21054	/_samplerate 60 /drops_1 0 0 0 /energy 0.9839028 0.9766532 0.968097 /char1 0.3646304 0.3716849 0.3788274 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+21056	/_samplerate 60 /drops_1 0 0 /energy 0.9582579 0.9471627 /char1 0.3860529 0.3933565 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+21059	/_samplerate 60 /drops_1 0 0 /energy 0.9348419 0.9213292 /char1 0.4007332 0.4081779 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+21061	/_samplerate 60 /drops_1 0 0 0 /energy 0.9066617 0.8908796 0.874026 /char1 0.4156856 0.4232511 0.4308691 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+21063	/_samplerate 60 /drops_1 0 0 /energy 0.8561473 0.8372924 /char1 0.4385345 0.4462421 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+21065	/_samplerate 60 /drops_1 0 0 /energy 0.817513 0.7968634 /char1 0.4539865 0.4617624 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+21068	/_samplerate 60 /drops_1 0 0 /energy 0.7754 0.7531819 /char1 0.4695646 0.4773875 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+21070	/_samplerate 60 /drops_1 0 0 0 /energy 0.7302697 0.7067264 0.6826165 /char1 0.485226 0.4930747 0.500928 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+21072	/_samplerate 60 /drops_1 0 0 /energy 0.658006 0.6329625 /char1 0.5087808 0.5166275 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+21075	/_samplerate 60 /drops_1 0 0 /energy 0.6075545 0.5818517 /char1 0.5244628 0.5322813 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+21077	/_samplerate 60 /drops_1 0 0 0 /energy 0.5559245 0.5298442 0.5036819 /char1 0.5400777 0.5478467 0.5555829 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+21079	/_samplerate 60 /drops_1 0 0 /energy 0.4775096 0.4513989 /char1 0.5632809 0.5709357 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+21082	/_samplerate 60 /drops_1 0 0 /energy 0.4254215 0.3996484 /char1 0.5785418 0.586094 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+21084	/_samplerate 60 /drops_1 0 0 0 /energy 0.3741505 0.3489974 0.3242582 /char1 0.5935873 0.6010164 0.6083763 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+21086	/_samplerate 60 /drops_1 0 0 /energy 0.3000008 0.2762915 /char1 0.6156619 0.6228682 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+21089	/_samplerate 60 /drops_1 0 0 /energy 0.2531954 0.2307758 /char1 0.6299903 0.6370234 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+21091	/_samplerate 60 /drops_1 0 0 0 /energy 0.2090941 0.1882097 0.16818 /char1 0.6439625 0.650803 0.6575401 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+21093	/_samplerate 60 /drops_1 0 0 /energy 0.1490597 0.1309013 /char1 0.6641693 0.6706859 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+21095	/_samplerate 60 /drops_1 0 0 /energy 0.1137547 0.09766664 /char1 0.6770855 0.6833638 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+21098	/_samplerate 60 /drops_1 0 0 /energy 0.0826814 0.06884 /char1 0.6895164 0.6955392 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+21100	/_samplerate 60 /drops_1 0 0 0 /energy 0.05618037 0.04473722 0.03454192 /char1 0.7014279 0.7071785 0.7127872 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+21103	/_samplerate 60 /drops_1 0 0 /energy 0.02562241 0.01800313 /char1 0.7182501 0.7235634 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+21105	/_samplerate 60 /drops_1 0 0 0 /energy 0.01170497 0.006745198 0.003137399 /char1 0.7287234 0.7337267 0.7385698 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+21107	/_samplerate 60 /drops_1 0 0 /energy 0.0008914671 1.355667e-05 /char1 0.7432494 0.7477623 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+21110	/_samplerate 60 /drops_1 0 0 /energy 0.0005060743 0.00236767 /char1 0.7521054 0.7562757 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+21112	/_samplerate 60 /drops_1 0 0 0 /energy 0.005593241 0.01017395 0.01609723 /char1 0.7602704 0.7640867 0.767722 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+21114	/_samplerate 60 /drops_1 0 0 /energy 0.02334686 0.03190296 /char1 0.7711738 0.7744398 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+21116	/_samplerate 60 /drops_1 0 0 /energy 0.04174209 0.05283726 /char1 0.7775177 0.7804054 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+21119	/_samplerate 60 /drops_1 0 0 /energy 0.06515808 0.07867077 /char1 0.7831009 0.7856024 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+21121	/_samplerate 60 /drops_1 0 0 0 /energy 0.0933383 0.1091205 0.125974 /char1 0.7879081 0.7900166 0.7919263 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+21124	/_samplerate 60 /drops_1 0 0 /energy 0.1438527 0.1627076 /char1 0.7936358 0.7951442 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+21126	/_samplerate 60 /drops_1 0 0 0 /energy 0.182487 0.2031366 0.2246 /char1 0.7964503 0.7975532 0.7984521 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+21128	/_samplerate 60 /drops_1 0 0 /energy 0.2468182 0.2697303 /char1 0.7991466 0.799636 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+21130	/_samplerate 60 /drops_1 0 0 /energy 0.2932736 0.3173835 /char1 0.7999201 0.7999986 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+21133	/_samplerate 60 /drops_1 0 0 /energy 0.341994 0.3670375 /char1 0.7998715 0.7995389 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+21135	/_samplerate 60 /drops_1 0 0 0 /energy 0.3924455 0.4181483 0.4440754 /char1 0.799001 0.7982581 0.7973109 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+21137	/_samplerate 60 /drops_1 0 0 /energy 0.4701559 0.4963181 /char1 0.7961599 0.7948059 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+21140	/_samplerate 60 /drops_1 0 0 /energy 0.5224904 0.5486011 /char1 0.79325 0.7914929 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+21142	/_samplerate 60 /drops_1 0 0 0 /energy 0.5745785 0.6003516 0.6258495 /char1 0.7895362 0.787381 0.7850288 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+21144	/_samplerate 60 /drops_1 0 0 /energy 0.6510026 0.6757417 /char1 0.7824813 0.7797402 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+21147	/_samplerate 60 /drops_1 0 0 /energy 0.6999992 0.7237085 /char1 0.7768074 0.7736849 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+21149	/_samplerate 60 /drops_1 0 0 0 /energy 0.7468046 0.7692242 0.790906 /char1 0.7703748 0.7668794 0.7632011 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+21151	/_samplerate 60 /drops_1 0 0 /energy 0.8117903 0.83182 /char1 0.7593424 0.7553059 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+21154	/_samplerate 60 /drops_1 0 0 /energy 0.8509403 0.8690987 /char1 0.7510945 0.746711 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+21156	/_samplerate 60 /drops_1 0 0 0 /energy 0.8862454 0.9023334 0.9173186 /char1 0.7421585 0.7374399 0.7325587 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+21158	/_samplerate 60 /drops_1 0 0 /energy 0.93116 0.9438196 /char1 0.727518 0.7223214 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+21161	/_samplerate 60 /drops_1 0 0 /energy 0.9552628 0.9654581 /char1 0.7169725 0.7114748 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+21163	/_samplerate 60 /drops_1 0 0 0 /energy 0.9743776 0.9819969 0.988295 /char1 0.7058322 0.7000486 0.6941278 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+21165	/_samplerate 60 /drops_1 0 0 /energy 0.9932548 0.9968626 /char1 0.688074 0.6818913 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+21168	/_samplerate 60 /drops_1 0 0 /energy 0.9991086 0.9999865 /char1 0.675584 0.6691563 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+21170	/_samplerate 60 /drops_1 0 0 0 /energy 0.9994939 0.9976323 0.9944068 /char1 0.6626126 0.6559576 0.6491956 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+21172	/_samplerate 60 /drops_1 0 0 /energy 0.989826 0.9839028 /char1 0.6423314 0.6353696 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+21175	/_samplerate 60 /drops_1 0 0 /energy 0.9766532 0.968097 /char1 0.6283151 0.6211726 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+21177	/_samplerate 60 /drops_1 0 0 0 /energy 0.9582579 0.9471627 0.9348419 /char1 0.6139471 0.6066435 0.5992668 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+21179	/_samplerate 60 /drops_1 0 0 /energy 0.9213292 0.9066617 /char1 0.591822 0.5843144 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+21182	/_samplerate 60 /drops_1 0 0 /energy 0.8908796 0.874026 /char1 0.576749 0.5691309 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+21184	/_samplerate 60 /drops_1 0 0 0 /energy 0.8561473 0.8372924 0.817513 /char1 0.5614654 0.5537579 0.5460135 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+21186	/_samplerate 60 /drops_1 0 0 /energy 0.7968634 0.7754 /char1 0.5382376 0.5304354 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+21188	/_samplerate 60 /drops_1 0 0 /energy 0.7531819 0.7302697 /char1 0.5226125 0.514774 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+21191	/_samplerate 60 /drops_1 0 0 /energy 0.7067264 0.6826165 /char1 0.5069253 0.499072 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+21193	/_samplerate 60 /drops_1 0 0 0 /energy 0.658006 0.6329625 0.6075545 /char1 0.4912193 0.4833725 0.4755372 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+21196	/_samplerate 60 /drops_1 0 0 /energy 0.5818517 0.5559245 /char1 0.4677187 0.4599223 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+21198	/_samplerate 60 /drops_1 0 0 0 /energy 0.5298442 0.5036819 0.4775096 /char1 0.4521533 0.4444171 0.436719 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+21200	/_samplerate 60 /drops_1 0 0 /energy 0.4513989 0.4254215 /char1 0.4290643 0.4214582 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+21202	/_samplerate 60 /drops_1 0 0 /energy 0.3996484 0.3741505 /char1 0.413906 0.4064128 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+21205	/_samplerate 60 /drops_1 0 0 /energy 0.3489974 0.3242582 /char1 0.3989836 0.3916237 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+21207	/_samplerate 60 /drops_1 0 0 0 /energy 0.3000008 0.2762915 0.2531954 /char1 0.3843381 0.3771318 0.3700097 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+21209	/_samplerate 60 /drops_1 0 0 /energy 0.2307758 0.2090941 /char1 0.3629766 0.3560375 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+21212	/_samplerate 60 /drops_1 0 0 /energy 0.1882097 0.16818 /char1 0.349197 0.3424599 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+21214	/_samplerate 60 /drops_1 0 0 0 /energy 0.1490597 0.1309013 0.1137547 /char1 0.3358307 0.3293141 0.3229145 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+21216	/_samplerate 60 /drops_1 0 0 /energy 0.09766664 0.0826814 /char1 0.3166362 0.3104836 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+21219	/_samplerate 60 /drops_1 0 0 /energy 0.06884 0.05618037 /char1 0.3044608 0.2985721 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+21221	/_samplerate 60 /drops_1 0 0 0 /energy 0.04473722 0.03454192 0.02562241 /char1 0.2928214 0.2872128 0.2817499 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+21223	/_samplerate 60 /drops_1 0 0 /energy 0.01800313 0.01170497 /char1 0.2764366 0.2712766 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+21226	/_samplerate 60 /drops_1 0 0 /energy 0.006745198 0.003137399 /char1 0.2662733 0.2614302 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+21228	/_samplerate 60 /drops_1 0 0 0 /energy 0.0008914671 1.355667e-05 0.0005060743 /char1 0.2567506 0.2522377 0.2478946 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+21230	/_samplerate 60 /drops_1 0 0 /energy 0.00236767 0.005593241 /char1 0.2437243 0.2397296 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+21233	/_samplerate 60 /drops_1 0 0 /energy 0.01017395 0.01609723 /char1 0.2359133 0.232278 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+21235	/_samplerate 60 /drops_1 0 0 0 /energy 0.02334686 0.03190296 0.04174209 /char1 0.2288262 0.2255602 0.2224823 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+21238	/_samplerate 60 /drops_1 0 0 /energy 0.05283726 0.06515808 /char1 0.2195946 0.2168991 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+21240	/_samplerate 60 /drops_1 0 0 0 /energy 0.07867077 0.0933383 0.1091205 /char1 0.2143976 0.2120919 0.2099834 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+21242	/_samplerate 60 /drops_1 0 0 /energy 0.125974 0.1438527 /char1 0.2080738 0.2063642 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+21244	/_samplerate 60 /drops_1 0 0 /energy 0.1627076 0.182487 /char1 0.2048558 0.2035497 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+21247	/_samplerate 60 /drops_1 0 0 /energy 0.2031366 0.2246 /char1 0.2024468 0.2015478 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+21249	/_samplerate 60 /drops_1 0 0 0 /energy 0.2468182 0.2697303 0.2932736 /char1 0.2008534 0.200364 0.2000799 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+21251	/_samplerate 60 /drops_1 0 0 /energy 0.3173835 0.341994 /char1 0.2000014 0.2001285 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+21254	/_samplerate 60 /drops_1 0 0 /energy 0.3670375 0.3924455 /char1 0.2004611 0.200999 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+21256	/_samplerate 60 /drops_1 0 0 0 /energy 0.4181483 0.4440754 0.4701559 /char1 0.2017419 0.2026891 0.2038401 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+21258	/_samplerate 60 /drops_1 0 0 /energy 0.4963181 0.5224904 /char1 0.205194 0.2067501 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+21261	/_samplerate 60 /drops_1 0 0 /energy 0.5486011 0.5745785 /char1 0.208507 0.2104638 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+21263	/_samplerate 60 /drops_1 0 0 0 /energy 0.6003516 0.6258495 0.6510026 /char1 0.212619 0.2149712 0.2175187 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+21266	/_samplerate 60 /drops_1 0 0 /energy 0.6757417 0.6999992 /char1 0.2202598 0.2231926 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+21268	/_samplerate 60 /drops_1 0 0 0 /energy 0.7237085 0.7468046 0.7692242 /char1 0.2263151 0.2296252 0.2331206 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+21270	/_samplerate 60 /drops_1 0 0 /energy 0.790906 0.8117903 /char1 0.2367989 0.2406576 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+21273	/_samplerate 60 /drops_1 0 0 /energy 0.83182 0.8509403 /char1 0.2446941 0.2489055 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+21275	/_samplerate 60 /drops_1 0 0 0 /energy 0.8690987 0.8862454 0.9023334 /char1 0.253289 0.2578415 0.2625601 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+21277	/_samplerate 60 /drops_1 0 0 /energy 0.9173186 0.93116 /char1 0.2674413 0.272482 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+21280	/_samplerate 60 /drops_1 0 0 /energy 0.9438196 0.9552628 /char1 0.2776786 0.2830275 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+21282	/_samplerate 60 /drops_1 0 0 0 /energy 0.9654581 0.9743776 0.9819969 /char1 0.2885252 0.2941678 0.2999514 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+21284	/_samplerate 60 /drops_1 0 0 /energy 0.988295 0.9932548 /char1 0.3058722 0.311926 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+21287	/_samplerate 60 /drops_1 0 0 /energy 0.9968626 0.9991086 /char1 0.3181087 0.324416 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+21289	/_samplerate 60 /drops_1 0 0 0 /energy 0.9999865 0.9994939 0.9976323 /char1 0.3308437 0.3373874 0.3440425 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+21291	/_samplerate 60 /drops_1 0 0 /energy 0.9944068 0.989826 /char1 0.3508044 0.3576686 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+21294	/_samplerate 60 /drops_1 0 0 /energy 0.9839028 0.9766532 /char1 0.3646304 0.3716849 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+21296	/_samplerate 60 /drops_1 0 0 0 /energy 0.968097 0.9582579 0.9471627 /char1 0.3788274 0.3860529 0.3933565 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+21298	/_samplerate 60 /drops_1 0 0 /energy 0.9348419 0.9213292 /char1 0.4007332 0.4081779 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+21301	/_samplerate 60 /drops_1 0 0 /energy 0.9066617 0.8908796 /char1 0.4156856 0.4232511 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+21303	/_samplerate 60 /drops_1 0 0 0 /energy 0.874026 0.8561473 0.8372924 /char1 0.4308691 0.4385345 0.4462421 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+21305	/_samplerate 60 /drops_1 0 0 /energy 0.817513 0.7968634 /char1 0.4539865 0.4617624 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+21308	/_samplerate 60 /drops_1 0 0 /energy 0.7754 0.7531819 /char1 0.4695646 0.4773875 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+21310	/_samplerate 60 /drops_1 0 0 0 /energy 0.7302697 0.7067264 0.6826165 /char1 0.485226 0.4930747 0.500928 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+21312	/_samplerate 60 /drops_1 0 0 /energy 0.658006 0.6329625 /char1 0.5087808 0.5166275 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+21315	/_samplerate 60 /drops_1 0 0 /energy 0.6075545 0.5818517 /char1 0.5244628 0.5322813 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+21317	/_samplerate 60 /drops_1 0 0 0 /energy 0.5559245 0.5298442 0.5036819 /char1 0.5400777 0.5478467 0.5555829 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+21319	/_samplerate 60 /drops_1 0 0 /energy 0.4775096 0.4513989 /char1 0.5632809 0.5709357 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+21322	/_samplerate 60 /drops_1 0 0 /energy 0.4254215 0.3996484 /char1 0.5785418 0.586094 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+21324	/_samplerate 60 /drops_1 0 0 0 /energy 0.3741505 0.3489974 0.3242582 /char1 0.5935873 0.6010164 0.6083763 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+21326	/_samplerate 60 /drops_1 0 0 /energy 0.3000008 0.2762915 /char1 0.6156619 0.6228682 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+21329	/_samplerate 60 /drops_1 0 0 /energy 0.2531954 0.2307758 /char1 0.6299903 0.6370234 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+21331	/_samplerate 60 /drops_1 0 0 0 /energy 0.2090941 0.1882097 0.16818 /char1 0.6439625 0.650803 0.6575401 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+21333	/_samplerate 60 /drops_1 0 0 /energy 0.1490597 0.1309013 /char1 0.6641693 0.6706859 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+21336	/_samplerate 60 /drops_1 0 0 /energy 0.1137547 0.09766664 /char1 0.6770855 0.6833638 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+21338	/_samplerate 60 /drops_1 0 0 0 /energy 0.0826814 0.06884 0.05618037 /char1 0.6895164 0.6955392 0.7014279 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+21340	/_samplerate 60 /drops_1 0 0 /energy 0.04473722 0.03454192 /char1 0.7071785 0.7127872 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+21343	/_samplerate 60 /drops_1 0 0 /energy 0.02562241 0.01800313 /char1 0.7182501 0.7235634 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+21345	/_samplerate 60 /drops_1 0 0 0 /energy 0.01170497 0.006745198 0.003137399 /char1 0.7287234 0.7337267 0.7385698 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+21347	/_samplerate 60 /drops_1 0 0 /energy 0.0008914671 1.355667e-05 /char1 0.7432494 0.7477623 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+21350	/_samplerate 60 /drops_1 0 0 /energy 0.0005060743 0.00236767 /char1 0.7521054 0.7562757 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+21352	/_samplerate 60 /drops_1 0 0 0 /energy 0.005593241 0.01017395 0.01609723 /char1 0.7602704 0.7640867 0.767722 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+21354	/_samplerate 60 /drops_1 0 0 /energy 0.02334686 0.03190296 /char1 0.7711738 0.7744398 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+21357	/_samplerate 60 /drops_1 0 0 /energy 0.04174209 0.05283726 /char1 0.7775177 0.7804054 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+21359	/_samplerate 60 /drops_1 0 0 0 /energy 0.06515808 0.07867077 0.0933383 /char1 0.7831009 0.7856024 0.7879081 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+21361	/_samplerate 60 /drops_1 0 0 /energy 0.1091205 0.125974 /char1 0.7900166 0.7919263 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+21364	/_samplerate 60 /drops_1 0 0 /energy 0.1438527 0.1627076 /char1 0.7936358 0.7951442 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+21366	/_samplerate 60 /drops_1 0 0 0 /energy 0.182487 0.2031366 0.2246 /char1 0.7964503 0.7975532 0.7984521 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+21368	/_samplerate 60 /drops_1 0 0 /energy 0.2468182 0.2697303 /char1 0.7991466 0.799636 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+21371	/_samplerate 60 /drops_1 0 0 /energy 0.2932736 0.3173835 /char1 0.7999201 0.7999986 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+21373	/_samplerate 60 /drops_1 0 0 0 /energy 0.341994 0.3670375 0.3924455 /char1 0.7998715 0.7995389 0.799001 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+21375	/_samplerate 60 /drops_1 0 0 /energy 0.4181483 0.4440754 /char1 0.7982581 0.7973109 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+21378	/_samplerate 60 /drops_1 0 0 /energy 0.4701559 0.4963181 /char1 0.7961599 0.7948059 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+21380	/_samplerate 60 /drops_1 0 0 0 /energy 0.5224904 0.5486011 0.5745785 /char1 0.79325 0.7914929 0.7895362 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+21382	/_samplerate 60 /drops_1 0 0 /energy 0.6003516 0.6258495 /char1 0.787381 0.7850288 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+21384	/_samplerate 60 /drops_1 0 0 /energy 0.6510026 0.6757417 /char1 0.7824813 0.7797402 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+21387	/_samplerate 60 /drops_1 0 0 /energy 0.6999992 0.7237085 /char1 0.7768074 0.7736849 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+21389	/_samplerate 60 /drops_1 0 0 0 /energy 0.7468046 0.7692242 0.790906 /char1 0.7703748 0.7668794 0.7632011 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+21392	/_samplerate 60 /drops_1 0 0 /energy 0.8117903 0.83182 /char1 0.7593424 0.7553059 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+21394	/_samplerate 60 /drops_1 0 0 0 /energy 0.8509403 0.8690987 0.8862454 /char1 0.7510945 0.746711 0.7421585 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+21397	/_samplerate 60 /drops_1 0 0 /energy 0.9023334 0.9173186 /char1 0.7374399 0.7325587 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+21399	/_samplerate 60 /drops_1 0 0 0 /energy 0.93116 0.9438196 0.9552628 /char1 0.727518 0.7223214 0.7169725 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+21401	/_samplerate 60 /drops_1 0 0 /energy 0.9654581 0.9743776 /char1 0.7114748 0.7058322 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+21404	/_samplerate 60 /drops_1 0 0 /energy 0.9819969 0.988295 /char1 0.7000486 0.6941278 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+21406	/_samplerate 60 /drops_1 0 0 0 /energy 0.9932548 0.9968626 0.9991086 /char1 0.688074 0.6818913 0.675584 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+21408	/_samplerate 60 /drops_1 0 0 /energy 0.9999865 0.9994939 /char1 0.6691563 0.6626126 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+21410	/_samplerate 60 /drops_1 0 0 /energy 0.9976323 0.9944068 /char1 0.6559576 0.6491956 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+21413	/_samplerate 60 /drops_1 0 0 /energy 0.989826 0.9839028 /char1 0.6423314 0.6353696 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+21415	/_samplerate 60 /drops_1 0 0 0 /energy 0.9766532 0.968097 0.9582579 /char1 0.6283151 0.6211726 0.6139471 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+21417	/_samplerate 60 /drops_1 0 0 /energy 0.9471627 0.9348419 /char1 0.6066435 0.5992668 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+21420	/_samplerate 60 /drops_1 0 0 /energy 0.9213292 0.9066617 /char1 0.591822 0.5843144 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+21422	/_samplerate 60 /drops_1 0 0 0 /energy 0.8908796 0.874026 0.8561473 /char1 0.576749 0.5691309 0.5614654 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+21425	/_samplerate 60 /drops_1 0 0 /energy 0.8372924 0.817513 /char1 0.5537579 0.5460135 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+21427	/_samplerate 60 /drops_1 0 0 0 /energy 0.7968634 0.7754 0.7531819 /char1 0.5382376 0.5304354 0.5226125 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+21429	/_samplerate 60 /drops_1 0 0 /energy 0.7302697 0.7067264 /char1 0.514774 0.5069253 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+21431	/_samplerate 60 /drops_1 0 0 /energy 0.6826165 0.658006 /char1 0.499072 0.4912193 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+21434	/_samplerate 60 /drops_1 0 0 /energy 0.6329625 0.6075545 /char1 0.4833725 0.4755372 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+21436	/_samplerate 60 /drops_1 0 0 0 /energy 0.5818517 0.5559245 0.5298442 /char1 0.4677187 0.4599223 0.4521533 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+21438	/_samplerate 60 /drops_1 0 0 /energy 0.5036819 0.4775096 /char1 0.4444171 0.436719 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+21441	/_samplerate 60 /drops_1 0 0 /energy 0.4513989 0.4254215 /char1 0.4290643 0.4214582 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+21443	/_samplerate 60 /drops_1 0 0 0 /energy 0.3996484 0.3741505 0.3489974 /char1 0.413906 0.4064128 0.3989836 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+21446	/_samplerate 60 /drops_1 0 0 /energy 0.3242582 0.3000008 /char1 0.3916237 0.3843381 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+21448	/_samplerate 60 /drops_1 0 0 0 /energy 0.2762915 0.2531954 0.2307758 /char1 0.3771318 0.3700097 0.3629766 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+21450	/_samplerate 60 /drops_1 0 0 /energy 0.2090941 0.1882097 /char1 0.3560375 0.349197 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+21453	/_samplerate 60 /drops_1 0 0 /energy 0.16818 0.1490597 /char1 0.3424599 0.3358307 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+21455	/_samplerate 60 /drops_1 0 0 0 /energy 0.1309013 0.1137547 0.09766664 /char1 0.3293141 0.3229145 0.3166362 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+21457	/_samplerate 60 /drops_1 0 0 /energy 0.0826814 0.06884 /char1 0.3104836 0.3044608 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+21460	/_samplerate 60 /drops_1 0 0 /energy 0.05618037 0.04473722 /char1 0.2985721 0.2928214 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+21462	/_samplerate 60 /drops_1 0 0 0 /energy 0.03454192 0.02562241 0.01800313 /char1 0.2872128 0.2817499 0.2764366 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+21464	/_samplerate 60 /drops_1 0 0 /energy 0.01170497 0.006745198 /char1 0.2712766 0.2662733 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+21467	/_samplerate 60 /drops_1 0 0 /energy 0.003137399 0.0008914671 /char1 0.2614302 0.2567506 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+21469	/_samplerate 60 /drops_1 0 0 0 /energy 1.355667e-05 0.0005060743 0.00236767 /char1 0.2522377 0.2478946 0.2437243 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+21472	/_samplerate 60 /drops_1 0 0 /energy 0.005593241 0.01017395 /char1 0.2397296 0.2359133 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+21474	/_samplerate 60 /drops_1 0 0 0 /energy 0.01609723 0.02334686 0.03190296 /char1 0.232278 0.2288262 0.2255602 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+21476	/_samplerate 60 /drops_1 0 0 /energy 0.04174209 0.05283726 /char1 0.2224823 0.2195946 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+21479	/_samplerate 60 /drops_1 0 0 /energy 0.06515808 0.07867077 /char1 0.2168991 0.2143976 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+21481	/_samplerate 60 /drops_1 0 0 0 /energy 0.0933383 0.1091205 0.125974 /char1 0.2120919 0.2099834 0.2080738 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+21483	/_samplerate 60 /drops_1 0 0 /energy 0.1438527 0.1627076 /char1 0.2063642 0.2048558 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+21486	/_samplerate 60 /drops_1 0 0 /energy 0.182487 0.2031366 /char1 0.2035497 0.2024468 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+21488	/_samplerate 60 /drops_1 0 0 0 /energy 0.2246 0.2468182 0.2697303 /char1 0.2015478 0.2008534 0.200364 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+21490	/_samplerate 60 /drops_1 0 0 /energy 0.2932736 0.3173835 /char1 0.2000799 0.2000014 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+21493	/_samplerate 60 /drops_1 0 0 /energy 0.341994 0.3670375 /char1 0.2001285 0.2004611 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+21495	/_samplerate 60 /drops_1 0 0 0 /energy 0.3924455 0.4181483 0.4440754 /char1 0.200999 0.2017419 0.2026891 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+21497	/_samplerate 60 /drops_1 0 0 /energy 0.4701559 0.4963181 /char1 0.2038401 0.205194 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+21500	/_samplerate 60 /drops_1 0 0 /energy 0.5224904 0.5486011 /char1 0.2067501 0.208507 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+21502	/_samplerate 60 /drops_1 0 0 0 /energy 0.5745785 0.6003516 0.6258495 /char1 0.2104638 0.212619 0.2149712 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+21504	/_samplerate 60 /drops_1 0 0 /energy 0.6510026 0.6757417 /char1 0.2175187 0.2202598 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+21507	/_samplerate 60 /drops_1 0 0 /energy 0.6999992 0.7237085 /char1 0.2231926 0.2263151 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+21509	/_samplerate 60 /drops_1 0 0 0 /energy 0.7468046 0.7692242 0.790906 /char1 0.2296252 0.2331206 0.2367989 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+21511	/_samplerate 60 /drops_1 0 0 /energy 0.8117903 0.83182 /char1 0.2406576 0.2446941 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+21514	/_samplerate 60 /drops_1 0 0 /energy 0.8509403 0.8690987 /char1 0.2489055 0.253289 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+21516	/_samplerate 60 /drops_1 0 0 0 /energy 0.8862454 0.9023334 0.9173186 /char1 0.2578415 0.2625601 0.2674413 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+21519	/_samplerate 60 /drops_1 0 0 /energy 0.93116 0.9438196 /char1 0.272482 0.2776786 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+21521	/_samplerate 60 /drops_1 0 0 0 /energy 0.9552628 0.9654581 0.9743776 /char1 0.2830275 0.2885252 0.2941678 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+21523	/_samplerate 60 /drops_1 0 0 /energy 0.9819969 0.988295 /char1 0.2999514 0.3058722 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+21526	/_samplerate 60 /drops_1 0 0 /energy 0.9932548 0.9968626 /char1 0.311926 0.3181087 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+21528	/_samplerate 60 /drops_1 0 0 0 /energy 0.9991086 0.9999865 0.9994939 /char1 0.324416 0.3308437 0.3373874 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+21530	/_samplerate 60 /drops_1 0 0 /energy 0.9976323 0.9944068 /char1 0.3440425 0.3508044 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+21532	/_samplerate 60 /drops_1 0 0 /energy 0.989826 0.9839028 /char1 0.3576686 0.3646304 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+21535	/_samplerate 60 /drops_1 0 0 /energy 0.9766532 0.968097 /char1 0.3716849 0.3788274 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+21537	/_samplerate 60 /drops_1 0 0 0 /energy 0.9582579 0.9471627 0.9348419 /char1 0.3860529 0.3933565 0.4007332 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+21540	/_samplerate 60 /drops_1 0 0 /energy 0.9213292 0.9066617 /char1 0.4081779 0.4156856 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+21542	/_samplerate 60 /drops_1 0 0 0 /energy 0.8908796 0.874026 0.8561473 /char1 0.4232511 0.4308691 0.4385345 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+21544	/_samplerate 60 /drops_1 0 0 /energy 0.8372924 0.817513 /char1 0.4462421 0.4539865 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+21547	/_samplerate 60 /drops_1 0 0 /energy 0.7968634 0.7754 /char1 0.4617624 0.4695646 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+21549	/_samplerate 60 /drops_1 0 0 0 /energy 0.7531819 0.7302697 0.7067264 /char1 0.4773875 0.485226 0.4930747 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+21551	/_samplerate 60 /drops_1 0 0 /energy 0.6826165 0.658006 /char1 0.500928 0.5087808 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+21554	/_samplerate 60 /drops_1 0 0 /energy 0.6329625 0.6075545 /char1 0.5166275 0.5244628 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+21556	/_samplerate 60 /drops_1 0 0 0 /energy 0.5818517 0.5559245 0.5298442 /char1 0.5322813 0.5400777 0.5478467 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+21558	/_samplerate 60 /drops_1 0 0 /energy 0.5036819 0.4775096 /char1 0.5555829 0.5632809 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+21561	/_samplerate 60 /drops_1 0 0 /energy 0.4513989 0.4254215 /char1 0.5709357 0.5785418 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+21563	/_samplerate 60 /drops_1 0 0 0 /energy 0.3996484 0.3741505 0.3489974 /char1 0.586094 0.5935873 0.6010164 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+21565	/_samplerate 60 /drops_1 0 0 /energy 0.3242582 0.3000008 /char1 0.6083763 0.6156619 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+21568	/_samplerate 60 /drops_1 0 0 /energy 0.2762915 0.2531954 /char1 0.6228682 0.6299903 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+21570	/_samplerate 60 /drops_1 0 0 0 /energy 0.2307758 0.2090941 0.1882097 /char1 0.6370234 0.6439625 0.650803 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+21572	/_samplerate 60 /drops_1 0 0 /energy 0.16818 0.1490597 /char1 0.6575401 0.6641693 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+21575	/_samplerate 60 /drops_1 0 0 /energy 0.1309013 0.1137547 /char1 0.6706859 0.6770855 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+21577	/_samplerate 60 /drops_1 0 0 0 /energy 0.09766664 0.0826814 0.06884 /char1 0.6833638 0.6895164 0.6955392 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+21579	/_samplerate 60 /drops_1 0 0 /energy 0.05618037 0.04473722 /char1 0.7014279 0.7071785 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+21582	/_samplerate 60 /drops_1 0 0 /energy 0.03454192 0.02562241 /char1 0.7127872 0.7182501 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+21584	/_samplerate 60 /drops_1 0 0 0 /energy 0.01800313 0.01170497 0.006745198 /char1 0.7235634 0.7287234 0.7337267 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+21586	/_samplerate 60 /drops_1 0 0 /energy 0.003137399 0.0008914671 /char1 0.7385698 0.7432494 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+21589	/_samplerate 60 /drops_1 0 0 /energy 1.355667e-05 0.0005060743 /char1 0.7477623 0.7521054 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+21591	/_samplerate 60 /drops_1 0 0 0 /energy 0.00236767 0.005593241 0.01017395 /char1 0.7562757 0.7602704 0.7640867 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+21593	/_samplerate 60 /drops_1 0 0 /energy 0.01609723 0.02334686 /char1 0.767722 0.7711738 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+21596	/_samplerate 60 /drops_1 0 0 /energy 0.03190296 0.04174209 /char1 0.7744398 0.7775177 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+21598	/_samplerate 60 /drops_1 0 0 0 /energy 0.05283726 0.06515808 0.07867077 /char1 0.7804054 0.7831009 0.7856024 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+21600	/_samplerate 60 /drops_1 0 0 /energy 0.0933383 0.1091205 /char1 0.7879081 0.7900166 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+21603	/_samplerate 60 /drops_1 0 0 /energy 0.125974 0.1438527 /char1 0.7919263 0.7936358 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+21605	/_samplerate 60 /drops_1 0 0 0 /energy 0.1627076 0.182487 0.2031366 /char1 0.7951442 0.7964503 0.7975532 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+21607	/_samplerate 60 /drops_1 0 0 /energy 0.2246 0.2468182 /char1 0.7984521 0.7991466 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+21610	/_samplerate 60 /drops_1 0 0 /energy 0.2697303 0.2932736 /char1 0.799636 0.7999201 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+21612	/_samplerate 60 /drops_1 0 0 0 /energy 0.3173835 0.341994 0.3670375 /char1 0.7999986 0.7998715 0.7995389 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+21614	/_samplerate 60 /drops_1 0 0 /energy 0.3924455 0.4181483 /char1 0.799001 0.7982581 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+21617	/_samplerate 60 /drops_1 0 0 /energy 0.4440754 0.4701559 /char1 0.7973109 0.7961599 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+21619	/_samplerate 60 /drops_1 0 0 0 /energy 0.4963181 0.5224904 0.5486011 /char1 0.7948059 0.79325 0.7914929 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+21621	/_samplerate 60 /drops_1 0 0 /energy 0.5745785 0.6003516 /char1 0.7895362 0.787381 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+21624	/_samplerate 60 /drops_1 0 0 /energy 0.6258495 0.6510026 /char1 0.7850288 0.7824813 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+21626	/_samplerate 60 /drops_1 0 0 0 /energy 0.6757417 0.6999992 0.7237085 /char1 0.7797402 0.7768074 0.7736849 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+21629	/_samplerate 60 /drops_1 0 0 /energy 0.7468046 0.7692242 /char1 0.7703748 0.7668794 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+21631	/_samplerate 60 /drops_1 0 0 0 /energy 0.790906 0.8117903 0.83182 /char1 0.7632011 0.7593424 0.7553059 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+21633	/_samplerate 60 /drops_1 0 0 /energy 0.8509403 0.8690987 /char1 0.7510945 0.746711 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+21635	/_samplerate 60 /drops_1 0 0 /energy 0.8862454 0.9023334 /char1 0.7421585 0.7374399 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+21638	/_samplerate 60 /drops_1 0 0 /energy 0.9173186 0.93116 /char1 0.7325587 0.727518 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+21640	/_samplerate 60 /drops_1 0 0 0 /energy 0.9438196 0.9552628 0.9654581 /char1 0.7223214 0.7169725 0.7114748 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+21642	/_samplerate 60 /drops_1 0 0 /energy 0.9743776 0.9819969 /char1 0.7058322 0.7000486 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+21645	/_samplerate 60 /drops_1 0 0 /energy 0.988295 0.9932548 /char1 0.6941278 0.688074 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+21647	/_samplerate 60 /drops_1 0 0 0 /energy 0.9968626 0.9991086 0.9999865 /char1 0.6818913 0.675584 0.6691563 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+21650	/_samplerate 60 /drops_1 0 0 /energy 0.9994939 0.9976323 /char1 0.6626126 0.6559576 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+21652	/_samplerate 60 /drops_1 0 0 0 /energy 0.9944068 0.989826 0.9839028 /char1 0.6491956 0.6423314 0.6353696 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+21654	/_samplerate 60 /drops_1 0 0 /energy 0.9766532 0.968097 /char1 0.6283151 0.6211726 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+21657	/_samplerate 60 /drops_1 0 0 /energy 0.9582579 0.9471627 /char1 0.6139471 0.6066435 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+21659	/_samplerate 60 /drops_1 0 0 0 /energy 0.9348419 0.9213292 0.9066617 /char1 0.5992668 0.591822 0.5843144 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+21661	/_samplerate 60 /drops_1 0 0 /energy 0.8908796 0.874026 /char1 0.576749 0.5691309 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+21663	/_samplerate 60 /drops_1 0 0 /energy 0.8561473 0.8372924 /char1 0.5614654 0.5537579 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+21666	/_samplerate 60 /drops_1 0 0 /energy 0.817513 0.7968634 /char1 0.5460135 0.5382376 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+21668	/_samplerate 60 /drops_1 0 0 0 /energy 0.7754 0.7531819 0.7302697 /char1 0.5304354 0.5226125 0.514774 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+21671	/_samplerate 60 /drops_1 0 0 /energy 0.7067264 0.6826165 /char1 0.5069253 0.499072 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+21673	/_samplerate 60 /drops_1 0 0 0 /energy 0.658006 0.6329625 0.6075545 /char1 0.4912193 0.4833725 0.4755372 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
+21676	/_samplerate 60 /drops_1 0 0 /energy 0.5818517 0.5559245 /char1 0.4677187 0.4599223 /char2 0.181 0.181 /drops_2 0 0 /tube 0.77 0.77 /drops_3 0 0 /chan1 0 0
+21678	/_samplerate 60 /drops_1 0 0 0 /energy 0.5298442 0.5036819 0.4775096 /char1 0.4521533 0.4444171 0.436719 /char2 0.181 0.181 0.181 /drops_2 0 0 0 /tube 0.77 0.77 0.77 /drops_3 0 0 0 /chan1 0 0 0
