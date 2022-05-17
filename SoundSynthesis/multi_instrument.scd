@@ -139,7 +139,7 @@ SynthDef(\tube, {
 		`[0.97,1.0,1.0,1.0,1.0,0.97],
 		`[0.5,res_array,0.2,-0.4],
 		`([0.01,0.02,0.01,0.005,0.05]*res_delay));
-	sig = sig * amp*0.5;
+	sig = sig * amp*0.3;
 	Out.ar(out, sig!2);
 }).add;
 
