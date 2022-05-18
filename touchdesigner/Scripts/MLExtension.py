@@ -73,6 +73,9 @@ class MLExtension:
 		
 		TDF.createProperty(self, 'LEARNING_RATE', value='', dependable=True,
 						   readOnly=False)
+		
+		TDF.createProperty(self, 'TIME_STEPS', value='', dependable=True,
+						   readOnly=False)
 
 		# Selected Data Points
 		TDF.createProperty(self, 'FeatureSelector', value='', dependable=True,
@@ -151,6 +154,7 @@ class MLExtension:
 		self.INITIAL_EPOCHS = int(parent.Ml.par.Initialepochs)
 		self.HIDDEN_DIM = int(parent.Ml.par.Hiddendim)
 		self.LEARNING_RATE = float(parent.Ml.par.Learningrate)
+		self.TIME_STEPS = int(parent.Ml.par.Timesteps)
 
 		debug("Get Model Settings")
 	
@@ -161,6 +165,11 @@ class MLExtension:
 			self.Model.add(Dense(self.OUTPUT_DIM, activation='sigmoid',kernel_initializer=my_init, bias_initializer=my_init))
 			sgd = SGD(learning_rate=self.LEARNING_RATE, decay=1e-6, momentum=0.9, nesterov=True)
 			self.Model.compile(loss='binary_crossentropy', optimizer=sgd, metrics=['accuracy'])
+		elif self.ModelType == 'lstm':
+			self.Model.add(LSTM(units=128, batch_input_shape=(self.BATCH_SIZE, self.TIME_STEPS, self.INPUT_DIM), stateful=True, return_sequences=True))
+			#self.Model.add(LSTM(units=128, batch_input_shape=(self.BATCH_SIZE, self.TIME_STEPS, self.INPUT_DIM), stateful=True, return_sequences=False))
+			self.Model.add(Dense(units=self.OUTPUT_DIM, activation='sigmoid'))
+			self.Model.compile(optimizer='rmsprop',loss='mse')
 		debug("Built ", self.ModelType, " Model")
 
 	def GetTrainingFileLocation(self):
@@ -171,14 +180,31 @@ class MLExtension:
 		#file = open(file_loc)
 		#values = np.loadtxt(file_loc, skiprows=1, dtype='float32')
 		string_values = StringIO(op('selected_data').text)
-		values = np.loadtxt(string_values,skiprows=1,dtype='float32')
+		values = np.loadtxt(file_loc,skiprows=1,dtype='float32')
 		debug('Training Data Points: ', values.shape[0])
 		self.Features, self.Targets = values[:,:-self.OUTPUT_DIM], values[:,self.INPUT_DIM:]
+		if self.ModelType == 'lstm':
+			self.Features = self.rolling_window2D(self.Features,self.TIME_STEPS)
+			self.Targets = self.Targets[self.TIME_STEPS-1:]
 		debug('Training Features Shape: ', self.Features.shape, 'Training Targets Shape: ', self.Targets.shape)
 
+	def rolling_window2D(self,a,n):
+		# a: 2D Input array 
+		# n: Group/sliding window length
+		return a[np.arange(a.shape[0]-n+1)[:,None] + np.arange(n)]
+
 	def FitModel(self):
-		self.Model.fit(self.Features,self.Targets,epochs=self.INITIAL_EPOCHS,batch_size=self.BATCH_SIZE,shuffle=True)
-		self.Model.summary()
+		debug("Fitting Model")
+		if self.ModelType == 'linear_regression':
+			debug("Starting Linear Regression Fit")
+			self.Model.fit(self.Features,self.Targets,epochs=self.INITIAL_EPOCHS,batch_size=self.BATCH_SIZE,shuffle=True)
+		elif self.ModelType == 'lstm':
+			debug("Starting LSTM Fit")
+			try:
+				self.Model.fit(x=self.Features,y=self.Targets,batch_size=self.BATCH_SIZE,epochs=self.INITIAL_EPOCHS)
+			except:
+				debug("Couldn't Fit Model")
+		#self.Model.summary()
 		debug("Initial Training finished... ")
 
 	def SaveModel(self):
