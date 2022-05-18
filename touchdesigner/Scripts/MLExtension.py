@@ -12,6 +12,8 @@ import sys
 import os
 import platform
 
+from io import StringIO
+
 import tensorflow as tf
 import keras
 from tensorflow.keras.models import Sequential
@@ -20,6 +22,8 @@ from tensorflow.keras.optimizers import SGD
 from tensorflow.python.client import device_lib
 
 import numpy as np
+
+import json
 
 from TDStoreTools import StorageManager
 import TDFunctions as TDF
@@ -46,6 +50,9 @@ class MLExtension:
 						   readOnly=False)
 
 		# Model Settings
+		TDF.createProperty(self, 'ModelType', value='', dependable=True,
+						   readOnly=False)
+
 		TDF.createProperty(self, 'INPUT_DIM', value='', dependable=True,
 						   readOnly=False)
 		
@@ -65,6 +72,14 @@ class MLExtension:
 						   readOnly=False)
 		
 		TDF.createProperty(self, 'LEARNING_RATE', value='', dependable=True,
+						   readOnly=False)
+
+		# Selected Data Points
+		TDF.createProperty(self, 'FeatureSelector', value='', dependable=True,
+						   readOnly=False)
+		TDF.createProperty(self, 'TargetSelector', value='', dependable=True,
+						   readOnly=False)				   
+		TDF.createProperty(self, 'DatapointsList', value='', dependable=True,
 						   readOnly=False)
 
 		# Training Settings
@@ -119,6 +134,16 @@ class MLExtension:
 		debug("Initiated Model")
 	
 	def GetModelSettings(self):
+
+		# Get Model Type
+		self.ModelType = parent.Ml.par.Modeltype.val
+
+		# Get Settings from Data Selection
+		self.FeatureSelector = parent.Ml.par.Selectedfeatures.val
+		self.TargetSelector = parent.Ml.par.Selectedtargets.val
+		self.DatapointsList = op('selected_data_points').row(0)
+
+		# Get Settings for the Model Parameters
 		self.INPUT_DIM = int(parent.Ml.par.Inputdim)
 		self.OUTPUT_DIM = int(parent.Ml.par.Outputdim)
 		self.BATCH_SIZE = int(parent.Ml.par.Batchsize)
@@ -126,22 +151,27 @@ class MLExtension:
 		self.INITIAL_EPOCHS = int(parent.Ml.par.Initialepochs)
 		self.HIDDEN_DIM = int(parent.Ml.par.Hiddendim)
 		self.LEARNING_RATE = float(parent.Ml.par.Learningrate)
+
+		debug("Get Model Settings")
 	
 	def BuildModel(self):
-		my_init=keras.initializers.RandomNormal(mean=0.0, stddev=0.05, seed=None)
-		self.Model.add(Dense(self.HIDDEN_DIM, activation='sigmoid', input_dim=self.INPUT_DIM, kernel_initializer=my_init, bias_initializer=my_init))
-		self.Model.add(Dense(self.OUTPUT_DIM, activation='sigmoid',kernel_initializer=my_init, bias_initializer=my_init))
-		sgd = SGD(learning_rate=self.LEARNING_RATE, decay=1e-6, momentum=0.9, nesterov=True)
-		self.Model.compile(loss='binary_crossentropy', optimizer=sgd, metrics=['accuracy'])
-		debug("Built Model")
+		if self.ModelType == 'linear_regression':
+			my_init=keras.initializers.RandomNormal(mean=0.0, stddev=0.05, seed=None)
+			self.Model.add(Dense(self.HIDDEN_DIM, activation='sigmoid', input_dim=self.INPUT_DIM, kernel_initializer=my_init, bias_initializer=my_init))
+			self.Model.add(Dense(self.OUTPUT_DIM, activation='sigmoid',kernel_initializer=my_init, bias_initializer=my_init))
+			sgd = SGD(learning_rate=self.LEARNING_RATE, decay=1e-6, momentum=0.9, nesterov=True)
+			self.Model.compile(loss='binary_crossentropy', optimizer=sgd, metrics=['accuracy'])
+		debug("Built ", self.ModelType, " Model")
 
 	def GetTrainingFileLocation(self):
-		self.TrainingFileLocation = parent.Ml.par.Trainingdata
+		self.TrainingFileLocation = parent.Ml.par.Trainingdata.val
 
 	def LoadTrainingData(self):
 		file_loc = str(self.TrainingFileLocation)
-		file = open(file_loc)
-		values = np.loadtxt(file_loc, skiprows=1, dtype='float32')
+		#file = open(file_loc)
+		#values = np.loadtxt(file_loc, skiprows=1, dtype='float32')
+		string_values = StringIO(op('selected_data').text)
+		values = np.loadtxt(string_values,skiprows=1,dtype='float32')
 		debug('Training Data Points: ', values.shape[0])
 		self.Features, self.Targets = values[:,:-self.OUTPUT_DIM], values[:,self.INPUT_DIM:]
 		debug('Training Features Shape: ', self.Features.shape, 'Training Targets Shape: ', self.Targets.shape)
@@ -150,14 +180,50 @@ class MLExtension:
 		self.Model.fit(self.Features,self.Targets,epochs=self.INITIAL_EPOCHS,batch_size=self.BATCH_SIZE,shuffle=True)
 		self.Model.summary()
 		debug("Initial Training finished... ")
-	
+
 	def SaveModel(self):
 		location = parent.Ml.par.Modelname
 		self.Model.save('Models/' + location) #saving as SavedModel format
+		self.CreateModelConfigFile()
+		debug("Saved Model")
+
+	def CreateModelConfigFile(self):
+		location = parent.Ml.par.Modelname
+		json_config = {}
+		json_config['Model_Type'] = self.ModelType
+		json_config['Training_Data'] = self.TrainingFileLocation
+		json_config['Selected_Features'] = self.FeatureSelector
+		json_config['Selected_Targets'] = self.TargetSelector
+		json_config['INPUT_DIM'] = self.INPUT_DIM
+		json_config['OUTPUT_DIM'] = self.OUTPUT_DIM
+		json_config['BATCH_SIZE'] = self.BATCH_SIZE
+		json_config['EPOCHS'] = self.EPOCHS
+		json_config['INITIAL_EPOCHS'] = self.INITIAL_EPOCHS
+		json_config['HIDDEN_DIM'] = self.HIDDEN_DIM
+		json_config['LEARNING_RATE'] = self.LEARNING_RATE
+		with open('Models/' + location + '/model_config.json', 'w') as jsonFile:
+			json.dump(json_config,jsonFile)
 
 	def LoadModel(self):
 		model_folder = str(parent.Ml.par.Selectmodel)
 		self.Model = keras.models.load_model(model_folder)
+		self.LoadSettingsFromConfigFile()
+		debug("Loaded Model")
+
+	def LoadSettingsFromConfigFile(self):
+		op('load_model_config').par.refreshpulse.pulse()
+		model_config = op('model_config')
+		self.ModelType = model_config.result['Model_Type']
+		self.TrainingFileLocation = model_config.result['Training_Data']
+		self.FeatureSelector = model_config.result['Selected_Features']
+		self.TargetSelector = model_config.result['Selected_Targets']
+		self.INPUT_DIM = model_config.result['INPUT_DIM']
+		self.OUTPUT_DIM = model_config.result['OUTPUT_DIM']
+		self.BATCH_SIZE = model_config.result['BATCH_SIZE']
+		self.EPOCHS = model_config.result['EPOCHS']
+		self.INITIAL_EPOCHS = model_config.result['INITIAL_EPOCHS']
+		self.HIDDEN_DIM = model_config.result['HIDDEN_DIM']
+		self.LEARNING_RATE = model_config.result['LEARNING_RATE']
 
 	def PredictTargets(self,features):
 		return self.Model.predict(np.array([features]))
