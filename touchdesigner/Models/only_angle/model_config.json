@@ -1,1 +1,0 @@
-{"Model_Type": "linear_regression", "Training_Data": "Entity-Recordings/220512_230125_Real-Data-Set-V2_60hz.txt", "Selected_Features": "angle_* ", "Selected_Targets": "sound_*", "INPUT_DIM": 18, "OUTPUT_DIM": 8, "BATCH_SIZE": 500, "EPOCHS": 10, "INITIAL_EPOCHS": 10, "HIDDEN_DIM": 128, "LEARNING_RATE": 1.0}
