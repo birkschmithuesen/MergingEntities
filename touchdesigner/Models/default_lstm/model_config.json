@@ -1,0 +1,1 @@
+{"Model_Type": 1, "Training_Data": "Entity-Recordings/default.txt", "Selected_Features": "^sound_*", "Selected_Targets": "sound_*", "INPUT_DIM": 67, "OUTPUT_DIM": 8, "BATCH_SIZE": 1, "EPOCHS": 1, "INITIAL_EPOCHS": 1, "HIDDEN_DIM": 10, "LEARNING_RATE": 1, "TIME_STEPS": 5}

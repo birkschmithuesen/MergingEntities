@@ -1,0 +1,1 @@
+{"Model_Type": 0, "Training_Data": "Entity-Recordings/220514_154852_Real-Data-Set-V2_60hz_Test_dreiSounds.txt", "Selected_Features": "quater_* angle_* acc_*", "Selected_Targets": "sound_*", "INPUT_DIM": 60, "OUTPUT_DIM": 8, "BATCH_SIZE": 1, "EPOCHS": 10, "INITIAL_EPOCHS": 10, "HIDDEN_DIM": 128, "LEARNING_RATE": 1, "TIME_STEPS": 30}
