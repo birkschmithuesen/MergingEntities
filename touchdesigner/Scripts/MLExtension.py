@@ -227,6 +227,7 @@ class MLExtension:
 		json_config['INITIAL_EPOCHS'] = self.INITIAL_EPOCHS
 		json_config['HIDDEN_DIM'] = self.HIDDEN_DIM
 		json_config['LEARNING_RATE'] = self.LEARNING_RATE
+		json_config['TIME_STEPS'] = self.TIME_STEPS
 		with open('Models/' + location + '/model_config.json', 'w') as jsonFile:
 			json.dump(json_config,jsonFile)
 
@@ -250,6 +251,7 @@ class MLExtension:
 		self.INITIAL_EPOCHS = model_config.result['INITIAL_EPOCHS']
 		self.HIDDEN_DIM = model_config.result['HIDDEN_DIM']
 		self.LEARNING_RATE = model_config.result['LEARNING_RATE']
+		self.TIME_STEPS = model_config.result['TIME_STEPS']
 
 	def PredictTargets(self,features):
 		return self.Model.predict(np.array([features]))
