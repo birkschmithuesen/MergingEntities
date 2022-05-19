@@ -13,6 +13,14 @@ Get an overview in the flowchart.PDF
 * MadMapper: Mapping if videoprojection is used
 * Light: MagicQ (chamsys) to calibrate the Movingheads
 
+## Anaconda Environment
+* Name: merging-entities
+* Python: 3.7.2
+* Requirements in requirements.txt in touchdesigner folder
+* Environment in environment.yml in touchdesigner folder
+We encountered unsolveable Crashes when fitting LSTM models. Research showed that it's not better to use 'conda install' instead of 'pip install' for this problem. We could verify this, installing envs with pip packages crashed the code, conda packages were running. The packages install via conda or pip also installed different versions of the packages (conda: tensorflow 3.2, pip: tensorflow 3.9).
+EDIT: It seems after de-installing CUDA the problem disappears. This could be the result of unmatchin CUDA and PY and TD versionsm but for now no CUDA anymore. 
+
 ## Machine Learning Install
 Setup an Andaconda environment from the requirements file /touchdesigner/environment.yml with "conda env create -f environment.yml -n MY-NAME"
 

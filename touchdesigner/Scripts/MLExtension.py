@@ -167,7 +167,7 @@ class MLExtension:
 			self.Model.compile(loss='binary_crossentropy', optimizer=sgd, metrics=['accuracy'])
 		elif self.ModelType == 'lstm':
 			self.Model.add(LSTM(units=128, batch_input_shape=(self.BATCH_SIZE, self.TIME_STEPS, self.INPUT_DIM), stateful=True, return_sequences=True))
-			#self.Model.add(LSTM(units=128, batch_input_shape=(self.BATCH_SIZE, self.TIME_STEPS, self.INPUT_DIM), stateful=True, return_sequences=False))
+			self.Model.add(LSTM(units=128, batch_input_shape=(self.BATCH_SIZE, self.TIME_STEPS, self.INPUT_DIM), stateful=True, return_sequences=False))
 			self.Model.add(Dense(units=self.OUTPUT_DIM, activation='sigmoid'))
 			self.Model.compile(optimizer='rmsprop',loss='mse')
 		debug("Built ", self.ModelType, " Model")
@@ -176,11 +176,11 @@ class MLExtension:
 		self.TrainingFileLocation = parent.Ml.par.Trainingdata.val
 
 	def LoadTrainingData(self):
-		file_loc = str(self.TrainingFileLocation)
+		#file_loc = str(self.TrainingFileLocation)
 		#file = open(file_loc)
 		#values = np.loadtxt(file_loc, skiprows=1, dtype='float32')
 		string_values = StringIO(op('selected_data').text)
-		values = np.loadtxt(file_loc,skiprows=1,dtype='float32')
+		values = np.loadtxt(string_values,skiprows=1,dtype='float32')
 		debug('Training Data Points: ', values.shape[0])
 		self.Features, self.Targets = values[:,:-self.OUTPUT_DIM], values[:,self.INPUT_DIM:]
 		if self.ModelType == 'lstm':
@@ -202,8 +202,8 @@ class MLExtension:
 			debug("Starting LSTM Fit")
 			try:
 				self.Model.fit(x=self.Features,y=self.Targets,batch_size=self.BATCH_SIZE,epochs=self.INITIAL_EPOCHS)
-			except:
-				debug("Couldn't Fit Model")
+			except ValueError as e:
+				debug("Couldn't Fit Model", e)
 		#self.Model.summary()
 		debug("Initial Training finished... ")
 
