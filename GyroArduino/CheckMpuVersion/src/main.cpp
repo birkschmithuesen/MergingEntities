@@ -22,10 +22,71 @@ void setup() {
   pinMode(13, OUTPUT);
   
 }
+void scan()
+{
+  byte error, address;
+  int nDevices;
 
+  Serial.println("Scanning...");
+
+  nDevices = 0;
+  for(address = 1; address < 127; address++ )
+  {
+    Wire.beginTransmission(address);
+    error = Wire.endTransmission();
+
+    if (error == 0)
+    {
+      Serial.print("I2C device found at address 0x");
+      if (address < 16)
+        Serial.print("0");
+
+      Serial.print(address,HEX);
+      Serial.println("  !");
+
+      nDevices++;
+    }
+    else if (error==4)
+    {
+      Serial.print("Unknown error at address 0x");
+      if (address < 16)
+        Serial.print("0");
+
+      Serial.println(address,HEX);
+    }
+  }
+  #define adress 0c
+  Wire.beginTransmission(address);
+    error = Wire.endTransmission();
+
+    if (error == 0)
+    {
+      Serial.print("I2C device found at address 0x");
+      if (address < 16)
+        Serial.print("0");
+
+      Serial.print(address,HEX);
+      Serial.println("  !");
+
+      nDevices++;
+    }
+    else if (error==4)
+    {
+      Serial.print("Unknown error at address 0x");
+      if (address < 16)
+        Serial.print("0");
+
+      Serial.println(address,HEX);
+    }
+
+  if (nDevices == 0)
+    Serial.println("No I2C devices found");
+  else
+    Serial.println("done");        // wait 5 seconds for next scan
+}
 void loop() {
   // put your main code here, to run repeatedly:
-
+  
   c = myIMU0.readByte(MPU9250_ADDRESS_AD0, WHO_AM_I_MPU9250);
   d = myIMU1.readByte(MPU9250_ADDRESS_AD1, WHO_AM_I_MPU9250);
 
@@ -35,6 +96,8 @@ void loop() {
   Serial.println(d, HEX);
   digitalWrite(13, ledOn);
   ledOn = !ledOn;
-  delay(100);
+
+  //scan();
+  delay(500);
 
 }

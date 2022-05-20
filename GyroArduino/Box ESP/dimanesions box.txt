@@ -1,0 +1,6 @@
+lenght : 5.2 just the ESP, 8.2 with power cable, 9.2 with gyro cables --> 9.5
+width : 2.8 just ESP, 5 --> 5
+height : 0.7 --> 1.1
+
+one hole on the back to plug the battery - just a hole --> D = 1.5
+one hole on the front get the cables for the gyro out - a hole along all the height --> D = 1.0

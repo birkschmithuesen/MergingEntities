@@ -95,11 +95,18 @@ void loop() {
   xyzFloat gValue = myMPU6500.getGValues();
   xyzFloat angle = myMPU6500.getAngles();
 
+  Serial.print(gValue.x);
+  Serial.print("//");
+  Serial.print(gValue.y);
+  Serial.print("//");
+  Serial.print(gValue.z);
+  Serial.print("//");
+
   Serial.print(angle.x);
   Serial.print("//");
   Serial.print(angle.y);
   Serial.print("//");
-  Serial.println(angle.z);
+  Serial.print(angle.z);
 
   Serial.println();
   

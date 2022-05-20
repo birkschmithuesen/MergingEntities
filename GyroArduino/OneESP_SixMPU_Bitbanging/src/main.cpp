@@ -81,6 +81,7 @@ int localPort = 8888; //Port of ESP
 
 OSCMessage body(BODY_ADDRESS);
 OSCMessage body1[] = {OSCMessage ("/body/1/gyro/1/"), OSCMessage ("/body/1/gyro/2/"), OSCMessage ("/body/1/gyro/3/"), OSCMessage ("/body/1/gyro/4/"), OSCMessage ("/body/1/gyro/5/"), OSCMessage ("/body/1/gyro/6/")};
+OSCMessage calibration("/calibration");
 
 //Function to connect WiFi
 void connectWiFi() //Let's connect a WiFi
@@ -182,13 +183,36 @@ void setup() {
   Serial.println("Acceleration calibration done.");
 
   Serial.println("Calibration of mag");
+
+  Udp.beginPacket(outIp, outPort);
+  calibration.send(Udp);
+  Udp.endPacket();
+
+  calibration.empty();
+
   for(int i=0; i<nbrSoftMpu; i++) {
+    calibration.add("Calibration of ").add(i+1);
+
     Smpu[i].setMagneticDeclination(2.53);
-    //Hmpu[i].calibrateMag();
+    Smpu[i].calibrateMag();
+
+    Udp.beginPacket(outIp, outPort);
+    calibration.send(Udp);
+    Udp.endPacket();
+
+    calibration.empty();
   }
   for(int i=0; i<nbrHardMpu; i++) {
+    calibration.add("Calibration of ").add(i+5);
+
     Hmpu[i].setMagneticDeclination(2.53);
-    //Hmpu[i].calibrateMag();
+    Hmpu[i].calibrateMag();
+
+    Udp.beginPacket(outIp, outPort);
+    calibration.send(Udp);
+    Udp.endPacket();
+
+    calibration.empty();
   }
   Serial.println("Mag calibration done.");
 
