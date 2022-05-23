@@ -145,7 +145,7 @@ class MLExtension:
 		elif self.Modelname == 'lstm':
 			debug("Starting LSTM Fit")
 			try:
-				self.Model.fit(x=self.Features,y=self.Targets,batch_size=self.Batchsize.val,epochs=self.Initialepochs.val)
+				self.Model.fit(x=self.Features,y=self.Targets,batch_size=self.Batchsize.val,epochs=self.Initialepochs.val,use_multiprocessing=False)
 			except ValueError as e:
 				debug("Couldn't Fit Model", e)
 		#self.Model.summary()
