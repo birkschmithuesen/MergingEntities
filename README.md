@@ -13,19 +13,14 @@ Get an overview in the flowchart.PDF
 * MadMapper: Mapping if videoprojection is used
 * Light: MagicQ (chamsys) to calibrate the Movingheads
 
-## Anaconda Environment
-* Name: merging-entities
-* Python: 3.7.2
-* Requirements in requirements.txt in touchdesigner folder
-* Environment in environment.yml in touchdesigner folder
-We encountered unsolveable Crashes when fitting LSTM models. Research showed that it's not better to use 'conda install' instead of 'pip install' for this problem. We could verify this, installing envs with pip packages crashed the code, conda packages were running. The packages install via conda or pip also installed different versions of the packages (conda: tensorflow 3.2, pip: tensorflow 3.9).
-EDIT: It seems after de-installing CUDA the problem disappears. This could be the result of unmatchin CUDA and PY and TD versionsm but for now no CUDA anymore. 
-
 ## Machine Learning Install
 Setup an Andaconda environment from the requirements file /touchdesigner/environment.yml with "conda env create -f environment.yml -n MY-NAME"
-
-
 More infos: https://derivative.ca/community-post/tutorial/anaconda-managing-python-environments-and-3rd-party-libraries-touchdesigner
+If wanted install CUDA -> CUDA version 11.5
+* CUDA Toolkit: https://www.dropbox.com/s/qid60lpnmoyj46p/cuda_11.5.0_496.13_win10.exe?dl=0
+* CUDNN Files: https://www.dropbox.com/s/hufr0ot3kak5hbi/cudnn-windows-x86_64-8.3.3.40_cuda11.5-archive.zip?dl=0
+* Follow Tutorial: https://www.youtube.com/watch?v=OEFKlRSd8Ic
+
 
 ## Bodysuite / Gyroscopes OSC Interface
 * each bodysuite with $id (counting from 1) sends it's gyroscope data like this: /body/$id/gyro/1...6/[quartanians, angles, rotation-speed], where quartanians has 4 dims and angles and rotation-speed has 3 dims x,y,z

@@ -129,7 +129,13 @@ class MLExtension:
 		self.Features, self.Targets = values[:,:-self.Outputdim.val], values[:,self.Inputdim.val:]
 		if self.Modelname == 'lstm':
 			self.Features = self.rolling_window2D(self.Features,self.Timesteps.val)
-			self.Targets = self.Targets[self.Timesteps.val-1:]
+			#self.Targets = self.Targets[self.Timesteps.val-1:]
+			#adjusting to batch_size
+			length, y, z = self.Features.shape
+			offset = length % self.Batchsize
+			feature_length = length - offset - self.Batchsize
+			self.Features = self.Features[0:feature_length, ]
+			self.Targets = self.Targets[self.Timesteps-1:feature_length+self.Timesteps-1, ]
 		debug('Training Features Shape: ', self.Features.shape, 'Training Targets Shape: ', self.Targets.shape)
 
 	def rolling_window2D(self,a,n):
@@ -145,7 +151,19 @@ class MLExtension:
 		elif self.Modelname == 'lstm':
 			debug("Starting LSTM Fit")
 			try:
-				self.Model.fit(x=self.Features,y=self.Targets,batch_size=self.Batchsize.val,epochs=self.Initialepochs.val)
+				self.Model.fit(x=self.Features,y=self.Targets,batch_size=self.Batchsize.val,epochs=self.Initialepochs.val,use_multiprocessing=False)
+				# save tmp weights to later set into new model with batchsize 1
+				tmp_model_weights = self.Model.get_weights()
+				# set new batchsize
+				self.Batchsize.val = 1
+				# make new model
+				self.Model = Sequential()
+				self.Model.add(LSTM(units=128, batch_input_shape=(self.Batchsize.val, self.Timesteps.val, self.Inputdim.val), stateful=True, return_sequences=True))
+				self.Model.add(LSTM(units=128, batch_input_shape=(self.Batchsize.val, self.Timesteps.val, self.Inputdim.val), stateful=True, return_sequences=False))
+				self.Model.add(Dense(units=self.Outputdim.val, activation='sigmoid'))
+				# set weights from tmp model
+				self.Model.set_weights(tmp_model_weights)
+				self.Model.compile(optimizer='rmsprop',loss='mse')
 			except ValueError as e:
 				debug("Couldn't Fit Model", e)
 		#self.Model.summary()
