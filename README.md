@@ -15,9 +15,12 @@ Get an overview in the flowchart.PDF
 
 ## Machine Learning Install
 Setup an Andaconda environment from the requirements file /touchdesigner/environment.yml with "conda env create -f environment.yml -n MY-NAME"
-
-
 More infos: https://derivative.ca/community-post/tutorial/anaconda-managing-python-environments-and-3rd-party-libraries-touchdesigner
+If wanted install CUDA -> CUDA version 11.5
+* CUDA Toolkit: https://www.dropbox.com/s/qid60lpnmoyj46p/cuda_11.5.0_496.13_win10.exe?dl=0
+* CUDNN Files: https://www.dropbox.com/s/hufr0ot3kak5hbi/cudnn-windows-x86_64-8.3.3.40_cuda11.5-archive.zip?dl=0
+* Follow Tutorial: https://www.youtube.com/watch?v=OEFKlRSd8Ic
+
 
 ## Bodysuite / Gyroscopes OSC Interface
 * each bodysuite with $id (counting from 1) sends it's gyroscope data like this: /body/$id/gyro/1...6/[quartanians, angles, rotation-speed], where quartanians has 4 dims and angles and rotation-speed has 3 dims x,y,z

@@ -42,9 +42,7 @@ class MLExtension:
 		# Model Settings
 		self.Modeltype = tdu.Dependency(0)
 		self.Modeltypes = ['linear_regression','lstm']
-		self.Modelname = self.Modeltypes[self.Modeltype]
-
-		TDF.createProperty
+		self.Modelname = self.Modeltypes[self.Modeltype.val]
 
 		self.Inputdim = tdu.Dependency(67)
 		self.Outputdim = tdu.Dependency(8)
@@ -75,7 +73,7 @@ class MLExtension:
 			"Batchsize",
 			"Epochs",
 			"Initialepochs",
-			"Hiddemdim",
+			"Hiddendim",
 			"Learningrate",
 			"Timesteps"
 
