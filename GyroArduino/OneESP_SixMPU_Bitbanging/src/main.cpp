@@ -192,24 +192,26 @@ void setup() {
   for(int i=0; i<nbrSoftMpu; i++) {
     calibration.add("Calibration of ").add(i+1);
 
-    Smpu[i].setMagneticDeclination(2.53);
-    Smpu[i].calibrateMag();
-
     Udp.beginPacket(outIp, outPort);
     calibration.send(Udp);
     Udp.endPacket();
+
+    Smpu[i].setMagneticDeclination(2.53);
+    Smpu[i].calibrateMag();
+
+
 
     calibration.empty();
   }
   for(int i=0; i<nbrHardMpu; i++) {
     calibration.add("Calibration of ").add(i+5);
 
-    Hmpu[i].setMagneticDeclination(2.53);
-    Hmpu[i].calibrateMag();
-
     Udp.beginPacket(outIp, outPort);
     calibration.send(Udp);
     Udp.endPacket();
+
+    Hmpu[i].setMagneticDeclination(2.53);
+    Hmpu[i].calibrateMag();
 
     calibration.empty();
   }
