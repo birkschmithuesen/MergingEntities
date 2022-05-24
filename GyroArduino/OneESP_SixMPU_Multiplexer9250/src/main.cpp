@@ -4,6 +4,8 @@
 //Mag calibration desactivated right now, see if it's usefull
 //Eventually speed up if TCA is fast enough
 
+//Attention : select the right channel with the TCA function
+
 //-------LIBRARIES-------
 //Library to use Arduino cmd
 #include <Arduino.h>
@@ -62,7 +64,7 @@ void check()
   delay(5000); // wait 5 seconds for next scan
 }
 
-#define nbrMpu 1
+#define nbrMpu 6
 
 //Addresses and pin of MPU and TCA9548A(=multiplexer)
 #define MPU_ADDRESS_1 0x68 //Set 0x68 or 0x69
@@ -108,20 +110,22 @@ void TCA(uint8_t channel){
 //Settings to connect to WiFi
 #define WIFI_SSID "ArtNet4Hans"
 #define WIFI_PASS "kaesimira"
-
-//Settings to other WiFi
-/*#define WIFI_SSID "TheaterDo-GAST"
-#define WIFI_PASS "theaterdortmund"*/
-
-#define LED_BUILTIN 2
-
-WiFiUDP Udp;
 IPAddress outIp(192,168,0,2); //IP of the computer
 int outPort = 8000; //Port on PC
 int localPort = 8888; //Port of ESP
 
+//Settings to other WiFi
+/*#define WIFI_SSID "TheaterDo-GAST"
+#define WIFI_PASS "theaterdortmund"
+IPAddress outIp(192,168,193,221); //IP of the computer
+int outPort = 8000; //Port on PC
+int localPort = 8888; //Port of ESP*/
+
+WiFiUDP Udp;
+
 OSCMessage body(BODY_ADDRESS);
 OSCMessage body1[] = {OSCMessage ("/body/1/gyro/1/"), OSCMessage ("/body/1/gyro/2/"), OSCMessage ("/body/1/gyro/3/"), OSCMessage ("/body/1/gyro/4/"), OSCMessage ("/body/1/gyro/5/"), OSCMessage ("/body/1/gyro/6/")};
+OSCMessage calibration("/calibration");
 
 //Function to connect WiFi
 void connectWiFi() //Let's connect a WiFi
@@ -164,8 +168,8 @@ void setup() {
   Serial.flush(); //Clean buffer
 
   //-------WIFI SETUP-------
-  /*connectWiFi();
-  startUdp();*/
+  connectWiFi();
+  startUdp();
 
   //-------MPU SETUP------
   //Launch comm with multiplexer
@@ -186,36 +190,45 @@ void setup() {
 
   //Lauch communication with the 6 mpus - Switch to channel i and lauch comm with mpu numer i
   for(int i=0; i<nbrMpu; i++) {
-    TCA(i);
-    check();
+    TCA(i+2);
+    //check();
     mpu[i].setup(MPU_ADDRESS_1, setting, Wire);
   }
 
   //Selection of filters
-  /*
+  
   QuatFilterSel sel{QuatFilterSel::MADGWICK};
   for(int i=0; i<nbrMpu; i++) {
+    TCA(i+2);
     mpu[i].selectFilter(sel);
     mpu[i].setFilterIterations(10);
-  }*/
+  }
   
   //Calibration of acceleration and magnetic offsets
-  /*
+  
   Serial.println("Calibration of acceleration : don't move devices");
   for(int i=0; i<nbrMpu; i++) {
-    TCA(i);
+    TCA(i+2);
     mpu[i].calibrateAccelGyro();
   }
   Serial.println("Acceleration calibration done.");
 
   Serial.println("Calibration of mag");
   for(int i=0; i<nbrMpu; i++) {
-    TCA(i);
+    calibration.add("Calibration of ").add(i+1);
+
+    Udp.beginPacket(outIp, outPort);
+    calibration.send(Udp);
+    Udp.endPacket();
+
+    TCA(i+2);
     mpu[i].setMagneticDeclination(2.53);
-    //Hmpu[i].calibrateMag();
+    mpu[i].calibrateMag();
+
+    calibration.empty();
   }
   Serial.println("Mag calibration done.");
-*/
+
 }
 
 void loop() {
@@ -223,7 +236,7 @@ void loop() {
   
   //Read mpu data
   for(int i=0; i<nbrMpu; i++) {
-    TCA(i);
+    TCA(i+2);
     mpu[i].update();
   }
 
@@ -242,7 +255,7 @@ void loop() {
   }
 
   //Store values
-  /*
+  
   for(int i=0; i<nbrMpu; i++) {
     qX[i] = mpu[i].getQuaternionX();
     qY[i] = mpu[i].getQuaternionY();
@@ -256,7 +269,7 @@ void loop() {
     gX[i] = mpu[i].getGyroX();
     gY[i] = mpu[i].getGyroY();
     gZ[i] = mpu[i].getGyroZ();
-  }*/
+  }
 
 
 
@@ -279,7 +292,7 @@ void loop() {
   */
 
  //Send data in a 6 separated messages, working okay
- /*
+ 
   for(int i=0; i<nbrMpu; i++) {
     body1[i].add(qX[i]).add(qY[i]).add(qZ[i]).add(qW[i]); //Fill OSC message with data
     body1[i].add(oX[i]).add(oY[i]).add(oZ[i]);
@@ -290,7 +303,7 @@ void loop() {
     Udp.endPacket();
 
     body1[i].empty();
-  }*/
+  }
 
 
 }

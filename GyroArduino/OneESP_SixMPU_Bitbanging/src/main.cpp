@@ -18,8 +18,8 @@
 
 //-------MPU SETTINGS-------
 //Parameters of the setup
-#define nbrSoftMpu 4
-#define nbrHardMpu 2
+#define nbrSoftMpu 0
+#define nbrHardMpu 1
 
 #define nbrMpu nbrSoftMpu + nbrHardMpu
 
@@ -69,15 +69,20 @@ float gZ[nbrMpu] = {0};
 #define WIFI_SSID "ArtNet4Hans"
 #define WIFI_PASS "kaesimira"
 #define LED_BUILTIN 2
-
-//Settings to other WiFi
-/*#define WIFI_SSID "TheaterDo-GAST"
-#define WIFI_PASS "theaterdortmund"*/
-
-WiFiUDP Udp;
 IPAddress outIp(192,168,0,2); //IP of the computer
 int outPort = 8000; //Port on PC
 int localPort = 8888; //Port of ESP
+
+//Settings to other WiFi
+/*#define WIFI_SSID "TheaterDo-GAST"
+#define WIFI_PASS "theaterdortmund"
+IPAddress outIp(192,168,193,221); //IP of the computer
+int outPort = 8000; //Port on PC
+int localPort = 8888; //Port of ESP*/
+
+
+WiFiUDP Udp;
+
 
 OSCMessage body(BODY_ADDRESS);
 OSCMessage body1[] = {OSCMessage ("/body/1/gyro/1/"), OSCMessage ("/body/1/gyro/2/"), OSCMessage ("/body/1/gyro/3/"), OSCMessage ("/body/1/gyro/4/"), OSCMessage ("/body/1/gyro/5/"), OSCMessage ("/body/1/gyro/6/")};
@@ -183,12 +188,6 @@ void setup() {
   Serial.println("Acceleration calibration done.");
 
   Serial.println("Calibration of mag");
-
-  Udp.beginPacket(outIp, outPort);
-  calibration.send(Udp);
-  Udp.endPacket();
-
-  calibration.empty();
 
   for(int i=0; i<nbrSoftMpu; i++) {
     calibration.add("Calibration of ").add(i+1);

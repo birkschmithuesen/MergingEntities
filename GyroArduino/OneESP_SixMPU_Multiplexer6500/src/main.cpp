@@ -112,12 +112,11 @@ WiFiUDP Udp;
 //Settings to connect to WiFi
 /*#define WIFI_SSID "ArtNet4Hans"
 #define WIFI_PASS "kaesimira"
-
 IPAddress outIp(192,168,0,2); //IP of the computer
 int outPort = 8000; //Port on PC
 int localPort = 8888; //Port of ESP*/
-//Settings to other WiFi
 
+//Settings to other WiFi
 #define WIFI_SSID "TheaterDo-GAST"
 #define WIFI_PASS "theaterdortmund"
 IPAddress outIp(192,168,193,221); //IP of the computer
@@ -192,8 +191,8 @@ void setup() {
 
   //Lauch communication with the 6 mpus - Switch to channel i and lauch comm with mpu numer i
   for(int i=0; i<nbrMpu; i++) {
-    TCA(i);
-    //check(); //Check list of visile i2c devices
+    TCA(i+2);
+    check(); //Check list of visile i2c devices
     mpu[i].setup(MPU_ADDRESS_1, setting, Wire);
   }
 
@@ -201,9 +200,11 @@ void setup() {
   
   Serial.println("Calibration of acceleration : don't move devices.");
   for(int i=0; i<nbrMpu; i++) {
-    TCA(i);
+    TCA(i+2);
+    Serial.print("Calibration of one mpu ");
+    Serial.println(i);
     mpu[i].calibrateAccelGyro();
-    Serial.println("Calibration of one mpu done.");
+    
   }
   Serial.println("Acceleration calibration done.");
 
@@ -214,7 +215,7 @@ void loop() {
   
   //Read mpu data
   for(int i=0; i<nbrMpu; i++) {
-    TCA(i);
+    TCA(i+2);
     mpu[i].update();
   }
 
