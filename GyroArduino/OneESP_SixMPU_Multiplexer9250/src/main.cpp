@@ -18,6 +18,28 @@
 //MPU and Bitbang library
 #include "MPU9250.h"
 
+//-------GENERAL SETTINGS-------
+
+//Select network to connnect
+
+#define KAESIMIRA
+//#define THEATER
+
+//Define or not define PROTO1 to adapt the code to the old prototype : it just change the channel number
+//#define PROTO1
+
+//Define the number of the body : 1, 2 or 3
+#define BODY_1
+
+//-------END GENERAL SETTINGS-------
+
+#ifdef PROTO1
+#define CHANNEL i+2
+#endif
+
+#ifndef PROTO1
+#define CHANNEL i
+#endif
 //-------MPU SETTINGS AND FUNCTIONS-------
 //Parameters of the setup
 
@@ -64,16 +86,13 @@ void check()
   delay(5000); // wait 5 seconds for next scan
 }
 
-#define nbrMpu 1
+#define nbrMpu 6
 
 //Addresses and pin of MPU and TCA9548A(=multiplexer)
 #define MPU_ADDRESS_1 0x68 //Set 0x68 or 0x69
 #define MPU_ADDRESS_2 0x69 //Set 0x68 or 0x69
 
 #define TCA_ADDRESS 0x70
-
-//Number of the suit where this code is flashed - 1,2 or 3
-#define BODY_ADDRESS "/body/1/"
 
 //SDA and SCL pin of the soft and hard wire mode
 int SDA_PIN = 21;
@@ -105,6 +124,22 @@ float gX[nbrMpu] = {0};
 float gY[nbrMpu] = {0};
 float gZ[nbrMpu] = {0};
 
+//Calibration data for automatic calibration :
+
+float magbiais[6][3] = {{19.45692,176.272,-354.0199},
+{-57.16423,-83.95995,6.887821},
+{195.9925,77.82183,-227.1107},
+{385.3314,224.4164,-140.9016},
+{-42.7326,-89.02625,-84.08881},
+{14.19734,95.83208,-402.2347}};
+
+float magscale[6][3] = {{1.017677,0.9950617,0.987745},
+{1.013836,1.025445,0.9629629},
+{1.009987,0.980606,1.009987},
+{1.02594,0.9987373,0.9765432},
+{1.011236,0.9782609,1.011236},
+{0.9856115,0.9927536,1.022388}};
+
 //Function to switch the channel on the multiplexer
 void TCA(uint8_t channel){
   Wire.beginTransmission(TCA_ADDRESS);
@@ -114,24 +149,38 @@ void TCA(uint8_t channel){
 
 //-------WIFI SETTINGS AND FUNCTIONS-------
 //Settings to connect to WiFi
-/*
+
+#ifdef KAESIMIRA
 #define WIFI_SSID "ArtNet4Hans"
 #define WIFI_PASS "kaesimira"
 IPAddress outIp(192,168,0,2); //IP of the computer
 int outPort = 8000; //Port on PC
-int localPort = 8888; //Port of ESP*/
+int localPort = 8888; //Port of ESP
+#endif
 
-//Settings to other WiFi
+#ifdef THEATER
 #define WIFI_SSID "TheaterDo-GAST"
 #define WIFI_PASS "theaterdortmund"
 IPAddress outIp(192,168,193,221); //IP of the computer
 int outPort = 8000; //Port on PC
-int localPort = 8888; //Port of ESP
+int localPort = 8888; //Port of ESP*/
+#endif
 
 WiFiUDP Udp;
 
-OSCMessage body(BODY_ADDRESS);
-OSCMessage body1[] = {OSCMessage ("/body/1/gyro/1/"), OSCMessage ("/body/1/gyro/2/"), OSCMessage ("/body/1/gyro/3/"), OSCMessage ("/body/1/gyro/4/"), OSCMessage ("/body/1/gyro/5/"), OSCMessage ("/body/1/gyro/6/")};
+#ifdef BODY_1
+OSCMessage body[] = {OSCMessage ("/body/1/gyro/1/"), OSCMessage ("/body/1/gyro/2/"), OSCMessage ("/body/1/gyro/3/"), OSCMessage ("/body/1/gyro/4/"), OSCMessage ("/body/1/gyro/5/"), OSCMessage ("/body/1/gyro/6/")};
+#endif
+
+#ifdef BODY_2
+OSCMessage body[] = {OSCMessage ("/body/2/gyro/1/"), OSCMessage ("/body/2/gyro/2/"), OSCMessage ("/body/2/gyro/3/"), OSCMessage ("/body/2/gyro/4/"), OSCMessage ("/body/2/gyro/5/"), OSCMessage ("/body/2/gyro/6/")};
+#endif
+
+#ifdef BODY_3
+OSCMessage body[] = {OSCMessage ("/body/3/gyro/1/"), OSCMessage ("/body/3/gyro/2/"), OSCMessage ("/body/3/gyro/3/"), OSCMessage ("/body/3/gyro/4/"), OSCMessage ("/body/3/gyro/5/"), OSCMessage ("/body/3/gyro/6/")};
+#endif
+
+
 OSCMessage calibration("/calibration");
 
 
@@ -205,7 +254,7 @@ void setup() {
 
   //Lauch communication with the 6 mpus - Switch to channel i and lauch comm with mpu numer i
   for(int i=0; i<nbrMpu; i++) {
-    TCA(i);
+    TCA(CHANNEL);
     //check();
     mpu[i].setup(MPU_ADDRESS_1, setting, Wire);
   }
@@ -214,7 +263,7 @@ void setup() {
   
   QuatFilterSel sel{QuatFilterSel::MADGWICK};
   for(int i=0; i<nbrMpu; i++) {
-    TCA(i);
+    TCA(CHANNEL);
     mpu[i].selectFilter(sel);
     mpu[i].setFilterIterations(10);
   }
@@ -222,17 +271,28 @@ void setup() {
   // ------- CALIBRATION -------
   
   //Calibration of acceleration
+  //Print in Serial / Send to osc that the accel calibration begins
   Serial.println("Calibration of acceleration : don't move devices");
+
+  calibration.add("Calibration of acceleration : don't move devices");
+  Udp.beginPacket(outIp, outPort);
+  calibration.send(Udp);
+  Udp.endPacket();
+  calibration.empty();
+
   digitalWrite(RED_PIN, HIGH);
   for(int i=0; i<nbrMpu; i++) {
     Serial.println(i);
-    TCA(i);
+    TCA(CHANNEL);
     mpu[i].calibrateAccelGyro();
   }
   digitalWrite(RED_PIN, LOW);
   Serial.println("Acceleration calibration done.");
 
-//Calibration of magnetometer
+  //Calibration of magnetometer
+
+  //Manual calibration : get ready to turn the mpu
+  /*
   Serial.println("Calibration of mag");
 
   for(int i=0; i<nbrMpu; i++) {
@@ -252,33 +312,39 @@ void setup() {
 
     Serial.println(i);
 
-    TCA(i);
+    TCA(CHANNEL);
     mpu[i].setMagneticDeclination(2.53);
     mpu[i].calibrateMag();
 
     calibration.empty();
+    }
+    */
+
+  //Automatic calibration : With data of the stage. Respect the gyro wiring
+  calibration.add("Automatic calibration of the magnetometer gyro");
+  Udp.beginPacket(outIp, outPort);
+  calibration.send(Udp);
+  Udp.endPacket();
+  calibration.empty();
+
+  for(int i=0; i<nbrMpu; i++) {
+    mpu[i].setMagneticDeclination(2.53);
+    mpu[i].setMagBias(magbiais[i][0], magbiais[i][1], magbiais[i][2]);
+    mpu[i].setMagScale(magscale[i][0], magscale[i][1], magscale[i][2]);
   }
   Serial.println("Mag calibration done.");
-  
-  //Print/send the calibration of magnetometer
+  //Blinking yel light= calib over
+  digitalWrite(YEL_PIN, LOW);
+  delay(200);
+  digitalWrite(YEL_PIN, HIGH);
+  delay(200);
+  digitalWrite(YEL_PIN, LOW);
+
+  /*
+  //Print/send the calibration of magnetometer - USE IT TO AUTO CALIB AGAIN 
   Serial.println("Calibration data :");
   for(int i=0; i<nbrMpu; i++) {
-    TCA(i);
-
-    Serial.print(mpu[i].getMagScaleX());
-    Serial.print("//");
-    Serial.print(mpu[i].getMagScaleY());
-    Serial.print("//");
-    Serial.print(mpu[i].getMagScaleZ());
-
-    Serial.print("---");
-
-    Serial.print(mpu[i].getMagBiasX());
-    Serial.print("//");
-    Serial.print(mpu[i].getMagBiasY());
-    Serial.print("//");
-    Serial.print(mpu[i].getMagBiasZ());
-    Serial.print("   ___   ");
+    TCA(CHANNEL);
 
     //Send calibration data to TouchDesigner
     calibration.add("MAGSCALE").add(i).add(mpu[i].getMagScaleX()).add(mpu[i].getMagScaleY()).add(mpu[i].getMagScaleZ());
@@ -292,16 +358,17 @@ void setup() {
     calibration.send(Udp);
     Udp.endPacket();
     calibration.empty();
-  }
+  }*/
 
 }
 
 void loop() {
+
   //--------MPU recording--------
   
   //Read mpu data
   for(int i=0; i<nbrMpu; i++) {
-    TCA(i);
+    TCA(CHANNEL);
     mpu[i].update();
   }
 
@@ -310,10 +377,10 @@ void loop() {
   static unsigned long last_print=0;
   if (millis()-last_print > 100) {
 
-        for(int i=0;i<nbrMpu;i++) {
-          Serial.print(mpu[i].getEulerX()); Serial.print("// ");
+        for(int i=0;i<nbrMpu;i++){
+          Serial.print(mpu[i].getRoll()); Serial.print("// ");
         }
-
+      
         Serial.println();
 
         last_print=millis();
@@ -359,15 +426,15 @@ void loop() {
  //Send data in a 6 separated messages, working okay
  
   for(int i=0; i<nbrMpu; i++) {
-    body1[i].add(qX[i]).add(qY[i]).add(qZ[i]).add(qW[i]); //Fill OSC message with data
-    body1[i].add(oX[i]).add(oY[i]).add(oZ[i]);
-    body1[i].add(gX[i]).add(gY[i]).add(gZ[i]);
+    body[i].add(qX[i]).add(qY[i]).add(qZ[i]).add(qW[i]); //Fill OSC message with data
+    body[i].add(oX[i]).add(oY[i]).add(oZ[i]);
+    body[i].add(gX[i]).add(gY[i]).add(gZ[i]);
 
     Udp.beginPacket(outIp, outPort);
-    body1[i].send(Udp);
+    body[i].send(Udp);
     Udp.endPacket();
 
-    body1[i].empty();
+    body[i].empty();
   }
 
 
