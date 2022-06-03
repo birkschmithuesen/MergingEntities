@@ -7,6 +7,16 @@
 #define MPU9250_ADDRESS MPU9250_ADDRESS_AD0   // Use either this line or the next to select which I2C address your device is using
 //#define MPU9250_ADDRESS MPU9250_ADDRESS_AD1
 
+#define TCA_ADDRESS 0x70
+
+ void TCA(uint8_t channel){
+  Wire.beginTransmission(TCA_ADDRESS);
+  Wire.write(1 << channel);
+  Wire.endTransmission();
+}
+
+
+
 MPU9250 myIMU0(MPU9250_ADDRESS_AD0, I2Cport, I2Cclock);
 MPU9250 myIMU1(MPU9250_ADDRESS_AD1, I2Cport, I2Cclock);
 
@@ -14,11 +24,13 @@ MPU9250 myIMU1(MPU9250_ADDRESS_AD1, I2Cport, I2Cclock);
  byte d = 0x00;
  bool ledOn = true;
 
+
+
 void setup() {
   // put your setup code here, to run once:
   Serial.begin(115200);
   while(!Serial){};
-
+  TCA(0);
   pinMode(13, OUTPUT);
   
 }
@@ -91,11 +103,8 @@ void loop() {
   d = myIMU1.readByte(MPU9250_ADDRESS_AD1, WHO_AM_I_MPU9250);
 
   Serial.print("Received AD0: 0x");
-  Serial.print(c, HEX);
-  Serial.print(", AD1: 0x");
-  Serial.println(d, HEX);
-  digitalWrite(13, ledOn);
-  ledOn = !ledOn;
+  Serial.println(c, HEX);
+  
 
   //scan();
   delay(500);

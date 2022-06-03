@@ -21,7 +21,7 @@
 //-------GENERAL SETTINGS-------
 
 //Select network to connnect
-
+#define nbrMpu 6
 #define KAESIMIRA
 //#define THEATER
 
@@ -29,7 +29,10 @@
 //#define PROTO1
 
 //Define the number of the body : 1, 2 or 3
-#define BODY_1
+#define BODY_2
+
+#define MANUAL_CALIB
+#define AUTO_CALIB
 
 //-------END GENERAL SETTINGS-------
 
@@ -86,7 +89,7 @@ void check()
   delay(5000); // wait 5 seconds for next scan
 }
 
-#define nbrMpu 6
+
 
 //Addresses and pin of MPU and TCA9548A(=multiplexer)
 #define MPU_ADDRESS_1 0x68 //Set 0x68 or 0x69
@@ -124,22 +127,6 @@ float gX[nbrMpu] = {0};
 float gY[nbrMpu] = {0};
 float gZ[nbrMpu] = {0};
 
-//Calibration data for automatic calibration :
-
-float magbiais[6][3] = {{19.45692,176.272,-354.0199},
-{-57.16423,-83.95995,6.887821},
-{195.9925,77.82183,-227.1107},
-{385.3314,224.4164,-140.9016},
-{-42.7326,-89.02625,-84.08881},
-{14.19734,95.83208,-402.2347}};
-
-float magscale[6][3] = {{1.017677,0.9950617,0.987745},
-{1.013836,1.025445,0.9629629},
-{1.009987,0.980606,1.009987},
-{1.02594,0.9987373,0.9765432},
-{1.011236,0.9782609,1.011236},
-{0.9856115,0.9927536,1.022388}};
-
 //Function to switch the channel on the multiplexer
 void TCA(uint8_t channel){
   Wire.beginTransmission(TCA_ADDRESS);
@@ -154,7 +141,7 @@ void TCA(uint8_t channel){
 #define WIFI_SSID "ArtNet4Hans"
 #define WIFI_PASS "kaesimira"
 IPAddress outIp(192,168,0,2); //IP of the computer
-int outPort = 8000; //Port on PC
+
 int localPort = 8888; //Port of ESP
 #endif
 
@@ -162,26 +149,49 @@ int localPort = 8888; //Port of ESP
 #define WIFI_SSID "TheaterDo-GAST"
 #define WIFI_PASS "theaterdortmund"
 IPAddress outIp(192,168,193,221); //IP of the computer
-int outPort = 8000; //Port on PC
 int localPort = 8888; //Port of ESP*/
 #endif
 
 WiFiUDP Udp;
 
+//Mag calibrtion data for A
+float magbiais[6][3] = {{14.19734,95.83208,-402.2347},
+{19.45692,176.272,-354.0199},
+{195.9925,77.82183,-227.1107},
+{385.3314,224.4164,-140.9016},
+{-42.7326,-89.02625,-84.08881},
+{-57.16423,-83.95995,6.887821}};
+
+float magscale[6][3] = {{0.9856115,0.9927536,1.022388},
+{1.017677,0.9950617,0.987745},
+{1.009987,0.980606,1.009987},
+{1.02594,0.9987373,0.9765432},
+{1.011236,0.9782609,1.011236},
+{1.013836,1.025445,0.9629629}};
 #ifdef BODY_1
+int outPort = 8000; //Port on PC
+
 OSCMessage body[] = {OSCMessage ("/body/1/gyro/1/"), OSCMessage ("/body/1/gyro/2/"), OSCMessage ("/body/1/gyro/3/"), OSCMessage ("/body/1/gyro/4/"), OSCMessage ("/body/1/gyro/5/"), OSCMessage ("/body/1/gyro/6/")};
-#endif
+OSCMessage calibration("/calibration/1");
 
+
+#endif
 #ifdef BODY_2
+int outPort = 8001; //Port on PC
+
 OSCMessage body[] = {OSCMessage ("/body/2/gyro/1/"), OSCMessage ("/body/2/gyro/2/"), OSCMessage ("/body/2/gyro/3/"), OSCMessage ("/body/2/gyro/4/"), OSCMessage ("/body/2/gyro/5/"), OSCMessage ("/body/2/gyro/6/")};
-#endif
+OSCMessage calibration("/calibration/2");
 
+
+#endif
 #ifdef BODY_3
+int outPort = 8002; //Port on PC
+
 OSCMessage body[] = {OSCMessage ("/body/3/gyro/1/"), OSCMessage ("/body/3/gyro/2/"), OSCMessage ("/body/3/gyro/3/"), OSCMessage ("/body/3/gyro/4/"), OSCMessage ("/body/3/gyro/5/"), OSCMessage ("/body/3/gyro/6/")};
+OSCMessage calibration("/calibration/3");
 #endif
 
 
-OSCMessage calibration("/calibration");
 
 
 //Function to connect WiFi
@@ -373,18 +383,24 @@ void loop() {
   }
 
   //Print values for debugging
-  /*
+  
   static unsigned long last_print=0;
   if (millis()-last_print > 100) {
 
         for(int i=0;i<nbrMpu;i++){
           Serial.print(mpu[i].getRoll()); Serial.print("// ");
+          /*
+          Serial.print(mpu[i].getQuaternionW()); Serial.print("// ");
+          Serial.print(mpu[i].getQuaternionX()); Serial.print("// ");
+          Serial.print(mpu[i].getQuaternionY()); Serial.print("// ");
+          Serial.print(mpu[i].getQuaternionZ()); Serial.print("// ");*/
+
         }
       
         Serial.println();
 
         last_print=millis();
-  }*/
+  }
 
   //Store values
   
