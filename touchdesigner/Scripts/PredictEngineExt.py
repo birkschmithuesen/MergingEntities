@@ -30,11 +30,12 @@ class PredictEngineExt:
 	"""
 	def __init__(self, ownerComp):
 		# The component to which this extension is attached
+		op('debugTable').appendRow([absTime.frame, f'Ext Init Start'])
 		self.ownerComp = ownerComp
 
 		op('import_info').clear(keepSize=True)
 
-		self.Model = Sequential()
+		self.Model = None
 
 		# Model Settings
 		self.Modeltype = tdu.Dependency(0)
@@ -58,11 +59,14 @@ class PredictEngineExt:
 		# Training Data Handling
 		self.Trainingdata = tdu.Dependency('')
 
+		op('debugTable').appendRow([absTime.frame, f'Ext Init End'])
+
 	def Getgpuinfo(self):
 		built_with_cuda = tf.test.is_built_with_cuda()
-		gpu_available = tf.test.is_gpu_available(cuda_only=False, min_cuda_compute_capability=None)
-		num_gpus = len(tf.config.experimental.list_physical_devices('GPU'))
-		device_list = device_lib.list_local_devices()
+		device_list = tf.config.list_physical_devices('GPU')
+		num_gpus = len(device_list)
+		gpu_available = True if num_gpus else False
+		vGpus_device_list = tf.config.list_logical_devices('GPU')
 
 		info = op('import_info')
 		info.clear(keepSize=True)
@@ -70,6 +74,7 @@ class PredictEngineExt:
 		info[1,0] = gpu_available
 		info[2,0] = num_gpus
 		info[3,0] = device_list
+		info[4,0] = vGpus_device_list
 
 	def ModelName(self):
 		self.Modelname = self.Modeltypes[self.Modeltype]
@@ -101,8 +106,15 @@ class PredictEngineExt:
 		self.Model = Sequential()
 		self.Model = keras.models.load_model(model_folder)
 		self.LoadSettingsFromConfigFile()
-		op('model_info').text = "summary"
-		debug("Loaded Model")
+
+		op('debugTable').appendRow([absTime.frame, 'Loadmodel END'])
 	
 	def PredictTargets(self,features):
 		return self.Model.predict(np.array([features]))
+
+	def Testext(self):
+		op('debugTable').appendRow([absTime.frame, 'Test Ext'])
+
+	def Clear(self):
+		op('debugTable').clear()
+		op('error1').par.clear.pulse()
