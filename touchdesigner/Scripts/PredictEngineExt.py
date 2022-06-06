@@ -33,9 +33,30 @@ class PredictEngineExt:
 		op('debugTable').appendRow([absTime.frame, f'Ext Init Start'])
 		self.ownerComp = ownerComp
 
-		op('import_info').clear(keepSize=True)
+		op('import_info').clear()
 
 		self.Model = None
+
+		gpus = tf.config.list_physical_devices('GPU')
+		if gpus:
+			try:
+				# telling tf to only use one gpu
+				#tf.config.set_visible_devices(gpus[0], 'GPU')
+				logical_gpus = tf.config.list_logical_devices('GPU')
+
+				#for gpu in gpus:
+					#tf.config.experimental.set_memory_growth(gpu, True)
+				#	tf.config.set_logical_device_configuration(
+				#		gpus[0],
+				#		[tf.config.LogicalDeviceConfiguration(memory_limit=2048)])
+				
+				op('debugTable').appendRow([absTime.frame, 'Physical GPUs: ' + str(len(gpus))])
+				op('debugTable').appendRow([absTime.frame, 'Logical GPUs: ' + str(len(logical_gpus))])
+				debug(len(gpus), "Physical GPUs,", len(logical_gpus), "Logical GPUs")
+			except RuntimeError as e:
+				# Virtual devices must be set before GPUs have been initialized
+				debug(e)
+				op('debugTable').appendRow([absTime.frame, 'Logical Device Error: ' + str(e)])
 
 		# Model Settings
 		self.Modeltype = tdu.Dependency(0)
@@ -64,17 +85,13 @@ class PredictEngineExt:
 	def Getgpuinfo(self):
 		built_with_cuda = tf.test.is_built_with_cuda()
 		device_list = tf.config.list_physical_devices('GPU')
-		num_gpus = len(device_list)
-		gpu_available = True if num_gpus else False
 		vGpus_device_list = tf.config.list_logical_devices('GPU')
 
 		info = op('import_info')
-		info.clear(keepSize=True)
-		info[0,0] = built_with_cuda
-		info[1,0] = gpu_available
-		info[2,0] = num_gpus
-		info[3,0] = device_list
-		info[4,0] = vGpus_device_list
+		info.clear()
+		info.appendRow(['Built with CUDA', built_with_cuda])
+		info.appendRow(['GPU Devices', device_list])
+		info.appendRow(['GPU Logical Devices', vGpus_device_list])
 
 	def ModelName(self):
 		self.Modelname = self.Modeltypes[self.Modeltype]
@@ -98,14 +115,13 @@ class PredictEngineExt:
 		self.Learningrate.val = model_config.result['LEARNING_RATE']
 		self.Timesteps.val = model_config.result['TIME_STEPS']
 
-	def Printmodelinfo(self):
-		debug("print info")
-
 	def Loadmodel(self):
 		model_folder = parent().par.Rootfolder + '/' + parent().par.Selectmodel
-		self.Model = Sequential()
-		self.Model = keras.models.load_model(model_folder)
-		self.LoadSettingsFromConfigFile()
+
+		with tf.device(tf.config.list_logical_devices('GPU')[0].name):
+			self.Model = Sequential()
+			self.Model = keras.models.load_model(model_folder)
+			self.LoadSettingsFromConfigFile()
 
 		op('debugTable').appendRow([absTime.frame, 'Loadmodel END'])
 	

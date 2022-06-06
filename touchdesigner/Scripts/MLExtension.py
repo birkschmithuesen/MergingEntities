@@ -37,7 +37,7 @@ class MLExtension:
 		self.ownerComp = ownerComp
 		
 		# Model
-		self.Model = ''
+		self.Model = None
 
 		# Model Settings
 		self.Modeltype = tdu.Dependency(0)
@@ -64,8 +64,7 @@ class MLExtension:
 		self.Targets = ''
 
 		# Config Attributes
-		config_attributes = [ 
-			
+		config_attributes = [ 			
 			"Modeltype",
 			"Modelname",
 			"Inputdim",
@@ -76,21 +75,35 @@ class MLExtension:
 			"Hiddendim",
 			"Learningrate",
 			"Timesteps"
-
 		]
 
-		for val  in config_attributes:
-			debug(val)
-		
-		#Check if CUDA and GPU is enabled
-		debug('Is TensorFlow built with CUDA: ', tf.test.is_built_with_cuda())
-		debug('Is GPU available: ', tf.test.is_gpu_available(cuda_only=False, min_cuda_compute_capability=None))
-		debug('Num GPUs Available: ', len(tf.config.experimental.list_physical_devices('GPU')))
-		debug('List of local devices: ', device_lib.list_local_devices())
+		# set tf gpu selection and memory growth
+		gpus = tf.config.list_physical_devices('GPU')
+		if gpus:
+			try:
+				# Currently, memory growth needs to be the same across GPUs
+				for gpu in gpus:
+					tf.config.experimental.set_memory_growth(gpu, True)
+					debug('Set Memory Growth to True')
+					logical_gpus = tf.config.list_logical_devices('GPU')
+					debug(len(gpus), "Physical GPUs,", len(logical_gpus), "Logical GPUs")
+			except RuntimeError as e:
+				# Memory growth must be set before GPUs have been initialized
+				debug(e)
 	
+	def PrintGPUInfo(self):
+		built_with_cuda = tf.test.is_built_with_cuda()
+		device_list = tf.config.list_physical_devices('GPU')
+		vGpus_device_list = tf.config.list_logical_devices('GPU')
+
+		debug(['Built with CUDA', built_with_cuda])
+		debug(['GPU Devices', device_list])
+		debug(['GPU Logical Devices', vGpus_device_list])
+
 	def InitiateModel(self):
-		self.Model = Sequential()
-		debug("Initiated Model")
+		with tf.device(tf.config.list_logical_devices('GPU')[0].name):
+			self.Model = Sequential()
+			debug("Initiated Model")
 
 	def ModelName(self):
 		self.Modelname = self.Modeltypes[self.Modeltype]
