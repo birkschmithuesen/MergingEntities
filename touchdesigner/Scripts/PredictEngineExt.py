@@ -21,6 +21,7 @@ from tensorflow.python.client import device_lib
 import gc
 
 import numpy as np
+import cupy as cp
 
 import json
 
@@ -134,14 +135,15 @@ class PredictEngineExt:
 		targets = None
 		with tf.device(tf.config.list_logical_devices('GPU')[0].name):
 			if self.Modelname == 'linear_regression':
-				debug('linear_regression')
+				my_features = features_chop[0].vals
+				targets = self.Model.predict(np.array([my_features]))
 			elif self.Modelname == 'lstm':
 				my_features = features_chop
-				features = tnp.ones([parent().Timesteps.val,parent().Inputdim.val],dtype='float32')
+				features = cp.ndarray([1,parent().Timesteps.val,parent().Inputdim.val],dtype='float32')
 				for i in range(my_features.numChans):
-					features[i] = tnp.sum(features_chop[i].numpyArray())
-				tnp.expand_dims(features, axis=0)
-				targets = self.Model.predict(tnp.array([features]))
+					features[0][i] = cp.asarray(features_chop[i].numpyArray())
+				features_in = cp.ndarray.get(features)
+				targets = self.Model.predict(features_in)
 		return targets
 
 	def Testext(self):

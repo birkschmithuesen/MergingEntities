@@ -6,7 +6,7 @@
 	},
 	"ddalf":{
 		"username": "ddalf",
-		"environment-name": "td_merging-entities",
-		"environment-location": "C:/Users/ddalf/anaconda3/envs/td_merging-entities"
+		"environment-name": "td_merging-entities-cuda",
+		"environment-location": "C:/Users/ddalf/anaconda3/envs/td_merging-entities-cuda"
 	}
  }
