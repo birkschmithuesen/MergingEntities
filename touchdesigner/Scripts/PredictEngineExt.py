@@ -12,10 +12,13 @@ from io import StringIO
 
 import tensorflow as tf
 import keras
+import tensorflow.experimental.numpy as tnp
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense, LSTM, Dropout, Activation
 from tensorflow.keras.optimizers import SGD
 from tensorflow.python.client import device_lib
+
+import gc
 
 import numpy as np
 
@@ -40,16 +43,9 @@ class PredictEngineExt:
 		gpus = tf.config.list_physical_devices('GPU')
 		if gpus:
 			try:
-				# telling tf to only use one gpu
-				#tf.config.set_visible_devices(gpus[0], 'GPU')
+				for gpu in gpus:
+					tf.config.experimental.set_memory_growth(gpu, True)
 				logical_gpus = tf.config.list_logical_devices('GPU')
-
-				#for gpu in gpus:
-					#tf.config.experimental.set_memory_growth(gpu, True)
-				#	tf.config.set_logical_device_configuration(
-				#		gpus[0],
-				#		[tf.config.LogicalDeviceConfiguration(memory_limit=2048)])
-				
 				op('debugTable').appendRow([absTime.frame, 'Physical GPUs: ' + str(len(gpus))])
 				op('debugTable').appendRow([absTime.frame, 'Logical GPUs: ' + str(len(logical_gpus))])
 				debug(len(gpus), "Physical GPUs,", len(logical_gpus), "Logical GPUs")
@@ -57,6 +53,9 @@ class PredictEngineExt:
 				# Virtual devices must be set before GPUs have been initialized
 				debug(e)
 				op('debugTable').appendRow([absTime.frame, 'Logical Device Error: ' + str(e)])
+
+		# enable NumPY behaviour for TensorFlow
+		tnp.experimental_enable_numpy_behavior()
 
 		# Model Settings
 		self.Modeltype = tdu.Dependency(0)
@@ -126,7 +125,24 @@ class PredictEngineExt:
 		op('debugTable').appendRow([absTime.frame, 'Loadmodel END'])
 	
 	def PredictTargets(self,features):
-		return self.Model.predict(np.array([features]))
+		targets = None
+		with tf.device(tf.config.list_logical_devices('GPU')[0].name):
+			targets = self.Model.predict(np.array([features]))
+		return targets
+
+	def PredictTargetsFromCHOP(self,features_chop):
+		targets = None
+		with tf.device(tf.config.list_logical_devices('GPU')[0].name):
+			if self.Modelname == 'linear_regression':
+				debug('linear_regression')
+			elif self.Modelname == 'lstm':
+				my_features = features_chop
+				features = tnp.ones([parent().Timesteps.val,parent().Inputdim.val],dtype='float32')
+				for i in range(my_features.numChans):
+					features[i] = tnp.sum(features_chop[i].numpyArray())
+				tnp.expand_dims(features, axis=0)
+				targets = self.Model.predict(tnp.array([features]))
+		return targets
 
 	def Testext(self):
 		op('debugTable').appendRow([absTime.frame, 'Test Ext'])
