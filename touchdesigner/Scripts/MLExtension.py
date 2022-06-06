@@ -21,6 +21,8 @@ from tensorflow.keras.layers import Dense, LSTM, Dropout, Activation
 from tensorflow.keras.optimizers import SGD
 from tensorflow.python.client import device_lib
 
+import gc
+
 import numpy as np
 
 import json
