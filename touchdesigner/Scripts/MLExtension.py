@@ -92,6 +92,8 @@ class MLExtension:
 			except RuntimeError as e:
 				# Memory growth must be set before GPUs have been initialized
 				debug(e)
+
+		self.PrintGPUInfo()
 	
 	def PrintGPUInfo(self):
 		built_with_cuda = tf.test.is_built_with_cuda()
