@@ -14,12 +14,13 @@ Get an overview in the flowchart.PDF
 * Light: MagicQ (chamsys) to calibrate the Movingheads
 
 ## Machine Learning Install
-Setup an Andaconda environment from the requirements file /touchdesigner/environment.yml with "conda env create -f environment.yml -n MY-NAME"
-More infos: https://derivative.ca/community-post/tutorial/anaconda-managing-python-environments-and-3rd-party-libraries-touchdesigner
-If wanted install CUDA -> CUDA version 11.5
-* CUDA Toolkit: https://www.dropbox.com/s/qid60lpnmoyj46p/cuda_11.5.0_496.13_win10.exe?dl=0
-* CUDNN Files: https://www.dropbox.com/s/hufr0ot3kak5hbi/cudnn-windows-x86_64-8.3.3.40_cuda11.5-archive.zip?dl=0
-* Follow Tutorial: https://www.youtube.com/watch?v=OEFKlRSd8Ic
+TouchDesigner will always use its shipped cuDNN file, no matter which conda environment is loaded. Therefore we need to build the system around this cuDNN file -> cuDNN 8.1.1
+It was not able to include a matching Cudatoolkit and cuDNN file in the environment therefore this needs to be downloaded and installed manually on Windows level. 
+* Step 1: Download and install CUDA Toolkit v11.2.2: https://developer.nvidia.com/cuda-11-2-2-download-archive (you only need the runtime libraries, selectable through custom install)
+* Step 2: Download cuDNN v8.1.1: https://developer.nvidia.com/compute/machine-learning/cudnn/secure/8.1.1.33/11.2_20210301/cudnn-11.2-windows-x64-v8.1.1.33.zip
+* Step 3: Copy/Paste the folders bin, include and lib from the cuDNN folder into the CUDA install folder “C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v11.2”. (replace files if asked)
+* Step 4: Add "C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v11.2\bin" to path environment variables
+* Step 5: Load Anaconda environment from touchdesigner/Conda/td_merging-entities.yml
 
 
 ## Bodysuite / Gyroscopes OSC Interface
