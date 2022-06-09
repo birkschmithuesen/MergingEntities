@@ -1,6 +1,6 @@
 #pragma once
 #ifndef MPU9250_H
-#define MPU9250_H
+#define MPU9250_Hs
 
 #include <Wire.h>
 
@@ -111,6 +111,8 @@ class MPU9250_ {
     float lin_acc[3] {0.f, 0.f, 0.f};  // linear acceleration (acceleration with gravity component subtracted)
     QuaternionFilter quat_filter;
     size_t n_filter_iter {1};
+
+    float theta = 0;
 
     // Other settings
     bool has_connected {false};
