@@ -26,8 +26,11 @@
 //Define the number of the body : 1, 2 or 3
 #define BODY_1
 
-//Define the claibration mode : MANUAL_CALIBRATION for manual, AUTO_CALIBRATION otherwise
+//Define the calibration mode : MANUAL_CALIBRATION for manual, AUTO_CALIBRATION otherwise
 #define AUTO_CALIBRATION
+
+//Define BUTTON to activate the button
+//#define BUTTON
 
 //-------END GENERAL SETTINGS-------
 
@@ -359,6 +362,7 @@ void setup() {
   delay(6000);
 
   state_button = digitalRead(BUTTON_PIN);
+  state_button = LOW;
   if(state_button == HIGH){
 
     //Acceleration : get data calibration + calibrate
@@ -451,6 +455,7 @@ void setup() {
       //Set magnetometer calibration data
       mpu[i].setMagBias(preferences.getFloat("magbiasX", 0),preferences.getFloat("magbiasY", 0),preferences.getFloat("magbiasZ", 0));
       mpu[i].setMagScale(preferences.getFloat("magscaleX", 0),preferences.getFloat("magscaleY", 0),preferences.getFloat("magscaleZ", 0));
+      mpu[i].setMagneticDeclination(2.53);
       preferences.end();
     }    
   }  
@@ -472,6 +477,7 @@ void setup() {
   delay(10000);
 
   state_button = digitalRead(BUTTON_PIN);
+  state_button = LOW;
   if(state_button == HIGH){
 
     //FIRST OPTION : We send the yaw of the mpu to compute on TD the rotated stage
@@ -487,7 +493,7 @@ void setup() {
     //theta = getYaw() - trainYaw;
     //w = cos(theta/2);
     //z = sin(theta/2);
-    //And we compute at the end or in the library just before update rpy the rotated quaternion with the easy formula
+    //And we compute at the end or in the library just before update_rpy the rotated quaternion with the easy formula
   }
 
   //Two leds are blinking, saying north is set
@@ -541,16 +547,19 @@ void loop() {
   if (millis()-last_print > 100) {
 
         for(int i=0;i<nbrMpu;i++){
-          /*
+          preferences.begin("0", false);
           Serial.print(mpu[i].getYaw()); Serial.print("// ");
-          itoa(i,mpuPref,10);
-          Serial.println(mpuPref);
-          
+          Serial.print(preferences.getFloat("magbiasX", 0)); Serial.print("// ");
+          Serial.print(preferences.getFloat("accbiasX", 0)); Serial.print("// ");
+          Serial.print(preferences.getFloat("magscaleX", 0)); Serial.print("// ");
+          preferences.end();
+          /*
           Serial.print(mpu[i].getQuaternionW()); Serial.print("// ");
           Serial.print(mpu[i].getQuaternionX()); Serial.print("// ");
           Serial.print(mpu[i].getQuaternionY()); Serial.print("// ");
           Serial.print(mpu[i].getQuaternionZ()); Serial.print("// ");*/
 
+          /*
           Serial.print(mpu[i].getMagScaleX());
           Serial.print("/");
           Serial.print(mpu[i].getMagScaleY());
@@ -566,7 +575,7 @@ void loop() {
           Serial.print(mpu[i].getMagBiasZ());
           Serial.print("/");
 
-          Serial.println();
+          Serial.println();*/
         }
       
         Serial.println();

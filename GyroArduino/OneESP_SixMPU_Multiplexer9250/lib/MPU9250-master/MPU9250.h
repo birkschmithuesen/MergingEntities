@@ -107,12 +107,16 @@ class MPU9250_ {
     float g[3] {0.f, 0.f, 0.f};
     float m[3] {0.f, 0.f, 0.f};
     float q[4] = {1.0f, 0.0f, 0.0f, 0.0f};  // vector to hold quaternion
+    float qr[4] = {1.0f, 0.0f, 0.0f, 0.0f};  // vector to hold rotated quaternion
     float rpy[3] {0.f, 0.f, 0.f};
     float lin_acc[3] {0.f, 0.f, 0.f};  // linear acceleration (acceleration with gravity component subtracted)
     QuaternionFilter quat_filter;
     size_t n_filter_iter {1};
 
     float theta = 0;
+    float halfcos = cos(theta)/2;
+    float halfsin = sin(theta)/2;
+    
 
     // Other settings
     bool has_connected {false};
@@ -251,14 +255,21 @@ public:
         float md = +m[2];
 
         for (size_t i = 0; i < n_filter_iter; ++i) {
+            //Update the quaternion
             quat_filter.update(an, ae, ad, gn, ge, gd, mn, me, md, q);
+            //Rotate the quaternion :
+            qr[0] = q[0]*halfcos - q[3]+halfsin;
+            qr[1] = q[1]*halfcos - q[2]*halfsin;
+            qr[2] = q[2]*halfcos + q[1]*halfsin;
+            qr[3] = q[3]*halfcos + q[0]*halfsin;
         }
 
         if (!b_ahrs) {
             temperature_count = read_temperature_data();               // Read the adc values
             temperature = ((float)temperature_count) / 333.87 + 21.0;  // Temperature in degrees Centigrade
         } else {
-            update_rpy(q[0], q[1], q[2], q[3]);
+            
+            update_rpy(q[0], q[1], q[2], q[3]); //MODIFED - WE TRANSLATE ROTATED QUAT
         }
         return true;
     }
@@ -275,6 +286,11 @@ public:
     float getQuaternionY() const { return q[2]; }
     float getQuaternionZ() const { return q[3]; }
     float getQuaternionW() const { return q[0]; }
+
+    float getQuaternionRX() const { return qr[1]; }
+    float getQuaternionRY() const { return qr[2]; }
+    float getQuaternionRZ() const { return qr[3]; }
+    float getQuaternionRW() const { return qr[0]; }
 
     float getAcc(const uint8_t i) const { return (i < 3) ? a[i] : 0.f; }
     float getGyro(const uint8_t i) const { return (i < 3) ? g[i] : 0.f; }
