@@ -18,10 +18,10 @@
 #include "MPU9250.h"
 
 //-------GENERAL SETTINGS-------
-#define nbrMpu 6
+#define nbrMpu 1
 //Select network to connnect
-#define KAESIMIRA
-//#define THEATER
+//#define KAESIMIRA
+#define THEATER
 
 //Define the number of the body : 1, 2 or 3
 #define BODY_1
@@ -30,7 +30,7 @@
 #define AUTO_CALIBRATION
 
 //Define BUTTON to activate the button
-//#define BUTTON
+#define BUTTON
 
 //-------END GENERAL SETTINGS-------
 
@@ -45,14 +45,18 @@
 
 
 //SDA and SCL pin of the soft and hard wire mode
-int SDA_PIN = 21;
-int SCL_PIN = 22;
+#define SDA_PIN 21
+#define SCL_PIN 22
 
 //LED pin for info showing, BUTTON pin for communication
 
-int RED_PIN = 32;
-int YEL_PIN = 33;
-int BUTTON_PIN = 5;
+#define RED_PIN 32
+#define YEL_PIN 33
+#define BUTTON_PIN 5
+
+#define MPU_NORTH 1 //Mpu used to set the north
+float theta = 0; //angle to the north
+float time_converge = 0;
 
 int state = HIGH;
 int state_button = LOW;
@@ -449,8 +453,20 @@ void setup() {
       preferences.begin(mpuPref, false);
 
       //Set acceleration calibration data
+      
       mpu[i].setAccBias(preferences.getFloat("accbiasX", 0),preferences.getFloat("accbiasY", 0),preferences.getFloat("accbiasZ", 0));
-      mpu[i].setAccBias(preferences.getFloat("gyrobiasX", 0),preferences.getFloat("gyrobiasY", 0),preferences.getFloat("gyrobiasZ", 0));
+      mpu[i].setGyroBias(preferences.getFloat("gyrobiasX", 0),preferences.getFloat("gyrobiasY", 0),preferences.getFloat("gyrobiasZ", 0));
+
+      //Test to see what the fuck
+      /*
+      digitalWrite(RED_PIN, HIGH);
+      for(int i=0; i<nbrMpu; i++) {
+        Serial.println(i);
+        TCA(i);
+        mpu[i].calibrateAccelGyro();
+      }
+      digitalWrite(RED_PIN, LOW);
+      Serial.println("Acceleration calibration done.");*/
 
       //Set magnetometer calibration data
       mpu[i].setMagBias(preferences.getFloat("magbiasX", 0),preferences.getFloat("magbiasY", 0),preferences.getFloat("magbiasZ", 0));
@@ -474,27 +490,35 @@ void setup() {
   //-------SECOND CHOICE------- Two leds are lighted : you have 10 seconds to orientate the MPU 1 over the new north and press the button
   digitalWrite(RED_PIN, HIGH);
   digitalWrite(YEL_PIN, HIGH);
-  delay(10000);
+
+  //We let the mpu run for 10 seconds to have the good yaw if we need it
+  TCA(MPU_NORTH-1);
+
+  time_converge = millis();
+  while(millis() - time_converge < 10000){
+    mpu[MPU_NORTH-1].update();
+  }
+  digitalWrite(RED_PIN, LOW);
+  digitalWrite(YEL_PIN, LOW);
 
   state_button = digitalRead(BUTTON_PIN);
-  state_button = LOW;
+  state_button = HIGH;
   if(state_button == HIGH){
-
-    //FIRST OPTION : We send the yaw of the mpu to compute on TD the rotated stage
-    TCA(0);
-    calibration.add(mpu[0].getYaw());
-    Udp.beginPacket(outIp, outPort);
-    calibration.send(Udp);
-    Udp.endPacket();
-    calibration.empty();
-
     
-    //SECOND OPTION :
-    //theta = getYaw() - trainYaw;
-    //w = cos(theta/2);
-    //z = sin(theta/2);
-    //And we compute at the end or in the library just before update_rpy the rotated quaternion with the easy formula
+    //We save the north direction and send it to the library
+    theta = mpu[MPU_NORTH-1].getYaw() * (-1);
+    
+    preferences.begin("setNorth", false);
+    preferences.putFloat("north", theta);
+    preferences.end();
   }
+
+  //We get the north and set it
+  preferences.begin("setNorth", false);    
+  for(int i=0;i<nbrMpu;i++){
+    mpu[i].setNorth(preferences.getFloat("north",0));
+  }
+  preferences.end();
 
   //Two leds are blinking, saying north is set
   for(int i=0; i<20; i++){
@@ -547,12 +571,44 @@ void loop() {
   if (millis()-last_print > 100) {
 
         for(int i=0;i<nbrMpu;i++){
-          preferences.begin("0", false);
+          
           Serial.print(mpu[i].getYaw()); Serial.print("// ");
-          Serial.print(preferences.getFloat("magbiasX", 0)); Serial.print("// ");
-          Serial.print(preferences.getFloat("accbiasX", 0)); Serial.print("// ");
-          Serial.print(preferences.getFloat("magscaleX", 0)); Serial.print("// ");
-          preferences.end();
+          Serial.print(mpu[i].getYaw_r()); Serial.print("// ");
+          Serial.print(mpu[i].getNorth()); Serial.print("// ");
+/*
+          preferences.begin("0", false);
+          Serial.print(preferences.getFloat("accbiasX", 0)); Serial.print("/");
+          Serial.print(mpu[i].getAccBiasX()); Serial.print("_");
+          Serial.print(preferences.getFloat("accbiasY", 0)); Serial.print("/");
+          Serial.print(mpu[i].getAccBiasY()); Serial.print("_");
+          Serial.print(preferences.getFloat("accbiasZ", 0)); Serial.print("/");
+          Serial.print(mpu[i].getAccBiasZ()); Serial.print("_");
+          preferences.end();*/
+/*        
+          Serial.print(preferences.getFloat("magbiasX", 0)); Serial.print("/");
+          Serial.print(mpu[i].getMagBiasX()); Serial.print("_");
+          Serial.print(preferences.getFloat("magbiasY", 0)); Serial.print("/");
+          Serial.print(mpu[i].getMagBiasY()); Serial.print("_");
+          Serial.print(preferences.getFloat("magbiasZ", 0)); Serial.print("/");
+          Serial.print(mpu[i].getMagBiasZ()); Serial.print("_");
+
+          
+
+          Serial.print(preferences.getFloat("magscaleX", 0)); Serial.print("/");
+          Serial.print(mpu[i].getMagScaleX()); Serial.print("_");
+          Serial.print(preferences.getFloat("magscaleY", 0)); Serial.print("/");
+          Serial.print(mpu[i].getMagScaleY()); Serial.print("_");
+          Serial.print(preferences.getFloat("magscaleZ", 0)); Serial.print("/");
+          Serial.print(mpu[i].getMagScaleZ()); Serial.print("_");
+
+          Serial.print(preferences.getFloat("gyrobiasX", 0)); Serial.print("/");
+          Serial.print(mpu[i].getGyroBiasX()); Serial.print("_");
+          Serial.print(preferences.getFloat("gyrobiasY", 0)); Serial.print("/");
+          Serial.print(mpu[i].getGyroBiasY()); Serial.print("_");
+          Serial.print(preferences.getFloat("gyrobiasZ", 0)); Serial.print("/");
+          Serial.print(mpu[i].getGyroBiasZ()); Serial.print("_");
+
+          */
           /*
           Serial.print(mpu[i].getQuaternionW()); Serial.print("// ");
           Serial.print(mpu[i].getQuaternionX()); Serial.print("// ");

@@ -107,15 +107,17 @@ class MPU9250_ {
     float g[3] {0.f, 0.f, 0.f};
     float m[3] {0.f, 0.f, 0.f};
     float q[4] = {1.0f, 0.0f, 0.0f, 0.0f};  // vector to hold quaternion
-    float qr[4] = {1.0f, 0.0f, 0.0f, 0.0f};  // vector to hold rotated quaternion
+    float q_r[4] = {1.0f, 0.0f, 0.0f, 0.0f};  // vector to hold rotated quaternion
     float rpy[3] {0.f, 0.f, 0.f};
+    float rpy_r[3] {0.f, 0.f, 0.f};
     float lin_acc[3] {0.f, 0.f, 0.f};  // linear acceleration (acceleration with gravity component subtracted)
     QuaternionFilter quat_filter;
     size_t n_filter_iter {1};
 
+    float north = 0.;
     float theta = 0;
-    float halfcos = cos(theta)/2;
-    float halfsin = sin(theta)/2;
+    float halfcos = 0;
+    float halfsin = 0;
     
 
     // Other settings
@@ -258,10 +260,10 @@ public:
             //Update the quaternion
             quat_filter.update(an, ae, ad, gn, ge, gd, mn, me, md, q);
             //Rotate the quaternion :
-            qr[0] = q[0]*halfcos - q[3]+halfsin;
-            qr[1] = q[1]*halfcos - q[2]*halfsin;
-            qr[2] = q[2]*halfcos + q[1]*halfsin;
-            qr[3] = q[3]*halfcos + q[0]*halfsin;
+            q_r[0] = q[0]*halfcos - q[3]*halfsin;
+            q_r[1] = q[1]*halfcos - q[2]*halfsin;
+            q_r[2] = q[2]*halfcos + q[1]*halfsin;
+            q_r[3] = q[3]*halfcos + q[0]*halfsin;
         }
 
         if (!b_ahrs) {
@@ -269,7 +271,8 @@ public:
             temperature = ((float)temperature_count) / 333.87 + 21.0;  // Temperature in degrees Centigrade
         } else {
             
-            update_rpy(q[0], q[1], q[2], q[3]); //MODIFED - WE TRANSLATE ROTATED QUAT
+            update_rpy(q[0], q[1], q[2], q[3]); 
+            update_rpy_r(q_r[0], q_r[1], q_r[2], q_r[3]); //update Roll pitch yaw with the rotated quaternion
         }
         return true;
     }
@@ -277,6 +280,14 @@ public:
     float getRoll() const { return rpy[0]; }
     float getPitch() const { return rpy[1]; }
     float getYaw() const { return rpy[2]; }
+
+    float getRoll_r() const { return rpy_r[0]; }
+    float getPitch_r() const { return rpy_r[1]; }
+    float getYaw_r() const { return rpy_r[2]; }
+
+    float getEulerX_r() const { return rpy_r[0]; }
+    float getEulerY_r() const { return -rpy_r[1]; }
+    float getEulerZ_r() const { return -rpy_r[2]; }
 
     float getEulerX() const { return rpy[0]; }
     float getEulerY() const { return -rpy[1]; }
@@ -287,10 +298,10 @@ public:
     float getQuaternionZ() const { return q[3]; }
     float getQuaternionW() const { return q[0]; }
 
-    float getQuaternionRX() const { return qr[1]; }
-    float getQuaternionRY() const { return qr[2]; }
-    float getQuaternionRZ() const { return qr[3]; }
-    float getQuaternionRW() const { return qr[0]; }
+    float getQuaternionRX() const { return q_r[1]; }
+    float getQuaternionRY() const { return q_r[2]; }
+    float getQuaternionRZ() const { return q_r[3]; }
+    float getQuaternionRW() const { return q_r[0]; }
 
     float getAcc(const uint8_t i) const { return (i < 3) ? a[i] : 0.f; }
     float getGyro(const uint8_t i) const { return (i < 3) ? g[i] : 0.f; }
@@ -329,18 +340,21 @@ public:
     float getMagScaleZ() const { return mag_scale[2]; }
 
     float getTemperature() const { return temperature; }
+    float getNorth() const { return north; }
 
     void setAccBias(const float x, const float y, const float z) {
         acc_bias[0] = x;
         acc_bias[1] = y;
         acc_bias[2] = z;
         write_accel_offset();
+        initMPU9250();
     }
     void setGyroBias(const float x, const float y, const float z) {
         gyro_bias[0] = x;
         gyro_bias[1] = y;
         gyro_bias[2] = z;
         write_gyro_offset();
+        initMPU9250();
     }
     void setMagBias(const float x, const float y, const float z) {
         mag_bias[0] = x;
@@ -353,6 +367,13 @@ public:
         mag_scale[2] = z;
     }
     void setMagneticDeclination(const float d) { magnetic_declination = d; }
+
+    void setNorth(const float n){
+        north = n;
+        theta = north * DEG_TO_RAD;
+        halfcos = cos(theta/2);
+        halfsin = sin(theta/2);
+        }
 
     void selectFilter(QuatFilterSel sel) {
         quat_filter.select_filter(sel);
@@ -498,6 +519,35 @@ public:
         lin_acc[0] = a[0] + a31;
         lin_acc[1] = a[1] + a32;
         lin_acc[2] = a[2] - a33;
+    }
+
+    void update_rpy_r(float qw, float qx, float qy, float qz) {
+        // Define output variables from updated quaternion---these are Tait-Bryan angles, commonly used in aircraft orientation.
+        // In this coordinate system, the positive z-axis is down toward Earth.
+        // Yaw is the angle between Sensor x-axis and Earth magnetic North (or true North if corrected for local declination, looking down on the sensor positive yaw is counterclockwise.
+        // Pitch is angle between sensor x-axis and Earth ground plane, toward the Earth is positive, up toward the sky is negative.
+        // Roll is angle between sensor y-axis and Earth ground plane, y-axis up is positive roll.
+        // These arise from the definition of the homogeneous rotation matrix constructed from quaternions.
+        // Tait-Bryan angles as well as Euler angles are non-commutative; that is, the get the correct orientation the rotations must be
+        // applied in the correct order which for this configuration is yaw, pitch, and then roll.
+        // For more see http://en.wikipedia.org/wiki/Conversion_between_quaternions_and_Euler_angles which has additional links.
+        float a12, a22, a31, a32, a33;  // rotation matrix coefficients for Euler angles and gravity components
+        a12 = 2.0f * (qx * qy + qw * qz);
+        a22 = qw * qw + qx * qx - qy * qy - qz * qz;
+        a31 = 2.0f * (qw * qx + qy * qz);
+        a32 = 2.0f * (qx * qz - qw * qy);
+        a33 = qw * qw - qx * qx - qy * qy + qz * qz;
+        rpy_r[0] = atan2f(a31, a33);
+        rpy_r[1] = -asinf(a32);
+        rpy_r[2] = atan2f(a12, a22);
+        rpy_r[0] *= 180.0f / PI;
+        rpy_r[1] *= 180.0f / PI;
+        rpy_r[2] *= 180.0f / PI;
+        rpy_r[2] += magnetic_declination;
+        if (rpy_r[2] >= +180.f)
+            rpy_r[2] -= 360.f;
+        else if (rpy_r[2] < -180.f)
+            rpy_r[2] += 360.f;
     }
 
     void update_accel_gyro() {
