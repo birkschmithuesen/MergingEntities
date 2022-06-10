@@ -1,0 +1,1 @@
+{"Model_Type": 0, "Training_Data": "Entity-Recordings/220602_201356_tes_1_60hz.txt", "Selected_Features": "quat* rot*", "Selected_Targets": "SOUND*", "INPUT_DIM": 30, "OUTPUT_DIM": 8, "BATCH_SIZE": 32, "EPOCHS": 100, "INITIAL_EPOCHS": 100, "HIDDEN_DIM": 16, "LEARNING_RATE": 1, "TIME_STEPS": 8}
