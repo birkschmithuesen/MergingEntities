@@ -62,6 +62,8 @@ class MLExtension:
 
 		# Training Settings
 		self.Trainingdata = tdu.Dependency('Entity-Recordings/default.txt')
+		self.Trainingdatatype = tdu.Dependency('file')
+		self.SetTrainingDataType()
 		self.Features = ''
 		self.Targets = ''
 
@@ -94,6 +96,13 @@ class MLExtension:
 				debug(e)
 
 		self.PrintGPUInfo()
+	
+	def SetTrainingDataType(self):
+		location, extension = os.path.splitext(self.Trainingdata.val)
+		if extension == '.txt':
+			self.Trainingdatatype.val =  'file'
+		else:
+			self.Trainingdatatype.val = 'folder'
 	
 	def PrintGPUInfo(self):
 		built_with_cuda = tf.test.is_built_with_cuda()
@@ -221,6 +230,7 @@ class MLExtension:
 		self.Modeltype.modified()
 		self.ModelName()
 		self.Trainingdata.val = model_config.result['Training_Data']
+		self.SetTrainingDataType()
 		self.Selectedfeatures.val = model_config.result['Selected_Features']
 		self.Selectedtargets.val = model_config.result['Selected_Targets']
 		self.Inputdim.val = model_config.result['INPUT_DIM']
