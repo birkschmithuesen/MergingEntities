@@ -30,7 +30,7 @@ void setup() {
   // put your setup code here, to run once:
   Serial.begin(115200);
   while(!Serial){};
-  TCA(0);
+  //TCA(0);
   pinMode(13, OUTPUT);
   
 }

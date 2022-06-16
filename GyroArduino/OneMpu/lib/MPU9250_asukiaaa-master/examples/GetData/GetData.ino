@@ -1,5 +1,4 @@
 #include <MPU9250_asukiaaa.h>
-#include <Arduino.h>
 
 #ifdef _ESP32_HAL_I2C_H_
 #define SDA_PIN 21

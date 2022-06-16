@@ -5,7 +5,7 @@
    width="83.40mm"
    version="1.1"
    id="svg1901"
-   sodipodi:docname="arms_legsBox.svg"
+   sodipodi:docname="arms_legsBox_2mm.svg"
    inkscape:version="1.1.2 (b8e25be833, 2022-02-05)"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
@@ -26,9 +26,9 @@
      inkscape:pagecheckerboard="0"
      inkscape:document-units="mm"
      showgrid="false"
-     inkscape:zoom="2.8284271"
-     inkscape:cx="83.968931"
-     inkscape:cy="106.59635"
+     inkscape:zoom="5.6568542"
+     inkscape:cx="74.157824"
+     inkscape:cy="118.17522"
      inkscape:window-width="1920"
      inkscape:window-height="1001"
      inkscape:window-x="-9"
@@ -142,17 +142,17 @@ SettingsUrl: http://www.festi.info/ClosedBox?FingerJoint_angle=90.0&amp;FingerJo
        id="path1888"
        sodipodi:nodetypes="csssssssssssssssscsscccsscsssssssssssssssscsscccssc" />
     <circle
-       style="fill:none;stroke:#000000;stroke-width:0.22"
-       id="path1270"
-       cx="16.110001"
-       cy="33.110001"
-       r="1" />
+       style="fill:none;stroke:#000000;stroke-width:0.22;stroke-linecap:round;stroke-linejoin:round"
+       id="path1270-3"
+       cx="15.973995"
+       cy="33.535641"
+       r="1.5" />
     <circle
-       style="fill:none;stroke:#000000;stroke-width:0.22"
-       id="path1272"
-       cx="21.110001"
-       cy="33.110001"
-       r="1" />
+       style="fill:none;stroke:#000000;stroke-width:0.22;stroke-linecap:round;stroke-linejoin:round"
+       id="path1272-9"
+       cx="21.630825"
+       cy="33.535641"
+       r="1.5" />
   </g>
   <g
      id="p-4"

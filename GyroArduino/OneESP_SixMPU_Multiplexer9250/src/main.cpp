@@ -18,13 +18,16 @@
 #include "MPU9250.h"
 
 //-------GENERAL SETTINGS-------
-#define nbrMpu 1
+#define nbrMpu 6
 //Select network to connnect
-//#define KAESIMIRA
-#define THEATER
+#define KAESIMIRA
+//#define THEATER
 
 //Define the number of the body : 1, 2 or 3
-#define BODY_1
+#define BODY_2
+
+//Set the magnetic declination of the light
+#define MAG_DECLINATION 2.53
 
 //Define the calibration mode : MANUAL_CALIBRATION for manual, AUTO_CALIBRATION otherwise
 #define AUTO_CALIBRATION
@@ -246,6 +249,7 @@ void setup() {
   //Led initialization
   pinMode(RED_PIN, OUTPUT);
   pinMode(YEL_PIN, OUTPUT);
+  pinMode(BUTTON_PIN, INPUT);
   digitalWrite(RED_PIN, LOW);
   digitalWrite(YEL_PIN, LOW);
 
@@ -328,7 +332,7 @@ void setup() {
     Serial.println(i);
 
     TCA(i);
-    mpu[i].setMagneticDeclination(2.53);
+    mpu[i].setMagneticDeclination(MAG_DECLINATION);
     mpu[i].calibrateMag();
 
     calibration.empty();
@@ -344,7 +348,7 @@ void setup() {
   calibration.empty();
 
   for(int i=0; i<nbrMpu; i++) {
-    mpu[i].setMagneticDeclination(2.53);
+    mpu[i].setMagneticDeclination(MAG_DECLINATION);
     mpu[i].setMagBias(magbias[i][0], magbias[i][1], magbias[i][2]);
     mpu[i].setMagScale(magscale[i][0], magscale[i][1], magscale[i][2]);
   }
@@ -358,17 +362,18 @@ void setup() {
   digitalWrite(YEL_PIN, LOW);
   #endif
 
-  //FUTURE PROCESS WITH BUTTON CHOICE
   #ifdef BUTTON
   //-------FIRST CHOICE-------Two leds are lighted : you have 6 seconds to press or not to press the button, to launch a calibration process
   digitalWrite(RED_PIN, HIGH);
   digitalWrite(YEL_PIN, HIGH);
   delay(6000);
+  digitalWrite(RED_PIN, LOW);
+  digitalWrite(YEL_PIN, LOW);
 
   state_button = digitalRead(BUTTON_PIN);
-  state_button = LOW;
+  //state_button = LOW;
   if(state_button == HIGH){
-
+    Serial.println("HIGH : Launch calibration sequence");
     //Acceleration : get data calibration + calibrate
     Serial.println("Calibration of acceleration : don't move devices");
     calibration.add("Calibration of acceleration : don't move devices");
@@ -423,11 +428,13 @@ void setup() {
       Serial.println(i);
 
       TCA(i);
-      mpu[i].setMagneticDeclination(2.53);
+      mpu[i].setMagneticDeclination(MAG_DECLINATION);
       mpu[i].calibrateMag();
 
       calibration.empty();
+      
     }
+    Serial.println("Calibration of mag done");
 
     //Magnetometer : store calibration data
     for(int i=0; i<nbrMpu; i++){
@@ -448,6 +455,7 @@ void setup() {
 
   //Button not pushed : we read the stored calibration data and calibrate
   else {
+    Serial.println("LOW : Load calibration data");
     for(int i=0; i<nbrMpu; i++){
       itoa(i,mpuPref,10); //Key names = number of mpu
       preferences.begin(mpuPref, false);
@@ -471,9 +479,10 @@ void setup() {
       //Set magnetometer calibration data
       mpu[i].setMagBias(preferences.getFloat("magbiasX", 0),preferences.getFloat("magbiasY", 0),preferences.getFloat("magbiasZ", 0));
       mpu[i].setMagScale(preferences.getFloat("magscaleX", 0),preferences.getFloat("magscaleY", 0),preferences.getFloat("magscaleZ", 0));
-      mpu[i].setMagneticDeclination(2.53);
+      mpu[i].setMagneticDeclination(MAG_DECLINATION);
       preferences.end();
-    }    
+    }
+    Serial.println("Calibration loaded");    
   }  
 
   //Two leds are blinking, saying calibration is over
@@ -502,15 +511,18 @@ void setup() {
   digitalWrite(YEL_PIN, LOW);
 
   state_button = digitalRead(BUTTON_PIN);
-  state_button = HIGH;
+  //state_button = HIGH;
   if(state_button == HIGH){
-    
+    Serial.println("HIGH : setting north");
     //We save the north direction and send it to the library
     theta = mpu[MPU_NORTH-1].getYaw() * (-1);
     
     preferences.begin("setNorth", false);
     preferences.putFloat("north", theta);
     preferences.end();
+  }
+  else{
+    Serial.println("LOW : Load former north");
   }
 
   //We get the north and set it
@@ -519,6 +531,7 @@ void setup() {
     mpu[i].setNorth(preferences.getFloat("north",0));
   }
   preferences.end();
+  Serial.println("North set");
 
   //Two leds are blinking, saying north is set
   for(int i=0; i<20; i++){

@@ -23,9 +23,9 @@
      inkscape:pagecheckerboard="0"
      inkscape:document-units="mm"
      showgrid="false"
-     inkscape:zoom="1.4396184"
-     inkscape:cx="424.76534"
-     inkscape:cy="479.64099"
+     inkscape:zoom="2.8792368"
+     inkscape:cx="439.5262"
+     inkscape:cy="499.95888"
      inkscape:window-width="1920"
      inkscape:window-height="1001"
      inkscape:window-x="-9"
@@ -109,16 +109,16 @@
        cy="184.61417"
        r="1" />
     <circle
-       style="fill:none;stroke:#000000;stroke-width:0.22"
-       id="path1160"
-       cx="118.11"
-       cy="131.467"
-       r="1" />
+       style="fill:none;stroke:#000000;stroke-width:0.22;stroke-linecap:round;stroke-linejoin:round"
+       id="path1270"
+       cx="117.36839"
+       cy="131.95917"
+       r="1.5" />
     <circle
-       style="fill:none;stroke:#000000;stroke-width:0.22"
-       id="path1160-0"
-       cx="125.11"
-       cy="131.61"
-       r="1" />
+       style="fill:none;stroke:#000000;stroke-width:0.22;stroke-linecap:round;stroke-linejoin:round"
+       id="path1272"
+       cx="123.02522"
+       cy="131.95917"
+       r="1.5" />
   </g>
 </svg>

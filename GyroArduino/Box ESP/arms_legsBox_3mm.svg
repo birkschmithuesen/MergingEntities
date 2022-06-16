@@ -27,13 +27,13 @@
      inkscape:document-units="mm"
      showgrid="false"
      inkscape:zoom="1.7119778"
-     inkscape:cx="209.99104"
-     inkscape:cy="108.35421"
-     inkscape:window-width="958"
-     inkscape:window-height="991"
-     inkscape:window-x="-8"
-     inkscape:window-y="0"
-     inkscape:window-maximized="0"
+     inkscape:cx="185.45801"
+     inkscape:cy="91.998857"
+     inkscape:window-width="1920"
+     inkscape:window-height="1001"
+     inkscape:window-x="-9"
+     inkscape:window-y="-9"
+     inkscape:window-maximized="1"
      inkscape:current-layer="svg930" />
   <!--
 ClosedBox - Fully closed box
@@ -202,11 +202,11 @@ SettingsUrl: http://www.festi.info/ClosedBox?FingerJoint_angle=90.0&amp;FingerJo
      id="path1270"
      cx="16.973091"
      cy="34.309734"
-     r="1" />
+     r="1.5" />
   <circle
      style="fill:none;stroke:#000000;stroke-width:0.22;stroke-linecap:round;stroke-linejoin:round"
      id="path1272"
-     cx="21.973091"
+     cx="22.629921"
      cy="34.309734"
-     r="1" />
+     r="1.5" />
 </svg>
