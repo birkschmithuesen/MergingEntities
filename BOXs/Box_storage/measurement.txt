@@ -1,0 +1,31 @@
+regular:
+L = 557 -> 551 = 2*275.5 = 3*183.3
+l = 360 -> 354 = 2*177
+
+half:
+L/2 = 257 -> 251 = 2*125.5
+l = 360 -> 354 = 2*177 = 3*118
+
+S = 115 -> S = 110-15 = 95 = 2*47.5
+M = 215 -> M = 210-15= 195 = 2*97.5
+
+Need :
+S,M,L -> Height
+axb -> Number of cases
+xc -> Number needed
+_half -> Half lenght box
+xdF -> Number of floors
+
+2x2  x3_S
+
+2x3 x2_S
+2x3 2xF x3_S_half
+
+2x2 2x_S_half
+
+2x2 2x_M
+
+2x3 2x_M
+2x3 2xF 2x_M
+
+
