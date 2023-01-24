@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   height="75.60mm"
+   viewBox="0.0 0.0 89.40 75.60"
+   width="89.40mm"
+   version="1.1"
+   id="svg898"
+   sodipodi:docname="arms_legsBox_2mm.svg"
+   inkscape:version="1.1.2 (b8e25be833, 2022-02-05)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <defs
+     id="defs902" />
+  <sodipodi:namedview
+     id="namedview900"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:document-units="mm"
+     showgrid="false"
+     inkscape:zoom="2.7263283"
+     inkscape:cx="215.67468"
+     inkscape:cy="143.96652"
+     inkscape:window-width="1920"
+     inkscape:window-height="1001"
+     inkscape:window-x="-9"
+     inkscape:window-y="-9"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg898" />
+  <!--
+ClosedBox - Fully closed box
+
+
+This box is more of a building block than a finished item.
+Use a vector graphics program (like Inkscape) to add holes or adjust the base
+plate.
+
+See BasedBox for variant with a base.
+
+
+Created with Boxes.py (https://festi.info/boxes.py)
+Creation date: 2022-06-27 10:39:26
+Command line (remove spaces between dashes): boxes ClosedBox - -FingerJoint_angle=90.0 - -FingerJoint_style=rectangular - -FingerJoint_surroundingspaces=2.0 - -FingerJoint_edge_width=1.0 - -FingerJoint_extra_length=0.0 - -FingerJoint_finger=2.0 - -FingerJoint_play=0.0 - -FingerJoint_space=2.0 - -FingerJoint_width=1.0 - -x=30 - -y=25 - -h=8 - -outside=0 - -thickness=2 - -format=svg - -tabs=0.0 - -debug=0 - -labels=0 - -labels=1 - -reference=0 - -inner_corners=loop - -burn=0.1
+Url: http://www.festi.info/ClosedBox?FingerJoint_angle=90.0&FingerJoint_style=rectangular&FingerJoint_surroundingspaces=2.0&FingerJoint_edge_width=1.0&FingerJoint_extra_length=0.0&FingerJoint_finger=2.0&FingerJoint_play=0.0&FingerJoint_space=2.0&FingerJoint_width=1.0&x=30&y=25&h=8&outside=0&thickness=2&format=svg&tabs=0.0&debug=0&labels=0&labels=1&reference=0&inner_corners=loop&burn=0.1&render=1
+SettingsUrl: http://www.festi.info/ClosedBox?FingerJoint_angle=90.0&FingerJoint_style=rectangular&FingerJoint_surroundingspaces=2.0&FingerJoint_edge_width=1.0&FingerJoint_extra_length=0.0&FingerJoint_finger=2.0&FingerJoint_play=0.0&FingerJoint_space=2.0&FingerJoint_width=1.0&x=30&y=25&h=8&outside=0&thickness=2&format=svg&tabs=0.0&debug=0&labels=0&labels=1&reference=0&inner_corners=loop&burn=0.1
+-->
+  <title
+     id="title864">ClosedBox</title>
+  <metadata
+     id="metadata866">
+    <rdf:RDF>
+      <cc:Work>
+        <dc:title>Box - ClosedBox</dc:title>
+        <dc:date>2022-06-27 10:39:26</dc:date>
+        <dc:source>http://www.festi.info/ClosedBox?FingerJoint_angle=90.0&amp;FingerJoint_style=rectangular&amp;FingerJoint_surroundingspaces=2.0&amp;FingerJoint_edge_width=1.0&amp;FingerJoint_extra_length=0.0&amp;FingerJoint_finger=2.0&amp;FingerJoint_play=0.0&amp;FingerJoint_space=2.0&amp;FingerJoint_width=1.0&amp;x=30&amp;y=25&amp;h=8&amp;outside=0&amp;thickness=2&amp;format=svg&amp;tabs=0.0&amp;debug=0&amp;labels=0&amp;labels=1&amp;reference=0&amp;inner_corners=loop&amp;burn=0.1&amp;render=1</dc:source>
+        <dc:description>Fully closed box
+
+This box is more of a building block than a finished item.
+Use a vector graphics program (like Inkscape) to add holes or adjust the base
+plate.
+
+See BasedBox for variant with a base.
+
+Created with Boxes.py (https://festi.info/boxes.py)
+Command line: boxes ClosedBox --FingerJoint_angle=90.0 --FingerJoint_style=rectangular --FingerJoint_surroundingspaces=2.0 --FingerJoint_edge_width=1.0 --FingerJoint_extra_length=0.0 --FingerJoint_finger=2.0 --FingerJoint_play=0.0 --FingerJoint_space=2.0 --FingerJoint_width=1.0 --x=30 --y=25 --h=8 --outside=0 --thickness=2 --format=svg --tabs=0.0 --debug=0 --labels=0 --labels=1 --reference=0 --inner_corners=loop --burn=0.1
+Url: http://www.festi.info/ClosedBox?FingerJoint_angle=90.0&amp;FingerJoint_style=rectangular&amp;FingerJoint_surroundingspaces=2.0&amp;FingerJoint_edge_width=1.0&amp;FingerJoint_extra_length=0.0&amp;FingerJoint_finger=2.0&amp;FingerJoint_play=0.0&amp;FingerJoint_space=2.0&amp;FingerJoint_width=1.0&amp;x=30&amp;y=25&amp;h=8&amp;outside=0&amp;thickness=2&amp;format=svg&amp;tabs=0.0&amp;debug=0&amp;labels=0&amp;labels=1&amp;reference=0&amp;inner_corners=loop&amp;burn=0.1&amp;render=1
+SettingsUrl: http://www.festi.info/ClosedBox?FingerJoint_angle=90.0&amp;FingerJoint_style=rectangular&amp;FingerJoint_surroundingspaces=2.0&amp;FingerJoint_edge_width=1.0&amp;FingerJoint_extra_length=0.0&amp;FingerJoint_finger=2.0&amp;FingerJoint_play=0.0&amp;FingerJoint_space=2.0&amp;FingerJoint_width=1.0&amp;x=30&amp;y=25&amp;h=8&amp;outside=0&amp;thickness=2&amp;format=svg&amp;tabs=0.0&amp;debug=0&amp;labels=0&amp;labels=1&amp;reference=0&amp;inner_corners=loop&amp;burn=0.1
+</dc:description>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     id="p-0"
+     style="fill:none;stroke-linecap:round;stroke-linejoin:round;">
+    <text
+       dominant-baseline="hanging"
+       font-size="4px"
+       style="font-family: sans-serif ; font-weight: normal; font-style: normal; fill: rgb(255,0,0)"
+       text-anchor="middle"
+       transform="matrix( 1.000 0.000 0.000 1.000 27.100 57.600 )"
+       id="text868">Wall 1</text>
+    <path
+       d="M 12.100 65.600 H 17.100 C 17.155 65.600 17.200 65.555 17.200 65.500 V 63.600 C 17.200 63.500 17.100 63.600 17.200 63.600 H 21.000 C 21.100 63.600 21.000 63.500 21.000 63.600 V 65.500 C 21.000 65.555 21.045 65.600 21.100 65.600 H 25.100 C 25.155 65.600 25.200 65.555 25.200 65.500 V 63.600 C 25.200 63.500 25.100 63.600 25.200 63.600 H 29.000 C 29.100 63.600 29.000 63.500 29.000 63.600 V 65.500 C 29.000 65.555 29.045 65.600 29.100 65.600 H 33.100 C 33.155 65.600 33.200 65.555 33.200 65.500 V 63.600 C 33.200 63.500 33.100 63.600 33.200 63.600 H 37.000 C 37.100 63.600 37.000 63.500 37.000 63.600 V 65.500 C 37.000 65.555 37.045 65.600 37.100 65.600 H 42.100 H 44.100 C 44.155 65.600 44.200 65.555 44.200 65.500 V 63.500 V 59.500 V 55.500 V 53.500 C 44.200 53.445 44.155 53.400 44.100 53.400 H 42.100 H 37.100 C 37.045 53.400 37.000 53.445 37.000 53.500 V 55.400 C 37.000 55.500 37.100 55.400 37.000 55.400 H 33.200 C 33.100 55.400 33.200 55.500 33.200 55.400 V 53.500 C 33.200 53.445 33.155 53.400 33.100 53.400 H 29.100 C 29.045 53.400 29.000 53.445 29.000 53.500 V 55.400 C 29.000 55.500 29.100 55.400 29.000 55.400 H 25.200 C 25.100 55.400 25.200 55.500 25.200 55.400 V 53.500 C 25.200 53.445 25.155 53.400 25.100 53.400 H 21.100 C 21.045 53.400 21.000 53.445 21.000 53.500 V 55.400 C 21.000 55.500 21.100 55.400 21.000 55.400 H 17.200 C 17.100 55.400 17.200 55.500 17.200 55.400 V 53.500 C 17.200 53.445 17.155 53.400 17.100 53.400 H 12.100 H 10.100 C 10.045 53.400 10.000 53.445 10.000 53.500 V 55.500 V 59.500 V 63.500 V 65.500 C 10.000 65.555 10.045 65.600 10.100 65.600 H 12.100"
+       stroke="rgb(0,0,0)"
+       stroke-width="0.20"
+       id="path870" />
+  </g>
+  <g
+     id="p-1"
+     style="fill:none;stroke-linecap:round;stroke-linejoin:round;">
+    <text
+       dominant-baseline="hanging"
+       font-size="4px"
+       style="font-family: sans-serif ; font-weight: normal; font-style: normal; fill: rgb(255,0,0)"
+       text-anchor="middle"
+       transform="matrix( 1.000 0.000 0.000 1.000 59.800 57.600 )"
+       id="text873">Wall 2</text>
+    <path
+       d="M 47.300 65.600 H 53.800 C 53.855 65.600 53.900 65.555 53.900 65.500 V 63.600 C 53.900 63.500 53.800 63.600 53.900 63.600 H 57.700 C 57.800 63.600 57.700 63.500 57.700 63.600 V 65.500 C 57.700 65.555 57.745 65.600 57.800 65.600 H 61.800 C 61.855 65.600 61.900 65.555 61.900 65.500 V 63.600 C 61.900 63.500 61.800 63.600 61.900 63.600 H 65.700 C 65.800 63.600 65.700 63.500 65.700 63.600 V 65.500 C 65.700 65.555 65.745 65.600 65.800 65.600 H 72.300 C 72.355 65.600 72.400 65.555 72.400 65.500 V 63.500 V 59.500 V 55.500 V 53.500 C 72.400 53.445 72.355 53.400 72.300 53.400 H 65.800 C 65.745 53.400 65.700 53.445 65.700 53.500 V 55.400 C 65.700 55.500 65.800 55.400 65.700 55.400 H 61.900 C 61.800 55.400 61.900 55.500 61.900 55.400 V 53.500 C 61.900 53.445 61.855 53.400 61.800 53.400 H 57.800 C 57.745 53.400 57.700 53.445 57.700 53.500 V 55.400 C 57.700 55.500 57.800 55.400 57.700 55.400 H 53.900 C 53.800 55.400 53.900 55.500 53.900 55.400 V 53.500 C 53.900 53.445 53.855 53.400 53.800 53.400 H 47.300 C 47.245 53.400 47.200 53.445 47.200 53.500 V 55.500 V 59.500 V 63.500 V 65.500 C 47.200 65.555 47.245 65.600 47.300 65.600"
+       stroke="rgb(0,0,0)"
+       stroke-width="0.20"
+       id="path875" />
+  </g>
+  <g
+     id="p-2"
+     style="fill:none;stroke-linecap:round;stroke-linejoin:round;">
+    <text
+       dominant-baseline="hanging"
+       font-size="4px"
+       style="font-family: sans-serif ; font-weight: normal; font-style: normal; fill: rgb(255,0,0)"
+       text-anchor="middle"
+       transform="matrix( 1.000 0.000 0.000 1.000 59.800 44.400 )"
+       id="text878">Wall 4</text>
+    <path
+       d="M 47.300 52.400 H 53.800 C 53.855 52.400 53.900 52.355 53.900 52.300 V 50.400 C 53.900 50.300 53.800 50.400 53.900 50.400 H 57.700 C 57.800 50.400 57.700 50.300 57.700 50.400 V 52.300 C 57.700 52.355 57.745 52.400 57.800 52.400 H 61.800 C 61.855 52.400 61.900 52.355 61.900 52.300 V 50.400 C 61.900 50.300 61.800 50.400 61.900 50.400 H 65.700 C 65.800 50.400 65.700 50.300 65.700 50.400 V 52.300 C 65.700 52.355 65.745 52.400 65.800 52.400 H 72.300 C 72.355 52.400 72.400 52.355 72.400 52.300 V 50.300 V 46.300 V 42.300 V 40.300 C 72.400 40.245 72.355 40.200 72.300 40.200 H 65.800 C 65.745 40.200 65.700 40.245 65.700 40.300 V 42.200 C 65.700 42.300 65.800 42.200 65.700 42.200 H 61.900 C 61.800 42.200 61.900 42.300 61.900 42.200 V 40.300 C 61.900 40.245 61.855 40.200 61.800 40.200 H 57.800 C 57.745 40.200 57.700 40.245 57.700 40.300 V 42.200 C 57.700 42.300 57.800 42.200 57.700 42.200 H 53.900 C 53.800 42.200 53.900 42.300 53.900 42.200 V 40.300 C 53.900 40.245 53.855 40.200 53.800 40.200 H 47.300 C 47.245 40.200 47.200 40.245 47.200 40.300 V 42.300 V 46.300 V 50.300 V 52.300 C 47.200 52.355 47.245 52.400 47.300 52.400"
+       stroke="rgb(0,0,0)"
+       stroke-width="0.20"
+       id="path880" />
+  </g>
+  <g
+     id="p-3"
+     style="fill:none;stroke-linecap:round;stroke-linejoin:round;">
+    <text
+       dominant-baseline="hanging"
+       font-size="4px"
+       style="font-family: sans-serif ; font-weight: normal; font-style: normal; fill: rgb(255,0,0)"
+       text-anchor="middle"
+       transform="matrix( 1.000 0.000 0.000 1.000 27.100 44.400 )"
+       id="text883">Wall 3</text>
+    <path
+       d="M 12.100 52.400 H 17.100 C 17.155 52.400 17.200 52.355 17.200 52.300 V 50.400 C 17.200 50.300 17.100 50.400 17.200 50.400 H 21.000 C 21.100 50.400 21.000 50.300 21.000 50.400 V 52.300 C 21.000 52.355 21.045 52.400 21.100 52.400 H 25.100 C 25.155 52.400 25.200 52.355 25.200 52.300 V 50.400 C 25.200 50.300 25.100 50.400 25.200 50.400 H 29.000 C 29.100 50.400 29.000 50.300 29.000 50.400 V 52.300 C 29.000 52.355 29.045 52.400 29.100 52.400 H 33.100 C 33.155 52.400 33.200 52.355 33.200 52.300 V 50.400 C 33.200 50.300 33.100 50.400 33.200 50.400 H 37.000 C 37.100 50.400 37.000 50.300 37.000 50.400 V 52.300 C 37.000 52.355 37.045 52.400 37.100 52.400 H 42.100 H 44.100 C 44.155 52.400 44.200 52.355 44.200 52.300 V 50.300 V 46.300 V 42.300 V 40.300 C 44.200 40.245 44.155 40.200 44.100 40.200 H 42.100 H 37.100 C 37.045 40.200 37.000 40.245 37.000 40.300 V 42.200 C 37.000 42.300 37.100 42.200 37.000 42.200 H 33.200 C 33.100 42.200 33.200 42.300 33.200 42.200 V 40.300 C 33.200 40.245 33.155 40.200 33.100 40.200 H 29.100 C 29.045 40.200 29.000 40.245 29.000 40.300 V 42.200 C 29.000 42.300 29.100 42.200 29.000 42.200 H 25.200 C 25.100 42.200 25.200 42.300 25.200 42.200 V 40.300 C 25.200 40.245 25.155 40.200 25.100 40.200 H 21.100 C 21.045 40.200 21.000 40.245 21.000 40.300 V 42.200 C 21.000 42.300 21.100 42.200 21.000 42.200 H 17.200 C 17.100 42.200 17.200 42.300 17.200 42.200 V 40.300 C 17.200 40.245 17.155 40.200 17.100 40.200 H 12.100 H 10.100 C 10.045 40.200 10.000 40.245 10.000 40.300 V 42.300 V 46.300 V 50.300 V 52.300 C 10.000 52.355 10.045 52.400 10.100 52.400 H 12.100"
+       stroke="rgb(0,0,0)"
+       stroke-width="0.20"
+       id="path885" />
+  </g>
+  <g
+     id="p-4"
+     style="fill:none;stroke-linecap:round;stroke-linejoin:round;">
+    <text
+       dominant-baseline="hanging"
+       font-size="4px"
+       style="font-family: sans-serif ; font-weight: normal; font-style: normal; fill: rgb(255,0,0)"
+       text-anchor="middle"
+       transform="matrix( 1.000 0.000 0.000 1.000 27.100 22.700 )"
+       id="text888">Top</text>
+    <path
+       d="M 12.100 37.200 H 17.000 C 17.100 37.200 17.000 37.100 17.000 37.200 V 39.100 C 17.000 39.155 17.045 39.200 17.100 39.200 H 21.100 C 21.155 39.200 21.200 39.155 21.200 39.100 V 37.200 C 21.200 37.100 21.100 37.200 21.200 37.200 H 25.000 C 25.100 37.200 25.000 37.100 25.000 37.200 V 39.100 C 25.000 39.155 25.045 39.200 25.100 39.200 H 29.100 C 29.155 39.200 29.200 39.155 29.200 39.100 V 37.200 C 29.200 37.100 29.100 37.200 29.200 37.200 H 33.000 C 33.100 37.200 33.000 37.100 33.000 37.200 V 39.100 C 33.000 39.155 33.045 39.200 33.100 39.200 H 37.100 C 37.155 39.200 37.200 39.155 37.200 39.100 V 37.200 C 37.200 37.100 37.100 37.200 37.200 37.200 H 42.100 C 42.155 37.200 42.200 37.155 42.200 37.100 V 30.700 C 42.200 30.600 42.100 30.700 42.200 30.700 H 44.100 C 44.155 30.700 44.200 30.655 44.200 30.600 V 26.600 C 44.200 26.545 44.155 26.500 44.100 26.500 H 42.200 C 42.100 26.500 42.200 26.600 42.200 26.500 V 22.700 C 42.200 22.600 42.100 22.700 42.200 22.700 H 44.100 C 44.155 22.700 44.200 22.655 44.200 22.600 V 18.600 C 44.200 18.545 44.155 18.500 44.100 18.500 H 42.200 C 42.100 18.500 42.200 18.600 42.200 18.500 V 12.100 C 42.200 12.045 42.155 12.000 42.100 12.000 H 37.200 C 37.100 12.000 37.200 12.100 37.200 12.000 V 10.100 C 37.200 10.045 37.155 10.000 37.100 10.000 H 33.100 C 33.045 10.000 33.000 10.045 33.000 10.100 V 12.000 C 33.000 12.100 33.100 12.000 33.000 12.000 H 29.200 C 29.100 12.000 29.200 12.100 29.200 12.000 V 10.100 C 29.200 10.045 29.155 10.000 29.100 10.000 H 25.100 C 25.045 10.000 25.000 10.045 25.000 10.100 V 12.000 C 25.000 12.100 25.100 12.000 25.000 12.000 H 21.200 C 21.100 12.000 21.200 12.100 21.200 12.000 V 10.100 C 21.200 10.045 21.155 10.000 21.100 10.000 H 17.100 C 17.045 10.000 17.000 10.045 17.000 10.100 V 12.000 C 17.000 12.100 17.100 12.000 17.000 12.000 H 12.100 C 12.045 12.000 12.000 12.045 12.000 12.100 V 18.500 C 12.000 18.600 12.100 18.500 12.000 18.500 H 10.100 C 10.045 18.500 10.000 18.545 10.000 18.600 V 22.600 C 10.000 22.655 10.045 22.700 10.100 22.700 H 12.000 C 12.100 22.700 12.000 22.600 12.000 22.700 V 26.500 C 12.000 26.600 12.100 26.500 12.000 26.500 H 10.100 C 10.045 26.500 10.000 26.545 10.000 26.600 V 30.600 C 10.000 30.655 10.045 30.700 10.100 30.700 H 12.000 C 12.100 30.700 12.000 30.600 12.000 30.700 V 37.100 C 12.000 37.155 12.045 37.200 12.100 37.200"
+       stroke="rgb(0,0,0)"
+       stroke-width="0.20"
+       id="path890" />
+  </g>
+  <g
+     id="p-5"
+     style="fill:none;stroke-linecap:round;stroke-linejoin:round;">
+    <text
+       dominant-baseline="hanging"
+       font-size="4px"
+       style="font-family: sans-serif ; font-weight: normal; font-style: normal; fill: rgb(255,0,0)"
+       text-anchor="middle"
+       transform="matrix( 1.000 0.000 0.000 1.000 62.300 22.700 )"
+       id="text893">Bottom</text>
+    <path
+       d="M 47.300 37.200 H 52.200 C 52.300 37.200 52.200 37.100 52.200 37.200 V 39.100 C 52.200 39.155 52.245 39.200 52.300 39.200 H 56.300 C 56.355 39.200 56.400 39.155 56.400 39.100 V 37.200 C 56.400 37.100 56.300 37.200 56.400 37.200 H 60.200 C 60.300 37.200 60.200 37.100 60.200 37.200 V 39.100 C 60.200 39.155 60.245 39.200 60.300 39.200 H 64.300 C 64.355 39.200 64.400 39.155 64.400 39.100 V 37.200 C 64.400 37.100 64.300 37.200 64.400 37.200 H 68.200 C 68.300 37.200 68.200 37.100 68.200 37.200 V 39.100 C 68.200 39.155 68.245 39.200 68.300 39.200 H 72.300 C 72.355 39.200 72.400 39.155 72.400 39.100 V 37.200 C 72.400 37.100 72.300 37.200 72.400 37.200 H 77.300 C 77.355 37.200 77.400 37.155 77.400 37.100 V 30.700 C 77.400 30.600 77.300 30.700 77.400 30.700 H 79.300 C 79.355 30.700 79.400 30.655 79.400 30.600 V 26.600 C 79.400 26.545 79.355 26.500 79.300 26.500 H 77.400 C 77.300 26.500 77.400 26.600 77.400 26.500 V 22.700 C 77.400 22.600 77.300 22.700 77.400 22.700 H 79.300 C 79.355 22.700 79.400 22.655 79.400 22.600 V 18.600 C 79.400 18.545 79.355 18.500 79.300 18.500 H 77.400 C 77.300 18.500 77.400 18.600 77.400 18.500 V 12.100 C 77.400 12.045 77.355 12.000 77.300 12.000 H 72.400 C 72.300 12.000 72.400 12.100 72.400 12.000 V 10.100 C 72.400 10.045 72.355 10.000 72.300 10.000 H 68.300 C 68.245 10.000 68.200 10.045 68.200 10.100 V 12.000 C 68.200 12.100 68.300 12.000 68.200 12.000 H 64.400 C 64.300 12.000 64.400 12.100 64.400 12.000 V 10.100 C 64.400 10.045 64.355 10.000 64.300 10.000 H 60.300 C 60.245 10.000 60.200 10.045 60.200 10.100 V 12.000 C 60.200 12.100 60.300 12.000 60.200 12.000 H 56.400 C 56.300 12.000 56.400 12.100 56.400 12.000 V 10.100 C 56.400 10.045 56.355 10.000 56.300 10.000 H 52.300 C 52.245 10.000 52.200 10.045 52.200 10.100 V 12.000 C 52.200 12.100 52.300 12.000 52.200 12.000 H 47.300 C 47.245 12.000 47.200 12.045 47.200 12.100 V 18.500 C 47.200 18.600 47.300 18.500 47.200 18.500 H 45.300 C 45.245 18.500 45.200 18.545 45.200 18.600 V 22.600 C 45.200 22.655 45.245 22.700 45.300 22.700 H 47.200 C 47.300 22.700 47.200 22.600 47.200 22.700 V 26.500 C 47.200 26.600 47.300 26.500 47.200 26.500 H 45.300 C 45.245 26.500 45.200 26.545 45.200 26.600 V 30.600 C 45.200 30.655 45.245 30.700 45.300 30.700 H 47.200 C 47.300 30.700 47.200 30.600 47.200 30.700 V 37.100 C 47.200 37.155 47.245 37.200 47.300 37.200"
+       stroke="rgb(0,0,0)"
+       stroke-width="0.20"
+       id="path895" />
+  </g>
+  <circle
+     style="fill:none;stroke:#000000;stroke-width:0.22;stroke-linecap:round;stroke-linejoin:round"
+     id="path1270-3"
+     cx="17.600082"
+     cy="33.869576"
+     r="1.5" />
+  <circle
+     style="fill:none;stroke:#000000;stroke-width:0.22;stroke-linecap:round;stroke-linejoin:round"
+     id="path1272-9"
+     cx="28.15781"
+     cy="33.578434"
+     r="1.5" />
+  <circle
+     style="fill:none;stroke:#000000;stroke-width:0.22"
+     id="path1230"
+     cx="49.569908"
+     cy="14.511142"
+     r="1" />
+  <circle
+     style="fill:none;stroke:#000000;stroke-width:0.22"
+     id="path1230-7"
+     cx="49.967457"
+     cy="34.675999"
+     r="1" />
+  <circle
+     style="fill:none;stroke:#000000;stroke-width:0.22"
+     id="path1230-4"
+     cx="74.564774"
+     cy="14.394489"
+     r="1" />
+  <circle
+     style="fill:none;stroke:#000000;stroke-width:0.22"
+     id="path1230-8"
+     cx="74.578415"
+     cy="34.904705"
+     r="1" />
+</svg>
