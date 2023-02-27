@@ -313,9 +313,9 @@ void startUdp() {
 void setup() {
   //-------HARDWARE SETUP-------
   Serial.begin(115200);
-  Serial.flush(); // Clean buffer
+  Serial.flush(); // clear buffer
 
-  // Led initialization
+  // LED initialization
   pinMode(RED_PIN, OUTPUT);
   pinMode(YEL_PIN, OUTPUT);
   pinMode(BUTTON_PIN, INPUT);
@@ -323,7 +323,6 @@ void setup() {
   digitalWrite(YEL_PIN, LOW);
 
   //-------WIFI SETUP-------
-
   connectWiFi();
   startUdp();
 
