@@ -1,5 +1,5 @@
 /** @file */
-/**
+/*
  * This code is intended to run on an ESP32 (<a hfref="https://www.espressif.com/sites/default/files/documentation/esp32_datasheet_en.pdf">datasheet</a>)
  */
 // Connections : Please always connect 2 hard mpu (builtin I2C bus) to your specified pins
@@ -23,7 +23,7 @@
 #include <Arduino.h>
 
 //-------GENERAL SETTINGS-------
-#define nbrMpu 6
+#define nbrMpu 6 /**< number of MPU (boards) attached to the controller */
 // Select network to connnect
 #define KAESIMIRA
 // #define THEATER
@@ -52,9 +52,9 @@
 #define FILTER_UPDATE_RATE_HZ 25
 
 // LED pin for info showing, BUTTON pin for communication
-#define RED_PIN 32
-#define YEL_PIN 33
-#define BUTTON_PIN 5
+#define RED_PIN 32   /**< ESP pin number of red LED */
+#define YEL_PIN 33   /**< ESP pin number of yellow LED */
+#define BUTTON_PIN 5 /**< ESP pin number of (callibration) button */
 
 #define MPU_NORTH 1 // Mpu used to set the north
 
@@ -116,6 +116,9 @@ float gyrobias[6][3];
  *
  * This function updates the control register in the switch to select one
  * of the eight I2C devices (numbered 0..7) attached to it.
+ *
+ * @param channel The channel to select to communicate with I2C client
+ * @todo limit processing to valid values (0..7)
  */
 void TCA(uint8_t channel) {
   Wire.beginTransmission(TCA_ADDRESS);
