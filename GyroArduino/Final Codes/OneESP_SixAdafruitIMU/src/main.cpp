@@ -150,8 +150,13 @@ void update(int i) {
                    mag[i].magnetic.x, mag[i].magnetic.y, mag[i].magnetic.z);
 }
 
-// Function to set the north
+/**
+ * Set proper global offsets to correctly indicate north.
+ *
+ * @param n angle to true north in degrees
+ */
 void setNorth(const float n) {
+  // update global variables
   north = n * DEG_TO_RAD;
   halfcos = cos(north / 2);
   halfsin = sin(north / 2);
