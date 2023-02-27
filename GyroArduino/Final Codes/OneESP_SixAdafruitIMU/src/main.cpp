@@ -1,3 +1,7 @@
+/** @file */
+/**
+ * This code is intended to run on an ESP32 (<a hfref="https://www.espressif.com/sites/default/files/documentation/esp32_datasheet_en.pdf">datasheet</>)
+ */
 //Connections : Please always connect 2 hard mpu (builtin I2C bus) to your specified pins
 //Indicate the numbers of hard, soft I2C, connect the soft I2C in the order of the specified pins
 //Specify your IP address and Wifi
@@ -43,7 +47,7 @@
 #define MPU_ADDRESS_1 0x68 //Set 0x68 or 0x69
 #define MPU_ADDRESS_2 0x69 //Set 0x68 or 0x69
 
-#define TCA_ADDRESS 0x70
+#define TCA_ADDRESS 0x70 /**< address of the 8 channel I2C switch */
 
 //Rate of filtering
 #define FILTER_UPDATE_RATE_HZ 25
@@ -56,7 +60,7 @@
 #define MPU_NORTH 1 //Mpu used to set the north
 
 //angle to the north
-float theta = 0; 
+float theta = 0;
 float north = 0;
 float halfcos = 0;
 float halfsin = 0;
@@ -108,7 +112,12 @@ float gZ[nbrMpu] = {0};
 float accbias[6][3];
 float gyrobias[6][3];
 
-//Function to switch the channel on the multiplexer
+/**
+ * Switch to the given channel on the multiplexer for I2C communication.
+ *
+ * This function updates the control register in the switch to select one
+ * of the eight I2C devices (numbered 0..7) attached to it.
+ */
 void TCA(uint8_t channel){
   Wire.beginTransmission(TCA_ADDRESS);
   Wire.write(1 << channel);
