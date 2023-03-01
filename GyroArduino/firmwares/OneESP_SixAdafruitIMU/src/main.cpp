@@ -162,19 +162,28 @@ void setNorth(const float n) {
   halfsin = sin(north / 2);
 }
 
-// Function to see mpu connected
+/**
+ * Check to see if MPUs can be found / is connected and print the result
+ * to the serial output.
+ *
+ * @todo return number of devices found?
+ * @todo select switch channel to scan via function argument?
+ */
 void check() {
   byte error, address;
-  int nDevices;
+  uint8_t deviceCount = 0;
 
   Serial.println("Scanning...");
 
-  nDevices = 0;
+  // go through each possible address
   for (address = 1; address < 127; address++) {
+    // try to initiate a conversation
     Wire.beginTransmission(address);
     error = Wire.endTransmission();
 
     if (error == 0) {
+      // if talking was successful, we found a
+      // device at the current address and print that
       Serial.print("I2C device found at address 0x");
       if (address < 16)
         Serial.print("0");
@@ -182,17 +191,23 @@ void check() {
       Serial.print(address, HEX);
       Serial.println("  !");
 
-      nDevices++;
-    } else if (error == 4) {
-      Serial.print("Unknown error at address 0x");
-      if (address < 16)
-        Serial.print("0");
+      // and we increase the number of devices found
+      deviceCount++;
+    } else {
+      // if not, there was no suitable device
+      if (error == 4) {
+        // but we can still mention specific errors
+        Serial.print("Unknown error at address 0x");
+        if (address < 16)
+          Serial.print("0");
 
-      Serial.println(address, HEX);
+        Serial.println(address, HEX);
+      }
     }
   }
 
-  if (nDevices == 0)
+  // we to some final reporting
+  if (deviceCount == 0)
     Serial.println("No I2C devices found");
   else
     Serial.println("done");
