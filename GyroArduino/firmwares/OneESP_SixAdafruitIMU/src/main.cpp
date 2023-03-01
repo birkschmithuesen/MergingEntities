@@ -12,7 +12,7 @@
 //-------LIBRARIES-------
 // Library to use Arduino cmd
 #include <Arduino.h>
-// Libraries for Comm
+// Libraries for communication
 #include <OSCMessage.h>
 #include <Preferences.h>
 #include <WiFi.h>
@@ -76,7 +76,7 @@ int state_button = LOW;
 Preferences preferences;
 char mpuPref[10];
 
-// Hardware I2c : Mpu data containers
+// Hardware I2C: MPU data containers
 Adafruit_Sensor *accelerometer[nbrMpu], *gyroscope[nbrMpu], *magnetometer[nbrMpu];
 #include "NXP_FXOS_FXAS.h" // NXP 9-DoF breakout //We declare it here to allow the .h to use the previous variables
 
