@@ -36,7 +36,6 @@
 
 // Define BUTTON to activate the button
 #define BUTTON
-
 //-------END GENERAL SETTINGS-------
 
 //-------MPU SETTINGS AND FUNCTIONS-------
@@ -81,9 +80,7 @@ Adafruit_Sensor *accelerometer[nbrMpu], *gyroscope[nbrMpu], *magnetometer[nbrMpu
 #include "NXP_FXOS_FXAS.h" // NXP 9-DoF breakout //We declare it here to allow the .h to use the previous variables
 
 Adafruit_NXPSensorFusion filter[nbrMpu];
-
 Adafruit_Sensor_Calibration_EEPROM cal[nbrMpu];
-
 sensors_event_t accel[nbrMpu], gyro[nbrMpu], mag[nbrMpu];
 
 // To change sensibility, call "cal.<rightfunction>
@@ -126,25 +123,33 @@ void selectSwitchChannel(uint8_t channel) {
   Wire.endTransmission();
 }
 
-// Function to update one imu
-void update(int i) {
+/**
+ * Get update events from the sensors and update (global) variables.
+ *
+ * @param i ID/number/index of the senor
+ * @todo adjust type of i
+ * @todo limit i to sensible values
+ */
+void fetchSensorUpdate(int i) {
   selectSwitchChannel(i);
+
+  // get raw data
   accelerometer[i]->getEvent(&accel[i]);
   gyroscope[i]->getEvent(&gyro[i]);
   magnetometer[i]->getEvent(&mag[i]);
 
-  // Substrat the offset - CALIBRATION
+  // substract the offset - CALIBRATION
   cal[i].calibrate(mag[i]);
   cal[i].calibrate(accel[i]);
   cal[i].calibrate(gyro[i]);
 
-  // Gyroscope needs to be converted from Rad/s to Degree/s
+  // Gyroscope needs to be converted from rad/s to degree/s
   // the rest are not unit-important
   gX[i] = gyro[i].gyro.x * SENSORS_RADS_TO_DPS;
   gY[i] = gyro[i].gyro.y * SENSORS_RADS_TO_DPS;
   gZ[i] = gyro[i].gyro.z * SENSORS_RADS_TO_DPS;
 
-  // Update the SensorFusion filter - QUATERNION
+  // update the SensorFusion filter - QUATERNION
   filter[i].update(gX[i], gY[i], gZ[i], accel[i].acceleration.x,
                    accel[i].acceleration.y, accel[i].acceleration.z,
                    mag[i].magnetic.x, mag[i].magnetic.y, mag[i].magnetic.z);
@@ -557,7 +562,7 @@ void setup() {
   last_update = millis();
   while (millis() - time_converge < 10000) {
     if (millis() - last_update > 1000 / FILTER_UPDATE_RATE_HZ) {
-      update(MPU_NORTH - 1);
+      fetchSensorUpdate(MPU_NORTH - 1);
       last_update = millis();
     }
   }
@@ -615,7 +620,7 @@ void loop() {
 
   for (int i = 0; i < nbrMpu; i++) {
     // Update data
-    update(i);
+    fetchSensorUpdate(i);
 
     //------- PRINT / SEND DATA -------
 
