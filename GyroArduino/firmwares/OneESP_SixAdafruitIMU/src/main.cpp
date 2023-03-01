@@ -120,7 +120,7 @@ float gyrobias[6][3];
  * @param channel The channel to select to communicate with I2C client
  * @todo limit processing to valid values (0..7)
  */
-void TCA(uint8_t channel) {
+void selectSwitchChannel(uint8_t channel) {
   Wire.beginTransmission(TCA_ADDRESS);
   Wire.write(1 << channel);
   Wire.endTransmission();
@@ -128,7 +128,7 @@ void TCA(uint8_t channel) {
 
 // Function to update one imu
 void update(int i) {
-  TCA(i);
+  selectSwitchChannel(i);
   accelerometer[i]->getEvent(&accel[i]);
   gyroscope[i]->getEvent(&gyro[i]);
   magnetometer[i]->getEvent(&mag[i]);
@@ -349,7 +349,7 @@ void setup() {
   //-------MPU SETUP------
   // Initialize all gyros
   for (int i = 0; i < nbrMpu; i++) {
-    TCA(i);
+    selectSwitchChannel(i);
     delay(100);
 
     if (!init_sensors(i)) {
