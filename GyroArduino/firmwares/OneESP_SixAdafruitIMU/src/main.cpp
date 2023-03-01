@@ -6,6 +6,7 @@
 // Indicate the numbers of hard, soft I2C, connect the soft I2C in the order of the specified pins
 // Specify your IP address and Wifi
 // Mag calibration desactivated right now, see if it's usefull Eventually speed up if TCA is fast enough
+// The IMU is a MPU-9250, hence the reference in variable names etc.
 
 // Attention : select the right channel with the TCA function (+2 woth prototype in wood, i regular without)
 
@@ -23,7 +24,7 @@
 #include <Arduino.h>
 
 //-------GENERAL SETTINGS-------
-#define nbrMpu 6 /**< number of IMU (MPU?) (boards) attached to the controller */
+#define nbrMpu 6 /**< number of IMU (MPU) (boards) attached to the controller */
 // Select network to connnect
 #define KAESIMIRA
 // #define THEATER
@@ -41,9 +42,9 @@
 //-------MPU SETTINGS AND FUNCTIONS-------
 // Parameters of the setup
 
-// Addresses and pin of MPU and TCA9548A(=multiplexer)
-#define MPU_ADDRESS_1 0x68 // Set 0x68 or 0x69
-#define MPU_ADDRESS_2 0x69 // Set 0x68 or 0x69
+// Addresses and pin of IMU (MPU-9250) and TCA9548A(=multiplexer)
+#define MPU_ADDRESS_1 0x68 /**< address of the MPU-9250 when its pin AD0 is low */
+#define MPU_ADDRESS_2 0x69 /**< address of the MPU-9250 when its pin AD0 is high */
 
 #define TCA_ADDRESS 0x70 /**< address of the 8 channel I2C switch */
 
