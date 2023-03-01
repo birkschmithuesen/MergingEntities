@@ -119,7 +119,7 @@ float gyrobias[6][3];
  * @param channel The channel to select to communicate with I2C client
  * @todo limit processing to valid values (0..7)
  */
-void selectSwitchChannel(uint8_t channel) {
+void selectI2cSwitchChannel(uint8_t channel) {
   Wire.beginTransmission(TCA_ADDRESS);
   Wire.write(1 << channel);
   Wire.endTransmission();
@@ -133,7 +133,7 @@ void selectSwitchChannel(uint8_t channel) {
  * @todo limit i to sensible values
  */
 void fetchSensorUpdate(int i) {
-  selectSwitchChannel(i);
+  selectI2cSwitchChannel(i);
 
   // get raw data
   accelerometer[i]->getEvent(&accel[i]);
@@ -362,7 +362,7 @@ void setup() {
   //-------MPU SETUP------
   // Initialize all gyros
   for (int i = 0; i < nbrMpu; i++) {
-    selectSwitchChannel(i);
+    selectI2cSwitchChannel(i);
     delay(100);
 
     if (!init_sensors(i)) {
@@ -390,7 +390,7 @@ void setup() {
   digitalWrite(RED_PIN, HIGH); // Calibrate one by one
   for (int i = 0; i < nbrMpu; i++) {
     Serial.println(i);
-    selectSwitchChannel(i);
+    selectI2cSwitchChannel(i);
     mpu[i].calibrateAccelGyro();
   }
   digitalWrite(RED_PIN, LOW);
@@ -418,7 +418,7 @@ void setup() {
 
     Serial.println(i);
 
-    selectSwitchChannel(i);
+    selectI2cSwitchChannel(i);
     mpu[i].setMagneticDeclination(MAG_DECLINATION);
     mpu[i].calibrateMag();
 
@@ -473,7 +473,7 @@ void setup() {
     digitalWrite(RED_PIN, HIGH);
     for(int i=0; i<nbrMpu; i++) {
       Serial.println(i);
-      selectSwitchChannel(i);
+      selectI2cSwitchChannel(i);
       mpu[i].calibrateAccelGyro();
     }
     digitalWrite(RED_PIN, LOW);
