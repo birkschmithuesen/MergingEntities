@@ -76,7 +76,9 @@ Preferences preferences;
 char mpuPref[10];
 
 // Hardware I2C: MPU data containers
-Adafruit_Sensor *accelerometer[nbrMpu], *gyroscope[nbrMpu], *magnetometer[nbrMpu];
+Adafruit_Sensor *accelerometer[nbrMpu]; /**< accelerometer data for each IMU */
+Adafruit_Sensor *gyroscope[nbrMpu];     /**< gyro data for each IMU */
+Adafruit_Sensor *magnetometer[nbrMpu];  /**< magentometer data for each IMU */
 #include "NXP_FXOS_FXAS.h" // NXP 9-DoF breakout //We declare it here to allow the .h to use the previous variables
 
 Adafruit_NXPSensorFusion filter[nbrMpu];  /**< filters for the sensor data, one for each sensor */
@@ -343,6 +345,9 @@ void startUdp() {
 }
 
 //-------SETUP-------
+/**
+ * Main setup / initialisation routine.
+ */
 void setup() {
   //-------HARDWARE SETUP-------
   Serial.begin(115200);
@@ -361,15 +366,13 @@ void setup() {
 
   //-------MPU SETUP------
   // Initialize all gyros
-  for (int i = 0; i < nbrMpu; i++) {
+  for (uint8_t i = 0; i < nbrMpu; i++) {
     selectI2cSwitchChannel(i);
     delay(100);
 
     if (!init_sensors(i)) {
       Serial.print("Desoo");
-    }
-
-    else {
+    } else {
       Serial.print("Strrange success");
     }
     filter[i].begin(FILTER_UPDATE_RATE_HZ);
@@ -388,7 +391,7 @@ void setup() {
   calibration.empty();
 
   digitalWrite(RED_PIN, HIGH); // Calibrate one by one
-  for (int i = 0; i < nbrMpu; i++) {
+  for (uint8_t i = 0; i < nbrMpu; i++) {
     Serial.println(i);
     selectI2cSwitchChannel(i);
     mpu[i].calibrateAccelGyro();
@@ -402,7 +405,7 @@ void setup() {
 #ifdef MANUAL_CALIBRATION
   Serial.println("Calibration of mag");
 
-  for (int i = 0; i < nbrMpu; i++) {
+  for (uint8_t i = 0; i < nbrMpu; i++) {
     if (state == HIGH) {
       digitalWrite(YEL_PIN, state);
       state = LOW;
@@ -434,7 +437,7 @@ void setup() {
   Udp.endPacket();
   calibration.empty();
 
-  for (int i = 0; i < nbrMpu; i++) {
+  for (uint8_t i = 0; i < nbrMpu; i++) {
     mpu[i].setMagneticDeclination(MAG_DECLINATION);
     mpu[i].setMagBias(magbias[i][0], magbias[i][1], magbias[i][2]);
     mpu[i].setMagScale(magscale[i][0], magscale[i][1], magscale[i][2]);
@@ -498,15 +501,13 @@ void setup() {
 
   // Button not pushed -> in any case here : we read the stored calibration data and calibrate
   Serial.println("LOW : Load calibration data");
-  for (int i = 0; i < nbrMpu; i++) {
+  for (uint8_t i = 0; i < nbrMpu; i++) {
 
     // For the future : each imu got his own calibration
     itoa(i, mpuPref, 10); // Key names = number of mpu
-
     preferences.begin(mpuPref, false);
 
     // Set acceleration & gyro calibration data
-
     cal[i].accel_zerog[0] = float(preferences.getChar("accbiasX", 0)) / 100;
     cal[i].accel_zerog[1] = float(preferences.getChar("accbiasY", 0)) / 100;
     cal[i].accel_zerog[2] = float(preferences.getChar("accbiasZ", 0)) / 100;
@@ -546,7 +547,7 @@ void setup() {
   Serial.println("Calibration loaded");
 
   // Two leds are blinking, saying calibration is over
-  for (int i = 0; i < 20; i++) {
+  for (uint8_t i = 0; i < 20; i++) {
     digitalWrite(RED_PIN, state);
     digitalWrite(YEL_PIN, state);
     if (state == HIGH) {
@@ -600,7 +601,7 @@ void setup() {
   Serial.println("North set");
 
   // Two leds are blinking, saying north is set
-  for (int i = 0; i < 20; i++) {
+  for (uint8_t i = 0; i < 20; i++) {
     digitalWrite(RED_PIN, state);
     digitalWrite(YEL_PIN, state);
     if (state == HIGH) {
