@@ -48,14 +48,14 @@
 #define TCA_ADDRESS 0x70 /**< address of the 8 channel I2C switch */
 
 // Rate of filtering
-#define FILTER_UPDATE_RATE_HZ 25
+#define FILTER_UPDATE_RATE_HZ 25  /**< update rate of the IMU sensor data filter */
 
 // LED pin for info showing, BUTTON pin for communication
 #define RED_PIN 32   /**< ESP pin number of red LED */
 #define YEL_PIN 33   /**< ESP pin number of yellow LED */
 #define BUTTON_PIN 5 /**< ESP pin number of (callibration) button */
 
-#define MPU_NORTH 1 // Mpu used to set the north
+#define MPU_NORTH 1 /**< MPU used to set the north */
 
 // angle to the north
 float theta = 0;
@@ -79,9 +79,11 @@ char mpuPref[10];
 Adafruit_Sensor *accelerometer[nbrMpu], *gyroscope[nbrMpu], *magnetometer[nbrMpu];
 #include "NXP_FXOS_FXAS.h" // NXP 9-DoF breakout //We declare it here to allow the .h to use the previous variables
 
-Adafruit_NXPSensorFusion filter[nbrMpu];
-Adafruit_Sensor_Calibration_EEPROM cal[nbrMpu];
-sensors_event_t accel[nbrMpu], gyro[nbrMpu], mag[nbrMpu];
+Adafruit_NXPSensorFusion filter[nbrMpu];  /**< filters for the sensor data, one for each sensor */
+Adafruit_Sensor_Calibration_EEPROM cal[nbrMpu];  /**< calibration settings for each IMU sensor */
+sensors_event_t accel[nbrMpu];  /**< last acceleration event for each IMU */
+sensors_event_t gyro[nbrMpu];   /**< last gyro event for each IMU */
+sensors_event_t mag[nbrMpu];    /**< last magnetic event for each IMU */
 
 // To change sensibility, call "cal.<rightfunction>
 
