@@ -23,7 +23,7 @@
 #include <Arduino.h>
 
 //-------GENERAL SETTINGS-------
-#define nbrMpu 6 /**< number of MPU (boards) attached to the controller */
+#define nbrMpu 6 /**< number of IMU (MPU?) (boards) attached to the controller */
 // Select network to connnect
 #define KAESIMIRA
 // #define THEATER
@@ -382,7 +382,7 @@ void setup() {
   digitalWrite(RED_PIN, HIGH); // Calibrate one by one
   for (int i = 0; i < nbrMpu; i++) {
     Serial.println(i);
-    TCA(i);
+    selectSwitchChannel(i);
     mpu[i].calibrateAccelGyro();
   }
   digitalWrite(RED_PIN, LOW);
@@ -410,7 +410,7 @@ void setup() {
 
     Serial.println(i);
 
-    TCA(i);
+    selectSwitchChannel(i);
     mpu[i].setMagneticDeclination(MAG_DECLINATION);
     mpu[i].calibrateMag();
 
@@ -465,7 +465,7 @@ void setup() {
     digitalWrite(RED_PIN, HIGH);
     for(int i=0; i<nbrMpu; i++) {
       Serial.println(i);
-      TCA(i);
+      selectSwitchChannel(i);
       mpu[i].calibrateAccelGyro();
     }
     digitalWrite(RED_PIN, LOW);
