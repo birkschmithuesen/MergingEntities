@@ -327,9 +327,11 @@ void connectWiFi() // Let's connect a WiFi
   }
 }
 
-// Function to start Udp communication on arduino side
+/**
+ * Set up UDP communication locally.
+ */
 void startUdp() {
-  Serial.print("Starting Udp connection to local port : ");
+  Serial.print("Starting UDP connection to local port ");
   Udp.begin(localPort); // set the connection with the computer
   Serial.println(localPort);
 }
