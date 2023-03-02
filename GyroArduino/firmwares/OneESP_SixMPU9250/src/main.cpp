@@ -259,6 +259,39 @@ void startUdp() {
   Serial.println(localPort);
 }
 
+/**
+ * Calibrate the magnetometer (i.e. set north) by manually
+ * fiddling with the sensor.
+ *
+ * @note This code has been extracted manually and not changed/adjusted
+ */
+void manualMagnetometerCalibration() {
+  Serial.println("Calibration of mag");
+
+  for (uint8_t i = 0; i < nbrMpu; i++) {
+    if (state == HIGH) {
+      digitalWrite(YEL_PIN, state);
+      state = LOW;
+    } else {
+      digitalWrite(YEL_PIN, state);
+      state = HIGH;
+    }
+    calibration.add("Calibration of ").add(i + 1);
+
+    Udp.beginPacket(outIp, outPort);
+    calibration.send(Udp);
+    Udp.endPacket();
+
+    Serial.println(i);
+
+    selectI2cSwitchChannel(i);
+    mpu[i].setMagneticDeclination(MAG_DECLINATION);
+    mpu[i].calibrateMag();
+
+    calibration.empty();
+  }
+}
+
 //-------SETUP-------
 /**
  * Main setup / initialisation routine.
@@ -335,30 +368,7 @@ void setup() {
 
 // Manual calibration : get ready to turn the mpu
 #ifdef MANUAL_CALIBRATION
-  Serial.println("Calibration of mag");
-
-  for (int i = 0; i < nbrMpu; i++) {
-    if (state == HIGH) {
-      digitalWrite(YEL_PIN, state);
-      state = LOW;
-    } else {
-      digitalWrite(YEL_PIN, state);
-      state = HIGH;
-    }
-    calibration.add("Calibration of ").add(i + 1);
-
-    Udp.beginPacket(outIp, outPort);
-    calibration.send(Udp);
-    Udp.endPacket();
-
-    Serial.println(i);
-
-    selectI2cSwitchChannel(i);
-    mpu[i].setMagneticDeclination(MAG_DECLINATION);
-    mpu[i].calibrateMag();
-
-    calibration.empty();
-  }
+  manualMagnetometerCalibration();
 #endif
 
 #ifdef AUTO_CALIBRATION
