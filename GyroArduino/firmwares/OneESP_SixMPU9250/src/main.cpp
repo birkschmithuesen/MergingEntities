@@ -249,13 +249,18 @@ void connectWiFi() {
 /**
  * Set up UDP communication locally.
  * 
+ * @param port local port to bind to
  * @see localPort
  * @see connectWiFi()
  */
-void startUdp() {
+void startUdp(int port) {
   Serial.print("Starting UDP connection to local port ");
-  Udp.begin(localPort); // set the connection with the computer
-  Serial.println(localPort);
+  Serial.print(port);
+  if (0 == Udp.begin(port)) {
+	  // no socket available for use
+	  Serial.println(" ... failed");
+  }
+  Serial.println(" ... succeeded");
 }
 
 /**
@@ -309,7 +314,7 @@ void setup() {
 
   //-------WIFI SETUP-------
   connectWiFi();
-  startUdp();
+  startUdp(localPort);
 
   //-------MPU SETUP------
   // Launch comm with multiplexer
