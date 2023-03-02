@@ -214,31 +214,43 @@ OSCMessage body[] = {
 OSCMessage calibration("/calibration/3");
 #endif
 
-// Function to connect WiFi
+/**
+ * This function establishes a connection to the preconfigured wifi network.
+ * 
+ * @see #WIFI_SSID
+ * @see #WIFI_PASS
+ * @see startUdp()
+ */
 void connectWiFi() {
-  Serial.print("Starting WiFi connection ...");
-
-  WiFi.mode(WIFI_STA); // Mode of the WiFi, STA = STATION MODE (connect to stg),
-                       // APM = Access Point Mode (create a network)
-  WiFi.begin(WIFI_SSID, WIFI_PASS); // Connecting the ESP
+  Serial.print("Connecting to wifi ..");
+  // Mode of the WiFi
+  //   STA = STATION MODE (connect to access point),
+  //   APM = Access Point Mode (create a network)
+  WiFi.mode(WIFI_STA);
+  WiFi.begin(WIFI_SSID, WIFI_PASS);
 
   long start = millis();
-
+  // try for ten seconds to connect every 100 ms (i.e. make 100 attempts)
   while (WiFi.status() != WL_CONNECTED && millis() - start < 10000) {
     Serial.print(".");
     delay(100);
   }
 
+  // print result of connection attempt(s) on serial console
   if (WiFi.status() != WL_CONNECTED) {
-    Serial.println("__Not connected__");
+    Serial.println(" failed");
   } else {
-    Serial.print("__Connected. IP adress : ");
+	Serial.println(" succeeded");
+    Serial.print("local IP address is ");
     Serial.println(WiFi.localIP());
   }
 }
 
 /**
  * Set up UDP communication locally.
+ * 
+ * @see localPort
+ * @see connectWiFi()
  */
 void startUdp() {
   Serial.print("Starting UDP connection to local port ");
