@@ -1,3 +1,7 @@
+/** @file */
+/*
+ * This code is intended to run on an ESP32 (<a hfref="https://www.espressif.com/sites/default/files/documentation/esp32_datasheet_en.pdf">datasheet</a>)
+ */
 //Connections : Please always connect 2 hard mpu (builtin I2C bus) to your specified pins
 //Indicate the numbers of hard, soft I2C, connect the soft I2C in the order of the specified pins
 //Specify your IP address and Wifi
@@ -7,9 +11,9 @@
 //Attention : select the right channel with the TCA function (+2 woth prototype in wood, i regular without)
 
 //-------LIBRARIES-------
-//Library to use Arduino cmd
+//Library to use Arduino commands
 #include <Arduino.h>
-//Libraries for Comm
+//Libraries for communication
 #include <WiFi.h>
 #include <OSCMessage.h>
 #include <WiFiUdp.h>
@@ -18,7 +22,7 @@
 #include "MPU9250.h"
 
 //-------GENERAL SETTINGS-------
-#define nbrMpu 6
+#define nbrMpu 6  /**< number of IMU (MPU) (boards) attached to the controller */
 //Select network to connnect
 #define KAESIMIRA
 //#define THEATER
@@ -40,25 +44,23 @@
 //-------MPU SETTINGS AND FUNCTIONS-------
 //Parameters of the setup
 
-//Addresses and pin of MPU and TCA9548A(=multiplexer)
-#define MPU_ADDRESS_1 0x68 //Set 0x68 or 0x69
-#define MPU_ADDRESS_2 0x69 //Set 0x68 or 0x69
-
-#define TCA_ADDRESS 0x70
-
+// Addresses and pin of IMU (MPU-9250) and TCA9548A(=multiplexer)
+#define MPU_ADDRESS_1 0x68 /**< address of the MPU-9250 when its pin AD0 is low */
+#define MPU_ADDRESS_2 0x69 /**< address of the MPU-9250 when its pin AD0 is high */
+#define TCA_ADDRESS 0x70 /**< address of the 8 channel I2C switch */
 
 //SDA and SCL pin of the soft and hard wire mode
 #define SDA_PIN 21
 #define SCL_PIN 22
 
-//LED pin for info showing, BUTTON pin for communication
+// LED pin for info showing, BUTTON pin for communication
+#define RED_PIN 32   /**< ESP pin number of red LED */
+#define YEL_PIN 33   /**< ESP pin number of yellow LED */
+#define BUTTON_PIN 5 /**< ESP pin number of (callibration) button */
 
-#define RED_PIN 32
-#define YEL_PIN 33
-#define BUTTON_PIN 5
 
-#define MPU_NORTH 1 //Mpu used to set the north
-float theta = 0; //angle to the north
+#define MPU_NORTH 1 /**< MPU used to set the north */
+float theta = 0;    /**< angle to the north */
 float time_converge = 0;
 
 int state = HIGH;
@@ -91,52 +93,74 @@ float gZ[nbrMpu] = {0};
 float accbias[6][3];
 float gyrobias[6][3];
 
-//Function to switch the channel on the multiplexer
-void TCA(uint8_t channel){
+/**
+ * Switch to the given channel on the multiplexer for I2C communication.
+ *
+ * This function updates the control register in the switch to select one
+ * of the eight I2C devices (numbered 0..7) attached to it.
+ *
+ * @param channel The channel to select to communicate with I2C client
+ * @todo limit processing to valid values (0..7)
+ */
+void selectI2cSwitchChannel(uint8_t channel) {
   Wire.beginTransmission(TCA_ADDRESS);
   Wire.write(1 << channel);
   Wire.endTransmission();
 }
 
-//Function to see mpu connected
-void check()
-{
-  byte error, address;
-  int nDevices;
+/**
+ * Check to see if I2C device (IMU) can be found / is connected and
+ * print the result to the serial output.
+ *
+ * @todo return number of devices found?
+ * @todo select switch channel to scan via function argument?
+ */
+void scanI2C() {
+  byte error;
+  uint8_t deviceCount = 0;
 
   Serial.println("Scanning...");
 
-  nDevices = 0;
-  for(address = 1; address < 127; address++ )
-  {
+  // go through each possible address
+  for (uint8_t address = 1; address < 127; address++) {
+    // try to initiate a conversation
     Wire.beginTransmission(address);
     error = Wire.endTransmission();
 
-    if (error == 0)
-    {
+    if (error == 0) {
+      // if talking was successful, we found a
+      // device at the current address and print that
       Serial.print("I2C device found at address 0x");
-      if (address < 16)
+      if (address < 16) {
+		// pad leading 0
         Serial.print("0");
+      }
 
-      Serial.print(address,HEX);
+      Serial.print(address, HEX);
       Serial.println("  !");
 
-      nDevices++;
-    }
-    else if (error==4)
-    {
-      Serial.print("Unknown error at address 0x");
-      if (address < 16)
-        Serial.print("0");
+      // and we increase the number of devices found
+      deviceCount++;
+    } else {
+      // if not, there was no suitable device
+      if (error == 4) {
+        // but we can still mention specific errors
+        Serial.print("Unknown error at address 0x");
+        if (address < 16) {
+          Serial.print("0");
+        }
 
-      Serial.println(address,HEX);
+        Serial.println(address, HEX);
+      }
     }
   }
 
-  if (nDevices == 0)
+  // we to some final reporting
+  if (deviceCount == 0) {
     Serial.println("No I2C devices found");
-  else
+  } else {
     Serial.println("done");
+  }
 
   delay(5000); // wait 5 seconds for next scan
 }
@@ -232,15 +256,20 @@ void connectWiFi() //Let's connect a WiFi
   }
 }
 
-//Function to start Udp communication on arduino side
+/**
+ * Set up UDP communication locally.
+ */
 void startUdp() {
-  Serial.print("Starting Udp connection to local port : ");
-  Udp.begin(localPort); //set the connection with the computer
+  Serial.print("Starting UDP connection to local port ");
+  Udp.begin(localPort); // set the connection with the computer
   Serial.println(localPort);
 }
 
 
 //-------SETUP-------
+/**
+ * Main setup / initialisation routine.
+ */
 void setup() {
   //-------HARDWARE SETUP-------
   Serial.begin(115200);
@@ -275,8 +304,8 @@ void setup() {
 
   //Lauch communication with the 6 mpus - Switch to channel i and lauch comm with mpu numer i
   for(int i=0; i<nbrMpu; i++) {
-    TCA(i);
-    //check();
+    selectI2cSwitchChannel(i);
+    //scanI2C();
     mpu[i].setup(MPU_ADDRESS_1, setting, Wire);
   }
 
@@ -302,7 +331,7 @@ void setup() {
   digitalWrite(RED_PIN, HIGH);//Calibrate one by one
   for(int i=0; i<nbrMpu; i++) {
     Serial.println(i);
-    TCA(i);
+    selectI2cSwitchChannel(i);
     mpu[i].calibrateAccelGyro();
   }
   digitalWrite(RED_PIN, LOW);
@@ -331,7 +360,7 @@ void setup() {
 
     Serial.println(i);
 
-    TCA(i);
+    selectI2cSwitchChannel(i);
     mpu[i].setMagneticDeclination(MAG_DECLINATION);
     mpu[i].calibrateMag();
 
@@ -385,7 +414,7 @@ void setup() {
     digitalWrite(RED_PIN, HIGH);
     for(int i=0; i<nbrMpu; i++) {
       Serial.println(i);
-      TCA(i);
+      selectI2cSwitchChannel(i);
       mpu[i].calibrateAccelGyro();
     }
     digitalWrite(RED_PIN, LOW);
@@ -427,7 +456,7 @@ void setup() {
 
       Serial.println(i);
 
-      TCA(i);
+      selectI2cSwitchChannel(i);
       mpu[i].setMagneticDeclination(MAG_DECLINATION);
       mpu[i].calibrateMag();
 
@@ -470,7 +499,7 @@ void setup() {
       digitalWrite(RED_PIN, HIGH);
       for(int i=0; i<nbrMpu; i++) {
         Serial.println(i);
-        TCA(i);
+        selectI2cSwitchChannel(i);
         mpu[i].calibrateAccelGyro();
       }
       digitalWrite(RED_PIN, LOW);
@@ -501,7 +530,7 @@ void setup() {
   digitalWrite(YEL_PIN, HIGH);
 
   //We let the mpu run for 10 seconds to have the good yaw if we need it
-  TCA(MPU_NORTH-1);
+  selectI2cSwitchChannel(MPU_NORTH-1);
 
   time_converge = millis();
   while(millis() - time_converge < 10000){
@@ -550,7 +579,7 @@ void setup() {
   //Print/send the calibration of magnetometer - USE IT TO AUTO CALIB AGAIN 
   Serial.println("Calibration data :");
   for(int i=0; i<nbrMpu; i++) {
-    TCA(i);
+    selectI2cSwitchChannel(i);
 
     //Send calibration data to TouchDesigner
     calibration.add("MAGSCALE").add(i).add(mpu[i].getMagScaleX()).add(mpu[i].getMagScaleY()).add(mpu[i].getMagScaleZ());
@@ -574,7 +603,7 @@ void loop() {
   
   //Read mpu data
   for(int i=0; i<nbrMpu; i++) {
-    TCA(i);
+    selectI2cSwitchChannel(i);
     mpu[i].update();
   }
 
