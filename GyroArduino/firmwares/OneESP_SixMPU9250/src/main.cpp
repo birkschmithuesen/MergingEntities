@@ -49,11 +49,11 @@
 // Addresses and pin of IMU (MPU-9250) and TCA9548A(=multiplexer)
 #define MPU_ADDRESS_1 0x68 /**< address of the MPU-9250 when its pin AD0 is low */
 #define MPU_ADDRESS_2 0x69 /**< address of the MPU-9250 when its pin AD0 is high */
-#define TCA_ADDRESS 0x70 /**< address of the 8 channel I2C switch */
+#define TCA_ADDRESS 0x70   /**< address of the 8 channel I2C switch */
 
 // SDA and SCL pin of the soft and hard wire mode
-#define SDA_PIN 21
-#define SCL_PIN 22
+#define SDA_PIN 21   /**< I2C data pin (on ESP32) */
+#define SCL_PIN 22   /**< I2C clock pin (on ESP32) */
 
 // LED pin for info showing, BUTTON pin for communication
 #define RED_PIN 32   /**< ESP pin number of red LED */
