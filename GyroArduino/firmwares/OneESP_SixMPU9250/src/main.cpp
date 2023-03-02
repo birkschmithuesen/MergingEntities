@@ -77,7 +77,7 @@ Preferences preferences;
 char mpuPref[10];
 
 // Hardware I2c
-MPU9250 mpu[nbrMpu];
+MPU9250 mpu[nbrMpu];  /**< software handler/abstraction for each MPU */
 
 // Setting variable
 MPU9250Setting setting;
