@@ -330,7 +330,7 @@ void setup() {
 
   // Lauch communication with the 6 mpus - Switch to channel i and lauch comm
   // with mpu numer i
-  for (int i = 0; i < nbrMpu; i++) {
+  for (uint8_t i = 0; i < nbrMpu; i++) {
     selectI2cSwitchChannel(i);
     // scanI2C();
     mpu[i].setup(MPU_ADDRESS_1, setting, Wire);
@@ -338,7 +338,7 @@ void setup() {
 
   // Selection of filters
   QuatFilterSel sel{QuatFilterSel::MADGWICK};
-  for (int i = 0; i < nbrMpu; i++) {
+  for (uint8_t i = 0; i < nbrMpu; i++) {
     mpu[i].selectFilter(sel);
     mpu[i].setFilterIterations(10);
   }
@@ -356,7 +356,7 @@ void setup() {
   calibration.empty();
 
   digitalWrite(RED_PIN, HIGH); // Calibrate one by one
-  for (int i = 0; i < nbrMpu; i++) {
+  for (uint8_t i = 0; i < nbrMpu; i++) {
     Serial.println(i);
     selectI2cSwitchChannel(i);
     mpu[i].calibrateAccelGyro();
@@ -379,7 +379,7 @@ void setup() {
   Udp.endPacket();
   calibration.empty();
 
-  for (int i = 0; i < nbrMpu; i++) {
+  for (uint8_t i = 0; i < nbrMpu; i++) {
     mpu[i].setMagneticDeclination(MAG_DECLINATION);
     mpu[i].setMagBias(magbias[i][0], magbias[i][1], magbias[i][2]);
     mpu[i].setMagScale(magscale[i][0], magscale[i][1], magscale[i][2]);
@@ -416,7 +416,7 @@ void setup() {
     calibration.empty();
 
     digitalWrite(RED_PIN, HIGH);
-    for (int i = 0; i < nbrMpu; i++) {
+    for (uint8_t i = 0; i < nbrMpu; i++) {
       Serial.println(i);
       selectI2cSwitchChannel(i);
       mpu[i].calibrateAccelGyro();
@@ -425,7 +425,7 @@ void setup() {
     Serial.println("Acceleration calibration done.");
 
     // Acceleration : store calibration data
-    for (int i = 0; i < nbrMpu; i++) {
+    for (uint8_t i = 0; i < nbrMpu; i++) {
       itoa(i, mpuPref, 10); // Key names = number of mpu
       preferences.begin(mpuPref, false);
 
@@ -443,7 +443,7 @@ void setup() {
     // Magnetometer : get data calibration + calibrate
     Serial.println("Calibration of mag");
 
-    for (int i = 0; i < nbrMpu; i++) {
+    for (uint8_t i = 0; i < nbrMpu; i++) {
       if (state == HIGH) {
         digitalWrite(YEL_PIN, state);
         state = LOW;
@@ -468,7 +468,7 @@ void setup() {
     Serial.println("Calibration of mag done");
 
     // Magnetometer : store calibration data
-    for (int i = 0; i < nbrMpu; i++) {
+    for (uint8_t i = 0; i < nbrMpu; i++) {
       itoa(i, mpuPref, 10); // Key names = number of mpu
       preferences.begin(mpuPref, false);
 
@@ -487,7 +487,7 @@ void setup() {
   // Button not pushed : we read the stored calibration data and calibrate
   else {
     Serial.println("LOW : Load calibration data");
-    for (int i = 0; i < nbrMpu; i++) {
+    for (uint8_t i = 0; i < nbrMpu; i++) {
       itoa(i, mpuPref, 10); // Key names = number of mpu
       preferences.begin(mpuPref, false);
 
@@ -503,7 +503,7 @@ void setup() {
       // Test to see what the fuck
       /*
       digitalWrite(RED_PIN, HIGH);
-      for(int i=0; i<nbrMpu; i++) {
+      for(uint8_t i=0; i<nbrMpu; i++) {
         Serial.println(i);
         selectI2cSwitchChannel(i);
         mpu[i].calibrateAccelGyro();
@@ -525,7 +525,7 @@ void setup() {
   }
 
   // Two leds are blinking, saying calibration is over
-  for (int i = 0; i < 20; i++) {
+  for (uint8_t i = 0; i < 20; i++) {
     digitalWrite(RED_PIN, state);
     digitalWrite(YEL_PIN, state);
     if (state == HIGH) {
@@ -569,14 +569,14 @@ void setup() {
 
   // We get the north and set it
   preferences.begin("setNorth", false);
-  for (int i = 0; i < nbrMpu; i++) {
+  for (uint8_t i = 0; i < nbrMpu; i++) {
     mpu[i].setNorth(preferences.getFloat("north", 0));
   }
   preferences.end();
   Serial.println("North set");
 
   // Two leds are blinking, saying north is set
-  for (int i = 0; i < 20; i++) {
+  for (uint8_t i = 0; i < 20; i++) {
     digitalWrite(RED_PIN, state);
     digitalWrite(YEL_PIN, state);
     if (state == HIGH) {
@@ -616,7 +616,7 @@ void loop() {
   //--------MPU recording--------
 
   // Read mpu data
-  for (int i = 0; i < nbrMpu; i++) {
+  for (uint8_t i = 0; i < nbrMpu; i++) {
     selectI2cSwitchChannel(i);
     mpu[i].update();
   }
