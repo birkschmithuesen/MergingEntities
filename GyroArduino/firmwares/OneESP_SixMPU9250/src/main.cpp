@@ -67,7 +67,6 @@ int localPort = 8888;                /**< source port for UDP communication on E
 
 #define MPU_NORTH 1 /**< MPU used to set the north */
 float theta = 0;    /**< angle to the north */
-float time_converge = 0;
 
 int state = HIGH;
 int state_button = LOW;
@@ -334,6 +333,8 @@ void automaticMagnetometerCalibration() {
  * @see loop()
  */
 void setup() {
+  float time_passed = 0;  /**< tracking time passed */
+
   //-------HARDWARE SETUP-------
   Serial.begin(115200);
   Serial.flush(); // Clean buffer
@@ -569,8 +570,8 @@ void setup() {
   // We let the mpu run for 10 seconds to have the good yaw if we need it
   selectI2cSwitchChannel(MPU_NORTH - 1);
 
-  time_converge = millis();
-  while (millis() - time_converge < 10000) {
+  time_passed = millis();
+  while (millis() - time_passed < 10000) {
     mpu[MPU_NORTH - 1].update();
   }
   digitalWrite(RED_PIN, LOW);
