@@ -24,9 +24,6 @@
 
 //-------GENERAL SETTINGS-------
 #define nbrMpu 6 /**< number of IMU (MPU) (boards) attached to the controller  */
-// Select network to connnect
-#define KAESIMIRA
-// #define THEATER
 
 // Define the number of the body : 1, 2 or 3
 #define BODY_2
@@ -42,6 +39,14 @@
 #define BUTTON
 
 //-------END GENERAL SETTINGS-------
+
+//-------BEGIN WIFI SETTINGS--------
+WiFiUDP Udp;                         /**< handler for UDP communication */
+#define WIFI_SSID "network name"     /**< SSID / name of the wifi network to use */
+#define WIFI_PASS "access password"  /**< password for the wifi network to use */
+IPAddress outIp(192, 168, 0, 2);     /**< IP address of the ESP32 */
+int localPort = 8888;                /**< source port for UDP communication on ESP32 */
+//-------END WIFI SETTINGS--------
 
 //-------MPU SETTINGS AND FUNCTIONS-------
 // Parameters of the setup
@@ -167,24 +172,6 @@ void scanI2C() {
 }
 
 //-------WIFI SETTINGS AND FUNCTIONS-------
-// Settings to connect to WiFi
-
-WiFiUDP Udp;
-
-#ifdef KAESIMIRA
-#define WIFI_SSID "ArtNet4Hans"
-#define WIFI_PASS "kaesimira"
-IPAddress outIp(192, 168, 0, 2); // IP of the computer
-int localPort = 8888;            // Port of ESP
-#endif
-
-#ifdef THEATER
-#define WIFI_SSID "TheaterDo-GAST"
-#define WIFI_PASS "theaterdortmund"
-IPAddress outIp(192, 168, 193, 221); // IP of the computer
-int localPort = 8888;                // Port of ESP*/
-#endif
-
 #ifdef BODY_1
 int outPort = 8000; // Port on PC
 OSCMessage body[] = {
