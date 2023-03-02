@@ -326,6 +326,8 @@ void automaticMagnetometerCalibration() {
 
 /**
  * Main setup / initialisation routine.
+ * 
+ * @see loop()
  */
 void setup() {
   //-------HARDWARE SETUP-------
@@ -628,23 +630,26 @@ void setup() {
   }*/
 }
 
+/**
+ * This main processing loop periodically retrieves the sensor data,
+ * cleans it, and passes it on via OSC.
+ * 
+ * @see setup()
+ */
 void loop() {
 
   //--------MPU recording--------
 
-  // Read mpu data
+  // fetch data from each MPU
   for (uint8_t i = 0; i < nbrMpu; i++) {
     selectI2cSwitchChannel(i);
     mpu[i].update();
   }
 
-  // Print values for debugging
-
+  // Print values for debugging (with 100ms pauses)
   static unsigned long last_print = 0;
   if (millis() - last_print > 100) {
-
     for (int i = 0; i < nbrMpu; i++) {
-
       Serial.print(mpu[i].getYaw());
       Serial.print("// ");
       Serial.print(mpu[i].getYaw_r());
@@ -663,12 +668,10 @@ void loop() {
     }
 
     Serial.println();
-
     last_print = millis();
   }
 
   // Store values
-
   for (int i = 0; i < nbrMpu; i++) {
     qX[i] = mpu[i].getQuaternionX();
     qY[i] = mpu[i].getQuaternionY();
@@ -688,8 +691,7 @@ void loop() {
   // Send data in 6 separated messages, working okay
 
   for (int i = 0; i < nbrMpu; i++) {
-    body[i].add(qX[i]).add(qY[i]).add(qZ[i]).add(
-        qW[i]); // Fill OSC message with data
+    body[i].add(qX[i]).add(qY[i]).add(qZ[i]).add(qW[i]); // Fill OSC message with data
     body[i].add(oX[i]).add(oY[i]).add(oZ[i]);
     body[i].add(gX[i]).add(gY[i]).add(gZ[i]);
 
