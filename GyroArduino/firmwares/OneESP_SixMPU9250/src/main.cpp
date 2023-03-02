@@ -106,6 +106,7 @@ float gyrobias[6][3];
  * of the eight I2C devices (numbered 0..7) attached to it.
  *
  * @param channel The channel to select to communicate with I2C client
+ * @see scanI2C()
  * @todo limit processing to valid values (0..7)
  */
 void selectI2cSwitchChannel(uint8_t channel) {
@@ -118,6 +119,7 @@ void selectI2cSwitchChannel(uint8_t channel) {
  * Check to see if I2C device (IMU) can be found / is connected and
  * print the result to the serial output.
  *
+ * @see selectI2cSwitchChannel(uint8_t channel)
  * @todo return number of devices found?
  * @todo select switch channel to scan via function argument?
  */
@@ -296,7 +298,7 @@ void manualMagnetometerCalibration() {
   }
 }
 
-//-------SETUP-------
+
 /**
  * Main setup / initialisation routine.
  */
@@ -305,7 +307,7 @@ void setup() {
   Serial.begin(115200);
   Serial.flush(); // Clean buffer
 
-  // Led initialization
+  // LED initialization
   pinMode(RED_PIN, OUTPUT);
   pinMode(YEL_PIN, OUTPUT);
   pinMode(BUTTON_PIN, INPUT);
@@ -333,7 +335,7 @@ void setup() {
   setting.accel_dlpf_cfg = ACCEL_DLPF_CFG::DLPF_45HZ;
 
   // Lauch communication with the 6 mpus - Switch to channel i and lauch comm
-  // with mpu numer i
+  // with mpu number i
   for (uint8_t i = 0; i < nbrMpu; i++) {
     selectI2cSwitchChannel(i);
     // scanI2C();
