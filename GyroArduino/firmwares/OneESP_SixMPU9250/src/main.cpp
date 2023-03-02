@@ -80,24 +80,24 @@ char mpuPref[10];
 MPU9250 mpu[nbrMpu];  /**< software handler/abstraction for each MPU */
 
 // Setting variable
-MPU9250Setting setting;
+MPU9250Setting setting;  /**< configuration settings of the MPU9250 stored in memory */
 
 // Store data from MPU
-float qX[nbrMpu] = {0};
-float qY[nbrMpu] = {0};
-float qZ[nbrMpu] = {0};
-float qW[nbrMpu] = {0};
+float qX[nbrMpu] = {0};  /**< quaternion X value for MPU referenced by index */
+float qY[nbrMpu] = {0};  /**< quaternion Y value for MPU referenced by index */
+float qZ[nbrMpu] = {0};  /**< quaternion Z value for MPU referenced by index */
+float qW[nbrMpu] = {0};  /**< quaternion W value for MPU referenced by index */
 
-float oX[nbrMpu] = {0};
-float oY[nbrMpu] = {0};
-float oZ[nbrMpu] = {0};
+float oX[nbrMpu] = {0};  /**< euler angle X axis for MPU referenced by index */
+float oY[nbrMpu] = {0};  /**< euler angle Y axis for MPU referenced by index */
+float oZ[nbrMpu] = {0};  /**< euler angle Z axis for MPU referenced by index */
 
-float gX[nbrMpu] = {0};
-float gY[nbrMpu] = {0};
-float gZ[nbrMpu] = {0};
+float gX[nbrMpu] = {0};  /**< gyroscope value X axis for MPU referenced by index */
+float gY[nbrMpu] = {0};  /**< gyroscope value Y axis for MPU referenced by index */
+float gZ[nbrMpu] = {0};  /**< gyroscope value Z axis for MPU referenced by index */
 
-float accbias[6][3];
-float gyrobias[6][3];
+float accbias[6][3];     /**< bias/drift/offset profile for the accelerator */
+float gyrobias[6][3];    /**< bias/drift/offset profile for the gyroscope */
 
 /**
  * Switch to the given channel on the multiplexer for I2C communication.
