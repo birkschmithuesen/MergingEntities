@@ -269,6 +269,7 @@ void startUdp(int port) {
  * Calibrate the magnetometer (i.e. set north) by manually
  * fiddling with the sensor.
  *
+ * @see automaticMagnetometerCalibration()
  * @note This code has been extracted manually and not changed/adjusted
  */
 void manualMagnetometerCalibration() {
@@ -296,6 +297,30 @@ void manualMagnetometerCalibration() {
 
     calibration.empty();
   }
+}
+
+
+/**
+ * Calibrate the magnetometer (i.e. set north) automatically. This requires
+ * detailed knowledge of the stage (layout / setup) and being diligent
+ * with the gyro wiring.
+ *
+ * @see manualMagnetometerCalibration()
+ * @note This code has been extracted manually and not changed/adjusted
+ */
+void automaticMagnetometerCalibration() {
+  calibration.add("Automatic calibration of the magnetometer gyro");
+  Udp.beginPacket(outIp, outPort);
+  calibration.send(Udp);
+  Udp.endPacket();
+  calibration.empty();
+
+  for (uint8_t i = 0; i < nbrMpu; i++) {
+    mpu[i].setMagneticDeclination(MAG_DECLINATION);
+    mpu[i].setMagBias(magbias[i][0], magbias[i][1], magbias[i][2]);
+    mpu[i].setMagScale(magscale[i][0], magscale[i][1], magscale[i][2]);
+  }
+  Serial.println("Mag calibration done");
 }
 
 
@@ -371,28 +396,14 @@ void setup() {
   Serial.println("Acceleration calibration done.");
 
 // Calibration of magnetometer
-
-// Manual calibration : get ready to turn the mpu
 #ifdef MANUAL_CALIBRATION
   manualMagnetometerCalibration();
 #endif
 
 #ifdef AUTO_CALIBRATION
-  // Automatic calibration : With data of the stage. Respect the gyro wiring
-  calibration.add("Automatic calibration of the magnetometer gyro");
-  Udp.beginPacket(outIp, outPort);
-  calibration.send(Udp);
-  Udp.endPacket();
-  calibration.empty();
-
-  for (uint8_t i = 0; i < nbrMpu; i++) {
-    mpu[i].setMagneticDeclination(MAG_DECLINATION);
-    mpu[i].setMagBias(magbias[i][0], magbias[i][1], magbias[i][2]);
-    mpu[i].setMagScale(magscale[i][0], magscale[i][1], magscale[i][2]);
-  }
-  Serial.println("Mag calibration done.");
+  automaticMagnetometerCalibration();
 #endif
-  // Blinking light= calib over
+  // Blinking light = calibration over
   digitalWrite(YEL_PIN, LOW);
   delay(200);
   digitalWrite(YEL_PIN, HIGH);
