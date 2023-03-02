@@ -26,17 +26,17 @@
 #define nbrMpu 6 /**< number of IMU (MPU) (boards) attached to the controller  */
 
 // Define the number of the body : 1, 2 or 3
-#define BODY_2
+#define BODY_2  /**< indicate individal controler (and thus configuration) */
 
 // Set the magnetic declination of the light
-#define MAG_DECLINATION 2.53
+#define MAG_DECLINATION 2.53  /**< magnetic declination of stage light */
 
 // Define the calibration mode : MANUAL_CALIBRATION for manual, AUTO_CALIBRATION
 // otherwise
-#define AUTO_CALIBRATION
+#define AUTO_CALIBRATION  /**< set (automatic) calibration mode */
 
 // Define BUTTON to activate the button
-#define BUTTON
+#define BUTTON  /**< indicate existence of button (to trigger calibration procedure) */
 
 //-------END GENERAL SETTINGS-------
 
@@ -68,12 +68,12 @@ int localPort = 8888;                /**< source port for UDP communication on E
 #define MPU_NORTH 1 /**< MPU used to set the north */
 float theta = 0;    /**< angle to the north */
 
-int state = HIGH;
-int state_button = LOW;
+int state = HIGH;        /**< last state of the button */
+int state_button = LOW;  /**< current state of the button */
 
 // Instance to store data on ESP32, name of the preference
-Preferences preferences;
-char mpuPref[10];
+Preferences preferences;  /**< container for preferences on ESP32 */
+char mpuPref[10];         /**< preferences of each MPU stored on ESP32 */
 
 // Hardware I2c
 MPU9250 mpu[nbrMpu];  /**< software handler/abstraction for each MPU */
