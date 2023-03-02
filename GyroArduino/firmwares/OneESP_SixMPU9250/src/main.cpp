@@ -175,45 +175,49 @@ void scanI2C() {
 
 //-------WIFI SETTINGS AND FUNCTIONS-------
 #ifdef BODY_1
-int outPort = 8000; // Port on PC
+int outPort = 8000;  /**< UDP server port on OSC receiver (i.e. central server) */
+/** OSC messages with senor values for given part */
 OSCMessage body[] = {
     OSCMessage("/body/1/gyro/1/"), OSCMessage("/body/1/gyro/2/"),
     OSCMessage("/body/1/gyro/3/"), OSCMessage("/body/1/gyro/4/"),
     OSCMessage("/body/1/gyro/5/"), OSCMessage("/body/1/gyro/6/")};
-OSCMessage calibration("/calibration/1");
-// Mag calibrtion data for A
+OSCMessage calibration("/calibration/1");  /**< OSC endpoint for calibration messages */
+/** scaling factors for magnetometer */
 float magscale[6][3] = {{1.01, 1.06, 0.94}, {1.01, 1.00, 0.99},
                         {1.04, 0.98, 0.98}, {1.06, 0.97, 0.98},
                         {0.99, 1.00, 1.01}, {1.02, 1.03, 0.95}};
-
+/** bias factors for magnetometer */
 float magbias[6][3] = {{-40.82, -108.61, -405.33}, {128.62, 104.29, -164.14},
                        {103.32, 249.40, -116.79},  {-15.87, 157.95, -46.02},
                        {-3.55, 46.14, -403.94},    {-17.57, 327.23, -390.66}};
 #endif
 
 #ifdef BODY_2
-int outPort = 8001; // Port on PC
+int outPort = 8001;  /**< UDP server port on OSC receiver (i.e. central server) */
+/** OSC messages with senor values for given part */
 OSCMessage body[] = {
     OSCMessage("/body/2/gyro/1/"), OSCMessage("/body/2/gyro/2/"),
     OSCMessage("/body/2/gyro/3/"), OSCMessage("/body/2/gyro/4/"),
     OSCMessage("/body/2/gyro/5/"), OSCMessage("/body/2/gyro/6/")};
-OSCMessage calibration("/calibration/2");
+OSCMessage calibration("/calibration/2");  /**< OSC endpoint for calibration messages */
+/** scaling factors for magnetometer */
 float magscale[6][3] = {{0.99, 1.01, 1.00}, {0.98, 1.00, 1.02},
                         {0.98, 1.03, 0.98}, {1.03, 0.99, 0.99},
                         {1.02, 0.99, 1.00}, {1.01, 0.98, 1.01}};
-
+/** bias factors for magnetometer */
 float magbias[6][3] = {{98.40, -5.27, -345.30}, {399.67, 242.51, -126.99},
                        {-48.23, -92.89, 67.16}, {8.90, -89.03, -82.37},
                        {5.31, 188.74, -324.95}, {183.41, 101.35, -152.56}};
 #endif
 
 #ifdef BODY_3
-int outPort = 8002; // Port on PC
+int outPort = 8002;  /**< UDP server port on OSC receiver (i.e. central server) */
+/** OSC messages with senor values for given part */
 OSCMessage body[] = {
     OSCMessage("/body/3/gyro/1/"), OSCMessage("/body/3/gyro/2/"),
     OSCMessage("/body/3/gyro/3/"), OSCMessage("/body/3/gyro/4/"),
     OSCMessage("/body/3/gyro/5/"), OSCMessage("/body/3/gyro/6/")};
-OSCMessage calibration("/calibration/3");
+OSCMessage calibration("/calibration/3");  /**< OSC endpoint for calibration messages */
 #endif
 
 /**
