@@ -8,20 +8,25 @@ s.freqscope;
 )
 
 
-
-// create a Synth
 (
-x = Synth(\moog);
-a = OscMoog.new;
-x.set(\freq, 440);
-a.init(x);
+// create groups
+~moogGroup = Group.new;
 
-)
-(
+// load Synth Defs
+~path = PathName(thisProcess.nowExecutingPath).parentPath;
+(~path++"synthlib.scd").load;
+
+// define number of performers bodies
+~numBodies = 4;
+
+// create Synths
+~moogs = {Synth.head(~moogGroup,\moog)}!~numBodies;
+{arg i;
+	~moogs[i].set(\freq, 300 + (i*52));
+	("Created "++~moogs[i]).postln;
+}!~numBodies;
 
 // make the Synth controllable via OSC with four parameters
-b = OscReceiver.new;
-b.connect(a, '/1')
+~oscDefMoog = {arg i; OscMoog.new(~moogs[i])}!~numBodies;
+~oscRecMoog = {arg i; OscReceiver.new(~oscDefMoog[i], ('/moog/' ++ i))}!~numBodies;
 )
-
-"0.4".lagw

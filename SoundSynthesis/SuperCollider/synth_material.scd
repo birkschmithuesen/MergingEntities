@@ -1,3 +1,8 @@
+
+
+
+
+
 Synths_Sine {
 	init {
 		"Initalize Sinewave Synth".postln;
@@ -140,38 +145,6 @@ KLing{
 	}
 
 }
-
-OscMoog{
-    init {
-        arg synth;
-        ~synth = synth;
-        ~ctrcutoff = [500, 20000, \exp].asSpec;
-        ~ctrres = [0.16, 0.97, \lin].asSpec;
-        ~ctrdepth = [0.0, 1.0, \lin].asSpec;
-        ~ctrspeed = [2.0, 15.0, \lin].asSpec;
-    }
-
-	// set the parameters
-	par1 {arg par;
-		~synth.set(\exc, par);
-	}
-	par2 {arg par;
-		~synth.set(\cutoff, ~ctrcutoff.map(par));
-	}
-	par3 {arg par;
-		~synth.set(\res, ~ctrres.map(par));
-	}
-	par4 {arg par;
-		~synth.set(\depth, ~ctrdepth.map(par));
-	}
-	par5 {arg par;
-		~synth.set(\speed, ~ctrspeed.map(par));
-	}
-	par8 {arg par;
-		~synth.set(\amp, par);
-	}
-}
-
 
 Moog{
 	createSynth {
