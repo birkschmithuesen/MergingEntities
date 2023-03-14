@@ -2,7 +2,9 @@
  *
  * This code is intended to run on an ESP32 (<a hfref="https://www.espressif.com/sites/default/files/documentation/esp32_datasheet_en.pdf">datasheet</a>)
  *
- *  @todo implement I2C switch selection
+ * @todo implement backwards compatibility to 6 MPU version
+ * @todo implement I2C switch selection
+ * @todo support 10 MPUs
  */
 // Connections : Please always connect 2 hard mpu (builtin I2C bus) to your specified pins
 // Indicate the numbers of hard, soft I2C, connect the soft I2C in the order of the specified pins
@@ -54,8 +56,8 @@ int localPort = 8888;                /**< source port for UDP communication on E
 // Parameters of the setup
 
 // Addresses and pin of IMU (MPU-9250) and TCA9548A(=multiplexer)
-#define MPU_ADDRESS_1 0x68 /**< address of the MPU-9250 when its pin AD0 is low */
-#define MPU_ADDRESS_2 0x69 /**< address of the MPU-9250 when its pin AD0 is high */
+#define MPU_SWITCH_RIGHT_SIDE 0x68 /**< address of the MPU-9250 when its pin AD0 is low */
+#define MPU_SWITCH_LEFT_SIDE 0x69  /**< address of the MPU-9250 when its pin AD0 is high */
 #define TCA_ADDRESS 0x70   /**< address of the 8 channel I2C switch */
 
 // SDA and SCL pin of the soft and hard wire mode
@@ -368,7 +370,7 @@ void setup() {
   setting.accel_fchoice = 0x01;
   setting.accel_dlpf_cfg = ACCEL_DLPF_CFG::DLPF_45HZ;
 
-  // Lauch communication with the 6 mpus - Switch to channel i and lauch comm
+  // Lauch communication with the 6 MPUs - Switch to channel i and lauch comm
   // with mpu number i
   for (uint8_t i = 0; i < nbrMpu; i++) {
     selectI2cSwitchChannel(i);

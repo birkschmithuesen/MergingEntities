@@ -2,7 +2,9 @@
  *
  * This code is intended to run on an ESP32 (<a hfref="https://www.espressif.com/sites/default/files/documentation/esp32_datasheet_en.pdf">datasheet</a>)
  *
- *  @todo implement I2C switch selection
+ * @todo implement backwards compatibility to 6 MPU version
+ * @todo implement I2C switch selection
+ * @todo support 10 MPUs
  */
 // Connections : Please always connect 2 hard mpu (builtin I2C bus) to your specified pins
 // Indicate the numbers of hard, soft I2C, connect the soft I2C in the order of the specified pins
