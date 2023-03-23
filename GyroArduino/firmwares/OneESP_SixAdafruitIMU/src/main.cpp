@@ -3,6 +3,7 @@
  * This code is intended to run on an ESP32 (<a hfref="https://www.espressif.com/sites/default/files/documentation/esp32_datasheet_en.pdf">datasheet</a>)
  * with a TCA9548A I2C multiplexer and uses the Adafruit sensor boards.
  *
+ * @warning This firmware needs to be updated to reach feature parity with the generic MPU9250 firmware.
  * @todo implement backwards compatibility to 6 MPU version
  * @todo implement I2C switch selection
  * @todo support 10 MPUs
