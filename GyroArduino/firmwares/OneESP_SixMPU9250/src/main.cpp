@@ -1,6 +1,7 @@
 /** @file
  *
  * This code is intended to run on an ESP32 (<a hfref="https://www.espressif.com/sites/default/files/documentation/esp32_datasheet_en.pdf">datasheet</a>)
+ * with a TCA9548A I2C multiplexer and generic MPU9250 sensor boards.
  *
  * @todo implement backwards compatibility to 6 MPU version
  * @todo implement I2C switch selection
