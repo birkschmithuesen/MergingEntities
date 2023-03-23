@@ -110,12 +110,15 @@ float gyrobias[6][3];    /**< bias/drift/offset profile for the gyroscope */
  * This function updates the control register in the switch to select one
  * of the eight I2C devices (numbered 0..7) attached to it.
  *
+ * @param address The I2C address of the multiplexer to use
  * @param channel The channel to select to communicate with I2C client
  * @see scanI2C()
  * @todo limit processing to valid values (0..7)
  */
-void selectI2cSwitchChannel(uint8_t channel) {
-  Wire.beginTransmission(TCA_ADDRESS);
+void selectI2cSwitchChannel(uint8_t address, uint8_t channel) {
+  // select the multiplexer by its hardware address
+  Wire.beginTransmission(address);
+  // select a channel on the multiplexer
   Wire.write(1 << channel);
   Wire.endTransmission();
 }
@@ -124,7 +127,7 @@ void selectI2cSwitchChannel(uint8_t channel) {
  * Check to see if I2C device (IMU) can be found / is connected and
  * print the result to the serial output.
  *
- * @see selectI2cSwitchChannel(uint8_t channel)
+ * @see selectI2cSwitchChannel(uint8_t address, uint8_t channel)
  * @todo return number of devices found?
  * @todo select switch channel to scan via function argument?
  */
@@ -300,7 +303,7 @@ void manualMagnetometerCalibration() {
 
     Serial.println(i);
 
-    selectI2cSwitchChannel(i);
+    selectI2cSwitchChannel(TCA_ADDRESS, i);
     mpu[i].setMagneticDeclination(MAG_DECLINATION);
     mpu[i].calibrateMag();
 
@@ -375,7 +378,7 @@ void setup() {
   // Lauch communication with the 6 MPUs - Switch to channel i and lauch comm
   // with mpu number i
   for (uint8_t i = 0; i < nbrMpu; i++) {
-    selectI2cSwitchChannel(i);
+    selectI2cSwitchChannel(TCA_ADDRESS, i);
     // scanI2C();
     mpu[i].setup(MPU_ADDRESS_1, setting, Wire);
   }
@@ -402,7 +405,7 @@ void setup() {
   digitalWrite(RED_PIN, HIGH); // Calibrate one by one
   for (uint8_t i = 0; i < nbrMpu; i++) {
     Serial.println(i);
-    selectI2cSwitchChannel(i);
+    selectI2cSwitchChannel(TCA_ADDRESS, i);
     mpu[i].calibrateAccelGyro();
   }
   digitalWrite(RED_PIN, LOW);
@@ -448,7 +451,7 @@ void setup() {
     digitalWrite(RED_PIN, HIGH);
     for (uint8_t i = 0; i < nbrMpu; i++) {
       Serial.println(i);
-      selectI2cSwitchChannel(i);
+      selectI2cSwitchChannel(TCA_ADDRESS, i);
       mpu[i].calibrateAccelGyro();
     }
     digitalWrite(RED_PIN, LOW);
@@ -489,7 +492,7 @@ void setup() {
 
       Serial.println(i);
 
-      selectI2cSwitchChannel(i);
+      selectI2cSwitchChannel(TCA_ADDRESS, i);
       mpu[i].setMagneticDeclination(MAG_DECLINATION);
       mpu[i].calibrateMag();
 
@@ -535,7 +538,7 @@ void setup() {
       digitalWrite(RED_PIN, HIGH);
       for(uint8_t i=0; i<nbrMpu; i++) {
         Serial.println(i);
-        selectI2cSwitchChannel(i);
+        selectI2cSwitchChannel(TCA_ADDRESS, i);
         mpu[i].calibrateAccelGyro();
       }
       digitalWrite(RED_PIN, LOW);
@@ -574,7 +577,7 @@ void setup() {
   digitalWrite(YEL_PIN, HIGH);
 
   // We let the mpu run for 10 seconds to have the good yaw if we need it
-  selectI2cSwitchChannel(MPU_NORTH - 1);
+  selectI2cSwitchChannel(TCA_ADDRESS, MPU_NORTH - 1);
 
   time_passed = millis();
   while (millis() - time_passed < 10000) {
@@ -624,7 +627,7 @@ void setup() {
   //Print/send the calibration of magnetometer - USE IT TO AUTO CALIB AGAIN
   Serial.println("Calibration data :");
   for(int i=0; i<nbrMpu; i++) {
-    selectI2cSwitchChannel(i);
+    selectI2cSwitchChannel(TCA_ADDRESS, i);
 
     //Send calibration data to TouchDesigner
     calibration.add("MAGSCALE").add(i).add(mpu[i].getMagScaleX()).add(mpu[i].getMagScaleY()).add(mpu[i].getMagScaleZ());
@@ -653,7 +656,7 @@ void loop() {
 
   // fetch data from each MPU
   for (uint8_t i = 0; i < nbrMpu; i++) {
-    selectI2cSwitchChannel(i);
+    selectI2cSwitchChannel(TCA_ADDRESS, i);
     mpu[i].update();
   }
 
