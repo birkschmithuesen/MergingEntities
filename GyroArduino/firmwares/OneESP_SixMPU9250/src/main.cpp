@@ -4,9 +4,13 @@
  * with a TCA9548A I2C multiplexer and generic MPU9250 sensor boards.
  *
  * @note This code base is the leading one in terms of features and maturity.
- * @todo implement backwards compatibility to 6 MPU version
- * @todo implement I2C switch selection
- * @todo support 10 MPUs
+ * @todo read controller ID from DIP switch
+ * @todo clean up OSC code and use new schema
+ * @todo implement / fix manual/button press magnetometer calibration (around line 645)
+ * @todo unify MPU data and socket structures
+ * @todo clean up serial console messages
+ * @todo implement (remote) OSC error logger
+ * @todo fix LED identifiers w.r.t to new colors
  */
 // Connections : Please always connect 2 hard mpu (builtin I2C bus) to your specified pins
 // Indicate the numbers of hard, soft I2C, connect the soft I2C in the order of the specified pins
@@ -27,6 +31,7 @@
 #include <WiFiUdp.h>
 // MPU and Bitbang library
 #include "MPU9250.h"
+
 
 //-------GENERAL SETTINGS-------
 #define nbrMpu 6 /**< number of IMU (MPU) (boards) attached to the controller  */
@@ -58,9 +63,10 @@ int localPort = 8888;                /**< source port for UDP communication on E
 // Parameters of the setup
 
 // Addresses and pin of IMU (MPU-9250) and TCA9548A(=multiplexer)
-#define MPU_ADDRESS_1 0x68 /**< address of the MPU-9250 when its pin AD0 is low */
-#define MPU_ADDRESS_2 0x69 /**< address of the MPU-9250 when its pin AD0 is high */
-#define TCA_ADDRESS 0x70   /**< address of the 8 channel I2C switch */
+#define MPU_ADDRESS_1 0x68           /**< address of the MPU-9250 when its pin AD0 is low */
+#define MPU_ADDRESS_2 0x69           /**< address of the MPU-9250 when its pin AD0 is high */
+#define TCA_ADDRESS_RIGHT_SIDE 0x70  /**< address of the "right side" 8 channel I2C switch */
+#define TCA_ADDRESS_LEFT_SIDE 0x71   /**< address of the "left side" 8 channel I2C switch */
 
 // SDA and SCL pin of the soft and hard wire mode
 #define SDA_PIN 21   /**< I2C data pin (on ESP32) */
@@ -77,12 +83,37 @@ float theta = 0;    /**< angle to the north */
 int state = HIGH;        /**< last state of the button */
 int state_button = LOW;  /**< current state of the button */
 
+/**
+ * A data structure to handle hardware related data of one MPU9250.
+ *
+ * @todo Also move data read from sensor here (?)
+ */
+struct MPU9250socket {
+	String label;        /**< human readable identification of the sensor (used on OSC path) */
+	uint8_t multiplexer; /**< I2C address of the responsible I2C multiplexer */
+	uint8_t channel;     /**< channel used on the I2C multiplexer */
+	MPU9250 mpu;         /**< software handler/abstraction for MPU at given channel of given multiplexer */
+};
+
+// manually create indexes to emulate a hashmap with an array
+#define LEFT_UPPER_ARM_INDEX 0  /**< index for the sensor at the left upper arm (brachium) */
+#define LEFT_LOWER_ARM_INDEX 1  /**< index for the sensor at the left lower arm (antebrachium) */
+#define LEFT_UPPER_LEG_INDEX 2  /**< index for the sensor at the left thigh (femur) */
+#define LEFT_LOWER_LEG_INDEX 3  /**< index for the sensor at the left crus (crus) */
+#define HIP_INDEX 4             /**< index for the sensor at the hip (coxa) */
+#define RIGHT_UPPER_ARM_INDEX 5 /**< index for the sensor at the right upper arm (brachium) */
+#define RIGHT_LOWER_ARM_INDEX 6 /**< index for the sensor at the right lower arm (antebrachium) */
+#define RIGHT_UPPER_LEG_INDEX 7 /**< index for the sensor at the right thigh (femur) */
+#define RIGHT_LOWER_LEG_INDEX 8 /**< index for the sensor at the right crus (crus) */
+#define HEAD_INDEX 9            /**< index for the sensor at the head (cranium) */
+
 // Instance to store data on ESP32, name of the preference
 Preferences preferences;  /**< container for preferences on ESP32 */
 char mpuPref[10];         /**< preferences of each MPU stored on ESP32 */
 
 // Hardware I2c
 MPU9250 mpu[nbrMpu];  /**< software handler/abstraction for each MPU */
+MPU9250socket sensors[nbrMpu];   /**< communication abstractions for all MPUs */
 
 // Setting variable
 MPU9250Setting setting;  /**< configuration settings of the MPU9250 stored in memory */
@@ -285,9 +316,11 @@ void startUdp(int port) {
  * @note This code has been extracted manually and not changed/adjusted
  */
 void manualMagnetometerCalibration() {
-  Serial.println("Calibration of mag");
+  Serial.println("manual calibration of magnetometers");
 
+  // go through each sensor socket
   for (uint8_t i = 0; i < nbrMpu; i++) {
+	// blink LEDs to indicate calibration going on
     if (state == HIGH) {
       digitalWrite(YEL_PIN, state);
       state = LOW;
@@ -303,7 +336,7 @@ void manualMagnetometerCalibration() {
 
     Serial.println(i);
 
-    selectI2cSwitchChannel(TCA_ADDRESS, i);
+    selectI2cSwitchChannel(sensors[i].multiplexer, sensors[i].channel);
     mpu[i].setMagneticDeclination(MAG_DECLINATION);
     mpu[i].calibrateMag();
 
@@ -342,18 +375,21 @@ void automaticMagnetometerCalibration() {
  * @see loop()
  */
 void setup() {
-  float time_passed = 0;  /**< tracking time passed */
+  float time_passed = 0;  // tracking time passed
 
   //-------HARDWARE SETUP-------
   Serial.begin(115200);
   Serial.flush(); // Clean buffer
 
+  Serial.print("setting up LED pins .");
   // LED initialization
   pinMode(RED_PIN, OUTPUT);
   pinMode(YEL_PIN, OUTPUT);
   pinMode(BUTTON_PIN, INPUT);
+  Serial.print(".");
   digitalWrite(RED_PIN, LOW);
   digitalWrite(YEL_PIN, LOW);
+  Serial.println(". done");
 
   //-------WIFI SETUP-------
   connectWiFi();
@@ -361,9 +397,44 @@ void setup() {
 
   //-------MPU SETUP------
   // Launch comm with multiplexer
-
+  Serial.print("setting up I2C pins .");
   Wire.begin(SDA_PIN, SCL_PIN);
   delay(2000);
+  Serial.println(".. done");
+
+  // all senor adressing
+  Serial.print("setting up sensor sockets .");
+  sensors[RIGHT_UPPER_ARM_INDEX].label = "right_upper_arm";
+  sensors[RIGHT_UPPER_ARM_INDEX].multiplexer = TCA_ADDRESS_RIGHT_SIDE;
+  sensors[RIGHT_UPPER_ARM_INDEX].channel = 2;
+  sensors[RIGHT_LOWER_ARM_INDEX].label = "right_lower_arm";
+  sensors[RIGHT_LOWER_ARM_INDEX].multiplexer = TCA_ADDRESS_RIGHT_SIDE;
+  sensors[RIGHT_LOWER_ARM_INDEX].channel = 3;
+  sensors[RIGHT_UPPER_LEG_INDEX].label = "right_upper_leg";
+  sensors[RIGHT_UPPER_LEG_INDEX].multiplexer = TCA_ADDRESS_RIGHT_SIDE;
+  sensors[RIGHT_UPPER_LEG_INDEX].channel = 4;
+  sensors[RIGHT_LOWER_LEG_INDEX].label = "right_lower_leg";
+  sensors[RIGHT_LOWER_LEG_INDEX].multiplexer = TCA_ADDRESS_RIGHT_SIDE;
+  sensors[RIGHT_LOWER_LEG_INDEX].channel = 5;
+  sensors[HIP_INDEX].label = "hip";
+  sensors[HIP_INDEX].multiplexer = TCA_ADDRESS_RIGHT_SIDE;
+  sensors[HIP_INDEX].channel = 7;
+  sensors[LEFT_UPPER_ARM_INDEX].label = "left_upper_arm";
+  sensors[LEFT_UPPER_ARM_INDEX].multiplexer = TCA_ADDRESS_LEFT_SIDE;
+  sensors[LEFT_UPPER_ARM_INDEX].channel = 2;
+  sensors[LEFT_LOWER_ARM_INDEX].label = "left_lower_arm";
+  sensors[LEFT_LOWER_ARM_INDEX].multiplexer = TCA_ADDRESS_LEFT_SIDE;
+  sensors[LEFT_LOWER_ARM_INDEX].channel = 3;
+  sensors[LEFT_UPPER_LEG_INDEX].label = "left_upper_leg";
+  sensors[LEFT_UPPER_LEG_INDEX].multiplexer = TCA_ADDRESS_LEFT_SIDE;
+  sensors[LEFT_UPPER_LEG_INDEX].channel = 4;
+  sensors[LEFT_LOWER_LEG_INDEX].label = "left_lower_leg";
+  sensors[LEFT_LOWER_LEG_INDEX].multiplexer = TCA_ADDRESS_LEFT_SIDE;
+  sensors[LEFT_LOWER_LEG_INDEX].channel = 5;
+  sensors[HEAD_INDEX].label = "head";
+  sensors[HEAD_INDEX].multiplexer = TCA_ADDRESS_LEFT_SIDE;
+  sensors[HEAD_INDEX].channel = 7;
+  Serial.println(".. done");
 
   // MPU parameters (sensitivity, etc)
   setting.accel_fs_sel = ACCEL_FS_SEL::A4G;
@@ -378,9 +449,9 @@ void setup() {
   // Lauch communication with the 6 MPUs - Switch to channel i and lauch comm
   // with mpu number i
   for (uint8_t i = 0; i < nbrMpu; i++) {
-    selectI2cSwitchChannel(TCA_ADDRESS, i);
+    selectI2cSwitchChannel(sensors[i].multiplexer, sensors[i].channel);
     // scanI2C();
-    mpu[i].setup(MPU_ADDRESS_1, setting, Wire);
+    mpu[i].setup(sensors[i].multiplexer, setting, Wire);
   }
 
   // Selection of filters
@@ -405,7 +476,7 @@ void setup() {
   digitalWrite(RED_PIN, HIGH); // Calibrate one by one
   for (uint8_t i = 0; i < nbrMpu; i++) {
     Serial.println(i);
-    selectI2cSwitchChannel(TCA_ADDRESS, i);
+    selectI2cSwitchChannel(sensors[i].multiplexer, sensors[i].channel);
     mpu[i].calibrateAccelGyro();
   }
   digitalWrite(RED_PIN, LOW);
@@ -451,7 +522,7 @@ void setup() {
     digitalWrite(RED_PIN, HIGH);
     for (uint8_t i = 0; i < nbrMpu; i++) {
       Serial.println(i);
-      selectI2cSwitchChannel(TCA_ADDRESS, i);
+      selectI2cSwitchChannel(sensors[i].multiplexer, sensors[i].channel);
       mpu[i].calibrateAccelGyro();
     }
     digitalWrite(RED_PIN, LOW);
@@ -492,7 +563,7 @@ void setup() {
 
       Serial.println(i);
 
-      selectI2cSwitchChannel(TCA_ADDRESS, i);
+      selectI2cSwitchChannel(TCA_ADDRESS_RIGHT_SIDE, i);
       mpu[i].setMagneticDeclination(MAG_DECLINATION);
       mpu[i].calibrateMag();
 
@@ -538,7 +609,7 @@ void setup() {
       digitalWrite(RED_PIN, HIGH);
       for(uint8_t i=0; i<nbrMpu; i++) {
         Serial.println(i);
-        selectI2cSwitchChannel(TCA_ADDRESS, i);
+        selectI2cSwitchChannel(sensors[i].multiplexer, sensors[i].channel);
         mpu[i].calibrateAccelGyro();
       }
       digitalWrite(RED_PIN, LOW);
@@ -576,8 +647,9 @@ void setup() {
   digitalWrite(RED_PIN, HIGH);
   digitalWrite(YEL_PIN, HIGH);
 
+  // TODO: fix this
   // We let the mpu run for 10 seconds to have the good yaw if we need it
-  selectI2cSwitchChannel(TCA_ADDRESS, MPU_NORTH - 1);
+  selectI2cSwitchChannel(TCA_ADDRESS_RIGHT_SIDE, MPU_NORTH - 1);
 
   time_passed = millis();
   while (millis() - time_passed < 10000) {
@@ -627,7 +699,7 @@ void setup() {
   //Print/send the calibration of magnetometer - USE IT TO AUTO CALIB AGAIN
   Serial.println("Calibration data :");
   for(int i=0; i<nbrMpu; i++) {
-    selectI2cSwitchChannel(TCA_ADDRESS, i);
+    selectI2cSwitchChannel(sensors[i].multiplexer, sensors[i].channel);
 
     //Send calibration data to TouchDesigner
     calibration.add("MAGSCALE").add(i).add(mpu[i].getMagScaleX()).add(mpu[i].getMagScaleY()).add(mpu[i].getMagScaleZ());
@@ -656,7 +728,7 @@ void loop() {
 
   // fetch data from each MPU
   for (uint8_t i = 0; i < nbrMpu; i++) {
-    selectI2cSwitchChannel(TCA_ADDRESS, i);
+    selectI2cSwitchChannel(sensors[i].multiplexer, sensors[i].channel);
     mpu[i].update();
   }
 
