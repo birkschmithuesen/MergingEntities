@@ -58,8 +58,8 @@ int localPort = 8888;                /**< source port for UDP communication on E
 // Parameters of the setup
 
 // Addresses and pin of IMU (MPU-9250) and TCA9548A(=multiplexer)
-#define MPU_SWITCH_RIGHT_SIDE 0x68 /**< address of the MPU-9250 when its pin AD0 is low */
-#define MPU_SWITCH_LEFT_SIDE 0x69  /**< address of the MPU-9250 when its pin AD0 is high */
+#define MPU_ADDRESS_1 0x68 /**< address of the MPU-9250 when its pin AD0 is low */
+#define MPU_ADDRESS_2 0x69 /**< address of the MPU-9250 when its pin AD0 is high */
 #define TCA_ADDRESS 0x70   /**< address of the 8 channel I2C switch */
 
 // SDA and SCL pin of the soft and hard wire mode
