@@ -93,6 +93,7 @@ struct MPU9250socket {
 	uint8_t multiplexer; /**< I2C address of the responsible I2C multiplexer */
 	uint8_t channel;     /**< channel used on the I2C multiplexer */
 	MPU9250 mpu;         /**< software handler/abstraction for MPU at given channel of given multiplexer */
+	bool usable = false; /**< indicate that sensor (data) is present and no errors occured */
 };
 
 // manually create indexes to emulate a hashmap with an array
