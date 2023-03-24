@@ -1,4 +1,25 @@
-NdefMixer(s);
+
+Scale.directory
+
+Server.killAll;
+
+
+{LFPulse.ar([48,55].midicps, 0.15)}.play;
+
+(
+{RLPF.ar(LFPulse.ar([48,55].midicps, 0.15),
+	SinOsc.kr(0.1, 0, 10, 72).midicps, 0.1, 0.1)}.play;
+)
+
+150.cpsmidi
+91.midicps
+55.midinote
+55.midinote
+60.midinote
+lookup
+
+Scale
+
 
 (
 Ndef(\simplebpf, {
@@ -11,7 +32,7 @@ Ndef(\simplebpf, {
 		rq,
 		1/rq.sqrt
 	);
-	sig = sig * ampaqQQ;
+	sig = sig * amp;
 	Out.ar(out, sig);
 }).play;
 )
@@ -20,6 +41,7 @@ Ndef(\simplebpf, {
 x = { MoogFF.ar(WhiteNoise.ar(01.1), MouseY.kr(100, 10000, 1), MouseX.kr(0, 4)) }.play(s);
 x.free;
 
+{MouseY.kr(100, 10000, 1).dump}.play;
 
 { Resonz.ar(WhiteNoise.ar(0.5), 2000, XLine.kr(1, 0.001, 8)) }.scope(1);
 
@@ -72,7 +94,7 @@ Ndef(\kling, {
 		LFSaw.kr(dens, 0.0).range(freq-lfo_depth, freq),
 		LFSaw.kr(dens, 1.0).range(freq, freq+lfo_depth) * dev
 	], decay);
-	sig = Pan2.ar(sig[0], -0.3) + Pan2.ar(sig[1], 0.3);
+	sig = Pan2.ar(sig[0], -0.3) + Pan2.ar(sig[1], 0.3)*amp;
 	Out.ar(out, sig);
 });
 )

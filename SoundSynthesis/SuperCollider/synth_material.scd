@@ -28,32 +28,6 @@ Synths_Sine {
 	}
 }
 
-Synths_Noise {
-	init {
-		"Initalize White Noise Synth".postln;
-		SynthDef(\noise, {
-			arg amp = 1, freq = 150, bw = 10, out = 0;
-			var sig;
-			sig = WhiteNoise.ar(0.25);
-			sig = BBandPass.ar(sig, freq, bw);
-			sig = sig * amp;
-			Out.ar(out, [sig, sig]);
-		}).add;
-		~synth = Synth(\noise);
-	}
-	par1 {arg par;
-		~synth.set(\amp, par);
-	}
-	par2 {arg par;
-		~synth.set(\freq, par.linexp(0, 1, 80, 4000));
-	}
-	par3 {arg par;
-		~synth.set(\bw, par.linlin(0, 1, 0.5, 5));
-	}
-	par4 {arg par;
-	}
-}
-
 
 SawSynth {
 	init {
