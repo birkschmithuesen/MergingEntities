@@ -1,5 +1,7 @@
 This is a general overview and starting point for the artes mobiles controller firmware(s).
 The code is based on arduino libaries and is intendet to run on an ESP32 board.
+The leading codebase is "OneESP_SixMPU9250". The others may or may not be updated to have
+all the features/functionality.
 
 # Basic steps
 
