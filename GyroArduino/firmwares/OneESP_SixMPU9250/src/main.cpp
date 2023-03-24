@@ -4,9 +4,9 @@
  * with a TCA9548A I2C multiplexer and generic MPU9250 sensor boards.
  *
  * @note This code base is the leading one in terms of features and maturity.
- * @todo read controller ID from DIP switch
+ * @todo clean up setup/config code dependend on controller ID
  * @todo clean up OSC code and use new schema
- * @todo implement / fix manual/button press magnetometer calibration (around line 645)
+ * @todo implement / fix manual/button press magnetometer calibration (around line 680)
  * @todo unify MPU data and socket structures
  * @todo clean up serial console messages
  * @todo implement (remote) OSC error logger
@@ -310,6 +310,32 @@ void startUdp(int port) {
 	  Serial.println(" ... failed");
   }
   Serial.println(" ... succeeded");
+}
+
+/**
+ * Retrieve the (unique) ID configured for this controller.
+ * This ID is used in the OSC messages to identify the sender.
+ * Its value is between 0 and 15 inclusively.
+ *
+ * @return configured ID of the controller.
+ */
+uint8_t getControllerID() {
+  uint8_t id = 0;
+
+  // read the switch state from left to right and add value at position
+  if (HIGH == digitalRead(ID_PIN1)) {
+	id = 8;
+  }
+  if (HIGH == digitalRead(ID_PIN2)) {
+	id += 4;
+  }
+  if (HIGH == digitalRead(ID_PIN3)) {
+	id += 2;
+  }
+  if (HIGH == digitalRead(ID_PIN4)) {
+	id += 1;
+  }
+  return id;
 }
 
 /**
