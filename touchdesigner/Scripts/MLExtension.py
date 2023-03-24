@@ -21,6 +21,8 @@ from tensorflow.keras.layers import Dense, LSTM, Dropout, Activation
 from tensorflow.keras.optimizers import SGD
 from tensorflow.python.client import device_lib
 
+import gc
+
 import numpy as np
 
 import json
@@ -37,14 +39,12 @@ class MLExtension:
 		self.ownerComp = ownerComp
 		
 		# Model
-		self.Model = ''
+		self.Model = None
 
 		# Model Settings
 		self.Modeltype = tdu.Dependency(0)
 		self.Modeltypes = ['linear_regression','lstm']
-		self.Modelname = self.Modeltypes[self.Modeltype]
-
-		TDF.createProperty
+		self.Modelname = self.Modeltypes[self.Modeltype.val]
 
 		self.Inputdim = tdu.Dependency(67)
 		self.Outputdim = tdu.Dependency(8)
@@ -62,12 +62,13 @@ class MLExtension:
 
 		# Training Settings
 		self.Trainingdata = tdu.Dependency('Entity-Recordings/default.txt')
+		self.Trainingdatatype = tdu.Dependency('file')
+		self.SetTrainingDataType()
 		self.Features = ''
 		self.Targets = ''
 
 		# Config Attributes
-		config_attributes = [ 
-			
+		config_attributes = [ 			
 			"Modeltype",
 			"Modelname",
 			"Inputdim",
@@ -75,24 +76,47 @@ class MLExtension:
 			"Batchsize",
 			"Epochs",
 			"Initialepochs",
-			"Hiddemdim",
+			"Hiddendim",
 			"Learningrate",
 			"Timesteps"
-
 		]
 
-		for val  in config_attributes:
-			debug(val)
-		
-		#Check if CUDA and GPU is enabled
-		debug('Is TensorFlow built with CUDA: ', tf.test.is_built_with_cuda())
-		debug('Is GPU available: ', tf.test.is_gpu_available(cuda_only=False, min_cuda_compute_capability=None))
-		debug('Num GPUs Available: ', len(tf.config.experimental.list_physical_devices('GPU')))
-		debug('List of local devices: ', device_lib.list_local_devices())
+		# set tf gpu selection and memory growth
+		gpus = tf.config.list_physical_devices('GPU')
+		if gpus:
+			try:
+				# Currently, memory growth needs to be the same across GPUs
+				for gpu in gpus:
+					tf.config.experimental.set_memory_growth(gpu, True)
+					debug('Set Memory Growth to True')
+					logical_gpus = tf.config.list_logical_devices('GPU')
+					debug(len(gpus), "Physical GPUs,", len(logical_gpus), "Logical GPUs")
+			except RuntimeError as e:
+				# Memory growth must be set before GPUs have been initialized
+				debug(e)
+
+		self.PrintGPUInfo()
 	
+	def SetTrainingDataType(self):
+		location, extension = os.path.splitext(self.Trainingdata.val)
+		if extension == '.txt':
+			self.Trainingdatatype.val =  'file'
+		else:
+			self.Trainingdatatype.val = 'folder'
+	
+	def PrintGPUInfo(self):
+		built_with_cuda = tf.test.is_built_with_cuda()
+		device_list = tf.config.list_physical_devices('GPU')
+		vGpus_device_list = tf.config.list_logical_devices('GPU')
+
+		debug(['Built with CUDA', built_with_cuda])
+		debug(['GPU Devices', device_list])
+		debug(['GPU Logical Devices', vGpus_device_list])
+
 	def InitiateModel(self):
-		self.Model = Sequential()
-		debug("Initiated Model")
+		with tf.device(tf.config.list_logical_devices('GPU')[0].name):
+			self.Model = Sequential()
+			debug("Initiated Model")
 
 	def ModelName(self):
 		self.Modelname = self.Modeltypes[self.Modeltype]
@@ -206,6 +230,7 @@ class MLExtension:
 		self.Modeltype.modified()
 		self.ModelName()
 		self.Trainingdata.val = model_config.result['Training_Data']
+		self.SetTrainingDataType()
 		self.Selectedfeatures.val = model_config.result['Selected_Features']
 		self.Selectedtargets.val = model_config.result['Selected_Targets']
 		self.Inputdim.val = model_config.result['INPUT_DIM']

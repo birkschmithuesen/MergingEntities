@@ -1,0 +1,5 @@
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v11.5\bin
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v11.5\extras\CUPTI\lib64
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v11.5\include
+C:\tools\cudnn-windows-x86_64-8.3.3.40_cuda11.5-archive\bin
+C:\tools\cudnn-windows-x86_64-8.3.3.40_cuda11.5-archive\include
