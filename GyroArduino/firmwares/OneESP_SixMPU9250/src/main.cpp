@@ -390,6 +390,10 @@ void setup() {
   pinMode(RED_PIN, OUTPUT);
   pinMode(YEL_PIN, OUTPUT);
   pinMode(BUTTON_PIN, INPUT);
+  pinMode(ID_PIN1, INPUT);
+  pinMode(ID_PIN2, INPUT);
+  pinMode(ID_PIN3, INPUT);
+  pinMode(ID_PIN4, INPUT);
   Serial.print(".");
   digitalWrite(RED_PIN, LOW);
   digitalWrite(YEL_PIN, LOW);
