@@ -727,6 +727,8 @@ void setup() {
  * cleans it, and passes it on via OSC.
  * 
  * @see setup()
+ * @todo check for errors in MPU data update
+ * @todo log error remotely
  */
 void loop() {
 
@@ -735,7 +737,15 @@ void loop() {
   // fetch data from each MPU
   for (uint8_t i = 0; i < nbrMpu; i++) {
     selectI2cSwitchChannel(sensors[i].multiplexer, sensors[i].channel);
-    mpu[i].update();
+    if (sensors[i].usable) {
+      // TODO: check for errors
+      mpu[i].update();
+    } else {
+      // TODO: log errors remotely
+      Serial.print("sensor for ");
+      Serial.print(sensors[i].label);
+      Serial.println(" is not usable");
+	}
   }
 
   // Print values for debugging (with 100ms pauses)
@@ -780,17 +790,23 @@ void loop() {
   }
 
   //-------OSC communication--------
-  // Send data in 6 separated messages, working okay
-
+  // Send data in separate message per sensor
   for (int i = 0; i < nbrMpu; i++) {
-    body[i].add(qX[i]).add(qY[i]).add(qZ[i]).add(qW[i]); // Fill OSC message with data
+	// skip sesors with problems
+	if (!sensors[i].usable) {
+       continue;
+    }
+    // Fill OSC message with data
+    body[i].add(qX[i]).add(qY[i]).add(qZ[i]).add(qW[i]);
     body[i].add(oX[i]).add(oY[i]).add(oZ[i]);
     body[i].add(gX[i]).add(gY[i]).add(gZ[i]);
 
+    // send data out
     Udp.beginPacket(outIp, outPort);
     body[i].send(Udp);
     Udp.endPacket();
 
+    // clear up message cache
     body[i].empty();
   }
 }
