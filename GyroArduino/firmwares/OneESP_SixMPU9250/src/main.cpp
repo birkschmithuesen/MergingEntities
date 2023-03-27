@@ -151,6 +151,7 @@ float gyrobias[6][3];    /**< bias/drift/offset profile for the gyroscope */
  * @param channel The channel to select to communicate with I2C client
  * @return true if selection was successful, false if not
  * @see countI2cDevices()
+ * @see countMultiplexer()
  * @todo limit processing to valid values (0..7)
  */
 bool selectI2cMultiplexerChannel(uint8_t address, uint8_t channel) {
@@ -172,6 +173,7 @@ bool selectI2cMultiplexerChannel(uint8_t address, uint8_t channel) {
  * @note Select a multiplexer and channel first.
  *
  * @see selectI2cMultiplexerChannel(uint8_t address, uint8_t channel)
+ * @see countMultiplexer()
  * @todo select switch channel to scan via function argument?
  */
 uint8_t countI2cDevices() {
@@ -414,38 +416,23 @@ void automaticMagnetometerCalibration() {
 
 
 /**
- * Guess the number of MPU9250 boards attached to the controler.
- * This routine is useful to select a (sub-)set of OSC paths and data
- * to be transmitted.
+ * Count the number of I2C multiplexer attached to the controller.
  *
- * @startuml
-
-start
-
-:count = 0;
-
-if (communication with TCA_ADDRESS_RIGHT_SIDE?) then (yes)
-  :count = 6;
-  if (communication with TCA_ADDRESS_LEFT_SIDE?) then (yes)
-    :count = 10;
-  else (no)
-  endif
-else (no)
-endif
-
-stop
-
-@enduml
- * @warning This routines does not actually verify the sensors attached.
- * @return Number of MPU9250 boards
+ * This routine is useful to guess the number of TCA9548A I2C multiplexer
+ * attached to the controller and thus select a (sub-)set of OSC paths
+ * and data to be transmitted.
+ *
+ * @return Number of TCA9548A I2C multiplexer
+ * @see countI2cDevices()
+ * @see selectI2cMultiplexerChannel(uint8_t address, uint8_t channel)
  */
-uint8_t guessNumberOfMpus(){
+uint8_t countMultiplexer(){
   uint8_t count = 0;
   if (selectI2cMultiplexerChannel(TCA_ADDRESS_RIGHT_SIDE, 1)) {
-    count = 6;
+    count = 1;
   }
   if (selectI2cMultiplexerChannel(TCA_ADDRESS_LEFT_SIDE, 1)) {
-    count = 10;
+    count = 2;
   }
   return count;
 }
