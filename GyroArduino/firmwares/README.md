@@ -1,5 +1,7 @@
 This is a general overview and starting point for the artes mobiles controller firmware(s).
 The code is based on arduino libaries and is intendet to run on an ESP32 board.
+The leading codebase is "OneESP_SixMPU9250". The others may or may not be updated to have
+all the features/functionality.
 
 # Basic steps
 
@@ -22,6 +24,9 @@ The code is based on arduino libaries and is intendet to run on an ESP32 board.
 
    doxygen DoxyFile
 
+# Previous production code
+The codebase up until 37b29a788d612b3fe45e6455e0f8cc0fa5f2ee93 (the last documentation commit is d4299a8ecae315ee831c7e43cf189bb9288b855f)
+is soley based on the old prototyped boards.
 
 # References
 
