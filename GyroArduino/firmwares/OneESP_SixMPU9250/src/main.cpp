@@ -4,9 +4,9 @@
  * with a TCA9548A I2C multiplexer and generic MPU9250 sensor boards.
  *
  * @note This code base is the leading one in terms of features and maturity.
- * @todo read controller ID from DIP switch
+ * @todo clean up setup/config code dependend on controller ID
  * @todo clean up OSC code and use new schema
- * @todo implement / fix manual/button press magnetometer calibration (around line 645)
+ * @todo implement / fix manual/button press magnetometer calibration (around line 680)
  * @todo unify MPU data and socket structures
  * @todo clean up serial console messages
  * @todo implement (remote) OSC error logger
@@ -76,6 +76,10 @@ int localPort = 8888;                /**< source port for UDP communication on E
 #define RED_PIN 32   /**< ESP pin number of red LED */
 #define YEL_PIN 33   /**< ESP pin number of yellow LED */
 #define BUTTON_PIN 5 /**< ESP pin number of (callibration) button */
+#define ID_PIN1 27   /**< 1st bit pin of ID DIP switch (D27) */
+#define ID_PIN2 14   /**< 2nd bit pin of ID DIP switch (D14) */
+#define ID_PIN3 12   /**< 3rd bit pin of ID DIP switch (D12) */
+#define ID_PIN4 13   /**< 4rd bit pin of ID DIP switch (D13) */
 
 #define MPU_NORTH 1 /**< MPU used to set the north */
 float theta = 0;    /**< angle to the north */
@@ -309,6 +313,32 @@ void startUdp(int port) {
 }
 
 /**
+ * Retrieve the (unique) ID configured for this controller.
+ * This ID is used in the OSC messages to identify the sender.
+ * Its value is between 0 and 15 inclusively.
+ *
+ * @return configured ID of the controller.
+ */
+uint8_t getControllerID() {
+  uint8_t id = 0;
+
+  // read the switch state from left to right and add value at position
+  if (HIGH == digitalRead(ID_PIN1)) {
+	id = 8;
+  }
+  if (HIGH == digitalRead(ID_PIN2)) {
+	id += 4;
+  }
+  if (HIGH == digitalRead(ID_PIN3)) {
+	id += 2;
+  }
+  if (HIGH == digitalRead(ID_PIN4)) {
+	id += 1;
+  }
+  return id;
+}
+
+/**
  * Calibrate the magnetometer (i.e. set north) by manually
  * fiddling with the sensor.
  *
@@ -386,6 +416,10 @@ void setup() {
   pinMode(RED_PIN, OUTPUT);
   pinMode(YEL_PIN, OUTPUT);
   pinMode(BUTTON_PIN, INPUT);
+  pinMode(ID_PIN1, INPUT);
+  pinMode(ID_PIN2, INPUT);
+  pinMode(ID_PIN3, INPUT);
+  pinMode(ID_PIN4, INPUT);
   Serial.print(".");
   digitalWrite(RED_PIN, LOW);
   digitalWrite(YEL_PIN, LOW);
