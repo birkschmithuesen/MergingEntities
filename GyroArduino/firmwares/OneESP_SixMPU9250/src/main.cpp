@@ -224,9 +224,9 @@ uint8_t countI2cDevices() {
 int outPort = 8000;  /**< UDP server port on OSC receiver (i.e. central server) */
 /** OSC messages with senor values for given part */
 OSCMessage body[] = {
-    OSCMessage("/body/1/gyro/1/"), OSCMessage("/body/1/gyro/2/"),
-    OSCMessage("/body/1/gyro/3/"), OSCMessage("/body/1/gyro/4/"),
-    OSCMessage("/body/1/gyro/5/"), OSCMessage("/body/1/gyro/6/")};
+    OSCMessage("/body/1/gyro/left_arm/"), OSCMessage("/body/1/gyro/right_arm/"),
+    OSCMessage("/body/1/gyro/left_foot/"), OSCMessage("/body/1/gyro/right_foot/"),
+    OSCMessage("/body/1/gyro/back/"), OSCMessage("/body/1/gyro/head/")};
 OSCMessage calibration("/calibration/1");  /**< OSC endpoint for calibration messages */
 /** scaling factors for magnetometer */
 float magscale[6][3] = {{1.01, 1.06, 0.94}, {1.01, 1.00, 0.99},
@@ -242,9 +242,9 @@ float magbias[6][3] = {{-40.82, -108.61, -405.33}, {128.62, 104.29, -164.14},
 int outPort = 8001;  /**< UDP server port on OSC receiver (i.e. central server) */
 /** OSC messages with senor values for given part */
 OSCMessage body[] = {
-    OSCMessage("/body/2/gyro/1/"), OSCMessage("/body/2/gyro/2/"),
-    OSCMessage("/body/2/gyro/3/"), OSCMessage("/body/2/gyro/4/"),
-    OSCMessage("/body/2/gyro/5/"), OSCMessage("/body/2/gyro/6/")};
+    OSCMessage("/body/2/gyro/left_arm/"), OSCMessage("/body/2/gyro/right_arm/"),
+    OSCMessage("/body/2/gyro/left_foot/"), OSCMessage("/body/2/gyro/right_foot/"),
+    OSCMessage("/body/2/gyro/back/"), OSCMessage("/body/2/gyro/head/")};
 OSCMessage calibration("/calibration/2");  /**< OSC endpoint for calibration messages */
 /** scaling factors for magnetometer */
 float magscale[6][3] = {{0.99, 1.01, 1.00}, {0.98, 1.00, 1.02},
@@ -260,9 +260,9 @@ float magbias[6][3] = {{98.40, -5.27, -345.30}, {399.67, 242.51, -126.99},
 int outPort = 8002;  /**< UDP server port on OSC receiver (i.e. central server) */
 /** OSC messages with senor values for given part */
 OSCMessage body[] = {
-    OSCMessage("/body/3/gyro/1/"), OSCMessage("/body/3/gyro/2/"),
-    OSCMessage("/body/3/gyro/3/"), OSCMessage("/body/3/gyro/4/"),
-    OSCMessage("/body/3/gyro/5/"), OSCMessage("/body/3/gyro/6/")};
+    OSCMessage("/body/3/gyro/left_arm/"), OSCMessage("/body/3/gyro/right_arm/"),
+    OSCMessage("/body/3/gyro/left_foot/"), OSCMessage("/body/3/gyro/right_foot/"),
+    OSCMessage("/body/3/gyro/back/"), OSCMessage("/body/3/gyro/6/")};
 OSCMessage calibration("/calibration/3");  /**< OSC endpoint for calibration messages */
 #endif
 
