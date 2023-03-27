@@ -97,6 +97,7 @@ struct MPU9250socket {
 	uint8_t multiplexer; /**< I2C address of the responsible I2C multiplexer */
 	uint8_t channel;     /**< channel used on the I2C multiplexer */
 	MPU9250 mpu;         /**< software handler/abstraction for MPU at given channel of given multiplexer */
+	bool usable = false; /**< indicate that sensor (data) is present and no errors occured */
 };
 
 // manually create indexes to emulate a hashmap with an array
@@ -147,7 +148,7 @@ float gyrobias[6][3];    /**< bias/drift/offset profile for the gyroscope */
  *
  * @param address The I2C address of the multiplexer to use
  * @param channel The channel to select to communicate with I2C client
- * @see scanI2C()
+ * @see countI2cDevices()
  * @todo limit processing to valid values (0..7)
  */
 void selectI2cSwitchChannel(uint8_t address, uint8_t channel) {
@@ -159,14 +160,15 @@ void selectI2cSwitchChannel(uint8_t address, uint8_t channel) {
 }
 
 /**
- * Check to see if I2C device (IMU) can be found / is connected and
+ * Count I2C devices (IMU) connected to ESP and
  * print the result to the serial output.
  *
+ * @note Select a multiplexer and channel first.
+ *
  * @see selectI2cSwitchChannel(uint8_t address, uint8_t channel)
- * @todo return number of devices found?
  * @todo select switch channel to scan via function argument?
  */
-void scanI2C() {
+uint8_t countI2cDevices() {
   byte error;
   uint8_t deviceCount = 0;
 
@@ -213,7 +215,8 @@ void scanI2C() {
     Serial.println("done");
   }
 
-  delay(5000); // wait 5 seconds for next scan
+  //delay(5000); // wait 5 seconds for next scan - TODO: remove?
+  return deviceCount;
 }
 
 //-------WIFI SETTINGS AND FUNCTIONS-------
@@ -480,11 +483,14 @@ void setup() {
   setting.accel_fchoice = 0x01;
   setting.accel_dlpf_cfg = ACCEL_DLPF_CFG::DLPF_45HZ;
 
-  // Lauch communication with the 6 MPUs - Switch to channel i and lauch comm
-  // with mpu number i
+  // Lauch communication with the MPUs
+  // go through list (expected) sensors and see if they are there
   for (uint8_t i = 0; i < nbrMpu; i++) {
     selectI2cSwitchChannel(sensors[i].multiplexer, sensors[i].channel);
-    // scanI2C();
+    // we found only one I2C device as expected, so mark it usable
+    if (1 == countI2cDevices() ) {
+		sensors[i].usable = true;
+	}
     mpu[i].setup(sensors[i].multiplexer, setting, Wire);
   }
 
@@ -755,6 +761,8 @@ void setup() {
  * cleans it, and passes it on via OSC.
  * 
  * @see setup()
+ * @todo check for errors in MPU data update
+ * @todo log error remotely
  */
 void loop() {
 
@@ -763,7 +771,15 @@ void loop() {
   // fetch data from each MPU
   for (uint8_t i = 0; i < nbrMpu; i++) {
     selectI2cSwitchChannel(sensors[i].multiplexer, sensors[i].channel);
-    mpu[i].update();
+    if (sensors[i].usable) {
+      // TODO: check for errors
+      mpu[i].update();
+    } else {
+      // TODO: log errors remotely
+      Serial.print("sensor for ");
+      Serial.print(sensors[i].label);
+      Serial.println(" is not usable");
+	}
   }
 
   // Print values for debugging (with 100ms pauses)
@@ -808,17 +824,23 @@ void loop() {
   }
 
   //-------OSC communication--------
-  // Send data in 6 separated messages, working okay
-
+  // Send data in separate message per sensor
   for (int i = 0; i < nbrMpu; i++) {
-    body[i].add(qX[i]).add(qY[i]).add(qZ[i]).add(qW[i]); // Fill OSC message with data
+	// skip sesors with problems
+	if (!sensors[i].usable) {
+       continue;
+    }
+    // Fill OSC message with data
+    body[i].add(qX[i]).add(qY[i]).add(qZ[i]).add(qW[i]);
     body[i].add(oX[i]).add(oY[i]).add(oZ[i]);
     body[i].add(gX[i]).add(gY[i]).add(gZ[i]);
 
+    // send data out
     Udp.beginPacket(outIp, outPort);
     body[i].send(Udp);
     Udp.endPacket();
 
+    // clear up message cache
     body[i].empty();
   }
 }
