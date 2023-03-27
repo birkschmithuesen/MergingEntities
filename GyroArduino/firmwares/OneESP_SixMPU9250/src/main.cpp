@@ -479,6 +479,13 @@ void setup() {
   Serial.print("setting up sensor sockets .");
   switch (countMultiplexer()) {
   case 1:
+    if ((1 == countMultiplexer()) && (10 == NUMBER_OF_MPU)) {
+      Serial.println("");
+      Serial.println("---------------------------------------------------");
+      Serial.println("10 sensors incompatible with single I2C multiplexer");
+      Serial.println("---------------------------------------------------");
+      delay(60 * 60 * 1000); // hang for a long time before crashing
+    }
     sensors[LEFT_UPPER_ARM_INDEX].label = "left_upper_arm";
     sensors[LEFT_UPPER_ARM_INDEX].multiplexer = TCA_ADDRESS_RIGHT_SIDE;
     sensors[LEFT_UPPER_ARM_INDEX].channel = 0;
