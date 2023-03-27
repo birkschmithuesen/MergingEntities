@@ -35,7 +35,7 @@
 
 
 //-------GENERAL SETTINGS-------
-#define nbrMpu 6 /**< number of IMU (MPU) (boards) attached to the controller  */
+#define NUMBER_OF_MPU 6 /**< number of IMU (MPU) (boards) attached to the controller  */
 
 // Define the number of the body : 1, 2 or 3
 #define BODY_2  /**< indicate individal controler (and thus configuration) */
@@ -118,25 +118,25 @@ Preferences preferences;  /**< container for preferences on ESP32 */
 char mpuPref[10];         /**< preferences of each MPU stored on ESP32 */
 
 // Hardware I2c
-MPU9250 mpu[nbrMpu];  /**< software handler/abstraction for each MPU */
-MPU9250socket sensors[nbrMpu];   /**< communication abstractions for all MPUs */
+MPU9250 mpu[NUMBER_OF_MPU];  /**< software handler/abstraction for each MPU */
+MPU9250socket sensors[NUMBER_OF_MPU];   /**< communication abstractions for all MPUs */
 
 // Setting variable
 MPU9250Setting setting;  /**< configuration settings of the MPU9250 stored in memory */
 
 // Store data from MPU
-float qX[nbrMpu] = {0};  /**< quaternion X value for MPU referenced by index */
-float qY[nbrMpu] = {0};  /**< quaternion Y value for MPU referenced by index */
-float qZ[nbrMpu] = {0};  /**< quaternion Z value for MPU referenced by index */
-float qW[nbrMpu] = {0};  /**< quaternion W value for MPU referenced by index */
+float qX[NUMBER_OF_MPU] = {0};  /**< quaternion X value for MPU referenced by index */
+float qY[NUMBER_OF_MPU] = {0};  /**< quaternion Y value for MPU referenced by index */
+float qZ[NUMBER_OF_MPU] = {0};  /**< quaternion Z value for MPU referenced by index */
+float qW[NUMBER_OF_MPU] = {0};  /**< quaternion W value for MPU referenced by index */
 
-float oX[nbrMpu] = {0};  /**< euler angle X axis for MPU referenced by index */
-float oY[nbrMpu] = {0};  /**< euler angle Y axis for MPU referenced by index */
-float oZ[nbrMpu] = {0};  /**< euler angle Z axis for MPU referenced by index */
+float oX[NUMBER_OF_MPU] = {0};  /**< euler angle X axis for MPU referenced by index */
+float oY[NUMBER_OF_MPU] = {0};  /**< euler angle Y axis for MPU referenced by index */
+float oZ[NUMBER_OF_MPU] = {0};  /**< euler angle Z axis for MPU referenced by index */
 
-float gX[nbrMpu] = {0};  /**< gyroscope value X axis for MPU referenced by index */
-float gY[nbrMpu] = {0};  /**< gyroscope value Y axis for MPU referenced by index */
-float gZ[nbrMpu] = {0};  /**< gyroscope value Z axis for MPU referenced by index */
+float gX[NUMBER_OF_MPU] = {0};  /**< gyroscope value X axis for MPU referenced by index */
+float gY[NUMBER_OF_MPU] = {0};  /**< gyroscope value Y axis for MPU referenced by index */
+float gZ[NUMBER_OF_MPU] = {0};  /**< gyroscope value Z axis for MPU referenced by index */
 
 float accbias[6][3];     /**< bias/drift/offset profile for the accelerator */
 float gyrobias[6][3];    /**< bias/drift/offset profile for the gyroscope */
@@ -358,7 +358,7 @@ void manualMagnetometerCalibration() {
   Serial.println("manual calibration of magnetometers");
 
   // go through each sensor socket
-  for (uint8_t i = 0; i < nbrMpu; i++) {
+  for (uint8_t i = 0; i < NUMBER_OF_MPU; i++) {
 	// blink LEDs to indicate calibration going on
     if (state == HIGH) {
       digitalWrite(YEL_PIN, state);
@@ -404,7 +404,7 @@ void automaticMagnetometerCalibration() {
   Udp.endPacket();
   calibration.empty();
 
-  for (uint8_t i = 0; i < nbrMpu; i++) {
+  for (uint8_t i = 0; i < NUMBER_OF_MPU; i++) {
     mpu[i].setMagneticDeclination(MAG_DECLINATION);
     mpu[i].setMagBias(magbias[i][0], magbias[i][1], magbias[i][2]);
     mpu[i].setMagScale(magscale[i][0], magscale[i][1], magscale[i][2]);
@@ -534,7 +534,7 @@ void setup() {
 
   // Lauch communication with the MPUs
   // go through list (expected) sensors and see if they are there
-  for (uint8_t i = 0; i < nbrMpu; i++) {
+  for (uint8_t i = 0; i < NUMBER_OF_MPU; i++) {
     if (!selectI2cMultiplexerChannel(sensors[i].multiplexer, sensors[i].channel)) {
       Serial.print("could not select channel ");
       Serial.print(sensors[i].channel);
@@ -550,7 +550,7 @@ void setup() {
 
   // Selection of filters
   QuatFilterSel sel{QuatFilterSel::MADGWICK};
-  for (uint8_t i = 0; i < nbrMpu; i++) {
+  for (uint8_t i = 0; i < NUMBER_OF_MPU; i++) {
     mpu[i].selectFilter(sel);
     mpu[i].setFilterIterations(10);
   }
@@ -568,7 +568,7 @@ void setup() {
   calibration.empty();
 
   digitalWrite(RED_PIN, HIGH); // Calibrate one by one
-  for (uint8_t i = 0; i < nbrMpu; i++) {
+  for (uint8_t i = 0; i < NUMBER_OF_MPU; i++) {
     Serial.println(i);
     if (!selectI2cMultiplexerChannel(sensors[i].multiplexer, sensors[i].channel)) {
       Serial.print("could not select channel ");
@@ -619,7 +619,7 @@ void setup() {
     calibration.empty();
 
     digitalWrite(RED_PIN, HIGH);
-    for (uint8_t i = 0; i < nbrMpu; i++) {
+    for (uint8_t i = 0; i < NUMBER_OF_MPU; i++) {
       Serial.println(i);
       if (!selectI2cMultiplexerChannel(sensors[i].multiplexer, sensors[i].channel)) {
         Serial.print("could not select channel ");
@@ -633,7 +633,7 @@ void setup() {
     Serial.println("Acceleration calibration done.");
 
     // Acceleration : store calibration data
-    for (uint8_t i = 0; i < nbrMpu; i++) {
+    for (uint8_t i = 0; i < NUMBER_OF_MPU; i++) {
       itoa(i, mpuPref, 10); // Key names = number of mpu
       preferences.begin(mpuPref, false);
 
@@ -651,7 +651,7 @@ void setup() {
     // Magnetometer : get data calibration + calibrate
     Serial.println("Calibration of mag");
 
-    for (uint8_t i = 0; i < nbrMpu; i++) {
+    for (uint8_t i = 0; i < NUMBER_OF_MPU; i++) {
       if (state == HIGH) {
         digitalWrite(YEL_PIN, state);
         state = LOW;
@@ -682,7 +682,7 @@ void setup() {
     Serial.println("Calibration of mag done");
 
     // Magnetometer : store calibration data
-    for (uint8_t i = 0; i < nbrMpu; i++) {
+    for (uint8_t i = 0; i < NUMBER_OF_MPU; i++) {
       itoa(i, mpuPref, 10); // Key names = number of mpu
       preferences.begin(mpuPref, false);
 
@@ -701,7 +701,7 @@ void setup() {
   // Button not pushed : we read the stored calibration data and calibrate
   else {
     Serial.println("LOW : Load calibration data");
-    for (uint8_t i = 0; i < nbrMpu; i++) {
+    for (uint8_t i = 0; i < NUMBER_OF_MPU; i++) {
       itoa(i, mpuPref, 10); // Key names = number of mpu
       preferences.begin(mpuPref, false);
 
@@ -717,7 +717,7 @@ void setup() {
       // Test to see what the fuck
       /*
       digitalWrite(RED_PIN, HIGH);
-      for(uint8_t i=0; i<nbrMpu; i++) {
+      for(uint8_t i=0; i<NUMBER_OF_MPU; i++) {
         Serial.println(i);
         selectI2cMultiplexerChannel(sensors[i].multiplexer, sensors[i].channel);
         mpu[i].calibrateAccelGyro();
@@ -789,7 +789,7 @@ void setup() {
 
   // We get the north and set it
   preferences.begin("setNorth", false);
-  for (uint8_t i = 0; i < nbrMpu; i++) {
+  for (uint8_t i = 0; i < NUMBER_OF_MPU; i++) {
     mpu[i].setNorth(preferences.getFloat("north", 0));
   }
   preferences.end();
@@ -813,7 +813,7 @@ void setup() {
   /*
   //Print/send the calibration of magnetometer - USE IT TO AUTO CALIB AGAIN
   Serial.println("Calibration data :");
-  for(int i=0; i<nbrMpu; i++) {
+  for(int i=0; i<NUMBER_OF_MPU; i++) {
     selectI2cMultiplexerChannel(sensors[i].multiplexer, sensors[i].channel);
 
     //Send calibration data to TouchDesigner
@@ -844,7 +844,7 @@ void loop() {
   //--------MPU recording--------
 
   // fetch data from each MPU
-  for (uint8_t i = 0; i < nbrMpu; i++) {
+  for (uint8_t i = 0; i < NUMBER_OF_MPU; i++) {
     if (!selectI2cMultiplexerChannel(sensors[i].multiplexer, sensors[i].channel)) {
       Serial.print("could not select channel ");
       Serial.print(sensors[i].channel);
@@ -865,7 +865,7 @@ void loop() {
   // Print values for debugging (with 100ms pauses)
   static unsigned long last_print = 0;
   if (millis() - last_print > 100) {
-    for (int i = 0; i < nbrMpu; i++) {
+    for (int i = 0; i < NUMBER_OF_MPU; i++) {
       Serial.print(mpu[i].getYaw());
       Serial.print("// ");
       Serial.print(mpu[i].getYaw_r());
@@ -888,7 +888,7 @@ void loop() {
   }
 
   // Store values
-  for (int i = 0; i < nbrMpu; i++) {
+  for (int i = 0; i < NUMBER_OF_MPU; i++) {
     qX[i] = mpu[i].getQuaternionX();
     qY[i] = mpu[i].getQuaternionY();
     qZ[i] = mpu[i].getQuaternionZ();
@@ -905,7 +905,7 @@ void loop() {
 
   //-------OSC communication--------
   // Send data in separate message per sensor
-  for (int i = 0; i < nbrMpu; i++) {
+  for (int i = 0; i < NUMBER_OF_MPU; i++) {
 	// skip sesors with problems
 	if (!sensors[i].usable) {
        continue;
