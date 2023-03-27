@@ -102,7 +102,7 @@ OscSaw{
 			if (msg[1] != nil,
 				{
 					if ( msg[1] == 0.0,
-						{synth.set(\degree, rrand(0,12), \amp, 0.0)},
+						{synth.set(\degree, rrand(0,12), \exc, 0.0)},
 						{synth.set(\exc, msg[1]);}
 					)
 
