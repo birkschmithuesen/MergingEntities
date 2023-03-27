@@ -24,13 +24,9 @@ It was not able to include a matching Cudatoolkit and cuDNN file in the environm
 
 
 ## Bodysuite / Gyroscopes OSC Interface
-* each bodysuite with $id (counting from 1) sends it's gyroscope data like this: /body/$id/gyro/1...6/[quartanians, angles, rotation-speed], where quartanians has 4 dims and angles and rotation-speed has 3 dims x,y,z
-1 - left arm
-2 - right arm
-3 - left foot
-4 - right foot
-5 - back
-6 - head
+Each bodysuite with $id (counting from 1) sends it's gyroscope data like this: `/body/$id/gyro/$part/[quarternions, angles, rotation-speed]`.
+The values for $part are: `left_arm`, `right_arm`, `left_foot`, `right_foot`, `back`, and `head`.
+The quaternions have 4 float values, the angles and angles and rotation-speed have 3 float values for x,y,z.
 
 ## Pharus / LiDAR Tracking Interface
 * for each ID there comes an OSC message with: [id, Posx, Posy, Normalx, Normaly, Orientationx, Orientationy, Speed]
