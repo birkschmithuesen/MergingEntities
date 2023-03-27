@@ -1,6 +1,6 @@
 (
 SynthDef(\moog, {
-	arg freq = 120, amp = 1, exc = 1, cutoff = 2000, res = 0.5, speed = 2, depth = 0.0, detune = 1, out = 0;
+	arg freq = 120, amp = 1, exc = 1, cutoff = 2000, res = 0.5, speed = 2, depth = 0.0, detune = 0, out = 0;
 	var sig;
 	freq = freq + (freq * (Rand(-1.0, 1.0) * detune));
 	sig = Pulse.ar([freq/2.98, freq], [0.3, 0.7]) * exc;
@@ -32,8 +32,8 @@ SynthDef(\noise, {
 */
 
 SynthDef(\saw, {
-	arg amp = 1, exc = 1, degree = 12, detune = 1.01, dist = 0, out = 0;
-	var temp, sig = 0, scale = Scale.dorian;
+	arg amp = 1, exc = 1, degree = 12, detune = 1.01, dist = 0.5, out = 0;
+	var temp, sig = 0, scale = Scale.minorPentatonic;
 	10.do{
 		temp = VarSaw.ar(
 			(DegreeToKey.kr(scale.as(LocalBuf), degree, scale.stepsPerOctave, 1, 60)).midicps * {Rand(-1.0,1.0).range(detune.reciprocal, detune)}!2,
@@ -52,7 +52,7 @@ SynthDef(\saw, {
 SynthDef(\lead, {
 	arg amp = 1, exc = 1, degree = 7, detune = 0.04, out = 0;
 	var scale, buffer, sig;
-	scale = FloatArray[0, 2, 3.2, 5, 7, 9, 10]; // dorian scale
+	scale =  FloatArray[0, 3, 5, 7, 10]; // dorian scale FloatArray[0, 2, 3.2, 5, 7, 9, 10];
 	buffer = Buffer.alloc(s, scale.size,1, {|b| b.setnMsg(0, scale) });
 
 	sig = SinOsc.ar(

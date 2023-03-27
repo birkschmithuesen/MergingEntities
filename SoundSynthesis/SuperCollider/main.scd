@@ -30,7 +30,7 @@ var scale;
 (~path++"synthlib.scd").load;
 
 // define number of performers bodies
-~numBodies = 4;
+~numBodies = 1;
 
 // create Synths
 scale = FloatArray[48, 55, 60, 67];//some 5ths starting from c4
@@ -60,7 +60,7 @@ scale = FloatArray[48, 55, 60, 67];//some 5ths starting from c4
 ~oscSaw = {arg i; OscSaw.new(~saws[i], ('/saw/' ++ i))}!~numBodies;
 ~oscSawGroup = OscDetuneGroup.new(~sawGroup, ('/saw/group'), 1.01, 1.5);
 
-~oscLead = {arg i; OscLead.new(~leads[i], ('/lead/' ++ i), 0, 15)}!~numBodies;
+~oscLead = {arg i; OscLead.new(~leads[i], ('/lead/' ++ i), 0, 13)}!~numBodies;
 ~oscLeadGroup = OscDetuneGroup.new(~leadGroup, ('/lead/group'), 0.04, 1.0);
 )
 
@@ -78,7 +78,7 @@ scale = FloatArray[48, 55, 60, 67];//some 5ths starting from c4
 (~path++"synthlib.scd").load;
 
 // define number of performers bodies
-~numBodies = 4;
+~numBodies = 1;
 
 // create Synths
 ~klings = {Synth.head(~klingGroup, \kling)}!~numBodies;
@@ -91,3 +91,6 @@ scale = FloatArray[48, 55, 60, 67];//some 5ths starting from c4
 
 
 )
+
+s.meter;
+~moogGroup.set(\amp, );

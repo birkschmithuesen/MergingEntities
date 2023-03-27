@@ -102,7 +102,7 @@ OscSaw{
 			if (msg[1] != nil,
 				{
 					if ( msg[1] == 0.0,
-						{synth.set(\degree, rrand(0,12), \exc, 0.0)},
+						{synth.set(\degree, rrand(0,9), \exc, 0.0)},
 						{synth.set(\exc, msg[1]);}
 					)
 
@@ -110,8 +110,7 @@ OscSaw{
 				{("received wrong OSC message length on address: " ++ address).postln}
 			);
 			if (msg[2] != nil,
-				{synth.set(\dist, msg[2]);},
-				{("received wrong OSC message length on address: " ++ address).postln}
+				{synth.set(\dist, msg[2]);}//,{("received wrong OSC message length on address: " ++ address).postln}
 			);
 		},
 		(address)
@@ -171,7 +170,7 @@ OscKling{
 				{("received wrong OSC message length on address: " ++ address).postln}
 			);
 			if (msg[3] != nil,
-				{synth.set(\dev, msg[3].linlin(0, 1, 0.0, 2.0));
+				{synth.set(\dev, msg[3].linlin(0, 1, 1.01, 2.0));
 				},
 				{("received wrong OSC message length on address: " ++ address).postln}
 			);
