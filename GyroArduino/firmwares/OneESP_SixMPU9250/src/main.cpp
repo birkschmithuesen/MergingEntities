@@ -4,6 +4,7 @@
  * with a TCA9548A I2C multiplexer and generic MPU9250 sensor boards.
  *
  * @note This code base is the leading one in terms of features and maturity.
+ * @todo rework calibration routine(s)
  * @todo clean up setup/config code dependend on controller ID
  * @todo clean up OSC code and use new schema
  * @todo implement / fix manual/button press magnetometer calibration (around line 680)
@@ -148,15 +149,20 @@ float gyrobias[6][3];    /**< bias/drift/offset profile for the gyroscope */
  *
  * @param address The I2C address of the multiplexer to use
  * @param channel The channel to select to communicate with I2C client
+ * @return true if selection was successful, false if not
  * @see countI2cDevices()
  * @todo limit processing to valid values (0..7)
  */
-void selectI2cSwitchChannel(uint8_t address, uint8_t channel) {
+bool selectI2cMultiplexerChannel(uint8_t address, uint8_t channel) {
+  bool result = false;
   // select the multiplexer by its hardware address
   Wire.beginTransmission(address);
   // select a channel on the multiplexer
-  Wire.write(1 << channel);
+  if (1 == Wire.write(1 << channel)) {
+    result = true;
+  }
   Wire.endTransmission();
+  return result;
 }
 
 /**
@@ -165,7 +171,7 @@ void selectI2cSwitchChannel(uint8_t address, uint8_t channel) {
  *
  * @note Select a multiplexer and channel first.
  *
- * @see selectI2cSwitchChannel(uint8_t address, uint8_t channel)
+ * @see selectI2cMultiplexerChannel(uint8_t address, uint8_t channel)
  * @todo select switch channel to scan via function argument?
  */
 uint8_t countI2cDevices() {
@@ -369,7 +375,12 @@ void manualMagnetometerCalibration() {
 
     Serial.println(i);
 
-    selectI2cSwitchChannel(sensors[i].multiplexer, sensors[i].channel);
+    if (!selectI2cMultiplexerChannel(sensors[i].multiplexer, sensors[i].channel)) {
+      Serial.print("could not select channel ");
+      Serial.print(sensors[i].channel);
+      Serial.print(" on multiplexer at address ");
+      Serial.println(sensors[i].multiplexer);
+    }
     mpu[i].setMagneticDeclination(MAG_DECLINATION);
     mpu[i].calibrateMag();
 
@@ -486,7 +497,12 @@ void setup() {
   // Lauch communication with the MPUs
   // go through list (expected) sensors and see if they are there
   for (uint8_t i = 0; i < nbrMpu; i++) {
-    selectI2cSwitchChannel(sensors[i].multiplexer, sensors[i].channel);
+    if (!selectI2cMultiplexerChannel(sensors[i].multiplexer, sensors[i].channel)) {
+      Serial.print("could not select channel ");
+      Serial.print(sensors[i].channel);
+      Serial.print(" on multiplexer at address ");
+      Serial.println(sensors[i].multiplexer);
+    }
     // we found only one I2C device as expected, so mark it usable
     if (1 == countI2cDevices() ) {
 		sensors[i].usable = true;
@@ -516,7 +532,12 @@ void setup() {
   digitalWrite(RED_PIN, HIGH); // Calibrate one by one
   for (uint8_t i = 0; i < nbrMpu; i++) {
     Serial.println(i);
-    selectI2cSwitchChannel(sensors[i].multiplexer, sensors[i].channel);
+    if (!selectI2cMultiplexerChannel(sensors[i].multiplexer, sensors[i].channel)) {
+      Serial.print("could not select channel ");
+      Serial.print(sensors[i].channel);
+      Serial.print(" on multiplexer at address ");
+      Serial.println(sensors[i].multiplexer);
+    }
     mpu[i].calibrateAccelGyro();
   }
   digitalWrite(RED_PIN, LOW);
@@ -562,7 +583,12 @@ void setup() {
     digitalWrite(RED_PIN, HIGH);
     for (uint8_t i = 0; i < nbrMpu; i++) {
       Serial.println(i);
-      selectI2cSwitchChannel(sensors[i].multiplexer, sensors[i].channel);
+      if (!selectI2cMultiplexerChannel(sensors[i].multiplexer, sensors[i].channel)) {
+        Serial.print("could not select channel ");
+        Serial.print(sensors[i].channel);
+        Serial.print(" on multiplexer at address ");
+        Serial.println(sensors[i].multiplexer);
+      }
       mpu[i].calibrateAccelGyro();
     }
     digitalWrite(RED_PIN, LOW);
@@ -603,7 +629,13 @@ void setup() {
 
       Serial.println(i);
 
-      selectI2cSwitchChannel(TCA_ADDRESS_RIGHT_SIDE, i);
+      //selectI2cMultiplexerChannel(TCA_ADDRESS_RIGHT_SIDE, i);
+      if (!selectI2cMultiplexerChannel(sensors[i].multiplexer, sensors[i].channel)) {
+        Serial.print("could not select channel ");
+        Serial.print(sensors[i].channel);
+        Serial.print(" on multiplexer at address ");
+        Serial.println(sensors[i].multiplexer);
+      }
       mpu[i].setMagneticDeclination(MAG_DECLINATION);
       mpu[i].calibrateMag();
 
@@ -649,7 +681,7 @@ void setup() {
       digitalWrite(RED_PIN, HIGH);
       for(uint8_t i=0; i<nbrMpu; i++) {
         Serial.println(i);
-        selectI2cSwitchChannel(sensors[i].multiplexer, sensors[i].channel);
+        selectI2cMultiplexerChannel(sensors[i].multiplexer, sensors[i].channel);
         mpu[i].calibrateAccelGyro();
       }
       digitalWrite(RED_PIN, LOW);
@@ -689,7 +721,12 @@ void setup() {
 
   // TODO: fix this
   // We let the mpu run for 10 seconds to have the good yaw if we need it
-  selectI2cSwitchChannel(TCA_ADDRESS_RIGHT_SIDE, MPU_NORTH - 1);
+  if (!selectI2cMultiplexerChannel(TCA_ADDRESS_RIGHT_SIDE, MPU_NORTH - 1)) {
+    Serial.print("could not select channel ");
+    Serial.print(MPU_NORTH - 1);
+    Serial.print(" on multiplexer at address ");
+    Serial.println(TCA_ADDRESS_RIGHT_SIDE);
+  }
 
   time_passed = millis();
   while (millis() - time_passed < 10000) {
@@ -739,7 +776,7 @@ void setup() {
   //Print/send the calibration of magnetometer - USE IT TO AUTO CALIB AGAIN
   Serial.println("Calibration data :");
   for(int i=0; i<nbrMpu; i++) {
-    selectI2cSwitchChannel(sensors[i].multiplexer, sensors[i].channel);
+    selectI2cMultiplexerChannel(sensors[i].multiplexer, sensors[i].channel);
 
     //Send calibration data to TouchDesigner
     calibration.add("MAGSCALE").add(i).add(mpu[i].getMagScaleX()).add(mpu[i].getMagScaleY()).add(mpu[i].getMagScaleZ());
@@ -770,7 +807,12 @@ void loop() {
 
   // fetch data from each MPU
   for (uint8_t i = 0; i < nbrMpu; i++) {
-    selectI2cSwitchChannel(sensors[i].multiplexer, sensors[i].channel);
+    if (!selectI2cMultiplexerChannel(sensors[i].multiplexer, sensors[i].channel)) {
+      Serial.print("could not select channel ");
+      Serial.print(sensors[i].channel);
+      Serial.print(" on multiplexer at address ");
+      Serial.println(sensors[i].multiplexer);
+    }
     if (sensors[i].usable) {
       // TODO: check for errors
       mpu[i].update();
