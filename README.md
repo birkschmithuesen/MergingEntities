@@ -25,7 +25,9 @@ It was not able to include a matching Cudatoolkit and cuDNN file in the environm
 
 ## Bodysuite / Gyroscopes OSC Interface
 Each bodysuite with $id (counting from 1) sends it's gyroscope data like this: `/body/$id/gyro/$part/[quarternions, angles, rotation-speed]`.
-The values for $part are: `left_arm`, `right_arm`, `left_foot`, `right_foot`, `back`, and `head`.
+The values for $part depend on the controller board and number of gyroscopes used. The 6 sensor controller yields data for
+`right_upper_arm`, `right_foot`, `left_upper_arm`, `left_foot`, `head`, and `back`.
+A 10 sensor setup adds `right_lower_arm`, `right_upper_leg`, `left_lower_arm`, and `left_upper_leg` values for $part.
 The quaternions have 4 float values, the angles and angles and rotation-speed have 3 float values for x,y,z.
 
 ## Pharus / LiDAR Tracking Interface

@@ -105,12 +105,12 @@ struct MPU9250socket {
 #define LEFT_UPPER_ARM_INDEX 0  /**< index for the sensor at the left upper arm (brachium) */
 #define LEFT_LOWER_ARM_INDEX 1  /**< index for the sensor at the left lower arm (antebrachium) */
 #define LEFT_UPPER_LEG_INDEX 2  /**< index for the sensor at the left thigh (femur) */
-#define LEFT_LOWER_LEG_INDEX 3  /**< index for the sensor at the left crus (crus) */
-#define HIP_INDEX 4             /**< index for the sensor at the hip (coxa) */
+#define LEFT_FOOT_INDEX 3       /**< index for the sensor at the left foot */
+#define BACK_INDEX 4            /**< index for the sensor at the back */
 #define RIGHT_UPPER_ARM_INDEX 5 /**< index for the sensor at the right upper arm (brachium) */
 #define RIGHT_LOWER_ARM_INDEX 6 /**< index for the sensor at the right lower arm (antebrachium) */
 #define RIGHT_UPPER_LEG_INDEX 7 /**< index for the sensor at the right thigh (femur) */
-#define RIGHT_LOWER_LEG_INDEX 8 /**< index for the sensor at the right crus (crus) */
+#define RIGHT_FOOT_INDEX 8      /**< index for the sensor at the right foot */
 #define HEAD_INDEX 9            /**< index for the sensor at the head (cranium) */
 
 // Instance to store data on ESP32, name of the preference
@@ -230,7 +230,7 @@ uint8_t countI2cDevices() {
 int outPort = 8000;  /**< UDP server port on OSC receiver (i.e. central server) */
 /** OSC messages with senor values for given part */
 OSCMessage body[] = {
-    OSCMessage("/body/1/gyro/left_arm/"), OSCMessage("/body/1/gyro/right_arm/"),
+    OSCMessage("/body/1/gyro/left_upper_arm/"), OSCMessage("/body/1/gyro/right_upper_arm/"),
     OSCMessage("/body/1/gyro/left_foot/"), OSCMessage("/body/1/gyro/right_foot/"),
     OSCMessage("/body/1/gyro/back/"), OSCMessage("/body/1/gyro/head/")};
 OSCMessage calibration("/calibration/1");  /**< OSC endpoint for calibration messages */
@@ -248,7 +248,7 @@ float magbias[6][3] = {{-40.82, -108.61, -405.33}, {128.62, 104.29, -164.14},
 int outPort = 8001;  /**< UDP server port on OSC receiver (i.e. central server) */
 /** OSC messages with senor values for given part */
 OSCMessage body[] = {
-    OSCMessage("/body/2/gyro/left_arm/"), OSCMessage("/body/2/gyro/right_arm/"),
+    OSCMessage("/body/2/gyro/left_upper_arm/"), OSCMessage("/body/2/gyro/right_upper_arm/"),
     OSCMessage("/body/2/gyro/left_foot/"), OSCMessage("/body/2/gyro/right_foot/"),
     OSCMessage("/body/2/gyro/back/"), OSCMessage("/body/2/gyro/head/")};
 OSCMessage calibration("/calibration/2");  /**< OSC endpoint for calibration messages */
@@ -266,9 +266,9 @@ float magbias[6][3] = {{98.40, -5.27, -345.30}, {399.67, 242.51, -126.99},
 int outPort = 8002;  /**< UDP server port on OSC receiver (i.e. central server) */
 /** OSC messages with senor values for given part */
 OSCMessage body[] = {
-    OSCMessage("/body/3/gyro/left_arm/"), OSCMessage("/body/3/gyro/right_arm/"),
+    OSCMessage("/body/3/gyro/left_upper_arm/"), OSCMessage("/body/3/gyro/right_upper_arm/"),
     OSCMessage("/body/3/gyro/left_foot/"), OSCMessage("/body/3/gyro/right_foot/"),
-    OSCMessage("/body/3/gyro/back/"), OSCMessage("/body/3/gyro/6/")};
+    OSCMessage("/body/3/gyro/back/"), OSCMessage("/body/3/gyro/head/")};
 OSCMessage calibration("/calibration/3");  /**< OSC endpoint for calibration messages */
 #endif
 
@@ -499,12 +499,12 @@ void setup() {
   sensors[RIGHT_UPPER_LEG_INDEX].label = "right_upper_leg";
   sensors[RIGHT_UPPER_LEG_INDEX].multiplexer = TCA_ADDRESS_RIGHT_SIDE;
   sensors[RIGHT_UPPER_LEG_INDEX].channel = 4;
-  sensors[RIGHT_LOWER_LEG_INDEX].label = "right_lower_leg";
-  sensors[RIGHT_LOWER_LEG_INDEX].multiplexer = TCA_ADDRESS_RIGHT_SIDE;
-  sensors[RIGHT_LOWER_LEG_INDEX].channel = 5;
-  sensors[HIP_INDEX].label = "hip";
-  sensors[HIP_INDEX].multiplexer = TCA_ADDRESS_RIGHT_SIDE;
-  sensors[HIP_INDEX].channel = 7;
+  sensors[RIGHT_FOOT_INDEX].label = "right_lower_leg";
+  sensors[RIGHT_FOOT_INDEX].multiplexer = TCA_ADDRESS_RIGHT_SIDE;
+  sensors[RIGHT_FOOT_INDEX].channel = 5;
+  sensors[BACK_INDEX].label = "hip";
+  sensors[BACK_INDEX].multiplexer = TCA_ADDRESS_RIGHT_SIDE;
+  sensors[BACK_INDEX].channel = 7;
   sensors[LEFT_UPPER_ARM_INDEX].label = "left_upper_arm";
   sensors[LEFT_UPPER_ARM_INDEX].multiplexer = TCA_ADDRESS_LEFT_SIDE;
   sensors[LEFT_UPPER_ARM_INDEX].channel = 2;
@@ -514,9 +514,9 @@ void setup() {
   sensors[LEFT_UPPER_LEG_INDEX].label = "left_upper_leg";
   sensors[LEFT_UPPER_LEG_INDEX].multiplexer = TCA_ADDRESS_LEFT_SIDE;
   sensors[LEFT_UPPER_LEG_INDEX].channel = 4;
-  sensors[LEFT_LOWER_LEG_INDEX].label = "left_lower_leg";
-  sensors[LEFT_LOWER_LEG_INDEX].multiplexer = TCA_ADDRESS_LEFT_SIDE;
-  sensors[LEFT_LOWER_LEG_INDEX].channel = 5;
+  sensors[LEFT_FOOT_INDEX].label = "left_lower_leg";
+  sensors[LEFT_FOOT_INDEX].multiplexer = TCA_ADDRESS_LEFT_SIDE;
+  sensors[LEFT_FOOT_INDEX].channel = 5;
   sensors[HEAD_INDEX].label = "head";
   sensors[HEAD_INDEX].multiplexer = TCA_ADDRESS_LEFT_SIDE;
   sensors[HEAD_INDEX].channel = 7;
