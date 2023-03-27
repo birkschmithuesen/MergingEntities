@@ -414,6 +414,44 @@ void automaticMagnetometerCalibration() {
 
 
 /**
+ * Guess the number of MPU9250 boards attached to the controler.
+ * This routine is useful to select a (sub-)set of OSC paths and data
+ * to be transmitted.
+ *
+ * @startuml
+
+start
+
+:count = 0;
+
+if (communication with TCA_ADDRESS_RIGHT_SIDE?) then (yes)
+  :count = 6;
+  if (communication with TCA_ADDRESS_LEFT_SIDE?) then (yes)
+    :count = 10;
+  else (no)
+  endif
+else (no)
+endif
+
+stop
+
+@enduml
+ * @warning This routines does not actually verify the sensors attached.
+ * @return Number of MPU9250 boards
+ */
+uint8_t guessNumberOfMpus(){
+  uint8_t count = 0;
+  if (selectI2cMultiplexerChannel(TCA_ADDRESS_RIGHT_SIDE, 1)) {
+    count = 6;
+  }
+  if (selectI2cMultiplexerChannel(TCA_ADDRESS_LEFT_SIDE, 1)) {
+    count = 10;
+  }
+  return count;
+}
+
+
+/**
  * Main setup / initialisation routine.
  * 
  * @see loop()
