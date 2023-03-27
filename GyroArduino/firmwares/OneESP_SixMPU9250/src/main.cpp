@@ -103,15 +103,15 @@ struct MPU9250socket {
 
 // manually create indexes to emulate a hashmap with an array
 #define LEFT_UPPER_ARM_INDEX 0  /**< index for the sensor at the left upper arm (brachium) */
-#define LEFT_LOWER_ARM_INDEX 1  /**< index for the sensor at the left lower arm (antebrachium) */
-#define LEFT_UPPER_LEG_INDEX 2  /**< index for the sensor at the left thigh (femur) */
-#define LEFT_FOOT_INDEX 3       /**< index for the sensor at the left foot */
+#define RIGHT_UPPER_ARM_INDEX 1 /**< index for the sensor at the right upper arm (brachium) */
+#define LEFT_FOOT_INDEX 2       /**< index for the sensor at the left foot */
+#define RIGHT_FOOT_INDEX 3      /**< index for the sensor at the right foot */
 #define BACK_INDEX 4            /**< index for the sensor at the back */
-#define RIGHT_UPPER_ARM_INDEX 5 /**< index for the sensor at the right upper arm (brachium) */
-#define RIGHT_LOWER_ARM_INDEX 6 /**< index for the sensor at the right lower arm (antebrachium) */
-#define RIGHT_UPPER_LEG_INDEX 7 /**< index for the sensor at the right thigh (femur) */
-#define RIGHT_FOOT_INDEX 8      /**< index for the sensor at the right foot */
-#define HEAD_INDEX 9            /**< index for the sensor at the head (cranium) */
+#define HEAD_INDEX 5            /**< index for the sensor at the head (cranium) */
+#define LEFT_LOWER_ARM_INDEX 6  /**< index for the sensor at the left lower arm (antebrachium) */
+#define RIGHT_LOWER_ARM_INDEX 7 /**< index for the sensor at the right lower arm (antebrachium) */
+#define LEFT_UPPER_LEG_INDEX 8  /**< index for the sensor at the left thigh (femur) */
+#define RIGHT_UPPER_LEG_INDEX 9 /**< index for the sensor at the right thigh (femur) */
 
 // Instance to store data on ESP32, name of the preference
 Preferences preferences;  /**< container for preferences on ESP32 */
@@ -477,36 +477,71 @@ void setup() {
 
   // all senor adressing
   Serial.print("setting up sensor sockets .");
-  sensors[RIGHT_UPPER_ARM_INDEX].label = "right_upper_arm";
-  sensors[RIGHT_UPPER_ARM_INDEX].multiplexer = TCA_ADDRESS_RIGHT_SIDE;
-  sensors[RIGHT_UPPER_ARM_INDEX].channel = 2;
-  sensors[RIGHT_LOWER_ARM_INDEX].label = "right_lower_arm";
-  sensors[RIGHT_LOWER_ARM_INDEX].multiplexer = TCA_ADDRESS_RIGHT_SIDE;
-  sensors[RIGHT_LOWER_ARM_INDEX].channel = 3;
-  sensors[RIGHT_UPPER_LEG_INDEX].label = "right_upper_leg";
-  sensors[RIGHT_UPPER_LEG_INDEX].multiplexer = TCA_ADDRESS_RIGHT_SIDE;
-  sensors[RIGHT_UPPER_LEG_INDEX].channel = 4;
-  sensors[RIGHT_FOOT_INDEX].label = "right_lower_leg";
-  sensors[RIGHT_FOOT_INDEX].multiplexer = TCA_ADDRESS_RIGHT_SIDE;
-  sensors[RIGHT_FOOT_INDEX].channel = 5;
-  sensors[BACK_INDEX].label = "hip";
-  sensors[BACK_INDEX].multiplexer = TCA_ADDRESS_RIGHT_SIDE;
-  sensors[BACK_INDEX].channel = 7;
-  sensors[LEFT_UPPER_ARM_INDEX].label = "left_upper_arm";
-  sensors[LEFT_UPPER_ARM_INDEX].multiplexer = TCA_ADDRESS_LEFT_SIDE;
-  sensors[LEFT_UPPER_ARM_INDEX].channel = 2;
-  sensors[LEFT_LOWER_ARM_INDEX].label = "left_lower_arm";
-  sensors[LEFT_LOWER_ARM_INDEX].multiplexer = TCA_ADDRESS_LEFT_SIDE;
-  sensors[LEFT_LOWER_ARM_INDEX].channel = 3;
-  sensors[LEFT_UPPER_LEG_INDEX].label = "left_upper_leg";
-  sensors[LEFT_UPPER_LEG_INDEX].multiplexer = TCA_ADDRESS_LEFT_SIDE;
-  sensors[LEFT_UPPER_LEG_INDEX].channel = 4;
-  sensors[LEFT_FOOT_INDEX].label = "left_lower_leg";
-  sensors[LEFT_FOOT_INDEX].multiplexer = TCA_ADDRESS_LEFT_SIDE;
-  sensors[LEFT_FOOT_INDEX].channel = 5;
-  sensors[HEAD_INDEX].label = "head";
-  sensors[HEAD_INDEX].multiplexer = TCA_ADDRESS_LEFT_SIDE;
-  sensors[HEAD_INDEX].channel = 7;
+  switch (countMultiplexer()) {
+  case 1:
+    sensors[LEFT_UPPER_ARM_INDEX].label = "left_upper_arm";
+    sensors[LEFT_UPPER_ARM_INDEX].multiplexer = TCA_ADDRESS_RIGHT_SIDE;
+    sensors[LEFT_UPPER_ARM_INDEX].channel = 0;
+    sensors[RIGHT_UPPER_ARM_INDEX].label = "right_upper_arm";
+    sensors[RIGHT_UPPER_ARM_INDEX].multiplexer = TCA_ADDRESS_RIGHT_SIDE;
+    sensors[RIGHT_UPPER_ARM_INDEX].channel = 1;
+    sensors[LEFT_FOOT_INDEX].label = "left_foot";
+    sensors[LEFT_FOOT_INDEX].multiplexer = TCA_ADDRESS_RIGHT_SIDE;
+    sensors[LEFT_FOOT_INDEX].channel = 2;
+    sensors[RIGHT_FOOT_INDEX].label = "right_foot";
+    sensors[RIGHT_FOOT_INDEX].multiplexer = TCA_ADDRESS_RIGHT_SIDE;
+    sensors[RIGHT_FOOT_INDEX].channel = 3;
+    sensors[BACK_INDEX].label = "back";
+    sensors[BACK_INDEX].multiplexer = TCA_ADDRESS_RIGHT_SIDE;
+    sensors[BACK_INDEX].channel = 4;
+    sensors[HEAD_INDEX].label = "head";
+    sensors[HEAD_INDEX].multiplexer = TCA_ADDRESS_RIGHT_SIDE;
+    sensors[HEAD_INDEX].channel = 5;
+    break;
+  case 2:
+    // first do the minimal setup
+    sensors[RIGHT_UPPER_ARM_INDEX].label = "right_upper_arm";
+    sensors[RIGHT_UPPER_ARM_INDEX].multiplexer = TCA_ADDRESS_RIGHT_SIDE;
+    sensors[RIGHT_UPPER_ARM_INDEX].channel = 2;
+    sensors[RIGHT_FOOT_INDEX].label = "right_foot";
+    sensors[RIGHT_FOOT_INDEX].multiplexer = TCA_ADDRESS_RIGHT_SIDE;
+    sensors[RIGHT_FOOT_INDEX].channel = 5;
+    sensors[BACK_INDEX].label = "hip";
+    sensors[BACK_INDEX].multiplexer = TCA_ADDRESS_RIGHT_SIDE;
+    sensors[BACK_INDEX].channel = 7;
+    sensors[LEFT_UPPER_ARM_INDEX].label = "left_upper_arm";
+    sensors[LEFT_UPPER_ARM_INDEX].multiplexer = TCA_ADDRESS_LEFT_SIDE;
+    sensors[LEFT_UPPER_ARM_INDEX].channel = 2;
+    sensors[LEFT_FOOT_INDEX].label = "left_foot";
+    sensors[LEFT_FOOT_INDEX].multiplexer = TCA_ADDRESS_LEFT_SIDE;
+    sensors[LEFT_FOOT_INDEX].channel = 5;
+    sensors[HEAD_INDEX].label = "head";
+    sensors[HEAD_INDEX].multiplexer = TCA_ADDRESS_LEFT_SIDE;
+    sensors[HEAD_INDEX].channel = 7;
+    // add the additional sensors if build is configured that way
+    if (10 == NUMBER_OF_MPU) {
+      sensors[RIGHT_LOWER_ARM_INDEX].label = "right_lower_arm";
+      sensors[RIGHT_LOWER_ARM_INDEX].multiplexer = TCA_ADDRESS_RIGHT_SIDE;
+      sensors[RIGHT_LOWER_ARM_INDEX].channel = 3;
+      sensors[RIGHT_UPPER_LEG_INDEX].label = "right_upper_leg";
+      sensors[RIGHT_UPPER_LEG_INDEX].multiplexer = TCA_ADDRESS_RIGHT_SIDE;
+      sensors[RIGHT_UPPER_LEG_INDEX].channel = 4;
+      sensors[LEFT_LOWER_ARM_INDEX].label = "left_lower_arm";
+      sensors[LEFT_LOWER_ARM_INDEX].multiplexer = TCA_ADDRESS_LEFT_SIDE;
+      sensors[LEFT_LOWER_ARM_INDEX].channel = 3;
+      sensors[LEFT_UPPER_LEG_INDEX].label = "left_upper_leg";
+      sensors[LEFT_UPPER_LEG_INDEX].multiplexer = TCA_ADDRESS_LEFT_SIDE;
+      sensors[LEFT_UPPER_LEG_INDEX].channel = 4;
+    }
+    break;
+  default:
+    Serial.println("");
+    Serial.println("---------------------------------------------------");
+    Serial.println("can not find a reasonable number of I2C multiplexer");
+    Serial.println("---------------------------------------------------");
+    delay(60 * 60 * 1000); // hang for a long time before crashing
+    break;
+  }
   Serial.println(".. done");
 
   // MPU parameters (sensitivity, etc)
