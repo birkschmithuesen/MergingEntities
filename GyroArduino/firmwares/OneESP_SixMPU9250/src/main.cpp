@@ -128,10 +128,19 @@ MPU9250Setting setting;  /**< configuration settings of the MPU9250 stored in me
  * This data structure models a quaternion for easier access to its component data.
  */
 struct Quaternion {
-	float x; /**< The x value of the quaternion */
-	float y; /**< The y value of the quaternion */
-	float z; /**< The z value of the quaternion */
-	float w; /**< The w value of the quaternion */
+	float x = 0.0; /**< The x value of the quaternion */
+	float y = 0.0; /**< The y value of the quaternion */
+	float z = 0.0; /**< The z value of the quaternion */
+	float w = 0.0; /**< The w value of the quaternion */
+};
+
+/**
+ * This data structure models an Euler angle for easier access to its component data.
+ */
+struct EulerAngle {
+	float x = 0.0; /**< The x-axis value of the Euler angle */
+	float y = 0.0; /**< The y-axis value of the Euler angle */
+	float z = 0.0; /**< The z-axis value of the Euler angle */
 };
 
 // Store data from MPU
