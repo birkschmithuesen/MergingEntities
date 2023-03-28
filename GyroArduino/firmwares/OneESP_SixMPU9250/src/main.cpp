@@ -124,6 +124,16 @@ MPU9250socket sensors[NUMBER_OF_MPU];   /**< communication abstractions for all 
 // Setting variable
 MPU9250Setting setting;  /**< configuration settings of the MPU9250 stored in memory */
 
+/**
+ * This data structure models a quaternion for easier access to its component data.
+ */
+struct Quaternion {
+	float x; /**< The x value of the quaternion */
+	float y; /**< The y value of the quaternion */
+	float z; /**< The z value of the quaternion */
+	float w; /**< The w value of the quaternion */
+};
+
 // Store data from MPU
 float qX[NUMBER_OF_MPU] = {0};  /**< quaternion X value for MPU referenced by index */
 float qY[NUMBER_OF_MPU] = {0};  /**< quaternion Y value for MPU referenced by index */
