@@ -165,19 +165,7 @@ struct MPU9250data {
 	GyroValue gyrovalue;   /**< gyroscope data along axis */
 };
 
-// Store data from MPU
-float qX[NUMBER_OF_MPU] = {0};  /**< quaternion X value for MPU referenced by index */
-float qY[NUMBER_OF_MPU] = {0};  /**< quaternion Y value for MPU referenced by index */
-float qZ[NUMBER_OF_MPU] = {0};  /**< quaternion Z value for MPU referenced by index */
-float qW[NUMBER_OF_MPU] = {0};  /**< quaternion W value for MPU referenced by index */
-
-float oX[NUMBER_OF_MPU] = {0};  /**< euler angle X axis for MPU referenced by index */
-float oY[NUMBER_OF_MPU] = {0};  /**< euler angle Y axis for MPU referenced by index */
-float oZ[NUMBER_OF_MPU] = {0};  /**< euler angle Z axis for MPU referenced by index */
-
-float gX[NUMBER_OF_MPU] = {0};  /**< gyroscope value X axis for MPU referenced by index */
-float gY[NUMBER_OF_MPU] = {0};  /**< gyroscope value Y axis for MPU referenced by index */
-float gZ[NUMBER_OF_MPU] = {0};  /**< gyroscope value Z axis for MPU referenced by index */
+MPU9250data mpuData[NUMBER_OF_MPU]; /**< bundled MPU9250 data to be accessed by index */
 
 float accbias[6][3];     /**< bias/drift/offset profile for the accelerator */
 float gyrobias[6][3];    /**< bias/drift/offset profile for the gyroscope */
@@ -959,33 +947,33 @@ void loop() {
     last_print = millis();
   }
 
-  // Store values
+  // Store sensor values
   for (int i = 0; i < NUMBER_OF_MPU; i++) {
-    qX[i] = mpu[i].getQuaternionX();
-    qY[i] = mpu[i].getQuaternionY();
-    qZ[i] = mpu[i].getQuaternionZ();
-    qW[i] = mpu[i].getQuaternionW();
+    mpuData[i].quaternion.x = mpu[i].getQuaternionX();
+    mpuData[i].quaternion.y = mpu[i].getQuaternionY();
+    mpuData[i].quaternion.z = mpu[i].getQuaternionZ();
+    mpuData[i].quaternion.w = mpu[i].getQuaternionW();
 
-    oX[i] = mpu[i].getEulerX();
-    oY[i] = mpu[i].getEulerY();
-    oZ[i] = mpu[i].getEulerZ();
+    mpuData[i].eulerangle.x = mpu[i].getEulerX();
+    mpuData[i].eulerangle.y = mpu[i].getEulerY();
+    mpuData[i].eulerangle.z = mpu[i].getEulerZ();
 
-    gX[i] = mpu[i].getGyroX();
-    gY[i] = mpu[i].getGyroY();
-    gZ[i] = mpu[i].getGyroZ();
+    mpuData[i].gyrovalue.x = mpu[i].getGyroX();
+    mpuData[i].gyrovalue.y = mpu[i].getGyroY();
+    mpuData[i].gyrovalue.z = mpu[i].getGyroZ();
   }
 
   //-------OSC communication--------
   // Send data in separate message per sensor
-  for (int i = 0; i < NUMBER_OF_MPU; i++) {
+  for (size_t i = 0; i < NUMBER_OF_MPU; i++) {
 	// skip sesors with problems
 	if (!sensors[i].usable) {
        continue;
     }
     // Fill OSC message with data
-    body[i].add(qX[i]).add(qY[i]).add(qZ[i]).add(qW[i]);
-    body[i].add(oX[i]).add(oY[i]).add(oZ[i]);
-    body[i].add(gX[i]).add(gY[i]).add(gZ[i]);
+    body[i].add(mpuData[i].quaternion.x).add(mpuData[i].quaternion.y).add(mpuData[i].quaternion.z).add(mpuData[i].quaternion.w);
+    body[i].add(mpuData[i].eulerangle.x).add(mpuData[i].eulerangle.y).add(mpuData[i].eulerangle.z);
+    body[i].add(mpuData[i].gyrovalue.x).add(mpuData[i].gyrovalue.y).add(mpuData[i].gyrovalue.z);
 
     // send data out
     Udp.beginPacket(outIp, outPort);
