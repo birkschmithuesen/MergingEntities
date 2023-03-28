@@ -143,6 +143,15 @@ struct EulerAngle {
 	float z = 0.0; /**< The z-axis value of the Euler angle */
 };
 
+/**
+ * This data structure models gyroscope data for easier access to its component data.
+ */
+struct GyroValue {
+	float x = 0.0; /**< The x-axis value of the gyroscope */
+	float y = 0.0; /**< The y-axis value of the gyroscope */
+	float z = 0.0; /**< The z-axis value of the gyroscope */
+};
+
 // Store data from MPU
 float qX[NUMBER_OF_MPU] = {0};  /**< quaternion X value for MPU referenced by index */
 float qY[NUMBER_OF_MPU] = {0};  /**< quaternion Y value for MPU referenced by index */
