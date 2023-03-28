@@ -440,10 +440,57 @@ uint8_t countMultiplexer(){
 }
 
 /**
+ * Calibrate the Accelerometers and store calibration data.
+ *
+ * @note The device should not be moved during the calibration procedure.
+ *
+ * @see buttonBasedCalibration()
+ */
+void passiveAccelerometerCalibration() {
+  Serial.println("Calibration of acceleration : don't move devices");
+  calibration.add("Calibration of acceleration : don't move devices");
+  Udp.beginPacket(outIp, outPort);
+  calibration.send(Udp);
+  Udp.endPacket();
+  calibration.empty();
+  digitalWrite(RED_PIN, HIGH);
+  for (uint8_t i = 0; i < NUMBER_OF_MPU; i++) {
+    Serial.println(i);
+    if (!selectI2cMultiplexerChannel(sensors[i].multiplexer,
+                                     sensors[i].channel)) {
+      Serial.print("could not select channel ");
+      Serial.print(sensors[i].channel);
+      Serial.print(" on multiplexer at address ");
+      Serial.println(sensors[i].multiplexer);
+    }
+    mpu[i].calibrateAccelGyro();
+  }
+  digitalWrite(RED_PIN, LOW);
+  Serial.println("Acceleration calibration done.");
+
+  // Acceleration: store calibration data
+  for (uint8_t i = 0; i < NUMBER_OF_MPU; i++) {
+    itoa(i, mpuPref, 10); // Key names = number of mpu
+    preferences.begin(mpuPref, false);
+
+    preferences.putFloat("accbiasX", mpu[i].getAccBiasX());
+    preferences.putFloat("accbiasY", mpu[i].getAccBiasY());
+    preferences.putFloat("accbiasZ", mpu[i].getAccBiasZ());
+
+    preferences.putFloat("gyrobiasX", mpu[i].getGyroBiasX());
+    preferences.putFloat("gyrobiasY", mpu[i].getGyroBiasY());
+    preferences.putFloat("gyrobiasZ", mpu[i].getGyroBiasZ());
+
+    preferences.end();
+  }
+}
+
+/**
  * Do the calibration with button choices.
  *
  * @warning This is just a copy of the code from the setup routine. It has not
  * been refactored/reviewed yet.
+ * @see passiveAccelerometerCalibration()
  * @see automaticMagnetometerCalibration()
  * @see manualMagnetometerCalibration()
  */
@@ -461,44 +508,8 @@ void buttonBasedCalibration() {
   // state_button = LOW;
   if (state_button == HIGH) {
     Serial.println("HIGH : Launch calibration sequence");
-    // Acceleration : get data calibration + calibrate
-    Serial.println("Calibration of acceleration : don't move devices");
-    calibration.add("Calibration of acceleration : don't move devices");
-    Udp.beginPacket(outIp, outPort);
-    calibration.send(Udp);
-    Udp.endPacket();
-    calibration.empty();
-
-    digitalWrite(RED_PIN, HIGH);
-    for (uint8_t i = 0; i < NUMBER_OF_MPU; i++) {
-      Serial.println(i);
-      if (!selectI2cMultiplexerChannel(sensors[i].multiplexer,
-                                       sensors[i].channel)) {
-        Serial.print("could not select channel ");
-        Serial.print(sensors[i].channel);
-        Serial.print(" on multiplexer at address ");
-        Serial.println(sensors[i].multiplexer);
-      }
-      mpu[i].calibrateAccelGyro();
-    }
-    digitalWrite(RED_PIN, LOW);
-    Serial.println("Acceleration calibration done.");
-
-    // Acceleration : store calibration data
-    for (uint8_t i = 0; i < NUMBER_OF_MPU; i++) {
-      itoa(i, mpuPref, 10); // Key names = number of mpu
-      preferences.begin(mpuPref, false);
-
-      preferences.putFloat("accbiasX", mpu[i].getAccBiasX());
-      preferences.putFloat("accbiasY", mpu[i].getAccBiasY());
-      preferences.putFloat("accbiasZ", mpu[i].getAccBiasZ());
-
-      preferences.putFloat("gyrobiasX", mpu[i].getGyroBiasX());
-      preferences.putFloat("gyrobiasY", mpu[i].getGyroBiasY());
-      preferences.putFloat("gyrobiasZ", mpu[i].getGyroBiasZ());
-
-      preferences.end();
-    }
+    // Acceleration: get data calibration + calibrate
+    passiveAccelerometerCalibration();
 
     // Magnetometer : get data calibration + calibrate
     Serial.println("Calibration of mag");
