@@ -92,6 +92,7 @@ int state_button = LOW;  /**< current state of the button */
  * A data structure to handle hardware related data of one MPU9250.
  *
  * @todo Also move data read from sensor here (?)
+ * @see MPU9250data
  */
 struct MPU9250socket {
 	String label;        /**< human readable identification of the sensor (used on OSC path) */
@@ -99,6 +100,58 @@ struct MPU9250socket {
 	uint8_t channel;     /**< channel used on the I2C multiplexer */
 	MPU9250 mpu;         /**< software handler/abstraction for MPU at given channel of given multiplexer */
 	bool usable = false; /**< indicate that sensor (data) is present and no errors occured */
+};
+
+/**
+ * This data structure models a quaternion for easier access to its component data.
+ *
+ * @see MPU9250data
+ * @see EulerAngle
+ * @see GyroValue
+ */
+struct Quaternion {
+	float x = 0.0; /**< The x value of the quaternion */
+	float y = 0.0; /**< The y value of the quaternion */
+	float z = 0.0; /**< The z value of the quaternion */
+	float w = 0.0; /**< The w value of the quaternion */
+};
+
+/**
+ * This data structure models an Euler angle for easier access to its component data.
+ *
+ * @see MPU9250data
+ * @see Quaternion
+ * @see GyroValue
+ */
+struct EulerAngle {
+	float x = 0.0; /**< The x-axis value of the Euler angle */
+	float y = 0.0; /**< The y-axis value of the Euler angle */
+	float z = 0.0; /**< The z-axis value of the Euler angle */
+};
+
+/**
+ * This data structure models gyroscope data for easier access to its component data.
+ *
+ * @see MPU9250data
+ * @see Quaternion
+ * @see EulerAngle
+ */
+struct GyroValue {
+	float x = 0.0; /**< The x-axis value of the gyroscope */
+	float y = 0.0; /**< The y-axis value of the gyroscope */
+	float z = 0.0; /**< The z-axis value of the gyroscope */
+};
+
+/**
+ * A model of the data retrieved from a MPU9250.
+ * 
+ * @note This is not a model for the sensor board itself.
+ * @see MPU9250socket
+ */
+struct MPU9250data {
+	Quaternion quaternion; /**< gyroscope data as quaternion */
+	EulerAngle eulerangle; /**< gyroscope data as Euler angle */
+	GyroValue gyrovalue;   /**< gyroscope data along axis */
 };
 
 // manually create indexes to emulate a hashmap with an array
@@ -117,29 +170,13 @@ struct MPU9250socket {
 Preferences preferences;  /**< container for preferences on ESP32 */
 char mpuPref[10];         /**< preferences of each MPU stored on ESP32 */
 
-// Hardware I2c
+// MPU9250 settings and data storage
 MPU9250 mpu[NUMBER_OF_MPU];  /**< software handler/abstraction for each MPU */
 MPU9250socket sensors[NUMBER_OF_MPU];   /**< communication abstractions for all MPUs */
-
-// Setting variable
-MPU9250Setting setting;  /**< configuration settings of the MPU9250 stored in memory */
-
-// Store data from MPU
-float qX[NUMBER_OF_MPU] = {0};  /**< quaternion X value for MPU referenced by index */
-float qY[NUMBER_OF_MPU] = {0};  /**< quaternion Y value for MPU referenced by index */
-float qZ[NUMBER_OF_MPU] = {0};  /**< quaternion Z value for MPU referenced by index */
-float qW[NUMBER_OF_MPU] = {0};  /**< quaternion W value for MPU referenced by index */
-
-float oX[NUMBER_OF_MPU] = {0};  /**< euler angle X axis for MPU referenced by index */
-float oY[NUMBER_OF_MPU] = {0};  /**< euler angle Y axis for MPU referenced by index */
-float oZ[NUMBER_OF_MPU] = {0};  /**< euler angle Z axis for MPU referenced by index */
-
-float gX[NUMBER_OF_MPU] = {0};  /**< gyroscope value X axis for MPU referenced by index */
-float gY[NUMBER_OF_MPU] = {0};  /**< gyroscope value Y axis for MPU referenced by index */
-float gZ[NUMBER_OF_MPU] = {0};  /**< gyroscope value Z axis for MPU referenced by index */
-
+MPU9250data mpuData[NUMBER_OF_MPU]; /**< bundled MPU9250 data to be accessed by index */
 float accbias[6][3];     /**< bias/drift/offset profile for the accelerator */
 float gyrobias[6][3];    /**< bias/drift/offset profile for the gyroscope */
+MPU9250Setting setting;  /**< configuration settings of the MPU9250 stored in memory */
 
 /**
  * Switch to the given channel on the multiplexer for I2C communication.
@@ -958,33 +995,33 @@ void loop() {
     last_print = millis();
   }
 
-  // Store values
+  // Store sensor values
   for (int i = 0; i < NUMBER_OF_MPU; i++) {
-    qX[i] = mpu[i].getQuaternionX();
-    qY[i] = mpu[i].getQuaternionY();
-    qZ[i] = mpu[i].getQuaternionZ();
-    qW[i] = mpu[i].getQuaternionW();
+    mpuData[i].quaternion.x = mpu[i].getQuaternionX();
+    mpuData[i].quaternion.y = mpu[i].getQuaternionY();
+    mpuData[i].quaternion.z = mpu[i].getQuaternionZ();
+    mpuData[i].quaternion.w = mpu[i].getQuaternionW();
 
-    oX[i] = mpu[i].getEulerX();
-    oY[i] = mpu[i].getEulerY();
-    oZ[i] = mpu[i].getEulerZ();
+    mpuData[i].eulerangle.x = mpu[i].getEulerX();
+    mpuData[i].eulerangle.y = mpu[i].getEulerY();
+    mpuData[i].eulerangle.z = mpu[i].getEulerZ();
 
-    gX[i] = mpu[i].getGyroX();
-    gY[i] = mpu[i].getGyroY();
-    gZ[i] = mpu[i].getGyroZ();
+    mpuData[i].gyrovalue.x = mpu[i].getGyroX();
+    mpuData[i].gyrovalue.y = mpu[i].getGyroY();
+    mpuData[i].gyrovalue.z = mpu[i].getGyroZ();
   }
 
   //-------OSC communication--------
   // Send data in separate message per sensor
-  for (int i = 0; i < NUMBER_OF_MPU; i++) {
+  for (size_t i = 0; i < NUMBER_OF_MPU; i++) {
 	// skip sesors with problems
 	if (!sensors[i].usable) {
        continue;
     }
     // Fill OSC message with data
-    body[i].add(qX[i]).add(qY[i]).add(qZ[i]).add(qW[i]);
-    body[i].add(oX[i]).add(oY[i]).add(oZ[i]);
-    body[i].add(gX[i]).add(gY[i]).add(gZ[i]);
+    body[i].add(mpuData[i].quaternion.x).add(mpuData[i].quaternion.y).add(mpuData[i].quaternion.z).add(mpuData[i].quaternion.w);
+    body[i].add(mpuData[i].eulerangle.x).add(mpuData[i].eulerangle.y).add(mpuData[i].eulerangle.z);
+    body[i].add(mpuData[i].gyrovalue.x).add(mpuData[i].gyrovalue.y).add(mpuData[i].gyrovalue.z);
 
     // send data out
     Udp.beginPacket(outIp, outPort);
