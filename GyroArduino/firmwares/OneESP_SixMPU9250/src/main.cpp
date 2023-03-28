@@ -354,6 +354,7 @@ uint8_t getControllerID() {
  * fiddling with the sensor.
  *
  * @see automaticMagnetometerCalibration()
+ * @see buttonBasedCalibration()
  * @note This code has been extracted manually and not changed/adjusted
  */
 void manualMagnetometerCalibration() {
@@ -397,6 +398,7 @@ void manualMagnetometerCalibration() {
  * with the gyro wiring.
  *
  * @see manualMagnetometerCalibration()
+ * @see buttonBasedCalibration()
  * @note This code has been extracted manually and not changed/adjusted
  */
 void automaticMagnetometerCalibration() {
@@ -437,10 +439,235 @@ uint8_t countMultiplexer(){
   return count;
 }
 
+/**
+ * Do the calibration with button choices.
+ *
+ * @warning This is just a copy of the code from the setup routine. It has not
+ * been refactored/reviewed yet.
+ * @see automaticMagnetometerCalibration()
+ * @see manualMagnetometerCalibration()
+ */
+void buttonBasedCalibration() {
+  //-------FIRST CHOICE-------
+  // Two LEDs are on: you have 6 seconds to press
+  // or not to press the button, to launch a calibration process
+  digitalWrite(RED_PIN, HIGH);
+  digitalWrite(YEL_PIN, HIGH);
+  delay(6000);
+  digitalWrite(RED_PIN, LOW);
+  digitalWrite(YEL_PIN, LOW);
+  state_button = digitalRead(BUTTON_PIN);
+
+  // state_button = LOW;
+  if (state_button == HIGH) {
+    Serial.println("HIGH : Launch calibration sequence");
+    // Acceleration : get data calibration + calibrate
+    Serial.println("Calibration of acceleration : don't move devices");
+    calibration.add("Calibration of acceleration : don't move devices");
+    Udp.beginPacket(outIp, outPort);
+    calibration.send(Udp);
+    Udp.endPacket();
+    calibration.empty();
+
+    digitalWrite(RED_PIN, HIGH);
+    for (uint8_t i = 0; i < NUMBER_OF_MPU; i++) {
+      Serial.println(i);
+      if (!selectI2cMultiplexerChannel(sensors[i].multiplexer,
+                                       sensors[i].channel)) {
+        Serial.print("could not select channel ");
+        Serial.print(sensors[i].channel);
+        Serial.print(" on multiplexer at address ");
+        Serial.println(sensors[i].multiplexer);
+      }
+      mpu[i].calibrateAccelGyro();
+    }
+    digitalWrite(RED_PIN, LOW);
+    Serial.println("Acceleration calibration done.");
+
+    // Acceleration : store calibration data
+    for (uint8_t i = 0; i < NUMBER_OF_MPU; i++) {
+      itoa(i, mpuPref, 10); // Key names = number of mpu
+      preferences.begin(mpuPref, false);
+
+      preferences.putFloat("accbiasX", mpu[i].getAccBiasX());
+      preferences.putFloat("accbiasY", mpu[i].getAccBiasY());
+      preferences.putFloat("accbiasZ", mpu[i].getAccBiasZ());
+
+      preferences.putFloat("gyrobiasX", mpu[i].getGyroBiasX());
+      preferences.putFloat("gyrobiasY", mpu[i].getGyroBiasY());
+      preferences.putFloat("gyrobiasZ", mpu[i].getGyroBiasZ());
+
+      preferences.end();
+    }
+
+    // Magnetometer : get data calibration + calibrate
+    Serial.println("Calibration of mag");
+
+    for (uint8_t i = 0; i < NUMBER_OF_MPU; i++) {
+      if (state == HIGH) {
+        digitalWrite(YEL_PIN, state);
+        state = LOW;
+      } else {
+        digitalWrite(YEL_PIN, state);
+        state = HIGH;
+      }
+      calibration.add("Calibration of ").add(i + 1);
+
+      Udp.beginPacket(outIp, outPort);
+      calibration.send(Udp);
+      Udp.endPacket();
+
+      Serial.println(i);
+
+      // selectI2cMultiplexerChannel(TCA_ADDRESS_RIGHT_SIDE, i);
+      if (!selectI2cMultiplexerChannel(sensors[i].multiplexer,
+                                       sensors[i].channel)) {
+        Serial.print("could not select channel ");
+        Serial.print(sensors[i].channel);
+        Serial.print(" on multiplexer at address ");
+        Serial.println(sensors[i].multiplexer);
+      }
+      mpu[i].setMagneticDeclination(MAG_DECLINATION);
+      mpu[i].calibrateMag();
+
+      calibration.empty();
+    }
+    Serial.println("Calibration of mag done");
+
+    // Magnetometer : store calibration data
+    for (uint8_t i = 0; i < NUMBER_OF_MPU; i++) {
+      itoa(i, mpuPref, 10); // Key names = number of mpu
+      preferences.begin(mpuPref, false);
+
+      preferences.putFloat("magbiasX", mpu[i].getMagBiasX());
+      preferences.putFloat("magbiasY", mpu[i].getMagBiasY());
+      preferences.putFloat("magbiasZ", mpu[i].getMagBiasZ());
+
+      preferences.putFloat("magscaleX", mpu[i].getMagScaleX());
+      preferences.putFloat("magscaleY", mpu[i].getMagScaleY());
+      preferences.putFloat("magscaleZ", mpu[i].getMagScaleZ());
+
+      preferences.end();
+    }
+  }
+
+  // Button not pushed : we read the stored calibration data and calibrate
+  else {
+    Serial.println("LOW : Load calibration data");
+    for (uint8_t i = 0; i < NUMBER_OF_MPU; i++) {
+      itoa(i, mpuPref, 10); // Key names = number of mpu
+      preferences.begin(mpuPref, false);
+
+      // Set acceleration calibration data
+
+      mpu[i].setAccBias(preferences.getFloat("accbiasX", 0),
+                        preferences.getFloat("accbiasY", 0),
+                        preferences.getFloat("accbiasZ", 0));
+      mpu[i].setGyroBias(preferences.getFloat("gyrobiasX", 0),
+                         preferences.getFloat("gyrobiasY", 0),
+                         preferences.getFloat("gyrobiasZ", 0));
+
+      // Test to see what the fuck
+      /*
+      digitalWrite(RED_PIN, HIGH);
+      for(uint8_t i=0; i<NUMBER_OF_MPU; i++) {
+        Serial.println(i);
+        selectI2cMultiplexerChannel(sensors[i].multiplexer, sensors[i].channel);
+        mpu[i].calibrateAccelGyro();
+      }
+      digitalWrite(RED_PIN, LOW);
+      Serial.println("Acceleration calibration done.");*/
+
+      // Set magnetometer calibration data
+      mpu[i].setMagBias(preferences.getFloat("magbiasX", 0),
+                        preferences.getFloat("magbiasY", 0),
+                        preferences.getFloat("magbiasZ", 0));
+      mpu[i].setMagScale(preferences.getFloat("magscaleX", 0),
+                         preferences.getFloat("magscaleY", 0),
+                         preferences.getFloat("magscaleZ", 0));
+      mpu[i].setMagneticDeclination(MAG_DECLINATION);
+      preferences.end();
+    }
+    Serial.println("Calibration loaded");
+  }
+
+  // Two leds are blinking, saying calibration is over
+  for (uint8_t i = 0; i < 20; i++) {
+    digitalWrite(RED_PIN, state);
+    digitalWrite(YEL_PIN, state);
+    if (state == HIGH) {
+      state = LOW;
+    } else {
+      state = HIGH;
+    }
+    delay(200);
+  }
+  digitalWrite(RED_PIN, LOW);
+  digitalWrite(YEL_PIN, LOW);
+
+  //-------SECOND CHOICE-------
+  // Two leds are on: you have 10 seconds to
+  // orientate the MPU 1 over the new north and press the button
+  digitalWrite(RED_PIN, HIGH);
+  digitalWrite(YEL_PIN, HIGH);
+
+  // TODO: fix this
+  // We let the mpu run for 10 seconds to have the good yaw if we need it
+  if (!selectI2cMultiplexerChannel(TCA_ADDRESS_RIGHT_SIDE, MPU_NORTH - 1)) {
+    Serial.print("could not select channel ");
+    Serial.print(MPU_NORTH - 1);
+    Serial.print(" on multiplexer at address ");
+    Serial.println(TCA_ADDRESS_RIGHT_SIDE);
+  }
+
+  time_passed = millis();
+  while (millis() - time_passed < 10000) {
+    mpu[MPU_NORTH - 1].update();
+  }
+  digitalWrite(RED_PIN, LOW);
+  digitalWrite(YEL_PIN, LOW);
+
+  state_button = digitalRead(BUTTON_PIN);
+  // state_button = HIGH;
+  if (state_button == HIGH) {
+    Serial.println("HIGH : setting north");
+    // We save the north direction and send it to the library
+    theta = mpu[MPU_NORTH - 1].getYaw() * (-1);
+
+    preferences.begin("setNorth", false);
+    preferences.putFloat("north", theta);
+    preferences.end();
+  } else {
+    Serial.println("LOW : Load former north");
+  }
+
+  // We get the north and set it
+  preferences.begin("setNorth", false);
+  for (uint8_t i = 0; i < NUMBER_OF_MPU; i++) {
+    mpu[i].setNorth(preferences.getFloat("north", 0));
+  }
+  preferences.end();
+  Serial.println("North set");
+
+  // Two leds are blinking, saying north is set
+  for (uint8_t i = 0; i < 20; i++) {
+    digitalWrite(RED_PIN, state);
+    digitalWrite(YEL_PIN, state);
+    if (state == HIGH) {
+      state = LOW;
+    } else {
+      state = HIGH;
+    }
+    delay(200);
+  }
+  digitalWrite(RED_PIN, LOW);
+  digitalWrite(YEL_PIN, LOW);
+}
+
 
 /**
  * Main setup / initialisation routine.
- * 
+ *
  * @see loop()
  */
 void setup() {
@@ -629,216 +856,7 @@ void setup() {
 #endif
 
 #ifdef BUTTON
-  //-------FIRST CHOICE-------Two leds are lighted : you have 6 seconds to press
-  //or not to press the button, to launch a calibration process
-  digitalWrite(RED_PIN, HIGH);
-  digitalWrite(YEL_PIN, HIGH);
-  delay(6000);
-  digitalWrite(RED_PIN, LOW);
-  digitalWrite(YEL_PIN, LOW);
-
-  state_button = digitalRead(BUTTON_PIN);
-  // state_button = LOW;
-  if (state_button == HIGH) {
-    Serial.println("HIGH : Launch calibration sequence");
-    // Acceleration : get data calibration + calibrate
-    Serial.println("Calibration of acceleration : don't move devices");
-    calibration.add("Calibration of acceleration : don't move devices");
-    Udp.beginPacket(outIp, outPort);
-    calibration.send(Udp);
-    Udp.endPacket();
-    calibration.empty();
-
-    digitalWrite(RED_PIN, HIGH);
-    for (uint8_t i = 0; i < NUMBER_OF_MPU; i++) {
-      Serial.println(i);
-      if (!selectI2cMultiplexerChannel(sensors[i].multiplexer, sensors[i].channel)) {
-        Serial.print("could not select channel ");
-        Serial.print(sensors[i].channel);
-        Serial.print(" on multiplexer at address ");
-        Serial.println(sensors[i].multiplexer);
-      }
-      mpu[i].calibrateAccelGyro();
-    }
-    digitalWrite(RED_PIN, LOW);
-    Serial.println("Acceleration calibration done.");
-
-    // Acceleration : store calibration data
-    for (uint8_t i = 0; i < NUMBER_OF_MPU; i++) {
-      itoa(i, mpuPref, 10); // Key names = number of mpu
-      preferences.begin(mpuPref, false);
-
-      preferences.putFloat("accbiasX", mpu[i].getAccBiasX());
-      preferences.putFloat("accbiasY", mpu[i].getAccBiasY());
-      preferences.putFloat("accbiasZ", mpu[i].getAccBiasZ());
-
-      preferences.putFloat("gyrobiasX", mpu[i].getGyroBiasX());
-      preferences.putFloat("gyrobiasY", mpu[i].getGyroBiasY());
-      preferences.putFloat("gyrobiasZ", mpu[i].getGyroBiasZ());
-
-      preferences.end();
-    }
-
-    // Magnetometer : get data calibration + calibrate
-    Serial.println("Calibration of mag");
-
-    for (uint8_t i = 0; i < NUMBER_OF_MPU; i++) {
-      if (state == HIGH) {
-        digitalWrite(YEL_PIN, state);
-        state = LOW;
-      } else {
-        digitalWrite(YEL_PIN, state);
-        state = HIGH;
-      }
-      calibration.add("Calibration of ").add(i + 1);
-
-      Udp.beginPacket(outIp, outPort);
-      calibration.send(Udp);
-      Udp.endPacket();
-
-      Serial.println(i);
-
-      //selectI2cMultiplexerChannel(TCA_ADDRESS_RIGHT_SIDE, i);
-      if (!selectI2cMultiplexerChannel(sensors[i].multiplexer, sensors[i].channel)) {
-        Serial.print("could not select channel ");
-        Serial.print(sensors[i].channel);
-        Serial.print(" on multiplexer at address ");
-        Serial.println(sensors[i].multiplexer);
-      }
-      mpu[i].setMagneticDeclination(MAG_DECLINATION);
-      mpu[i].calibrateMag();
-
-      calibration.empty();
-    }
-    Serial.println("Calibration of mag done");
-
-    // Magnetometer : store calibration data
-    for (uint8_t i = 0; i < NUMBER_OF_MPU; i++) {
-      itoa(i, mpuPref, 10); // Key names = number of mpu
-      preferences.begin(mpuPref, false);
-
-      preferences.putFloat("magbiasX", mpu[i].getMagBiasX());
-      preferences.putFloat("magbiasY", mpu[i].getMagBiasY());
-      preferences.putFloat("magbiasZ", mpu[i].getMagBiasZ());
-
-      preferences.putFloat("magscaleX", mpu[i].getMagScaleX());
-      preferences.putFloat("magscaleY", mpu[i].getMagScaleY());
-      preferences.putFloat("magscaleZ", mpu[i].getMagScaleZ());
-
-      preferences.end();
-    }
-  }
-
-  // Button not pushed : we read the stored calibration data and calibrate
-  else {
-    Serial.println("LOW : Load calibration data");
-    for (uint8_t i = 0; i < NUMBER_OF_MPU; i++) {
-      itoa(i, mpuPref, 10); // Key names = number of mpu
-      preferences.begin(mpuPref, false);
-
-      // Set acceleration calibration data
-
-      mpu[i].setAccBias(preferences.getFloat("accbiasX", 0),
-                        preferences.getFloat("accbiasY", 0),
-                        preferences.getFloat("accbiasZ", 0));
-      mpu[i].setGyroBias(preferences.getFloat("gyrobiasX", 0),
-                         preferences.getFloat("gyrobiasY", 0),
-                         preferences.getFloat("gyrobiasZ", 0));
-
-      // Test to see what the fuck
-      /*
-      digitalWrite(RED_PIN, HIGH);
-      for(uint8_t i=0; i<NUMBER_OF_MPU; i++) {
-        Serial.println(i);
-        selectI2cMultiplexerChannel(sensors[i].multiplexer, sensors[i].channel);
-        mpu[i].calibrateAccelGyro();
-      }
-      digitalWrite(RED_PIN, LOW);
-      Serial.println("Acceleration calibration done.");*/
-
-      // Set magnetometer calibration data
-      mpu[i].setMagBias(preferences.getFloat("magbiasX", 0),
-                        preferences.getFloat("magbiasY", 0),
-                        preferences.getFloat("magbiasZ", 0));
-      mpu[i].setMagScale(preferences.getFloat("magscaleX", 0),
-                         preferences.getFloat("magscaleY", 0),
-                         preferences.getFloat("magscaleZ", 0));
-      mpu[i].setMagneticDeclination(MAG_DECLINATION);
-      preferences.end();
-    }
-    Serial.println("Calibration loaded");
-  }
-
-  // Two leds are blinking, saying calibration is over
-  for (uint8_t i = 0; i < 20; i++) {
-    digitalWrite(RED_PIN, state);
-    digitalWrite(YEL_PIN, state);
-    if (state == HIGH) {
-      state = LOW;
-    } else {
-      state = HIGH;
-    }
-    delay(200);
-  }
-  digitalWrite(RED_PIN, LOW);
-  digitalWrite(YEL_PIN, LOW);
-
-  //-------SECOND CHOICE------- Two leds are lighted : you have 10 seconds to
-  //orientate the MPU 1 over the new north and press the button
-  digitalWrite(RED_PIN, HIGH);
-  digitalWrite(YEL_PIN, HIGH);
-
-  // TODO: fix this
-  // We let the mpu run for 10 seconds to have the good yaw if we need it
-  if (!selectI2cMultiplexerChannel(TCA_ADDRESS_RIGHT_SIDE, MPU_NORTH - 1)) {
-    Serial.print("could not select channel ");
-    Serial.print(MPU_NORTH - 1);
-    Serial.print(" on multiplexer at address ");
-    Serial.println(TCA_ADDRESS_RIGHT_SIDE);
-  }
-
-  time_passed = millis();
-  while (millis() - time_passed < 10000) {
-    mpu[MPU_NORTH - 1].update();
-  }
-  digitalWrite(RED_PIN, LOW);
-  digitalWrite(YEL_PIN, LOW);
-
-  state_button = digitalRead(BUTTON_PIN);
-  // state_button = HIGH;
-  if (state_button == HIGH) {
-    Serial.println("HIGH : setting north");
-    // We save the north direction and send it to the library
-    theta = mpu[MPU_NORTH - 1].getYaw() * (-1);
-
-    preferences.begin("setNorth", false);
-    preferences.putFloat("north", theta);
-    preferences.end();
-  } else {
-    Serial.println("LOW : Load former north");
-  }
-
-  // We get the north and set it
-  preferences.begin("setNorth", false);
-  for (uint8_t i = 0; i < NUMBER_OF_MPU; i++) {
-    mpu[i].setNorth(preferences.getFloat("north", 0));
-  }
-  preferences.end();
-  Serial.println("North set");
-
-  // Two leds are blinking, saying north is set
-  for (uint8_t i = 0; i < 20; i++) {
-    digitalWrite(RED_PIN, state);
-    digitalWrite(YEL_PIN, state);
-    if (state == HIGH) {
-      state = LOW;
-    } else {
-      state = HIGH;
-    }
-    delay(200);
-  }
-  digitalWrite(RED_PIN, LOW);
-  digitalWrite(YEL_PIN, LOW);
+  buttonBasedCalibration();
 #endif
 
   /*
