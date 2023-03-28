@@ -92,6 +92,7 @@ int state_button = LOW;  /**< current state of the button */
  * A data structure to handle hardware related data of one MPU9250.
  *
  * @todo Also move data read from sensor here (?)
+ * @see MPU9250data
  */
 struct MPU9250socket {
 	String label;        /**< human readable identification of the sensor (used on OSC path) */
@@ -150,6 +151,18 @@ struct GyroValue {
 	float x = 0.0; /**< The x-axis value of the gyroscope */
 	float y = 0.0; /**< The y-axis value of the gyroscope */
 	float z = 0.0; /**< The z-axis value of the gyroscope */
+};
+
+/**
+ * A model of the data retrieved from a MPU9250.
+ * 
+ * @note This is not a model for the sensor board itself.
+ * @see MPU9250socket
+ */
+struct MPU9250data {
+	Quaternion quaternion; /**< gyroscope data as quaternion */
+	EulerAngle eulerangle; /**< gyroscope data as Euler angle */
+	GyroValue gyrovalue;   /**< gyroscope data along axis */
 };
 
 // Store data from MPU
