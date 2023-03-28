@@ -445,6 +445,7 @@ uint8_t countMultiplexer(){
  * @note The device should not be moved during the calibration procedure.
  *
  * @see buttonBasedCalibration()
+ * @see passiveMagnetometerCalibration()
  */
 void passiveAccelerometerCalibration() {
   Serial.println("Calibration of acceleration : don't move devices");
@@ -486,6 +487,66 @@ void passiveAccelerometerCalibration() {
 }
 
 /**
+ * Calibrate the Magnetometer and store calibration data.
+ *
+ * @note The device should not be moved during the calibration procedure.
+ *
+ * @see buttonBasedCalibration()
+ * @see passiveMagnetometerCalibration()
+ */
+void passiveMagnetometerCalibration() {
+  Serial.println("Calibration of magnetometers");
+
+  for (uint8_t i = 0; i < NUMBER_OF_MPU; i++) {
+    if (state == HIGH) {
+      digitalWrite(YEL_PIN, state);
+      state = LOW;
+    } else {
+      digitalWrite(YEL_PIN, state);
+      state = HIGH;
+    }
+    calibration.add("Calibration of ").add(i + 1);
+
+    Udp.beginPacket(outIp, outPort);
+    calibration.send(Udp);
+    Udp.endPacket();
+
+    Serial.println(i);
+
+    // selectI2cMultiplexerChannel(TCA_ADDRESS_RIGHT_SIDE, i);
+    if (!selectI2cMultiplexerChannel(sensors[i].multiplexer,
+                                     sensors[i].channel)) {
+      Serial.print("could not select channel ");
+      Serial.print(sensors[i].channel);
+      Serial.print(" on multiplexer at address ");
+      Serial.println(sensors[i].multiplexer);
+    }
+    mpu[i].setMagneticDeclination(MAG_DECLINATION);
+    mpu[i].calibrateMag();
+
+    calibration.empty();
+  }
+  Serial.println("Calibration of magnetometers done");
+
+  // Magnetometer : store calibration data
+  for (uint8_t i = 0; i < NUMBER_OF_MPU; i++) {
+    itoa(i, mpuPref, 10); // Key names = number of mpu
+    preferences.begin(mpuPref, false);
+
+    preferences.putFloat("magbiasX", mpu[i].getMagBiasX());
+    preferences.putFloat("magbiasY", mpu[i].getMagBiasY());
+    preferences.putFloat("magbiasZ", mpu[i].getMagBiasZ());
+
+    preferences.putFloat("magscaleX", mpu[i].getMagScaleX());
+    preferences.putFloat("magscaleY", mpu[i].getMagScaleY());
+    preferences.putFloat("magscaleZ", mpu[i].getMagScaleZ());
+
+    preferences.end();
+  }
+}
+
+
+/**
  * Do the calibration with button choices.
  *
  * @warning This is just a copy of the code from the setup routine. It has not
@@ -495,6 +556,8 @@ void passiveAccelerometerCalibration() {
  * @see manualMagnetometerCalibration()
  */
 void buttonBasedCalibration() {
+  float time_passed = 0;  // tracking time passed
+
   //-------FIRST CHOICE-------
   // Two LEDs are on: you have 6 seconds to press
   // or not to press the button, to launch a calibration process
@@ -510,60 +573,10 @@ void buttonBasedCalibration() {
     Serial.println("HIGH : Launch calibration sequence");
     // Acceleration: get data calibration + calibrate
     passiveAccelerometerCalibration();
-
     // Magnetometer : get data calibration + calibrate
-    Serial.println("Calibration of mag");
-
-    for (uint8_t i = 0; i < NUMBER_OF_MPU; i++) {
-      if (state == HIGH) {
-        digitalWrite(YEL_PIN, state);
-        state = LOW;
-      } else {
-        digitalWrite(YEL_PIN, state);
-        state = HIGH;
-      }
-      calibration.add("Calibration of ").add(i + 1);
-
-      Udp.beginPacket(outIp, outPort);
-      calibration.send(Udp);
-      Udp.endPacket();
-
-      Serial.println(i);
-
-      // selectI2cMultiplexerChannel(TCA_ADDRESS_RIGHT_SIDE, i);
-      if (!selectI2cMultiplexerChannel(sensors[i].multiplexer,
-                                       sensors[i].channel)) {
-        Serial.print("could not select channel ");
-        Serial.print(sensors[i].channel);
-        Serial.print(" on multiplexer at address ");
-        Serial.println(sensors[i].multiplexer);
-      }
-      mpu[i].setMagneticDeclination(MAG_DECLINATION);
-      mpu[i].calibrateMag();
-
-      calibration.empty();
-    }
-    Serial.println("Calibration of mag done");
-
-    // Magnetometer : store calibration data
-    for (uint8_t i = 0; i < NUMBER_OF_MPU; i++) {
-      itoa(i, mpuPref, 10); // Key names = number of mpu
-      preferences.begin(mpuPref, false);
-
-      preferences.putFloat("magbiasX", mpu[i].getMagBiasX());
-      preferences.putFloat("magbiasY", mpu[i].getMagBiasY());
-      preferences.putFloat("magbiasZ", mpu[i].getMagBiasZ());
-
-      preferences.putFloat("magscaleX", mpu[i].getMagScaleX());
-      preferences.putFloat("magscaleY", mpu[i].getMagScaleY());
-      preferences.putFloat("magscaleZ", mpu[i].getMagScaleZ());
-
-      preferences.end();
-    }
-  }
-
-  // Button not pushed : we read the stored calibration data and calibrate
-  else {
+    passiveMagnetometerCalibration();
+  } else {
+	// Button not pushed : we read the stored calibration data and calibrate
     Serial.println("LOW : Load calibration data");
     for (uint8_t i = 0; i < NUMBER_OF_MPU; i++) {
       itoa(i, mpuPref, 10); // Key names = number of mpu
@@ -682,8 +695,6 @@ void buttonBasedCalibration() {
  * @see loop()
  */
 void setup() {
-  float time_passed = 0;  // tracking time passed
-
   //-------HARDWARE SETUP-------
   Serial.begin(115200);
   Serial.flush(); // Clean buffer
