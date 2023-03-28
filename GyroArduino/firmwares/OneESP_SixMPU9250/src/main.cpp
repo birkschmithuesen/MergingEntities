@@ -104,6 +104,10 @@ struct MPU9250socket {
 
 /**
  * This data structure models a quaternion for easier access to its component data.
+ *
+ * @see MPU9250data
+ * @see EulerAngle
+ * @see GyroValue
  */
 struct Quaternion {
 	float x = 0.0; /**< The x value of the quaternion */
@@ -114,6 +118,10 @@ struct Quaternion {
 
 /**
  * This data structure models an Euler angle for easier access to its component data.
+ *
+ * @see MPU9250data
+ * @see Quaternion
+ * @see GyroValue
  */
 struct EulerAngle {
 	float x = 0.0; /**< The x-axis value of the Euler angle */
@@ -123,6 +131,10 @@ struct EulerAngle {
 
 /**
  * This data structure models gyroscope data for easier access to its component data.
+ *
+ * @see MPU9250data
+ * @see Quaternion
+ * @see EulerAngle
  */
 struct GyroValue {
 	float x = 0.0; /**< The x-axis value of the gyroscope */
