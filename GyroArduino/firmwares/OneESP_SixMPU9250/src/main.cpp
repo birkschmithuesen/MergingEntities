@@ -102,29 +102,6 @@ struct MPU9250socket {
 	bool usable = false; /**< indicate that sensor (data) is present and no errors occured */
 };
 
-// manually create indexes to emulate a hashmap with an array
-#define LEFT_UPPER_ARM_INDEX 0  /**< index for the sensor at the left upper arm (brachium) */
-#define RIGHT_UPPER_ARM_INDEX 1 /**< index for the sensor at the right upper arm (brachium) */
-#define LEFT_FOOT_INDEX 2       /**< index for the sensor at the left foot */
-#define RIGHT_FOOT_INDEX 3      /**< index for the sensor at the right foot */
-#define BACK_INDEX 4            /**< index for the sensor at the back */
-#define HEAD_INDEX 5            /**< index for the sensor at the head (cranium) */
-#define LEFT_LOWER_ARM_INDEX 6  /**< index for the sensor at the left lower arm (antebrachium) */
-#define RIGHT_LOWER_ARM_INDEX 7 /**< index for the sensor at the right lower arm (antebrachium) */
-#define LEFT_UPPER_LEG_INDEX 8  /**< index for the sensor at the left thigh (femur) */
-#define RIGHT_UPPER_LEG_INDEX 9 /**< index for the sensor at the right thigh (femur) */
-
-// Instance to store data on ESP32, name of the preference
-Preferences preferences;  /**< container for preferences on ESP32 */
-char mpuPref[10];         /**< preferences of each MPU stored on ESP32 */
-
-// Hardware I2c
-MPU9250 mpu[NUMBER_OF_MPU];  /**< software handler/abstraction for each MPU */
-MPU9250socket sensors[NUMBER_OF_MPU];   /**< communication abstractions for all MPUs */
-
-// Setting variable
-MPU9250Setting setting;  /**< configuration settings of the MPU9250 stored in memory */
-
 /**
  * This data structure models a quaternion for easier access to its component data.
  */
@@ -165,10 +142,29 @@ struct MPU9250data {
 	GyroValue gyrovalue;   /**< gyroscope data along axis */
 };
 
-MPU9250data mpuData[NUMBER_OF_MPU]; /**< bundled MPU9250 data to be accessed by index */
+// manually create indexes to emulate a hashmap with an array
+#define LEFT_UPPER_ARM_INDEX 0  /**< index for the sensor at the left upper arm (brachium) */
+#define RIGHT_UPPER_ARM_INDEX 1 /**< index for the sensor at the right upper arm (brachium) */
+#define LEFT_FOOT_INDEX 2       /**< index for the sensor at the left foot */
+#define RIGHT_FOOT_INDEX 3      /**< index for the sensor at the right foot */
+#define BACK_INDEX 4            /**< index for the sensor at the back */
+#define HEAD_INDEX 5            /**< index for the sensor at the head (cranium) */
+#define LEFT_LOWER_ARM_INDEX 6  /**< index for the sensor at the left lower arm (antebrachium) */
+#define RIGHT_LOWER_ARM_INDEX 7 /**< index for the sensor at the right lower arm (antebrachium) */
+#define LEFT_UPPER_LEG_INDEX 8  /**< index for the sensor at the left thigh (femur) */
+#define RIGHT_UPPER_LEG_INDEX 9 /**< index for the sensor at the right thigh (femur) */
 
+// Instance to store data on ESP32, name of the preference
+Preferences preferences;  /**< container for preferences on ESP32 */
+char mpuPref[10];         /**< preferences of each MPU stored on ESP32 */
+
+// MPU9250 settings and data storage
+MPU9250 mpu[NUMBER_OF_MPU];  /**< software handler/abstraction for each MPU */
+MPU9250socket sensors[NUMBER_OF_MPU];   /**< communication abstractions for all MPUs */
+MPU9250data mpuData[NUMBER_OF_MPU]; /**< bundled MPU9250 data to be accessed by index */
 float accbias[6][3];     /**< bias/drift/offset profile for the accelerator */
 float gyrobias[6][3];    /**< bias/drift/offset profile for the gyroscope */
+MPU9250Setting setting;  /**< configuration settings of the MPU9250 stored in memory */
 
 /**
  * Switch to the given channel on the multiplexer for I2C communication.
