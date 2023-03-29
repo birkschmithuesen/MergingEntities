@@ -530,8 +530,11 @@ void checkAndConfigureGyros() {
   // Lauch communication with the MPUs
   // go through list of (expected) sensors and see if they are there
   for (uint8_t i = 0; i < NUMBER_OF_MPU; i++) {
+    Serial.print("setting up gyro for ");
+    Serial.print(sensors[i].label);
     // skip sensors that are already configured (i.e. usable)
     if (sensors[i].usable) {
+      Serial.println(" ... already done");
       continue;
     }
 
@@ -540,10 +543,9 @@ void checkAndConfigureGyros() {
                                      sensors[i].channel)) {
       // selection failed
       sensors[i].usable = false;
-      Serial.print("could not select channel ");
       Serial.print(sensors[i].channel);
-      Serial.print(" on multiplexer at address ");
       Serial.println(sensors[i].multiplexer);
+      Serial.println(" ... failed at multiplexer channel selection");
       continue;
     }
 
@@ -555,9 +557,10 @@ void checkAndConfigureGyros() {
     }*/
 
     // try to initialize the multiplexer with the (global) settings
-    if (!sensors[i].mpu.setup(sensors[i].multiplexer, setting, Wire)) {
+    if (!sensors[i].mpu.setup(sensors[i].address, setting, Wire)) {
       // somehow it failed
       sensors[i].usable = false;
+      Serial.println(" ... failed at MPU setup");
       continue;
     }
 
@@ -567,6 +570,7 @@ void checkAndConfigureGyros() {
 
     // everything is done and now the senor is usable
     sensors[i].usable = true;
+    Serial.println(" ... worked");
   }
 }
 
