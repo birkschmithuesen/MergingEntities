@@ -1,0 +1,57 @@
+@startuml
+
+start
+
+:both LEDs on;
+
+:wait 3 seconds to press button;
+
+if (button pressed?) then (yes)
+  :both LEDs off;
+
+  :passiveAccelerometerCalibration;
+
+  :passiveMagneometerCalibration;
+
+else (no)
+  :both LEDs off;
+
+  :load accelerometer and magnetometer
+   calibration data for each sensor
+   from memory;
+
+  if (load successful) then (yes)
+    :configure sensor
+     with loaded data;
+  else (no)
+    :skip configuration;
+  endif
+
+endif
+
+:two LEDs are blinking
+ for 2 seconds;
+
+:both LEDs on;
+
+:do not move sensors
+for 10 seconds;
+
+:both LEDs off;
+
+if (button pressed?) then (yes)
+  :save new north
+   data to memory;
+else (no)
+
+endif
+
+:load north angle from memory;
+
+:set north for each sensor;
+
+:blink LEDs 20x;
+
+stop
+
+@enduml
