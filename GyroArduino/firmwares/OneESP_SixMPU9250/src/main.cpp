@@ -54,8 +54,10 @@
 
 //-------BEGIN WIFI SETTINGS--------
 WiFiUDP Udp;                         /**< handler for UDP communication */
-#define WIFI_SSID "network name"     /**< SSID / name of the wifi network to use */
-#define WIFI_PASS "access password"  /**< password for the wifi network to use */
+//#define WIFI_SSID "network name"     /**< SSID / name of the wifi network to use */
+//#define WIFI_PASS "access password"  /**< password for the wifi network to use */
+#define WIFI_SSID "ArtNet4Hans"     /**< SSID / name of the wifi network to use */
+#define WIFI_PASS "kaesimira"  /**< password for the wifi network to use */
 IPAddress outIp(192, 168, 0, 2);     /**< IP address of the (target) OSC server */
 int localPort = 8888;                /**< source port for UDP communication on ESP32 */
 //-------END WIFI SETTINGS--------
