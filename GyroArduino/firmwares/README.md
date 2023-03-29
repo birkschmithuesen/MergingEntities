@@ -14,13 +14,22 @@ all the features/functionality.
 
    pio run
 
-3. Upload firmware to device
+3. Install udev rules: https://docs.platformio.org/en/latest/core/installation/udev-rules.html
+
+3.1. Download rules from https://raw.githubusercontent.com/platformio/platformio-core/develop/platformio/assets/system/99-platformio-udev.rules
+3.2. Inspect 99-platformio-udev.rules for configuration collisions
+3.3. Copy rules: sudo cp 99-platformio-udev.rules /etc/udev/rules.d/99-platformio-udev.rules
+3.4. Reload rules: sudo service udev restart
+
+4. Attach controller to USB
+
+5. Upload firmware to device
 
    pio run -t upload
 
    maybe specify USB port explicitly via: --upload-port=/dev/ttyUSB0
 
-4. Use doxygen to generate in-depth firmware documentation
+6. Use doxygen to generate in-depth firmware documentation
 
    doxygen DoxyFile
 

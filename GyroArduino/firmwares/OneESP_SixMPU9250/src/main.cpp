@@ -190,6 +190,7 @@ MPU9250Setting setting;  /**< configuration settings of the MPU9250 stored in me
  * @see countI2cDevices()
  * @see countMultiplexer()
  * @see checkAndConfigureGyros()
+ * @see fetchData()
  * @todo limit processing to valid values (0..7)
  */
 bool selectI2cMultiplexerChannel(uint8_t address, uint8_t channel) {
@@ -792,6 +793,53 @@ void buttonBasedCalibration() {
   digitalWrite(YEL_PIN, LOW);
 }
 
+/**
+ * Fetch data from all MPU9250 boards and update global value storage.
+ * 
+ * @see selectI2cMultiplexerChannel(uint8_t address, uint8_t channel)
+ * @see setup()
+ * @see loop()
+ * @todo indicate errors
+ */
+void fetchData() {
+  // fetch data from each MPU
+  for (uint8_t i = 0; i < NUMBER_OF_MPU; i++) {
+    if (!selectI2cMultiplexerChannel(sensors[i].multiplexer,
+                                     sensors[i].channel)) {
+      Serial.print("could not select channel ");
+      Serial.print(sensors[i].channel);
+      Serial.print(" on multiplexer at address ");
+      Serial.println(sensors[i].multiplexer);
+    }
+    if (sensors[i].usable) {
+      if(!mpu[i].update()) {
+        // too harsh?
+        sensors[i].usable = false;
+      }
+    } else {
+      // TODO: log errors remotely
+      Serial.print("sensor for ");
+      Serial.print(sensors[i].label);
+      Serial.println(" is not usable");
+    }
+  }
+
+  // Store sensor values
+  for (int i = 0; i < NUMBER_OF_MPU; i++) {
+    mpuData[i].quaternion.x = mpu[i].getQuaternionX();
+    mpuData[i].quaternion.y = mpu[i].getQuaternionY();
+    mpuData[i].quaternion.z = mpu[i].getQuaternionZ();
+    mpuData[i].quaternion.w = mpu[i].getQuaternionW();
+
+    mpuData[i].eulerangle.x = mpu[i].getEulerX();
+    mpuData[i].eulerangle.y = mpu[i].getEulerY();
+    mpuData[i].eulerangle.z = mpu[i].getEulerZ();
+
+    mpuData[i].gyrovalue.x = mpu[i].getGyroX();
+    mpuData[i].gyrovalue.y = mpu[i].getGyroY();
+    mpuData[i].gyrovalue.z = mpu[i].getGyroZ();
+  }
+}
 
 /**
  * Main setup / initialisation routine.
@@ -909,7 +957,6 @@ void setup() {
   // check which MPU9250 board is there and configure them
   checkAndConfigureGyros();
 
-
   // ------- CALIBRATION AND SET THE NORTH-------
   // CURRENT PROCESS WITHOUT BUTTON CHOICE
 
@@ -988,25 +1035,7 @@ void setup() {
 void loop() {
 
   //--------MPU recording--------
-
-  // fetch data from each MPU
-  for (uint8_t i = 0; i < NUMBER_OF_MPU; i++) {
-    if (!selectI2cMultiplexerChannel(sensors[i].multiplexer, sensors[i].channel)) {
-      Serial.print("could not select channel ");
-      Serial.print(sensors[i].channel);
-      Serial.print(" on multiplexer at address ");
-      Serial.println(sensors[i].multiplexer);
-    }
-    if (sensors[i].usable) {
-      // TODO: check for errors
-      mpu[i].update();
-    } else {
-      // TODO: log errors remotely
-      Serial.print("sensor for ");
-      Serial.print(sensors[i].label);
-      Serial.println(" is not usable");
-	}
-  }
+  fetchData();
 
   // Print values for debugging (with 100ms pauses)
   static unsigned long last_print = 0;
@@ -1031,22 +1060,6 @@ void loop() {
 
     Serial.println();
     last_print = millis();
-  }
-
-  // Store sensor values
-  for (int i = 0; i < NUMBER_OF_MPU; i++) {
-    mpuData[i].quaternion.x = mpu[i].getQuaternionX();
-    mpuData[i].quaternion.y = mpu[i].getQuaternionY();
-    mpuData[i].quaternion.z = mpu[i].getQuaternionZ();
-    mpuData[i].quaternion.w = mpu[i].getQuaternionW();
-
-    mpuData[i].eulerangle.x = mpu[i].getEulerX();
-    mpuData[i].eulerangle.y = mpu[i].getEulerY();
-    mpuData[i].eulerangle.z = mpu[i].getEulerZ();
-
-    mpuData[i].gyrovalue.x = mpu[i].getGyroX();
-    mpuData[i].gyrovalue.y = mpu[i].getGyroY();
-    mpuData[i].gyrovalue.z = mpu[i].getGyroZ();
   }
 
   //-------OSC communication--------
