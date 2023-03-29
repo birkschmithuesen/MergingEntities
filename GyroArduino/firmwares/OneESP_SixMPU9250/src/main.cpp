@@ -322,7 +322,9 @@ OSCMessage calibration("/calibration/3");  /**< OSC endpoint for calibration mes
  * @see startUdp()
  */
 void connectWiFi() {
-  Serial.print("Connecting to wifi ..");
+  Serial.print("Connecting to wifi network \"");
+  Serial.print(WIFI_SSID);
+  Serial.print("\" .");
   // Mode of the WiFi
   //   STA = STATION MODE (connect to access point),
   //   APM = Access Point Mode (create a network)
