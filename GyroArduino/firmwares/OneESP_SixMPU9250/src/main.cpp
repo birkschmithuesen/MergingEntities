@@ -745,8 +745,10 @@ void fetchData() {
       Serial.println(sensors[i].multiplexer);
     }
     if (sensors[i].usable) {
-      // TODO: check for errors
-      mpu[i].update();
+      if(!mpu[i].update()) {
+        // too harsh?
+        sensors[i].usable = false;
+      }
     } else {
       // TODO: log errors remotely
       Serial.print("sensor for ");
