@@ -576,17 +576,20 @@ void checkAndConfigureGyros() {
  *
  * @see buttonBasedCalibration()
  * @see passiveMagnetometerCalibration()
+ * @see setup()
  */
 void passiveAccelerometerCalibration() {
-  Serial.println("Calibration of acceleration : don't move devices");
-  calibration.add("Calibration of acceleration : don't move devices");
+  Serial.println("calibration of acceleration: don't move devices");
+  calibration.add("calibration of acceleration: don't move devices");
   Udp.beginPacket(outIp, outPort);
   calibration.send(Udp);
   Udp.endPacket();
   calibration.empty();
   digitalWrite(RED_PIN, HIGH);
   for (uint8_t i = 0; i < NUMBER_OF_MPU; i++) {
-    Serial.println(i);
+    Serial.print("calibrating accelerometer for \"");
+    Serial.print(idx2string[i]);
+    Serial.println("\"");
     if (!selectI2cMultiplexerChannel(sensors[i].multiplexer,
                                      sensors[i].channel)) {
       Serial.print("could not select channel ");
@@ -597,7 +600,7 @@ void passiveAccelerometerCalibration() {
     sensors[i].mpu.calibrateAccelGyro();
   }
   digitalWrite(RED_PIN, LOW);
-  Serial.println("Acceleration calibration done.");
+  Serial.println("acceleration calibration done.");
 
   // Acceleration: store calibration data
   for (uint8_t i = 0; i < NUMBER_OF_MPU; i++) {
