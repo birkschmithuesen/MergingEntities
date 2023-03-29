@@ -334,10 +334,10 @@ void connectWiFi() {
   WiFi.begin(WIFI_SSID, WIFI_PASS);
 
   long start = millis();
-  // try for ten seconds to connect every 100 ms (i.e. make 100 attempts)
+  // try for ten seconds to connect every 500 ms (i.e. make 10000/500 = 20 attempts)
   while (WiFi.status() != WL_CONNECTED && millis() - start < 10000) {
     Serial.print(".");
-    delay(100);
+    delay(500);
   }
 
   // print result of connection attempt(s) on serial console
