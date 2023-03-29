@@ -169,7 +169,7 @@ struct MPU9250data {
 #define RIGHT_UPPER_LEG_INDEX 9 /**< index for the sensor at the right thigh (femur) */
 
 /** map the numerical index to string */
-String idx2string[] = {
+const char* idx2string[] = {
   "left_upper_arm", "right_upper_arm", "left_foot", "right_foot",
   "back", "head", "left_lower_arm", "right_lower_arm", "left_upper_leg",
   "right_upper_leg"
@@ -177,7 +177,6 @@ String idx2string[] = {
 
 // Instance to store data on ESP32, name of the preference
 Preferences preferences;  /**< container for preferences to be stored in non-volatile memory on ESP32 */
-char mpuPref[10];         /**< preferences of each MPU stored on ESP32 */
 
 // MPU9250 settings and data storage
 MPU9250socket sensors[NUMBER_OF_MPU];   /**< communication abstractions for all MPUs */
@@ -587,10 +586,8 @@ void passiveAccelerometerCalibration() {
 
   // Acceleration: store calibration data
   for (uint8_t i = 0; i < NUMBER_OF_MPU; i++) {
-    // convert MPU index to namespace (string)
-    itoa(i, mpuPref, 10);
     // create writeable namespace named after MPU
-    preferences.begin(mpuPref, false);
+    preferences.begin(idx2string[i], false);
 
     preferences.putFloat("accbiasX", sensors[i].mpu.getAccBiasX());
     preferences.putFloat("accbiasY", sensors[i].mpu.getAccBiasY());
@@ -648,8 +645,8 @@ void passiveMagnetometerCalibration() {
 
   // Magnetometer : store calibration data
   for (uint8_t i = 0; i < NUMBER_OF_MPU; i++) {
-    itoa(i, mpuPref, 10); // Key names = number of mpu
-    preferences.begin(mpuPref, false);
+    // create writable namespace to store data in NVS
+    preferences.begin(idx2string[i], false);
 
     preferences.putFloat("magbiasX", sensors[i].mpu.getMagBiasX());
     preferences.putFloat("magbiasY", sensors[i].mpu.getMagBiasY());
@@ -688,20 +685,24 @@ void buttonBasedCalibration() {
 
   // state_button = LOW;
   if (state_button == HIGH) {
-    Serial.println("HIGH : Launch calibration sequence");
+    Serial.println("launching calibration sequence");
     // Acceleration: get data calibration + calibrate
     passiveAccelerometerCalibration();
     // Magnetometer : get data calibration + calibrate
     passiveMagnetometerCalibration();
   } else {
 	// Button not pushed : we read the stored calibration data and calibrate
-    Serial.println("LOW : Load calibration data");
+    Serial.println("loading calibration data");
     for (uint8_t i = 0; i < NUMBER_OF_MPU; i++) {
-      itoa(i, mpuPref, 10); // Key names = number of mpu
-      preferences.begin(mpuPref, false);
+      // read preferences from namespace in NVS
+      if(!preferences.begin(idx2string[i], true)) {
+        Serial.print("no configuration data found for \"");
+        Serial.print(idx2string[i]);
+        Serial.println("\" / skipping config");
+        continue;
+      }
 
       // Set acceleration calibration data
-
       sensors[i].mpu.setAccBias(preferences.getFloat("accbiasX", 0),
                         preferences.getFloat("accbiasY", 0),
                         preferences.getFloat("accbiasZ", 0));
@@ -776,6 +777,7 @@ void buttonBasedCalibration() {
     // We save the north direction and send it to the library
     theta = sensors[MPU_NORTH - 1].mpu.getYaw() * (-1);
 
+    // save angle to north in NVS namespace
     preferences.begin("setNorth", false);
     preferences.putFloat("north", theta);
     preferences.end();
@@ -783,8 +785,8 @@ void buttonBasedCalibration() {
     Serial.println("LOW : Load former north");
   }
 
-  // We get the north and set it
-  preferences.begin("setNorth", false);
+  // retrieve angle to north from readable NVS namespace
+  preferences.begin("setNorth", true);
   for (uint8_t i = 0; i < NUMBER_OF_MPU; i++) {
     sensors[i].mpu.setNorth(preferences.getFloat("north", 0));
   }
