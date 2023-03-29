@@ -546,12 +546,12 @@ void checkAndConfigureGyros() {
       continue;
     }
 
-    // sanity check: there should only be one device and the MPU should be
-    // available
-    if (!((1 == countI2cDevices()) && (sensors[i].mpu.available()))) {
+    /*/ sanity check: MPU should be available - NOT AVAILABLE AT THIS STAGE?
+    if (!sensors[i].mpu.available()) {
+      Serial.println("meh ...");
       sensors[i].usable = false;
       continue;
-    }
+    }*/
 
     // try to initialize the multiplexer with the (global) settings
     if (!sensors[i].mpu.setup(sensors[i].multiplexer, setting, Wire)) {
