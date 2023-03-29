@@ -733,17 +733,6 @@ void buttonBasedCalibration() {
                                  preferences.getFloat("gyrobiasY", 0.0),
                                  preferences.getFloat("gyrobiasZ", 0.0));
 
-      // Test to see what the fuck
-      /*
-      digitalWrite(RED_PIN, HIGH);
-      for(uint8_t i=0; i<NUMBER_OF_MPU; i++) {
-        Serial.println(i);
-        selectI2cMultiplexerChannel(sensors[i].multiplexer, sensors[i].channel);
-        mpu[i].calibrateAccelGyro();
-      }
-      digitalWrite(RED_PIN, LOW);
-      Serial.println("Acceleration calibration done.");*/
-
       // Set magnetometer calibration data
       sensors[i].mpu.setMagBias(preferences.getFloat("magbiasX", 0.0),
                                 preferences.getFloat("magbiasY", 0.0),
