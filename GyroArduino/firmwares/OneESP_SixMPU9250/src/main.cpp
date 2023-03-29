@@ -858,11 +858,11 @@ void setup() {
       Serial.print(" on multiplexer at address ");
       Serial.println(sensors[i].multiplexer);
     }
-    // we found only one I2C device as expected, so mark it usable
-    if (1 == countI2cDevices() ) {
-		sensors[i].usable = true;
-	}
-    mpu[i].setup(sensors[i].multiplexer, setting, Wire);
+
+    if(mpu[i].setup(sensors[i].multiplexer, setting, Wire)) {
+      // setup successful, mark as usable
+      sensors[i].usable = true;
+    }
   }
 
   // Selection of filters
