@@ -168,6 +168,13 @@ struct MPU9250data {
 #define LEFT_UPPER_LEG_INDEX 8  /**< index for the sensor at the left thigh (femur) */
 #define RIGHT_UPPER_LEG_INDEX 9 /**< index for the sensor at the right thigh (femur) */
 
+/** map the numerical index to string */
+String idx2string[] = {
+  "left_upper_arm", "right_upper_arm", "left_foot", "right_foot",
+  "back", "head", "left_lower_arm", "right_lower_arm", "left_upper_leg",
+  "right_upper_leg"
+};
+
 // Instance to store data on ESP32, name of the preference
 Preferences preferences;  /**< container for preferences to be stored in non-volatile memory on ESP32 */
 char mpuPref[10];         /**< preferences of each MPU stored on ESP32 */
