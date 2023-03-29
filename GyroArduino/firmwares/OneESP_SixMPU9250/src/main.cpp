@@ -189,6 +189,7 @@ MPU9250Setting setting;  /**< configuration settings of the MPU9250 stored in me
  * @return true if selection was successful, false if not
  * @see countI2cDevices()
  * @see countMultiplexer()
+ * @see checkAndConfigureGyros()
  * @see fetchData()
  * @todo limit processing to valid values (0..7)
  */
@@ -212,6 +213,7 @@ bool selectI2cMultiplexerChannel(uint8_t address, uint8_t channel) {
  *
  * @see selectI2cMultiplexerChannel(uint8_t address, uint8_t channel)
  * @see countMultiplexer()
+ * @see checkAndConfigureGyros()
  * @todo select switch channel to scan via function argument?
  */
 uint8_t countI2cDevices() {
@@ -475,6 +477,71 @@ uint8_t countMultiplexer(){
     count = 2;
   }
   return count;
+}
+
+/**
+ * Check which MPU9250 sensor board is there and do the initial
+ * configuration.
+ *
+ * @see setup()
+ * @see selectI2cMultiplexerChannel(uint8_t address, uint8_t channel)
+ * @see countI2cDevices()
+ * @todo send channel selection error via OSC
+ */
+void checkAndConfigureGyros() {
+  // MPU parameters (sensitivity, etc)
+  setting.accel_fs_sel = ACCEL_FS_SEL::A4G;
+  setting.gyro_fs_sel = GYRO_FS_SEL::G500DPS;
+  setting.mag_output_bits = MAG_OUTPUT_BITS::M16BITS;
+  setting.fifo_sample_rate = FIFO_SAMPLE_RATE::SMPL_125HZ;
+  setting.gyro_fchoice = 0x03;
+  setting.gyro_dlpf_cfg = GYRO_DLPF_CFG::DLPF_41HZ;
+  setting.accel_fchoice = 0x01;
+  setting.accel_dlpf_cfg = ACCEL_DLPF_CFG::DLPF_45HZ;
+  // filter for measurement data
+  QuatFilterSel sel{QuatFilterSel::MADGWICK};
+
+  // Lauch communication with the MPUs
+  // go through list of (expected) sensors and see if they are there
+  for (uint8_t i = 0; i < NUMBER_OF_MPU; i++) {
+    // skip sensors that are already configured (i.e. usable)
+    if (sensors[i].usable) {
+      continue;
+    }
+
+    // select channel on multiplexer
+    if (!selectI2cMultiplexerChannel(sensors[i].multiplexer,
+                                     sensors[i].channel)) {
+      // selection failed
+      sensors[i].usable = false;
+      Serial.print("could not select channel ");
+      Serial.print(sensors[i].channel);
+      Serial.print(" on multiplexer at address ");
+      Serial.println(sensors[i].multiplexer);
+      continue;
+    }
+
+    // sanity check: there should only be one device and the MPU should be
+    // available
+    if (!((1 == countI2cDevices()) && (sensors[i].mpu.available()))) {
+      sensors[i].usable = false;
+      continue;
+    }
+
+    // try to initialize the multiplexer with the (global) settings
+    if (!mpu[i].setup(sensors[i].multiplexer, setting, Wire)) {
+      // somehow it failed
+      sensors[i].usable = false;
+      continue;
+    }
+
+    // configure the filter for the measured data
+    mpu[i].selectFilter(sel);
+    mpu[i].setFilterIterations(10);
+
+    // everything is done and now the senor is usable
+    sensors[i].usable = true;
+  }
 }
 
 /**
@@ -887,38 +954,8 @@ void setup() {
   }
   Serial.println(".. done");
 
-  // MPU parameters (sensitivity, etc)
-  setting.accel_fs_sel = ACCEL_FS_SEL::A4G;
-  setting.gyro_fs_sel = GYRO_FS_SEL::G500DPS;
-  setting.mag_output_bits = MAG_OUTPUT_BITS::M16BITS;
-  setting.fifo_sample_rate = FIFO_SAMPLE_RATE::SMPL_125HZ;
-  setting.gyro_fchoice = 0x03;
-  setting.gyro_dlpf_cfg = GYRO_DLPF_CFG::DLPF_41HZ;
-  setting.accel_fchoice = 0x01;
-  setting.accel_dlpf_cfg = ACCEL_DLPF_CFG::DLPF_45HZ;
-
-  // Lauch communication with the MPUs
-  // go through list (expected) sensors and see if they are there
-  for (uint8_t i = 0; i < NUMBER_OF_MPU; i++) {
-    if (!selectI2cMultiplexerChannel(sensors[i].multiplexer, sensors[i].channel)) {
-      Serial.print("could not select channel ");
-      Serial.print(sensors[i].channel);
-      Serial.print(" on multiplexer at address ");
-      Serial.println(sensors[i].multiplexer);
-    }
-
-    if(mpu[i].setup(sensors[i].multiplexer, setting, Wire)) {
-      // setup successful, mark as usable
-      sensors[i].usable = true;
-    }
-  }
-
-  // Selection of filters
-  QuatFilterSel sel{QuatFilterSel::MADGWICK};
-  for (uint8_t i = 0; i < NUMBER_OF_MPU; i++) {
-    mpu[i].selectFilter(sel);
-    mpu[i].setFilterIterations(10);
-  }
+  // check which MPU9250 board is there and configure them
+  checkAndConfigureGyros();
 
   // ------- CALIBRATION AND SET THE NORTH-------
   // CURRENT PROCESS WITHOUT BUTTON CHOICE
