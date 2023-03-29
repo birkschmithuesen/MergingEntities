@@ -245,7 +245,22 @@ uint8_t countI2cDevices() {
       }
 
       Serial.print(address, HEX);
-      Serial.println("  !");
+      switch (address) {
+        case MPU_ADDRESS_1:
+          Serial.println(" (probably MPU9250)");
+          break;
+        case MPU_ADDRESS_2:
+          Serial.println(" (probably MPU9250)");
+          break;
+        case TCA_ADDRESS_LEFT_SIDE:
+          Serial.println(" (probably TCA9548A)");
+          break;
+        case TCA_ADDRESS_RIGHT_SIDE:
+          Serial.println(" (probably TCA9548A)");
+          break;
+        default:
+          Serial.println();
+	  }
 
       // and we increase the number of devices found
       deviceCount++;
