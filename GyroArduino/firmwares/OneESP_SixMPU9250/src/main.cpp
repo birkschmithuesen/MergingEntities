@@ -54,8 +54,10 @@
 
 //-------BEGIN WIFI SETTINGS--------
 WiFiUDP Udp;                         /**< handler for UDP communication */
-#define WIFI_SSID "network name"     /**< SSID / name of the wifi network to use */
-#define WIFI_PASS "access password"  /**< password for the wifi network to use */
+//#define WIFI_SSID "network name"     /**< SSID / name of the wifi network to use */
+//#define WIFI_PASS "access password"  /**< password for the wifi network to use */
+#define WIFI_SSID "ArtNet4Hans"     /**< SSID / name of the wifi network to use */
+#define WIFI_PASS "kaesimira"  /**< password for the wifi network to use */
 IPAddress outIp(192, 168, 0, 2);     /**< IP address of the (target) OSC server */
 int localPort = 8888;                /**< source port for UDP communication on ESP32 */
 //-------END WIFI SETTINGS--------
@@ -157,18 +159,24 @@ struct MPU9250data {
 // manually create indexes to emulate a hashmap with an array
 #define LEFT_UPPER_ARM_INDEX 0  /**< index for the sensor at the left upper arm (brachium) */
 #define RIGHT_UPPER_ARM_INDEX 1 /**< index for the sensor at the right upper arm (brachium) */
-#define LEFT_FOOT_INDEX 2       /**< index for the sensor at the left foot */
-#define RIGHT_FOOT_INDEX 3      /**< index for the sensor at the right foot */
-#define BACK_INDEX 4            /**< index for the sensor at the back */
+#define LEFT_FOOT_INDEX 2       /**< index for the sensor at the left foot (pes) */
+#define RIGHT_FOOT_INDEX 3      /**< index for the sensor at the right foot (pes) */
+#define BACK_INDEX 4            /**< index for the sensor at the back (dorsum) */
 #define HEAD_INDEX 5            /**< index for the sensor at the head (cranium) */
 #define LEFT_LOWER_ARM_INDEX 6  /**< index for the sensor at the left lower arm (antebrachium) */
 #define RIGHT_LOWER_ARM_INDEX 7 /**< index for the sensor at the right lower arm (antebrachium) */
 #define LEFT_UPPER_LEG_INDEX 8  /**< index for the sensor at the left thigh (femur) */
 #define RIGHT_UPPER_LEG_INDEX 9 /**< index for the sensor at the right thigh (femur) */
 
+/** map the numerical index to string */
+const char* idx2string[] = {
+  "left_upper_arm", "right_upper_arm", "left_foot", "right_foot",
+  "back", "head", "left_lower_arm", "right_lower_arm", "left_upper_leg",
+  "right_upper_leg"
+};
+
 // Instance to store data on ESP32, name of the preference
-Preferences preferences;  /**< container for preferences on ESP32 */
-char mpuPref[10];         /**< preferences of each MPU stored on ESP32 */
+Preferences preferences;  /**< container for preferences to be stored in non-volatile memory on ESP32 */
 
 // MPU9250 settings and data storage
 MPU9250socket sensors[NUMBER_OF_MPU];   /**< communication abstractions for all MPUs */
@@ -332,10 +340,10 @@ void connectWiFi() {
   WiFi.begin(WIFI_SSID, WIFI_PASS);
 
   long start = millis();
-  // try for ten seconds to connect every 100 ms (i.e. make 100 attempts)
+  // try for ten seconds to connect every 500 ms (i.e. make 10000/500 = 20 attempts)
   while (WiFi.status() != WL_CONNECTED && millis() - start < 10000) {
     Serial.print(".");
-    delay(100);
+    delay(500);
   }
 
   // print result of connection attempt(s) on serial console
@@ -578,8 +586,8 @@ void passiveAccelerometerCalibration() {
 
   // Acceleration: store calibration data
   for (uint8_t i = 0; i < NUMBER_OF_MPU; i++) {
-    itoa(i, mpuPref, 10); // Key names = number of mpu
-    preferences.begin(mpuPref, false);
+    // create writeable namespace named after MPU
+    preferences.begin(idx2string[i], false);
 
     preferences.putFloat("accbiasX", sensors[i].mpu.getAccBiasX());
     preferences.putFloat("accbiasY", sensors[i].mpu.getAccBiasY());
@@ -637,8 +645,8 @@ void passiveMagnetometerCalibration() {
 
   // Magnetometer : store calibration data
   for (uint8_t i = 0; i < NUMBER_OF_MPU; i++) {
-    itoa(i, mpuPref, 10); // Key names = number of mpu
-    preferences.begin(mpuPref, false);
+    // create writable namespace to store data in NVS
+    preferences.begin(idx2string[i], false);
 
     preferences.putFloat("magbiasX", sensors[i].mpu.getMagBiasX());
     preferences.putFloat("magbiasY", sensors[i].mpu.getMagBiasY());
@@ -677,20 +685,24 @@ void buttonBasedCalibration() {
 
   // state_button = LOW;
   if (state_button == HIGH) {
-    Serial.println("HIGH : Launch calibration sequence");
+    Serial.println("launching calibration sequence");
     // Acceleration: get data calibration + calibrate
     passiveAccelerometerCalibration();
     // Magnetometer : get data calibration + calibrate
     passiveMagnetometerCalibration();
   } else {
 	// Button not pushed : we read the stored calibration data and calibrate
-    Serial.println("LOW : Load calibration data");
+    Serial.println("loading calibration data");
     for (uint8_t i = 0; i < NUMBER_OF_MPU; i++) {
-      itoa(i, mpuPref, 10); // Key names = number of mpu
-      preferences.begin(mpuPref, false);
+      // read preferences from namespace in NVS
+      if(!preferences.begin(idx2string[i], true)) {
+        Serial.print("no configuration data found for \"");
+        Serial.print(idx2string[i]);
+        Serial.println("\" / skipping config");
+        continue;
+      }
 
       // Set acceleration calibration data
-
       sensors[i].mpu.setAccBias(preferences.getFloat("accbiasX", 0),
                         preferences.getFloat("accbiasY", 0),
                         preferences.getFloat("accbiasZ", 0));
@@ -765,6 +777,7 @@ void buttonBasedCalibration() {
     // We save the north direction and send it to the library
     theta = sensors[MPU_NORTH - 1].mpu.getYaw() * (-1);
 
+    // save angle to north in NVS namespace
     preferences.begin("setNorth", false);
     preferences.putFloat("north", theta);
     preferences.end();
@@ -772,8 +785,8 @@ void buttonBasedCalibration() {
     Serial.println("LOW : Load former north");
   }
 
-  // We get the north and set it
-  preferences.begin("setNorth", false);
+  // retrieve angle to north from readable NVS namespace
+  preferences.begin("setNorth", true);
   for (uint8_t i = 0; i < NUMBER_OF_MPU; i++) {
     sensors[i].mpu.setNorth(preferences.getFloat("north", 0));
   }
