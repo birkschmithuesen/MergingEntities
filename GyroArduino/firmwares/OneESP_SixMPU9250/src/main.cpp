@@ -49,7 +49,6 @@
 
 // Define BUTTON to activate the button
 #define BUTTON  /**< indicate existence of button (to trigger calibration procedure) */
-
 //-------END GENERAL SETTINGS-------
 
 //-------BEGIN WIFI SETTINGS--------
@@ -881,10 +880,19 @@ void fetchData() {
 void setup() {
   //-------HARDWARE SETUP-------
   Serial.begin(115200);
-  Serial.flush(); // Clean buffer
+  Serial.flush(); // clear serial buffer
 
-  Serial.print("setting up LED pins .");
+  // print a nice banner :)
+  Serial.println("----------------------------------------");
+  Serial.println("  ┌─┐┬─┐┌┬┐┌─┐┌─┐  ┌┬┐┌─┐┌┐ ┬┬  ┌─┐┌─┐");
+  Serial.println("  ├─┤├┬┘ │ ├┤ └─┐  ││││ │├┴┐││  ├┤ └─┐");
+  Serial.println("  ┴ ┴┴└─ ┴ └─┘└─┘  ┴ ┴└─┘└─┘┴┴─┘└─┘└─┘");
+  Serial.println("----------------------------------------");
+  Serial.println();
+  delay(1000);
+
   // LED initialization
+  Serial.print("setting up LED pins .");
   pinMode(RED_PIN, OUTPUT);
   pinMode(YEL_PIN, OUTPUT);
   pinMode(BUTTON_PIN, INPUT);
