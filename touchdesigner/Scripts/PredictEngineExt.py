@@ -98,7 +98,7 @@ class PredictEngineExt:
 		return self.Modelname
 
 	def LoadSettingsFromConfigFile(self):
-		op('load_model_config').par.file = parent().par.Rootfolder + '/' + parent().par.Selectmodel + '/model_config.json'
+		#op('load_model_config').par.file = parent().par.Rootfolder + '/' + parent().par.Selectmodel + '/model_config.json'
 		op('load_model_config').par.refreshpulse.pulse()
 		model_config = op('model_config')
 		self.Modeltype.val = model_config.result['Model_Type']
@@ -116,13 +116,12 @@ class PredictEngineExt:
 		self.Timesteps.val = model_config.result['TIME_STEPS']
 
 	def Loadmodel(self):
-		model_folder = parent().par.Rootfolder + '/' + parent().par.Selectmodel
-
+		model_folder = parent().par.Selectmodel.eval()
+		op('debugTable').appendRow([absTime.frame, model_folder])
 		with tf.device(tf.config.list_logical_devices('GPU')[0].name):
 			self.Model = Sequential()
 			self.Model = keras.models.load_model(model_folder)
 			self.LoadSettingsFromConfigFile()
-
 		op('debugTable').appendRow([absTime.frame, 'Loadmodel END'])
 	
 	def PredictTargets(self,features):

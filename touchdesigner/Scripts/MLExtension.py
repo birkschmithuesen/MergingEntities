@@ -179,11 +179,11 @@ class MLExtension:
 				# save tmp weights to later set into new model with batchsize 1
 				tmp_model_weights = self.Model.get_weights()
 				# set new batchsize
-				self.Batchsize.val = 1
+				#self.Batchsize.val = 1
 				# make new model
 				self.Model = Sequential()
-				self.Model.add(LSTM(units=128, batch_input_shape=(self.Batchsize.val, self.Timesteps.val, self.Inputdim.val), stateful=True, return_sequences=True))
-				self.Model.add(LSTM(units=128, batch_input_shape=(self.Batchsize.val, self.Timesteps.val, self.Inputdim.val), stateful=True, return_sequences=False))
+				self.Model.add(LSTM(units=128, batch_input_shape=(1, self.Timesteps.val, self.Inputdim.val), stateful=True, return_sequences=True))
+				self.Model.add(LSTM(units=128, batch_input_shape=(1, self.Timesteps.val, self.Inputdim.val), stateful=True, return_sequences=False))
 				self.Model.add(Dense(units=self.Outputdim.val, activation='sigmoid'))
 				# set weights from tmp model
 				self.Model.set_weights(tmp_model_weights)
