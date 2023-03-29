@@ -56,7 +56,7 @@
 WiFiUDP Udp;                         /**< handler for UDP communication */
 #define WIFI_SSID "network name"     /**< SSID / name of the wifi network to use */
 #define WIFI_PASS "access password"  /**< password for the wifi network to use */
-IPAddress outIp(192, 168, 0, 2);     /**< IP address of the ESP32 */
+IPAddress outIp(192, 168, 0, 2);     /**< IP address of the (target) OSC server */
 int localPort = 8888;                /**< source port for UDP communication on ESP32 */
 //-------END WIFI SETTINGS--------
 
@@ -319,9 +319,12 @@ OSCMessage calibration("/calibration/3");  /**< OSC endpoint for calibration mes
  * @see #WIFI_SSID
  * @see #WIFI_PASS
  * @see startUdp()
+ * @see setup()
  */
 void connectWiFi() {
-  Serial.print("Connecting to wifi ..");
+  Serial.print("Connecting to wifi network \"");
+  Serial.print(WIFI_SSID);
+  Serial.print("\" .");
   // Mode of the WiFi
   //   STA = STATION MODE (connect to access point),
   //   APM = Access Point Mode (create a network)
@@ -843,6 +846,8 @@ void fetchData() {
 /**
  * Main setup / initialisation routine.
  *
+ * @see connectWiFi()
+ * @see startUdp()
  * @see loop()
  */
 void setup() {
@@ -867,6 +872,11 @@ void setup() {
   //-------WIFI SETUP-------
   connectWiFi();
   startUdp(localPort);
+  Serial.print("target OSC server is ");
+  Serial.print(outIp);
+  Serial.print(" port ");
+  Serial.println(outPort);
+
 
   //-------MPU SETUP------
   // Launch comm with multiplexer
