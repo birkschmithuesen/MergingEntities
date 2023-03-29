@@ -159,9 +159,9 @@ struct MPU9250data {
 // manually create indexes to emulate a hashmap with an array
 #define LEFT_UPPER_ARM_INDEX 0  /**< index for the sensor at the left upper arm (brachium) */
 #define RIGHT_UPPER_ARM_INDEX 1 /**< index for the sensor at the right upper arm (brachium) */
-#define LEFT_FOOT_INDEX 2       /**< index for the sensor at the left foot */
-#define RIGHT_FOOT_INDEX 3      /**< index for the sensor at the right foot */
-#define BACK_INDEX 4            /**< index for the sensor at the back */
+#define LEFT_FOOT_INDEX 2       /**< index for the sensor at the left foot (pes) */
+#define RIGHT_FOOT_INDEX 3      /**< index for the sensor at the right foot (pes) */
+#define BACK_INDEX 4            /**< index for the sensor at the back (dorsum) */
 #define HEAD_INDEX 5            /**< index for the sensor at the head (cranium) */
 #define LEFT_LOWER_ARM_INDEX 6  /**< index for the sensor at the left lower arm (antebrachium) */
 #define RIGHT_LOWER_ARM_INDEX 7 /**< index for the sensor at the right lower arm (antebrachium) */
@@ -169,7 +169,7 @@ struct MPU9250data {
 #define RIGHT_UPPER_LEG_INDEX 9 /**< index for the sensor at the right thigh (femur) */
 
 // Instance to store data on ESP32, name of the preference
-Preferences preferences;  /**< container for preferences on ESP32 */
+Preferences preferences;  /**< container for preferences to be stored in non-volatile memory on ESP32 */
 char mpuPref[10];         /**< preferences of each MPU stored on ESP32 */
 
 // MPU9250 settings and data storage
@@ -580,7 +580,9 @@ void passiveAccelerometerCalibration() {
 
   // Acceleration: store calibration data
   for (uint8_t i = 0; i < NUMBER_OF_MPU; i++) {
-    itoa(i, mpuPref, 10); // Key names = number of mpu
+    // convert MPU index to namespace (string)
+    itoa(i, mpuPref, 10);
+    // create writeable namespace named after MPU
     preferences.begin(mpuPref, false);
 
     preferences.putFloat("accbiasX", sensors[i].mpu.getAccBiasX());
