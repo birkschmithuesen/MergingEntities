@@ -171,7 +171,6 @@ Preferences preferences;  /**< container for preferences on ESP32 */
 char mpuPref[10];         /**< preferences of each MPU stored on ESP32 */
 
 // MPU9250 settings and data storage
-MPU9250 mpu[NUMBER_OF_MPU];  /**< software handler/abstraction for each MPU */
 MPU9250socket sensors[NUMBER_OF_MPU];   /**< communication abstractions for all MPUs */
 MPU9250data mpuData[NUMBER_OF_MPU]; /**< bundled MPU9250 data to be accessed by index */
 float accbias[6][3];     /**< bias/drift/offset profile for the accelerator */
@@ -424,8 +423,8 @@ void manualMagnetometerCalibration() {
       Serial.print(" on multiplexer at address ");
       Serial.println(sensors[i].multiplexer);
     }
-    mpu[i].setMagneticDeclination(MAG_DECLINATION);
-    mpu[i].calibrateMag();
+    sensors[i].mpu.setMagneticDeclination(MAG_DECLINATION);
+    sensors[i].mpu.calibrateMag();
 
     calibration.empty();
   }
@@ -449,9 +448,9 @@ void automaticMagnetometerCalibration() {
   calibration.empty();
 
   for (uint8_t i = 0; i < NUMBER_OF_MPU; i++) {
-    mpu[i].setMagneticDeclination(MAG_DECLINATION);
-    mpu[i].setMagBias(magbias[i][0], magbias[i][1], magbias[i][2]);
-    mpu[i].setMagScale(magscale[i][0], magscale[i][1], magscale[i][2]);
+    sensors[i].mpu.setMagneticDeclination(MAG_DECLINATION);
+    sensors[i].mpu.setMagBias(magbias[i][0], magbias[i][1], magbias[i][2]);
+    sensors[i].mpu.setMagScale(magscale[i][0], magscale[i][1], magscale[i][2]);
   }
   Serial.println("Mag calibration done");
 }
@@ -529,15 +528,15 @@ void checkAndConfigureGyros() {
     }
 
     // try to initialize the multiplexer with the (global) settings
-    if (!mpu[i].setup(sensors[i].multiplexer, setting, Wire)) {
+    if (!sensors[i].mpu.setup(sensors[i].multiplexer, setting, Wire)) {
       // somehow it failed
       sensors[i].usable = false;
       continue;
     }
 
     // configure the filter for the measured data
-    mpu[i].selectFilter(sel);
-    mpu[i].setFilterIterations(10);
+    sensors[i].mpu.selectFilter(sel);
+    sensors[i].mpu.setFilterIterations(10);
 
     // everything is done and now the senor is usable
     sensors[i].usable = true;
@@ -569,7 +568,7 @@ void passiveAccelerometerCalibration() {
       Serial.print(" on multiplexer at address ");
       Serial.println(sensors[i].multiplexer);
     }
-    mpu[i].calibrateAccelGyro();
+    sensors[i].mpu.calibrateAccelGyro();
   }
   digitalWrite(RED_PIN, LOW);
   Serial.println("Acceleration calibration done.");
@@ -579,13 +578,13 @@ void passiveAccelerometerCalibration() {
     itoa(i, mpuPref, 10); // Key names = number of mpu
     preferences.begin(mpuPref, false);
 
-    preferences.putFloat("accbiasX", mpu[i].getAccBiasX());
-    preferences.putFloat("accbiasY", mpu[i].getAccBiasY());
-    preferences.putFloat("accbiasZ", mpu[i].getAccBiasZ());
+    preferences.putFloat("accbiasX", sensors[i].mpu.getAccBiasX());
+    preferences.putFloat("accbiasY", sensors[i].mpu.getAccBiasY());
+    preferences.putFloat("accbiasZ", sensors[i].mpu.getAccBiasZ());
 
-    preferences.putFloat("gyrobiasX", mpu[i].getGyroBiasX());
-    preferences.putFloat("gyrobiasY", mpu[i].getGyroBiasY());
-    preferences.putFloat("gyrobiasZ", mpu[i].getGyroBiasZ());
+    preferences.putFloat("gyrobiasX", sensors[i].mpu.getGyroBiasX());
+    preferences.putFloat("gyrobiasY", sensors[i].mpu.getGyroBiasY());
+    preferences.putFloat("gyrobiasZ", sensors[i].mpu.getGyroBiasZ());
 
     preferences.end();
   }
@@ -626,8 +625,8 @@ void passiveMagnetometerCalibration() {
       Serial.print(" on multiplexer at address ");
       Serial.println(sensors[i].multiplexer);
     }
-    mpu[i].setMagneticDeclination(MAG_DECLINATION);
-    mpu[i].calibrateMag();
+    sensors[i].mpu.setMagneticDeclination(MAG_DECLINATION);
+    sensors[i].mpu.calibrateMag();
 
     calibration.empty();
   }
@@ -638,13 +637,13 @@ void passiveMagnetometerCalibration() {
     itoa(i, mpuPref, 10); // Key names = number of mpu
     preferences.begin(mpuPref, false);
 
-    preferences.putFloat("magbiasX", mpu[i].getMagBiasX());
-    preferences.putFloat("magbiasY", mpu[i].getMagBiasY());
-    preferences.putFloat("magbiasZ", mpu[i].getMagBiasZ());
+    preferences.putFloat("magbiasX", sensors[i].mpu.getMagBiasX());
+    preferences.putFloat("magbiasY", sensors[i].mpu.getMagBiasY());
+    preferences.putFloat("magbiasZ", sensors[i].mpu.getMagBiasZ());
 
-    preferences.putFloat("magscaleX", mpu[i].getMagScaleX());
-    preferences.putFloat("magscaleY", mpu[i].getMagScaleY());
-    preferences.putFloat("magscaleZ", mpu[i].getMagScaleZ());
+    preferences.putFloat("magscaleX", sensors[i].mpu.getMagScaleX());
+    preferences.putFloat("magscaleY", sensors[i].mpu.getMagScaleY());
+    preferences.putFloat("magscaleZ", sensors[i].mpu.getMagScaleZ());
 
     preferences.end();
   }
@@ -689,10 +688,10 @@ void buttonBasedCalibration() {
 
       // Set acceleration calibration data
 
-      mpu[i].setAccBias(preferences.getFloat("accbiasX", 0),
+      sensors[i].mpu.setAccBias(preferences.getFloat("accbiasX", 0),
                         preferences.getFloat("accbiasY", 0),
                         preferences.getFloat("accbiasZ", 0));
-      mpu[i].setGyroBias(preferences.getFloat("gyrobiasX", 0),
+      sensors[i].mpu.setGyroBias(preferences.getFloat("gyrobiasX", 0),
                          preferences.getFloat("gyrobiasY", 0),
                          preferences.getFloat("gyrobiasZ", 0));
 
@@ -708,13 +707,13 @@ void buttonBasedCalibration() {
       Serial.println("Acceleration calibration done.");*/
 
       // Set magnetometer calibration data
-      mpu[i].setMagBias(preferences.getFloat("magbiasX", 0),
+      sensors[i].mpu.setMagBias(preferences.getFloat("magbiasX", 0),
                         preferences.getFloat("magbiasY", 0),
                         preferences.getFloat("magbiasZ", 0));
-      mpu[i].setMagScale(preferences.getFloat("magscaleX", 0),
+      sensors[i].mpu.setMagScale(preferences.getFloat("magscaleX", 0),
                          preferences.getFloat("magscaleY", 0),
                          preferences.getFloat("magscaleZ", 0));
-      mpu[i].setMagneticDeclination(MAG_DECLINATION);
+      sensors[i].mpu.setMagneticDeclination(MAG_DECLINATION);
       preferences.end();
     }
     Serial.println("Calibration loaded");
@@ -751,7 +750,7 @@ void buttonBasedCalibration() {
 
   time_passed = millis();
   while (millis() - time_passed < 10000) {
-    mpu[MPU_NORTH - 1].update();
+    sensors[MPU_NORTH - 1].mpu.update();
   }
   digitalWrite(RED_PIN, LOW);
   digitalWrite(YEL_PIN, LOW);
@@ -761,7 +760,7 @@ void buttonBasedCalibration() {
   if (state_button == HIGH) {
     Serial.println("HIGH : setting north");
     // We save the north direction and send it to the library
-    theta = mpu[MPU_NORTH - 1].getYaw() * (-1);
+    theta = sensors[MPU_NORTH - 1].mpu.getYaw() * (-1);
 
     preferences.begin("setNorth", false);
     preferences.putFloat("north", theta);
@@ -773,7 +772,7 @@ void buttonBasedCalibration() {
   // We get the north and set it
   preferences.begin("setNorth", false);
   for (uint8_t i = 0; i < NUMBER_OF_MPU; i++) {
-    mpu[i].setNorth(preferences.getFloat("north", 0));
+    sensors[i].mpu.setNorth(preferences.getFloat("north", 0));
   }
   preferences.end();
   Serial.println("North set");
@@ -812,7 +811,7 @@ void fetchData() {
       Serial.println(sensors[i].multiplexer);
     }
     if (sensors[i].usable) {
-      if(!mpu[i].update()) {
+      if(!sensors[i].mpu.update()) {
         // too harsh?
         sensors[i].usable = false;
       }
@@ -826,18 +825,18 @@ void fetchData() {
 
   // Store sensor values
   for (int i = 0; i < NUMBER_OF_MPU; i++) {
-    mpuData[i].quaternion.x = mpu[i].getQuaternionX();
-    mpuData[i].quaternion.y = mpu[i].getQuaternionY();
-    mpuData[i].quaternion.z = mpu[i].getQuaternionZ();
-    mpuData[i].quaternion.w = mpu[i].getQuaternionW();
+    mpuData[i].quaternion.x = sensors[i].mpu.getQuaternionX();
+    mpuData[i].quaternion.y = sensors[i].mpu.getQuaternionY();
+    mpuData[i].quaternion.z = sensors[i].mpu.getQuaternionZ();
+    mpuData[i].quaternion.w = sensors[i].mpu.getQuaternionW();
 
-    mpuData[i].eulerangle.x = mpu[i].getEulerX();
-    mpuData[i].eulerangle.y = mpu[i].getEulerY();
-    mpuData[i].eulerangle.z = mpu[i].getEulerZ();
+    mpuData[i].eulerangle.x = sensors[i].mpu.getEulerX();
+    mpuData[i].eulerangle.y = sensors[i].mpu.getEulerY();
+    mpuData[i].eulerangle.z = sensors[i].mpu.getEulerZ();
 
-    mpuData[i].gyrovalue.x = mpu[i].getGyroX();
-    mpuData[i].gyrovalue.y = mpu[i].getGyroY();
-    mpuData[i].gyrovalue.z = mpu[i].getGyroZ();
+    mpuData[i].gyrovalue.x = sensors[i].mpu.getGyroX();
+    mpuData[i].gyrovalue.y = sensors[i].mpu.getGyroY();
+    mpuData[i].gyrovalue.z = sensors[i].mpu.getGyroZ();
   }
 }
 
@@ -1041,11 +1040,11 @@ void loop() {
   static unsigned long last_print = 0;
   if (millis() - last_print > 100) {
     for (int i = 0; i < NUMBER_OF_MPU; i++) {
-      Serial.print(mpu[i].getYaw());
+      Serial.print(sensors[i].mpu.getYaw());
       Serial.print("// ");
-      Serial.print(mpu[i].getYaw_r());
+      Serial.print(sensors[i].mpu.getYaw_r());
       Serial.print("// ");
-      Serial.print(mpu[i].getNorth());
+      Serial.print(sensors[i].mpu.getNorth());
       Serial.print("// ");
       /*
                 preferences.begin("0", false);
