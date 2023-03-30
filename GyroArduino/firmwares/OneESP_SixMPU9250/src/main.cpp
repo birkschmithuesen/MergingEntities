@@ -49,6 +49,7 @@
 
 // Define BUTTON to activate the button
 #define BUTTON  /**< indicate existence of button (to trigger calibration procedure) */
+#define DEBUG  /**< enable more verbose logging to serial line */
 //-------END GENERAL SETTINGS-------
 
 //-------BEGIN WIFI SETTINGS--------
@@ -554,7 +555,12 @@ void checkAndConfigureGyros() {
       sensors[i].usable = false;
       continue;
     }*/
-
+#ifdef DEBUG
+    Serial.print("using multiplexer 0x");
+    Serial.print(sensors[i].multiplexer, HEX);
+    Serial.print(" with channel ");
+    Serial.println(sensors[i].channel);
+#endif
     // try to initialize the multiplexer with the (global) settings
     if (!sensors[i].mpu.setup(sensors[i].address, setting, Wire)) {
       // somehow it failed
@@ -938,8 +944,14 @@ void setup() {
 
   // all senor adressing
   Serial.print("setting up sensor sockets .");
+#ifdef DEBUG
+  Serial.print("found ");
+  Serial.print(countMultiplexer());
+  Serial.println(" multiplexer");
+#endif
   switch (countMultiplexer()) {
   case 1:
+    // old prototype board
     if ((1 == countMultiplexer()) && (10 == NUMBER_OF_MPU)) {
       Serial.println("");
       Serial.println("---------------------------------------------------");
