@@ -674,25 +674,32 @@ void passiveMagnetometerCalibration() {
   }
 }
 
-
 /**
  * Do the calibration with button choices.
  *
- * @warning This is just a copy of the code from the setup routine. It has not
- * been refactored/reviewed yet.
  * @see passiveAccelerometerCalibration()
  * @see automaticMagnetometerCalibration()
  * @see manualMagnetometerCalibration()
+ * @see setup()
  */
 void buttonBasedCalibration() {
-  float time_passed = 0;  // tracking time passed
+  float time_passed = 0; // tracking time passed
 
+  Serial.println("---");
+  Serial.println("Press the button for automatic calibration (otherwise previous configuration is loaded)");
   //-------FIRST CHOICE-------
-  // Two LEDs are on: you have 6 seconds to press
+  // Two LEDs are on: you have 4 seconds to press
   // or not to press the button, to launch a calibration process
+  Serial.print("Waiting 3.");
   digitalWrite(RED_PIN, HIGH);
   digitalWrite(YEL_PIN, HIGH);
-  delay(6000);
+  delay(1000);
+  Serial.print(".2.");
+  delay(1000);
+  Serial.print(".1.");
+  delay(1000);
+  Serial.println(".(check)");
+  delay(1000);
   digitalWrite(RED_PIN, LOW);
   digitalWrite(YEL_PIN, LOW);
   state_button = digitalRead(BUTTON_PIN);
@@ -705,47 +712,37 @@ void buttonBasedCalibration() {
     // Magnetometer : get data calibration + calibrate
     passiveMagnetometerCalibration();
   } else {
-	// Button not pushed : we read the stored calibration data and calibrate
+    // Button not pushed : we read the stored calibration data and calibrate
     Serial.println("loading calibration data");
     for (uint8_t i = 0; i < NUMBER_OF_MPU; i++) {
       // read preferences from namespace in NVS
-      if(!preferences.begin(idx2string[i], true)) {
+      if (!preferences.begin(idx2string[i], true)) {
         Serial.print("no configuration data found for \"");
         Serial.print(idx2string[i]);
         Serial.println("\" / skipping config");
+        delay(1000);
         continue;
       }
 
       // Set acceleration calibration data
-      sensors[i].mpu.setAccBias(preferences.getFloat("accbiasX", 0),
-                        preferences.getFloat("accbiasY", 0),
-                        preferences.getFloat("accbiasZ", 0));
-      sensors[i].mpu.setGyroBias(preferences.getFloat("gyrobiasX", 0),
-                         preferences.getFloat("gyrobiasY", 0),
-                         preferences.getFloat("gyrobiasZ", 0));
-
-      // Test to see what the fuck
-      /*
-      digitalWrite(RED_PIN, HIGH);
-      for(uint8_t i=0; i<NUMBER_OF_MPU; i++) {
-        Serial.println(i);
-        selectI2cMultiplexerChannel(sensors[i].multiplexer, sensors[i].channel);
-        mpu[i].calibrateAccelGyro();
-      }
-      digitalWrite(RED_PIN, LOW);
-      Serial.println("Acceleration calibration done.");*/
+      sensors[i].mpu.setAccBias(preferences.getFloat("accbiasX", 0.0),
+                                preferences.getFloat("accbiasY", 0.0),
+                                preferences.getFloat("accbiasZ", 0.0));
+      sensors[i].mpu.setGyroBias(preferences.getFloat("gyrobiasX", 0.0),
+                                 preferences.getFloat("gyrobiasY", 0.0),
+                                 preferences.getFloat("gyrobiasZ", 0.0));
 
       // Set magnetometer calibration data
-      sensors[i].mpu.setMagBias(preferences.getFloat("magbiasX", 0),
-                        preferences.getFloat("magbiasY", 0),
-                        preferences.getFloat("magbiasZ", 0));
-      sensors[i].mpu.setMagScale(preferences.getFloat("magscaleX", 0),
-                         preferences.getFloat("magscaleY", 0),
-                         preferences.getFloat("magscaleZ", 0));
+      sensors[i].mpu.setMagBias(preferences.getFloat("magbiasX", 0.0),
+                                preferences.getFloat("magbiasY", 0.0),
+                                preferences.getFloat("magbiasZ", 0.0));
+      sensors[i].mpu.setMagScale(preferences.getFloat("magscaleX", 0.0),
+                                 preferences.getFloat("magscaleY", 0.0),
+                                 preferences.getFloat("magscaleZ", 0.0));
       sensors[i].mpu.setMagneticDeclination(MAG_DECLINATION);
       preferences.end();
     }
-    Serial.println("Calibration loaded");
+    Serial.println("previous calibration data loaded");
   }
 
   // Two leds are blinking, saying calibration is over
@@ -765,11 +762,12 @@ void buttonBasedCalibration() {
   //-------SECOND CHOICE-------
   // Two leds are on: you have 10 seconds to
   // orientate the MPU 1 over the new north and press the button
+  Serial.println("---");
+  Serial.println("leave the sensors alone for 10 seconds");
   digitalWrite(RED_PIN, HIGH);
   digitalWrite(YEL_PIN, HIGH);
 
-  // TODO: fix this
-  // We let the mpu run for 10 seconds to have the good yaw if we need it
+  // sample the MPU for 10 seconds to have the good yaw if we need it
   if (!selectI2cMultiplexerChannel(TCA_ADDRESS_RIGHT_SIDE, MPU_NORTH - 1)) {
     Serial.print("could not select channel ");
     Serial.print(MPU_NORTH - 1);
@@ -778,36 +776,45 @@ void buttonBasedCalibration() {
   }
 
   time_passed = millis();
-  while (millis() - time_passed < 10000) {
-    sensors[MPU_NORTH - 1].mpu.update();
+  for (uint8_t sec = 10; sec != 0; sec--) {
+    Serial.print(sec);
+    Serial.print("..");
+    while (millis() - time_passed < 1000) {
+      sensors[MPU_NORTH - 1].mpu.update();
+    }
+    time_passed = millis();
   }
   digitalWrite(RED_PIN, LOW);
   digitalWrite(YEL_PIN, LOW);
+  Serial.println("..done");
+
+  Serial.println("---");
+  Serial.println("press calibration button to save current north (otherwise old data is loaded)");
+  delay(1000);
 
   state_button = digitalRead(BUTTON_PIN);
-  // state_button = HIGH;
   if (state_button == HIGH) {
-    Serial.println("HIGH : setting north");
-    // We save the north direction and send it to the library
+    Serial.println("saving current north");
+    // we save the north direction and send it to the library
     theta = sensors[MPU_NORTH - 1].mpu.getYaw() * (-1);
 
-    // save angle to north in NVS namespace
+    // save angle to north in writable NVS namespace
     preferences.begin("setNorth", false);
     preferences.putFloat("north", theta);
     preferences.end();
   } else {
-    Serial.println("LOW : Load former north");
+    Serial.println("loading former north");
   }
 
   // retrieve angle to north from readable NVS namespace
   preferences.begin("setNorth", true);
   for (uint8_t i = 0; i < NUMBER_OF_MPU; i++) {
-    sensors[i].mpu.setNorth(preferences.getFloat("north", 0));
+    sensors[i].mpu.setNorth(preferences.getFloat("north", 0.0));
   }
   preferences.end();
-  Serial.println("North set");
+  Serial.println("north is configured");
 
-  // Two leds are blinking, saying north is set
+  // two LEDs are blinking, indicating north is set
   for (uint8_t i = 0; i < 20; i++) {
     digitalWrite(RED_PIN, state);
     digitalWrite(YEL_PIN, state);
@@ -824,7 +831,7 @@ void buttonBasedCalibration() {
 
 /**
  * Fetch data from all MPU9250 boards and update global value storage.
- * 
+ *
  * @see selectI2cMultiplexerChannel(uint8_t address, uint8_t channel)
  * @see setup()
  * @see loop()
