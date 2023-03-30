@@ -49,6 +49,7 @@
 
 // Define BUTTON to activate the button
 #define BUTTON  /**< indicate existence of button (to trigger calibration procedure) */
+//#define DEBUG  /**< enable more verbose logging to serial line */
 //-------END GENERAL SETTINGS-------
 
 //-------BEGIN WIFI SETTINGS--------
@@ -493,16 +494,66 @@ void automaticMagnetometerCalibration() {
  * @see countI2cDevices()
  * @see selectI2cMultiplexerChannel(uint8_t address, uint8_t channel)
  */
-uint8_t countMultiplexer(){
-  uint8_t count = 0;
-  if (selectI2cMultiplexerChannel(TCA_ADDRESS_RIGHT_SIDE, 1)) {
-    count = 1;
+uint8_t countMultiplexer() {
+  uint8_t deviceCount = 0;
+  uint8_t result = 0;
+
+#ifdef DEBUG
+  Serial.println();
+  Serial.print("* I2C timeout is ");
+  Serial.print(Wire.getTimeOut());
+  Serial.println("ms");
+  Serial.print("* address 0x");
+  Serial.println(TCA_ADDRESS_LEFT_SIDE, HEX);
+#endif
+  // we try to talk to expected multiplexers
+  Wire.beginTransmission(TCA_ADDRESS_LEFT_SIDE);
+  result = Wire.endTransmission(true);
+  switch(result) {
+  case 0:
+    // talking was successful, we found a device at the current address
+    deviceCount += 1;
+#ifdef DEBUG
+    Serial.println("* found a multiplexer");
+    break;
+  case 5:
+    Serial.println("* I2C bus timeout");
+#endif
+    break;
+  default:
+    break;
   }
-  if (selectI2cMultiplexerChannel(TCA_ADDRESS_LEFT_SIDE, 1)) {
-    count = 2;
+
+  // doing it again
+#ifdef DEBUG
+  Serial.print("* I2C timeout is ");
+  Serial.print(Wire.getTimeOut());
+  Serial.println("ms");
+  Serial.print("* address 0x");
+  Serial.println(TCA_ADDRESS_RIGHT_SIDE, HEX);
+#endif
+  // doing it again
+  Wire.beginTransmission(TCA_ADDRESS_RIGHT_SIDE);
+  result = Wire.endTransmission(true);
+  switch(result) {
+  case 0:
+    // talking was successful, we found a device at the current address
+    deviceCount += 1;
+#ifdef DEBUG
+    Serial.println("* found a multiplexer");
+    break;
+  case 5:
+    Serial.println("* I2C bus timeout");
+#endif
+    break;
+  default:
+    break;
   }
-  return count;
+
+  //delay(5000); // wait 5 seconds for next scan - TODO: remove?
+  return deviceCount;
 }
+
 
 /**
  * Check which MPU9250 sensor board is there and do the initial
@@ -554,7 +605,12 @@ void checkAndConfigureGyros() {
       sensors[i].usable = false;
       continue;
     }*/
-
+#ifdef DEBUG
+    Serial.print("using multiplexer 0x");
+    Serial.print(sensors[i].multiplexer, HEX);
+    Serial.print(" with channel ");
+    Serial.println(sensors[i].channel);
+#endif
     // try to initialize the multiplexer with the (global) settings
     if (!sensors[i].mpu.setup(sensors[i].address, setting, Wire)) {
       // somehow it failed
@@ -938,13 +994,20 @@ void setup() {
 
   // all senor adressing
   Serial.print("setting up sensor sockets .");
+#ifdef DEBUG
+  Serial.print("found ");
+  Serial.print(countMultiplexer());
+  Serial.println(" multiplexer");
+#endif
   switch (countMultiplexer()) {
   case 1:
-    if ((1 == countMultiplexer()) && (10 == NUMBER_OF_MPU)) {
+    // old prototype board
+    if (10 == NUMBER_OF_MPU) {
       Serial.println("");
       Serial.println("---------------------------------------------------");
       Serial.println("10 sensors incompatible with single I2C multiplexer");
       Serial.println("---------------------------------------------------");
+      Serial.println("... stopping everything");
       // put ESP32 into deep sleep (closest to shutdown)
       esp_deep_sleep_start();
     }
@@ -1008,6 +1071,7 @@ void setup() {
     Serial.println("---------------------------------------------------");
     Serial.println("can not find a reasonable number of I2C multiplexer");
     Serial.println("---------------------------------------------------");
+    Serial.println("... stopping everything");
     // put ESP32 into deep sleep (closest to shutdown)
     esp_deep_sleep_start();
     break;
