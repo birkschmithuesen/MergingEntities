@@ -96,11 +96,12 @@ int state_button = LOW;  /**< current state of the button */
  * @see MPU9250data
  */
 struct MPU9250socket {
-	String label;        /**< human readable identification of the sensor (used on OSC path) */
-	uint8_t multiplexer; /**< I2C address of the responsible I2C multiplexer */
-	uint8_t channel;     /**< channel used on the I2C multiplexer */
-	MPU9250 mpu;         /**< software handler/abstraction for MPU at given channel of given multiplexer */
-	bool usable = false; /**< indicate that sensor (data) is present and no errors occured */
+  String label; /**< human readable identification of the sensor (for OSC path) */
+  uint8_t multiplexer; /**< I2C address of the responsible I2C multiplexer */
+  uint8_t channel;     /**< channel used on the I2C multiplexer */
+  uint8_t address = MPU_ADDRESS_1; /**< I2C address of the MPU9250 */
+  MPU9250 mpu; /**< software handler/abstraction for MPU at given channel of given multiplexer */
+  bool usable = false; /**< indicate that sensor (data) is present and no errors occured */
 };
 
 /**
@@ -528,8 +529,11 @@ void checkAndConfigureGyros() {
   // Lauch communication with the MPUs
   // go through list of (expected) sensors and see if they are there
   for (uint8_t i = 0; i < NUMBER_OF_MPU; i++) {
+    Serial.print("setting up gyro for ");
+    Serial.print(sensors[i].label);
     // skip sensors that are already configured (i.e. usable)
     if (sensors[i].usable) {
+      Serial.println(" ... already done");
       continue;
     }
 
@@ -538,24 +542,24 @@ void checkAndConfigureGyros() {
                                      sensors[i].channel)) {
       // selection failed
       sensors[i].usable = false;
-      Serial.print("could not select channel ");
       Serial.print(sensors[i].channel);
-      Serial.print(" on multiplexer at address ");
       Serial.println(sensors[i].multiplexer);
+      Serial.println(" ... failed at multiplexer channel selection");
       continue;
     }
 
-    // sanity check: there should only be one device and the MPU should be
-    // available
-    if (!((1 == countI2cDevices()) && (sensors[i].mpu.available()))) {
+    /*/ sanity check: MPU should be available - NOT AVAILABLE AT THIS STAGE?
+    if (!sensors[i].mpu.available()) {
+      Serial.println("meh ...");
       sensors[i].usable = false;
       continue;
-    }
+    }*/
 
     // try to initialize the multiplexer with the (global) settings
-    if (!sensors[i].mpu.setup(sensors[i].multiplexer, setting, Wire)) {
+    if (!sensors[i].mpu.setup(sensors[i].address, setting, Wire)) {
       // somehow it failed
       sensors[i].usable = false;
+      Serial.println(" ... failed at MPU setup");
       continue;
     }
 
@@ -565,6 +569,7 @@ void checkAndConfigureGyros() {
 
     // everything is done and now the senor is usable
     sensors[i].usable = true;
+    Serial.println(" ... worked");
   }
 }
 
@@ -575,17 +580,20 @@ void checkAndConfigureGyros() {
  *
  * @see buttonBasedCalibration()
  * @see passiveMagnetometerCalibration()
+ * @see setup()
  */
 void passiveAccelerometerCalibration() {
-  Serial.println("Calibration of acceleration : don't move devices");
-  calibration.add("Calibration of acceleration : don't move devices");
+  Serial.println("calibration of acceleration: don't move devices");
+  calibration.add("calibration of acceleration: don't move devices");
   Udp.beginPacket(outIp, outPort);
   calibration.send(Udp);
   Udp.endPacket();
   calibration.empty();
   digitalWrite(RED_PIN, HIGH);
   for (uint8_t i = 0; i < NUMBER_OF_MPU; i++) {
-    Serial.println(i);
+    Serial.print("calibrating accelerometer for \"");
+    Serial.print(idx2string[i]);
+    Serial.println("\"");
     if (!selectI2cMultiplexerChannel(sensors[i].multiplexer,
                                      sensors[i].channel)) {
       Serial.print("could not select channel ");
@@ -596,7 +604,7 @@ void passiveAccelerometerCalibration() {
     sensors[i].mpu.calibrateAccelGyro();
   }
   digitalWrite(RED_PIN, LOW);
-  Serial.println("Acceleration calibration done.");
+  Serial.println("acceleration calibration done.");
 
   // Acceleration: store calibration data
   for (uint8_t i = 0; i < NUMBER_OF_MPU; i++) {
