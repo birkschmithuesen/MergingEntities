@@ -4,6 +4,55 @@ Scale.directory
 Server.killAll;
 
 
+//////////////////////////
+// PATTERNS WITH SynthDef
+//////////////////////////
+
+(
+~tempo = 60/120 * 4; //60/90 * 4 //60sec / 128 BPM * 4 bars
+
+(
+SynthDef.new(\sine, {
+	arg freq=440, atk=0.005, rel=0.3, amp=1, pan=0, bus=0;
+	var sig, env;
+	sig = SinOsc.ar(freq);
+	env = EnvGen.kr(Env.new([0, 1, 0], [atk, rel], [1,-1]), doneAction:2);
+	sig = Pan2.ar(sig, pan, amp);
+	sig = sig * env;
+	Out.ar(bus, sig);
+}).add
+)
+
+x = Synth.new(\sine, [\amp, 0.5]);
+
+
+// PDEVs
+(
+Pdef.new(
+	\sinepat,
+	Pbind(
+		\instrument, \sine,
+		\dur, Pseq([1/16], inf),
+		\stretch, ~tempo,
+		\midinote, Pseq([33], inf),
+		\harmonic, Pexprand(1, 6, inf).round.trace,
+		// \amp, Pkey(\harmonic).reciprocal * 0.2,
+		\amp, Pkey(\harmonic).reciprocal * Pseq([Pexprand(0.4, 0.5, 1),Pexprand(0.1, 0.3, 3)], inf),
+		\atk, 0.005, //Pwhite(0.002, 0.1, inf),
+		\rel, Pwhite(0.005, 0.2, inf),
+		\pan, Pwhite(-0.8, 0.8, inf),
+	)
+).play(quant:~tempo);//quant_(~tempo);//play(quant:~tempo);
+)
+)
+
+
+
+
+
+
+
+
 {LFPulse.ar([48,55].midicps, 0.15)}.play;
 
 (
