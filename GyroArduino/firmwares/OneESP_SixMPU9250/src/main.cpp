@@ -610,6 +610,7 @@ void checkAndConfigureGyros() {
     Serial.print(sensors[i].multiplexer, HEX);
     Serial.print(" with channel ");
     Serial.println(sensors[i].channel);
+    sensors[i].mpu.verbose(true);
 #endif
     // try to initialize the multiplexer with the (global) settings
     if (!sensors[i].mpu.setup(sensors[i].address, setting, Wire)) {
