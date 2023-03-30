@@ -34,6 +34,9 @@ endif
 
 :both LEDs on;
 
+:hold the left upper arm
+(sensor) towards (new) north;
+
 :do not move sensors
 for 10 seconds;
 
