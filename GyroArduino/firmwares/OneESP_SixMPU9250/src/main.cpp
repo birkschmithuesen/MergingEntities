@@ -49,7 +49,7 @@
 
 // Define BUTTON to activate the button
 #define BUTTON  /**< indicate existence of button (to trigger calibration procedure) */
-#define DEBUG  /**< enable more verbose logging to serial line */
+//#define DEBUG  /**< enable more verbose logging to serial line */
 //-------END GENERAL SETTINGS-------
 
 //-------BEGIN WIFI SETTINGS--------
@@ -1002,7 +1002,7 @@ void setup() {
   switch (countMultiplexer()) {
   case 1:
     // old prototype board
-    if ((1 == countMultiplexer()) && (10 == NUMBER_OF_MPU)) {
+    if (10 == NUMBER_OF_MPU) {
       Serial.println("");
       Serial.println("---------------------------------------------------");
       Serial.println("10 sensors incompatible with single I2C multiplexer");
