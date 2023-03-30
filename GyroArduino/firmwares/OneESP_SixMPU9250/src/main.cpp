@@ -704,7 +704,7 @@ void passiveMagnetometerCalibration() {
       digitalWrite(YEL_PIN, state);
       state = HIGH;
     }
-    calibration.add("calibration of ").add(i + 1);
+    calibration.add("calibration of ").add(sensors[i].label);
 
     Udp.beginPacket(outIp, outPort);
     calibration.send(Udp);

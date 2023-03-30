@@ -1,5 +1,7 @@
 @startuml
 
+title calibration sequence
+
 start
 
 :both LEDs on;
@@ -9,9 +11,31 @@ start
 if (button pressed?) then (yes)
   :both LEDs off;
 
-  :passiveAccelerometerCalibration;
+  :do not move the sensors;
 
-  :passiveMagneometerCalibration;
+  'passive acceleromenter calibration'
+  :red LED on;
+
+  :each sensor calibrates
+   accelerometer in current
+   position;
+
+  :red LED off;
+
+  :accelerometer calibration
+   data is being saved;
+
+  'passice magnetometer calibration'
+  :yellow LED starts blinking;
+
+  :each sensor calibrates
+   magnetometer in current
+   position;
+
+  :yellow LED stops blinking;
+
+  :magnetometer calibration
+   data is being saved;
 
 else (no)
   :both LEDs off;
