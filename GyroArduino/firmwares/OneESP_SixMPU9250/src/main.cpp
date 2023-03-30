@@ -1007,6 +1007,7 @@ void setup() {
       Serial.println("---------------------------------------------------");
       Serial.println("10 sensors incompatible with single I2C multiplexer");
       Serial.println("---------------------------------------------------");
+      Serial.println("... stopping everything");
       // put ESP32 into deep sleep (closest to shutdown)
       esp_deep_sleep_start();
     }
@@ -1070,6 +1071,7 @@ void setup() {
     Serial.println("---------------------------------------------------");
     Serial.println("can not find a reasonable number of I2C multiplexer");
     Serial.println("---------------------------------------------------");
+    Serial.println("... stopping everything");
     // put ESP32 into deep sleep (closest to shutdown)
     esp_deep_sleep_start();
     break;
