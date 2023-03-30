@@ -688,7 +688,7 @@ void passiveAccelerometerCalibration() {
  * @see passiveMagnetometerCalibration()
  */
 void passiveMagnetometerCalibration() {
-  Serial.println("Calibration of magnetometers");
+  Serial.println("calibration of magnetometers");
 
   for (uint8_t i = 0; i < NUMBER_OF_MPU; i++) {
     if (state == HIGH) {
@@ -698,15 +698,14 @@ void passiveMagnetometerCalibration() {
       digitalWrite(YEL_PIN, state);
       state = HIGH;
     }
-    calibration.add("Calibration of ").add(i + 1);
+    calibration.add("calibration of ").add(i + 1);
 
     Udp.beginPacket(outIp, outPort);
     calibration.send(Udp);
     Udp.endPacket();
 
-    Serial.println(i);
+    Serial.println(sensors[i].label);
 
-    // selectI2cMultiplexerChannel(TCA_ADDRESS_RIGHT_SIDE, i);
     if (!selectI2cMultiplexerChannel(sensors[i].multiplexer,
                                      sensors[i].channel)) {
       Serial.print("could not select channel ");
@@ -719,7 +718,7 @@ void passiveMagnetometerCalibration() {
 
     calibration.empty();
   }
-  Serial.println("Calibration of magnetometers done");
+  Serial.println("calibration of magnetometers done");
 
   // Magnetometer : store calibration data
   for (uint8_t i = 0; i < NUMBER_OF_MPU; i++) {
