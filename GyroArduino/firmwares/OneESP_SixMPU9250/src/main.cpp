@@ -647,6 +647,12 @@ void passiveAccelerometerCalibration() {
   calibration.empty();
   digitalWrite(RED_PIN, HIGH);
   for (uint8_t i = 0; i < NUMBER_OF_MPU; i++) {
+    if (!sensors[i].usable) {
+      Serial.print("skipping ");
+      Serial.print(sensors[i].label);
+      Serial.println(" because it is unusable");
+      continue;
+    }
     Serial.print("calibrating accelerometer for \"");
     Serial.print(idx2string[i]);
     Serial.println("\"");
