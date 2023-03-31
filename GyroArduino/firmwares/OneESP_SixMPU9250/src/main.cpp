@@ -547,17 +547,15 @@ uint8_t countMultiplexer() {
   return deviceCount;
 }
 
-
 /**
- * Check which MPU9250 sensor board is there and do the initial
- * configuration.
+ * Configure a single MPU9250 board.
+ * This takes care of basic settings (sensitivity, resolution etc.) to
+ * make a sensor ready for calibration.
  *
- * @see setup()
- * @see selectI2cMultiplexerChannel(uint8_t address, uint8_t channel)
- * @see countI2cDevices()
- * @todo send channel selection error via OSC
+ * @param stk is a pointer to the sensor (socket) to configure
+ * @see checkAndConfigureGyros()
  */
-void checkAndConfigureGyros() {
+void configureMPU9250(MPU9250socket *skt) {
   // MPU parameters (sensitivity, etc)
   setting.accel_fs_sel = ACCEL_FS_SEL::A4G;
   setting.gyro_fs_sel = GYRO_FS_SEL::G500DPS;
@@ -570,6 +568,55 @@ void checkAndConfigureGyros() {
   // filter for measurement data
   QuatFilterSel sel{QuatFilterSel::MADGWICK};
 
+  // select channel on multiplexer
+  if (!selectI2cMultiplexerChannel(skt->multiplexer,
+                                   skt->channel)) {
+    // selection failed
+    skt->usable = false;
+#ifdef DEBUG
+    Serial.print(skt->channel);
+    Serial.println(skt->multiplexer);
+    Serial.println(" ... failed at multiplexer channel selection");
+#endif
+    return;
+  }
+
+#ifdef DEBUG
+  Serial.print("using multiplexer 0x");
+  Serial.print(skt->multiplexer, HEX);
+  Serial.print(" with channel ");
+  Serial.println(skt->channel);
+  skt->mpu.verbose(true);
+#endif
+  // try to initialize the multiplexer with the (global) settings
+  if (!skt->mpu.setup(skt->address, setting, Wire)) {
+    // somehow it failed
+    skt->usable = false;
+#ifdef DEBUG
+    Serial.println(" ... failed at MPU setup");
+#endif
+    return;
+  }
+
+  // configure the filter for the measured data
+  skt->mpu.selectFilter(sel);
+  skt->mpu.setFilterIterations(10);
+
+  // everything is done and now the senor is usable
+  skt->usable = true;
+}
+
+/**
+ * Check which MPU9250 sensor board is there and do the initial
+ * configuration.
+ *
+ * @see setup()
+ * @see selectI2cMultiplexerChannel(uint8_t address, uint8_t channel)
+ * @see countI2cDevices()
+ * @see configureMPU9250()
+ * @todo send channel selection error via OSC
+ */
+void checkAndConfigureGyros() {
   // Lauch communication with the MPUs
   // go through list of (expected) sensors and see if they are there
   for (uint8_t i = 0; i < NUMBER_OF_MPU; i++) {
@@ -581,45 +628,13 @@ void checkAndConfigureGyros() {
       continue;
     }
 
-    // select channel on multiplexer
-    if (!selectI2cMultiplexerChannel(sensors[i].multiplexer,
-                                     sensors[i].channel)) {
-      // selection failed
-      sensors[i].usable = false;
-      Serial.print(sensors[i].channel);
-      Serial.println(sensors[i].multiplexer);
-      Serial.println(" ... failed at multiplexer channel selection");
-      continue;
+    configureMPU9250(&sensors[i]);
+
+    if (sensors[i].usable) {
+      Serial.println(" ... worked");
+    } else {
+      Serial.println("... failed");
     }
-
-    /*/ sanity check: MPU should be available - NOT AVAILABLE AT THIS STAGE?
-    if (!sensors[i].mpu.available()) {
-      Serial.println("meh ...");
-      sensors[i].usable = false;
-      continue;
-    }*/
-#ifdef DEBUG
-    Serial.print("using multiplexer 0x");
-    Serial.print(sensors[i].multiplexer, HEX);
-    Serial.print(" with channel ");
-    Serial.println(sensors[i].channel);
-    sensors[i].mpu.verbose(true);
-#endif
-    // try to initialize the multiplexer with the (global) settings
-    if (!sensors[i].mpu.setup(sensors[i].address, setting, Wire)) {
-      // somehow it failed
-      sensors[i].usable = false;
-      Serial.println(" ... failed at MPU setup");
-      continue;
-    }
-
-    // configure the filter for the measured data
-    sensors[i].mpu.selectFilter(sel);
-    sensors[i].mpu.setFilterIterations(10);
-
-    // everything is done and now the senor is usable
-    sensors[i].usable = true;
-    Serial.println(" ... worked");
   }
 }
 
