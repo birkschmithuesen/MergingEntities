@@ -4,12 +4,9 @@
  * with a TCA9548A I2C multiplexer and generic MPU9250 sensor boards.
  *
  * @note This code base is the leading one in terms of features and maturity.
- * @todo rework calibration routine(s)
  * @todo clean up setup/config code dependend on controller ID
  * @todo clean up OSC code and use new schema
- * @todo implement / fix manual/button press magnetometer calibration (around line 680)
  * @todo unify MPU data and socket structures
- * @todo clean up serial console messages
  * @todo implement (remote) OSC error logger
  * @todo fix LED identifiers w.r.t to new colors
  */
