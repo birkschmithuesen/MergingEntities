@@ -554,6 +554,8 @@ uint8_t countMultiplexer() {
  *
  * @param stk is a pointer to the sensor (socket) to configure
  * @see checkAndConfigureGyros()
+ * @warning This function is not thread-safe (i.e. due to calling selectI2cMultiplexerChannel())
+ * @note stack size is about 1500*32bit
  */
 void configureMPU9250(MPU9250socket *skt) {
   // MPU parameters (sensitivity, etc)
