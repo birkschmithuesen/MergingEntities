@@ -1256,6 +1256,7 @@ void setup() {
  * @todo log error remotely
  */
 void loop() {
+  uint16_t cleanUpCounter = 0; // periodically clean up things (65535)
 
   //--------MPU recording--------
   fetchData();
@@ -1276,24 +1277,37 @@ void loop() {
     last_print = millis();
   }
 
-  //-------OSC communication--------
-  // Send data in separate message per sensor
-  for (size_t i = 0; i < NUMBER_OF_MPU; i++) {
-	// skip sesors with problems
-	if (!sensors[i].usable) {
-       continue;
+  //-------OSC communication if wifi is available --------
+  if (WiFi.status() == WL_CONNECTED) {
+	 // Send data in separate message per sensor
+    for (size_t i = 0; i < NUMBER_OF_MPU; i++) {
+      // skip sesors with problems
+      if (!sensors[i].usable) {
+        continue;
+      }
+      // Fill OSC message with data
+      body[i]
+          .add(mpuData[i].quaternion.x)
+          .add(mpuData[i].quaternion.y)
+          .add(mpuData[i].quaternion.z)
+          .add(mpuData[i].quaternion.w);
+      body[i]
+          .add(mpuData[i].eulerangle.x)
+          .add(mpuData[i].eulerangle.y)
+          .add(mpuData[i].eulerangle.z);
+      body[i]
+          .add(mpuData[i].gyrovalue.x)
+          .add(mpuData[i].gyrovalue.y)
+          .add(mpuData[i].gyrovalue.z);
+
+      // send data out
+      Udp.beginPacket(outIp, outPort);
+      body[i].send(Udp);
+      Udp.endPacket();
+
+      // clear up message cache
+      body[i].empty();
     }
-    // Fill OSC message with data
-    body[i].add(mpuData[i].quaternion.x).add(mpuData[i].quaternion.y).add(mpuData[i].quaternion.z).add(mpuData[i].quaternion.w);
-    body[i].add(mpuData[i].eulerangle.x).add(mpuData[i].eulerangle.y).add(mpuData[i].eulerangle.z);
-    body[i].add(mpuData[i].gyrovalue.x).add(mpuData[i].gyrovalue.y).add(mpuData[i].gyrovalue.z);
-
-    // send data out
-    Udp.beginPacket(outIp, outPort);
-    body[i].send(Udp);
-    Udp.endPacket();
-
-    // clear up message cache
-    body[i].empty();
   }
+  cleanUpCounter += 1;
 }
