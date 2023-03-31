@@ -87,7 +87,7 @@ SynthDef(\kling, {
 	Out.ar(out, sig);
 }).add;
 )
-
-SynthDef(\dist, {
-	arg in =
-}
+//
+// SynthDef(\dist, {
+// 	arg in =
+// 	}
