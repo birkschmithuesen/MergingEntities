@@ -84,7 +84,6 @@ int localPort = 8888;                /**< source port for UDP communication on E
 #define ID_PIN3 12   /**< 3rd bit pin of ID DIP switch (D12) */
 #define ID_PIN4 13   /**< 4rd bit pin of ID DIP switch (D13) */
 
-#define MPU_NORTH 1 /**< MPU used to set the north */
 float theta = 0;    /**< angle to the north */
 
 int state = HIGH;        /**< last state of the button */
@@ -610,6 +609,7 @@ void checkAndConfigureGyros() {
     Serial.print(sensors[i].multiplexer, HEX);
     Serial.print(" with channel ");
     Serial.println(sensors[i].channel);
+    sensors[i].mpu.verbose(true);
 #endif
     // try to initialize the multiplexer with the (global) settings
     if (!sensors[i].mpu.setup(sensors[i].address, setting, Wire)) {
@@ -647,6 +647,12 @@ void passiveAccelerometerCalibration() {
   calibration.empty();
   digitalWrite(RED_PIN, HIGH);
   for (uint8_t i = 0; i < NUMBER_OF_MPU; i++) {
+    if (!sensors[i].usable) {
+      Serial.print("skipping ");
+      Serial.print(sensors[i].label);
+      Serial.println(" because it is unusable");
+      continue;
+    }
     Serial.print("calibrating accelerometer for \"");
     Serial.print(idx2string[i]);
     Serial.println("\"");
@@ -688,7 +694,7 @@ void passiveAccelerometerCalibration() {
  * @see passiveMagnetometerCalibration()
  */
 void passiveMagnetometerCalibration() {
-  Serial.println("Calibration of magnetometers");
+  Serial.println("calibration of magnetometers");
 
   for (uint8_t i = 0; i < NUMBER_OF_MPU; i++) {
     if (state == HIGH) {
@@ -698,15 +704,14 @@ void passiveMagnetometerCalibration() {
       digitalWrite(YEL_PIN, state);
       state = HIGH;
     }
-    calibration.add("Calibration of ").add(i + 1);
+    calibration.add("calibration of ").add(sensors[i].label);
 
     Udp.beginPacket(outIp, outPort);
     calibration.send(Udp);
     Udp.endPacket();
 
-    Serial.println(i);
+    Serial.println(sensors[i].label);
 
-    // selectI2cMultiplexerChannel(TCA_ADDRESS_RIGHT_SIDE, i);
     if (!selectI2cMultiplexerChannel(sensors[i].multiplexer,
                                      sensors[i].channel)) {
       Serial.print("could not select channel ");
@@ -719,7 +724,7 @@ void passiveMagnetometerCalibration() {
 
     calibration.empty();
   }
-  Serial.println("Calibration of magnetometers done");
+  Serial.println("calibration of magnetometers done");
 
   // Magnetometer : store calibration data
   for (uint8_t i = 0; i < NUMBER_OF_MPU; i++) {
@@ -825,18 +830,19 @@ void buttonBasedCalibration() {
 
   //-------SECOND CHOICE-------
   // Two leds are on: you have 10 seconds to
-  // orientate the MPU 1 over the new north and press the button
+  // use LEFT_UPPER_ARM_INDEX MPU to set new north and press the button
   Serial.println("---");
+  Serial.println("orient the left upper arm (sensor) towards north");
   Serial.println("leave the sensors alone for 10 seconds");
   digitalWrite(RED_PIN, HIGH);
   digitalWrite(YEL_PIN, HIGH);
 
   // sample the MPU for 10 seconds to have the good yaw if we need it
-  if (!selectI2cMultiplexerChannel(TCA_ADDRESS_RIGHT_SIDE, MPU_NORTH - 1)) {
+  if (!selectI2cMultiplexerChannel(sensors[LEFT_UPPER_ARM_INDEX].multiplexer, sensors[LEFT_UPPER_ARM_INDEX].channel)) {
     Serial.print("could not select channel ");
-    Serial.print(MPU_NORTH - 1);
-    Serial.print(" on multiplexer at address ");
-    Serial.println(TCA_ADDRESS_RIGHT_SIDE);
+    Serial.print(sensors[LEFT_UPPER_ARM_INDEX].channel);
+    Serial.print(" on multiplexer at address 0x");
+    Serial.println(sensors[LEFT_UPPER_ARM_INDEX].multiplexer, HEX);
   }
 
   time_passed = millis();
@@ -844,7 +850,7 @@ void buttonBasedCalibration() {
     Serial.print(sec);
     Serial.print("..");
     while (millis() - time_passed < 1000) {
-      sensors[MPU_NORTH - 1].mpu.update();
+      sensors[LEFT_UPPER_ARM_INDEX].mpu.update();
     }
     time_passed = millis();
   }
@@ -860,7 +866,7 @@ void buttonBasedCalibration() {
   if (state_button == HIGH) {
     Serial.println("saving current north");
     // we save the north direction and send it to the library
-    theta = sensors[MPU_NORTH - 1].mpu.getYaw() * (-1);
+    theta = sensors[LEFT_UPPER_ARM_INDEX].mpu.getYaw() * (-1);
 
     // save angle to north in writable NVS namespace
     preferences.begin("setNorth", false);
