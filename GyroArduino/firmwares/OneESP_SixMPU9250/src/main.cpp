@@ -630,41 +630,56 @@ void checkAndConfigureGyros() {
  * @see buttonBasedCalibration()
  * @see passiveMagnetometerCalibration()
  * @see setup()
+ * @todo handling unsuable sensor sockets when storing data
  */
 void passiveAccelerometerCalibration() {
-  Serial.println("calibration of acceleration: don't move devices");
-  calibration.add("calibration of acceleration: don't move devices");
+  Serial.println("calibration of accelerometers: don't move devices");
+  calibration.add("calibration of accelerometers: don't move devices");
   Udp.beginPacket(outIp, outPort);
   calibration.send(Udp);
   Udp.endPacket();
   calibration.empty();
   digitalWrite(RED_PIN, HIGH);
+  Serial.println("calibrating accelerometer for");
   for (uint8_t i = 0; i < NUMBER_OF_MPU; i++) {
+	Serial.print(" * ");
+	Serial.print(sensors[i].label);
     if (!sensors[i].usable) {
-      Serial.print("skipping ");
-      Serial.print(sensors[i].label);
-      Serial.println(" because it is unusable");
+      Serial.println(" skipped because sensor is unusable");
       continue;
     }
-    Serial.print("calibrating accelerometer for \"");
-    Serial.print(idx2string[i]);
-    Serial.println("\"");
     if (!selectI2cMultiplexerChannel(sensors[i].multiplexer,
                                      sensors[i].channel)) {
-      Serial.print("could not select channel ");
+      Serial.print(" could not select channel ");
       Serial.print(sensors[i].channel);
       Serial.print(" on multiplexer at address ");
       Serial.println(sensors[i].multiplexer);
+      sensors[i].usable = false;
+      continue;
     }
     sensors[i].mpu.calibrateAccelGyro();
+    Serial.println(" done");
   }
   digitalWrite(RED_PIN, LOW);
   Serial.println("acceleration calibration done.");
 
-  // Acceleration: store calibration data
+  // store accelerometer calibration data
+  Serial.print("storing accelerometer calibration data .");
   for (uint8_t i = 0; i < NUMBER_OF_MPU; i++) {
-    // create writeable namespace named after MPU
-    preferences.begin(idx2string[i], false);
+    // create writable namespace to store data in NVS
+    if(!preferences.begin(idx2string[i], false)) {
+        Serial.println(".. failed");
+        Serial.print("could not open data store for ");
+        Serial.println(idx2string[i]);
+	    continue;
+    }
+    // remove old data/key-value pairs of avoid accumulation
+    if(!preferences.clear()) {
+        Serial.println(".. failed");
+        Serial.print("could clean up data store for ");
+        Serial.println(idx2string[i]);
+        continue;
+    }
 
     preferences.putFloat("accbiasX", sensors[i].mpu.getAccBiasX());
     preferences.putFloat("accbiasY", sensors[i].mpu.getAccBiasY());
@@ -676,6 +691,7 @@ void passiveAccelerometerCalibration() {
 
     preferences.end();
   }
+  Serial.println(".. done");
 }
 
 /**
@@ -685,11 +701,19 @@ void passiveAccelerometerCalibration() {
  *
  * @see buttonBasedCalibration()
  * @see passiveMagnetometerCalibration()
+ * @todo handle unusable sensor sockets when storing data
  */
 void passiveMagnetometerCalibration() {
-  Serial.println("calibration of magnetometers");
+  Serial.println("calibration of magnetometers: don't move devices");
 
+  Serial.println("calibrating magnetometer for");
   for (uint8_t i = 0; i < NUMBER_OF_MPU; i++) {
+	Serial.print(" * ");
+	Serial.print(sensors[i].label);
+    if (!sensors[i].usable) {
+      Serial.println(" skipped because sensor is unusable");
+      continue;
+    }
     if (state == HIGH) {
       digitalWrite(YEL_PIN, state);
       state = LOW;
@@ -698,7 +722,6 @@ void passiveMagnetometerCalibration() {
       state = HIGH;
     }
     calibration.add("calibration of ").add(sensors[i].label);
-
     Udp.beginPacket(outIp, outPort);
     calibration.send(Udp);
     Udp.endPacket();
@@ -711,18 +734,33 @@ void passiveMagnetometerCalibration() {
       Serial.print(sensors[i].channel);
       Serial.print(" on multiplexer at address ");
       Serial.println(sensors[i].multiplexer);
+      sensors[i].usable = false;
+      continue;
     }
     sensors[i].mpu.setMagneticDeclination(MAG_DECLINATION);
     sensors[i].mpu.calibrateMag();
-
     calibration.empty();
+    Serial.println(" done");
   }
   Serial.println("calibration of magnetometers done");
 
-  // Magnetometer : store calibration data
+  // store magnetometer calibration data
+  Serial.print("storing magnetometer calibration data .");
   for (uint8_t i = 0; i < NUMBER_OF_MPU; i++) {
     // create writable namespace to store data in NVS
-    preferences.begin(idx2string[i], false);
+    if(!preferences.begin(idx2string[i], false)) {
+        Serial.println(".. failed");
+        Serial.print("could not open data store for ");
+        Serial.println(idx2string[i]);
+	    continue;
+    }
+    // remove old data/key-value pairs of avoid accumulation
+    if(!preferences.clear()) {
+        Serial.println(".. failed");
+        Serial.print("could clean up data store for ");
+        Serial.println(idx2string[i]);
+        continue;
+    }
 
     preferences.putFloat("magbiasX", sensors[i].mpu.getMagBiasX());
     preferences.putFloat("magbiasY", sensors[i].mpu.getMagBiasY());
@@ -734,6 +772,7 @@ void passiveMagnetometerCalibration() {
 
     preferences.end();
   }
+  Serial.println(".. done");
 }
 
 /**
