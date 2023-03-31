@@ -659,7 +659,7 @@ void passiveAccelerometerCalibration() {
       continue;
     }
     sensors[i].mpu.calibrateAccelGyro();
-    Serial.println(" done");
+    Serial.println(" ... done");
   }
   digitalWrite(RED_PIN, LOW);
   Serial.println("acceleration calibration done.");
@@ -728,8 +728,6 @@ void passiveMagnetometerCalibration() {
     calibration.send(Udp);
     Udp.endPacket();
 
-    Serial.println(sensors[i].label);
-
     if (!selectI2cMultiplexerChannel(sensors[i].multiplexer,
                                      sensors[i].channel)) {
       Serial.print("could not select channel ");
@@ -742,7 +740,7 @@ void passiveMagnetometerCalibration() {
     sensors[i].mpu.setMagneticDeclination(MAG_DECLINATION);
     sensors[i].mpu.calibrateMag();
     calibration.empty();
-    Serial.println(" done");
+    Serial.println(" ... done");
   }
   Serial.println("calibration of magnetometers done");
 
@@ -790,7 +788,7 @@ void setNorth() {
   Serial.println("---");
   Serial.println("orient the left upper arm (sensor) towards north");
   Serial.println("leave the sensors alone for 10 seconds");
-  Serial.print("over in ");
+  Serial.print("done in ");
   digitalWrite(RED_PIN, HIGH);
   digitalWrite(YEL_PIN, HIGH);
 
@@ -813,7 +811,7 @@ void setNorth() {
   }
   digitalWrite(RED_PIN, LOW);
   digitalWrite(YEL_PIN, LOW);
-  Serial.println("..done");
+  Serial.println(".. thank you");
 
   Serial.println("---");
   Serial.println("press calibration button to save current north (otherwise old data is loaded)");
@@ -821,7 +819,7 @@ void setNorth() {
 
   state_button = digitalRead(BUTTON_PIN);
   if (state_button == HIGH) {
-    Serial.println("saving current north");
+    Serial.print("saving current north");
     // we save the north direction and send it to the library
     theta = sensors[LEFT_UPPER_ARM_INDEX].mpu.getYaw() * (-1);
 
@@ -855,7 +853,7 @@ void setNorth() {
  */
 void buttonBasedCalibration() {
   Serial.println("---");
-  Serial.println("Press the button for automatic calibration (otherwise previous configuration is loaded)");
+  Serial.println("Press the button for calibration (otherwise previous configuration is loaded)");
   //-------FIRST CHOICE-------
   // Two LEDs are on: you have 4 seconds to press
   // or not to press the button, to launch a calibration process
@@ -938,8 +936,9 @@ void buttonBasedCalibration() {
   Serial.println("setting north for");
   for (uint8_t i = 0; i < NUMBER_OF_MPU; i++) {
 	Serial.print(" * ");
-	Serial.println(sensors[i].label);
+	Serial.print(sensors[i].label);
     sensors[i].mpu.setNorth(preferences.getFloat("north", 0.0));
+    Serial.println(" ... done");
   }
   preferences.end();
   Serial.println("north is configured");
