@@ -21,6 +21,8 @@ from tensorflow.keras.layers import Dense, LSTM, Dropout, Activation
 from tensorflow.keras.optimizers import SGD
 from tensorflow.python.client import device_lib
 
+import mdn
+
 import gc
 
 import numpy as np
@@ -45,6 +47,9 @@ class MLExtension:
 		self.Modeltype = tdu.Dependency(0)
 		self.Modeltypes = ['linear_regression','lstm']
 		self.Modelname = self.Modeltypes[self.Modeltype.val]
+
+		self.MDNLayer = tdu.Dependency(0)
+		self.MDNDistribution = tdu.Dependency(10)
 
 		self.Inputdim = tdu.Dependency(67)
 		self.Outputdim = tdu.Dependency(8)
@@ -140,7 +145,11 @@ class MLExtension:
 			self.Model.add(LSTM(units=128, batch_input_shape=(self.Batchsize.val, self.Timesteps.val, self.Inputdim.val), stateful=True, return_sequences=True))
 			self.Model.add(LSTM(units=128, batch_input_shape=(self.Batchsize.val, self.Timesteps.val, self.Inputdim.val), stateful=True, return_sequences=False))
 			self.Model.add(Dense(units=self.Outputdim.val, activation='sigmoid'))
-			self.Model.compile(optimizer='rmsprop',loss='mse')
+			if self.MDNLayer.val == 1:
+				self.Model.add(mdn.MDN(self.Outputdim.val,self.MDNDistribution.val))
+				self.Model.compile(loss=mdn.get_mixture_loss_func(self.Outputdim.val,self.MDNDistribution.val), optimizer=keras.optimizers.Adam())
+			else:
+				self.Model.compile(optimizer='rmsprop',loss='mse')
 		debug("Built ", self.ModelName(), " Model")
 
 	def LoadTrainingData(self):
@@ -187,7 +196,11 @@ class MLExtension:
 				self.Model.add(Dense(units=self.Outputdim.val, activation='sigmoid'))
 				# set weights from tmp model
 				self.Model.set_weights(tmp_model_weights)
-				self.Model.compile(optimizer='rmsprop',loss='mse')
+				if self.MDNLayer.val == 1:
+					self.Model.add(mdn.MDN(self.Outputdim.val,self.MDNDistribution.val))
+					self.Model.compile(loss=mdn.get_mixture_loss_func(self.Outputdim.val,self.MDNDistribution.val), optimizer=keras.optimizers.Adam())
+				else:
+					self.Model.compile(optimizer='rmsprop',loss='mse')
 			except ValueError as e:
 				debug("Couldn't Fit Model", e)
 		#self.Model.summary()
@@ -203,6 +216,7 @@ class MLExtension:
 		location = parent.Ml.par.Modelname
 		json_config = {}
 		json_config['Model_Type'] = self.Modeltype.val
+		json_config['MDN_Layer'] = self.MDNLayer.val
 		json_config['Training_Data'] = self.Trainingdata.val
 		json_config['Selected_Features'] = self.Selectedfeatures.val
 		json_config['Selected_Targets'] = self.Selectedtargets.val
@@ -227,6 +241,11 @@ class MLExtension:
 		op('load_model_config').par.refreshpulse.pulse()
 		model_config = op('model_config')
 		self.Modeltype.val = model_config.result['Model_Type']
+		try:
+			self.MDNLayer.val = model_config.result['MDN_Layer']
+		except:
+			self.MDNLayer.val = 0
+			debug("Old Model without MDN Setting")
 		self.Modeltype.modified()
 		self.ModelName()
 		self.Trainingdata.val = model_config.result['Training_Data']
@@ -243,4 +262,8 @@ class MLExtension:
 		self.Timesteps.val = model_config.result['TIME_STEPS']
 
 	def PredictTargets(self,features):
-		return self.Model.predict(np.array([features]))
+		if self.MDNLayer == 1:
+			distributions = self.Model.predict(np.array([features]))
+			return np.apply_along_axis(mdn.sample_from_output,1,distributions,self.Outputdim.val,self.MDNDistribution,temp=1.0)
+		else:
+			return self.Model.predict(np.array([features]))

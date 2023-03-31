@@ -18,6 +18,8 @@ from tensorflow.keras.layers import Dense, LSTM, Dropout, Activation
 from tensorflow.keras.optimizers import SGD
 from tensorflow.python.client import device_lib
 
+import mdn
+
 import gc
 
 import numpy as np
@@ -63,6 +65,9 @@ class PredictEngineExt:
 		self.Modeltypes = ['linear_regression','lstm']
 		self.Modelname = self.Modeltypes[self.Modeltype]
 
+		self.MDNLayer = tdu.Dependency(0)
+		self.MDNDistribution = tdu.Dependency(10)
+
 		self.Inputdim = tdu.Dependency(67)
 		self.Outputdim = tdu.Dependency(8)
 		self.Batchsize= tdu.Dependency(1)
@@ -102,6 +107,11 @@ class PredictEngineExt:
 		op('load_model_config').par.refreshpulse.pulse()
 		model_config = op('model_config')
 		self.Modeltype.val = model_config.result['Model_Type']
+		try:
+			self.MDNLayer.val = model_config.result['MDN_Layer']
+		except:
+			self.MDNLayer.val = 0
+			debug("Old Model without MDN Setting")
 		self.ModelName()
 		self.Trainingdata.val = model_config.result['Training_Data']
 		self.Selectedfeatures.val = model_config.result['Selected_Features']
@@ -142,7 +152,11 @@ class PredictEngineExt:
 				for i in range(my_features.numChans):
 					features[0][i] = cp.asarray(features_chop[i].numpyArray())
 				features_in = cp.ndarray.get(features)
-				targets = self.Model.predict(features_in)
+				if self.MDNLayer == 1:
+					distributions = self.Model.predict(features_in)
+					targets = np.apply_along_axis(mdn.sample_from_output,1,distributions,self.Outputdim.val,self.MDNDistribution,temp=1.0)
+				else:
+					targets = self.Model.predict(features_in)
 		return targets
 
 	def Testext(self):
