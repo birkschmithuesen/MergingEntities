@@ -867,6 +867,7 @@ void buttonBasedCalibration() {
   Serial.println("---");
   Serial.println("orient the left upper arm (sensor) towards north");
   Serial.println("leave the sensors alone for 10 seconds");
+  Serial.print("over in ");
   digitalWrite(RED_PIN, HIGH);
   digitalWrite(YEL_PIN, HIGH);
 
@@ -902,16 +903,30 @@ void buttonBasedCalibration() {
     theta = sensors[LEFT_UPPER_ARM_INDEX].mpu.getYaw() * (-1);
 
     // save angle to north in writable NVS namespace
-    preferences.begin("setNorth", false);
+    if(!preferences.begin("setNorth", false)) {
+        Serial.println(".. failed");
+        Serial.println("could not open data store");
+	    continue;
+    }
+    // remove old data/key-value pairs of avoid accumulation
+    if(!preferences.clear()) {
+        Serial.println(".. failed");
+        Serial.println("could clean up data store");
+        continue;
+    }
     preferences.putFloat("north", theta);
     preferences.end();
+    Serial.println(" ... done");
   } else {
     Serial.println("loading former north");
   }
 
   // retrieve angle to north from readable NVS namespace
   preferences.begin("setNorth", true);
+  Serial.println("setting north for");
   for (uint8_t i = 0; i < NUMBER_OF_MPU; i++) {
+	Serial.print(" * ");
+	Serial.println(sensors[i].label);
     sensors[i].mpu.setNorth(preferences.getFloat("north", 0.0));
   }
   preferences.end();
