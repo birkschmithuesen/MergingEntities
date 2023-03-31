@@ -43,10 +43,6 @@
 // Set the magnetic declination of the light
 #define MAG_DECLINATION 2.53  /**< magnetic declination of stage light */
 
-// Define the calibration mode : MANUAL_CALIBRATION for manual, AUTO_CALIBRATION
-// otherwise
-#define AUTO_CALIBRATION  /**< set (automatic) calibration mode */
-
 // Define BUTTON to activate the button
 #define BUTTON  /**< indicate existence of button (to trigger calibration procedure) */
 //#define DEBUG  /**< enable more verbose logging to serial line */
@@ -749,6 +745,7 @@ void passiveMagnetometerCalibration() {
  * @see passiveAccelerometerCalibration()
  * @see automaticMagnetometerCalibration()
  * @see manualMagnetometerCalibration()
+ * @see noButtonCalibration()
  * @see setup()
  */
 void buttonBasedCalibration() {
@@ -896,6 +893,60 @@ void buttonBasedCalibration() {
     delay(200);
   }
   digitalWrite(RED_PIN, LOW);
+  digitalWrite(YEL_PIN, LOW);
+}
+
+/**
+ * Do the accelerometer and magnetometer calibration when no button is available.
+ *
+ * @param autocalibration indicate if automatic (vs. manual) calibration of the magnetometer is to be done
+ * @todo maybe remove since hardware has button now?
+ * @see buttonBasedCalibration()
+ * @see setup()
+ */
+void noButtonCalibration(bool autocalibration = true) {
+  Serial.println("doing calibration without button interaction");
+  delay(1000);
+  Serial.println("calibration of acceleration: don't move devices");
+  calibration.add("calibration of acceleration: don't move devices");
+  Udp.beginPacket(outIp, outPort);
+  calibration.send(Udp);
+  Udp.endPacket();
+  calibration.empty();
+
+  digitalWrite(RED_PIN, HIGH);
+  // calibrate one by one
+  for (uint8_t i = 0; i < NUMBER_OF_MPU; i++) {
+    if (!sensors[i].usable) {
+      Serial.print("skipping unusable sensor for ");
+      Serial.println(sensors[i].label);
+      continue;
+    }
+    Serial.print("calibrating sensor for ");
+    Serial.println(sensors[i].label);
+    if (!selectI2cMultiplexerChannel(sensors[i].multiplexer, sensors[i].channel)) {
+      Serial.print("could not select channel ");
+      Serial.print(sensors[i].channel);
+      Serial.print(" on multiplexer at address 0x");
+      Serial.println(sensors[i].multiplexer, HEX);
+    }
+    sensors[i].mpu.calibrateAccelGyro();
+  }
+  digitalWrite(RED_PIN, LOW);
+  Serial.println("acceleration calibration done.");
+
+  // calibration of magnetometer
+  if (autocalibration) {
+    automaticMagnetometerCalibration();
+  } else {
+    manualMagnetometerCalibration();
+  }
+
+  // blinking LEDs = calibration over
+  digitalWrite(YEL_PIN, LOW);
+  delay(200);
+  digitalWrite(YEL_PIN, HIGH);
+  delay(200);
   digitalWrite(YEL_PIN, LOW);
 }
 
@@ -1091,42 +1142,7 @@ void setup() {
   // CURRENT PROCESS WITHOUT BUTTON CHOICE
 
 #ifndef BUTTON
-  // Calibration of acceleration
-  Serial.println("Calibration of acceleration : don't move devices");
-  calibration.add("Calibration of acceleration : don't move devices");
-  Udp.beginPacket(outIp, outPort);
-  calibration.send(Udp);
-  Udp.endPacket();
-  calibration.empty();
-
-  digitalWrite(RED_PIN, HIGH); // Calibrate one by one
-  for (uint8_t i = 0; i < NUMBER_OF_MPU; i++) {
-    Serial.println(i);
-    if (!selectI2cMultiplexerChannel(sensors[i].multiplexer, sensors[i].channel)) {
-      Serial.print("could not select channel ");
-      Serial.print(sensors[i].channel);
-      Serial.print(" on multiplexer at address ");
-      Serial.println(sensors[i].multiplexer);
-    }
-    mpu[i].calibrateAccelGyro();
-  }
-  digitalWrite(RED_PIN, LOW);
-  Serial.println("Acceleration calibration done.");
-
-// Calibration of magnetometer
-#ifdef MANUAL_CALIBRATION
-  manualMagnetometerCalibration();
-#endif
-
-#ifdef AUTO_CALIBRATION
-  automaticMagnetometerCalibration();
-#endif
-  // Blinking light = calibration over
-  digitalWrite(YEL_PIN, LOW);
-  delay(200);
-  digitalWrite(YEL_PIN, HIGH);
-  delay(200);
-  digitalWrite(YEL_PIN, LOW);
+  noButtonCalibration();
 #endif
 
 #ifdef BUTTON
