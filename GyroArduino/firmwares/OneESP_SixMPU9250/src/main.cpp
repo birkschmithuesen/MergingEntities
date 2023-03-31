@@ -1255,15 +1255,6 @@ void loop() {
       Serial.print("// ");
       Serial.print(sensors[i].mpu.getNorth());
       Serial.print("// ");
-      /*
-                preferences.begin("0", false);
-                Serial.print(preferences.getFloat("accbiasX", 0));
-         Serial.print("/"); Serial.print(mpu[i].getAccBiasX());
-         Serial.print("_"); Serial.print(preferences.getFloat("accbiasY", 0));
-         Serial.print("/"); Serial.print(mpu[i].getAccBiasY());
-         Serial.print("_"); Serial.print(preferences.getFloat("accbiasZ", 0));
-         Serial.print("/"); Serial.print(mpu[i].getAccBiasZ());
-         Serial.print("_"); preferences.end();*/
     }
 
     Serial.println();
