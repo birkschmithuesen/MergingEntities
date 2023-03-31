@@ -57,6 +57,7 @@ int localPort = 8888;                /**< source port for UDP communication on E
 
 //-------MPU SETTINGS AND FUNCTIONS-------
 // Parameters of the setup
+uint16_t cleanUpCounter = 0; // periodically clean up things (65535)
 
 // Addresses and pin of IMU (MPU-9250) and TCA9548A(=multiplexer)
 #define MPU_ADDRESS_1 0x68           /**< address of the MPU-9250 when its pin AD0 is low */
@@ -1258,8 +1259,6 @@ void setup() {
  * @todo log error remotely
  */
 void loop() {
-  uint16_t cleanUpCounter = 0; // periodically clean up things (65535)
-
   //--------MPU recording--------
   fetchData();
 
@@ -1274,7 +1273,6 @@ void loop() {
       Serial.print(sensors[i].mpu.getNorth());
       Serial.print("// ");
     }
-
     Serial.println();
     last_print = millis();
   }
@@ -1310,6 +1308,27 @@ void loop() {
       // clear up message cache
       body[i].empty();
     }
+  }
+
+  // try to clean up sensor sockets all 100 iterations
+  if (cleanUpCounter > 100) {
+    for (int i = 0; i < NUMBER_OF_MPU; i++) {
+      // skip sensors that are already configured (i.e. usable)
+      if (sensors[i].usable) {
+        continue;
+      }
+      Serial.print("trying to resurrect ");
+      Serial.println(sensors[i].label);
+      Serial.print("* setting up gyro");
+      configureMPU9250(&sensors[i]);
+
+      if (sensors[i].usable) {
+        Serial.println(" ... worked");
+      } else {
+        Serial.println("... failed");
+      }
+    }
+    cleanUpCounter = 0;
   }
   cleanUpCounter += 1;
 }
