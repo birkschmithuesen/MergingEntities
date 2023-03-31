@@ -413,6 +413,7 @@ uint8_t getControllerID() {
  *
  * @see automaticMagnetometerCalibration()
  * @see buttonBasedCalibration()
+ * @see setNorth()
  * @note This code has been extracted manually and not changed/adjusted
  */
 void manualMagnetometerCalibration() {
@@ -658,7 +659,7 @@ void passiveAccelerometerCalibration() {
       continue;
     }
     sensors[i].mpu.calibrateAccelGyro();
-    Serial.println(" done");
+    Serial.println(" ... done");
   }
   digitalWrite(RED_PIN, LOW);
   Serial.println("acceleration calibration done.");
@@ -701,6 +702,7 @@ void passiveAccelerometerCalibration() {
  *
  * @see buttonBasedCalibration()
  * @see passiveMagnetometerCalibration()
+ * @see setNorth()
  * @todo handle unusable sensor sockets when storing data
  */
 void passiveMagnetometerCalibration() {
@@ -726,8 +728,6 @@ void passiveMagnetometerCalibration() {
     calibration.send(Udp);
     Udp.endPacket();
 
-    Serial.println(sensors[i].label);
-
     if (!selectI2cMultiplexerChannel(sensors[i].multiplexer,
                                      sensors[i].channel)) {
       Serial.print("could not select channel ");
@@ -740,7 +740,7 @@ void passiveMagnetometerCalibration() {
     sensors[i].mpu.setMagneticDeclination(MAG_DECLINATION);
     sensors[i].mpu.calibrateMag();
     calibration.empty();
-    Serial.println(" done");
+    Serial.println(" ... done");
   }
   Serial.println("calibration of magnetometers done");
 
@@ -776,19 +776,84 @@ void passiveMagnetometerCalibration() {
 }
 
 /**
+ * Set / calibrate north using one sensor.
+ *
+ * @see buttonBasedCalibration()
+ * @see passiveMagnetometerCalibration()
+ * @see manualMagnetometerCalibration()
+ */
+void setNorth() {
+  float time_passed = 0; // tracking time passed
+
+  Serial.println("---");
+  Serial.println("orient the left upper arm (sensor) towards north");
+  Serial.println("leave the sensors alone for 10 seconds");
+  Serial.print("done in ");
+  digitalWrite(RED_PIN, HIGH);
+  digitalWrite(YEL_PIN, HIGH);
+
+  // sample the MPU for 10 seconds to have the good yaw if we need it
+  if (!selectI2cMultiplexerChannel(sensors[LEFT_UPPER_ARM_INDEX].multiplexer, sensors[LEFT_UPPER_ARM_INDEX].channel)) {
+    Serial.print("could not select channel ");
+    Serial.print(sensors[LEFT_UPPER_ARM_INDEX].channel);
+    Serial.print(" on multiplexer at address 0x");
+    Serial.println(sensors[LEFT_UPPER_ARM_INDEX].multiplexer, HEX);
+  }
+
+  time_passed = millis();
+  for (uint8_t sec = 10; sec != 0; sec--) {
+    Serial.print(sec);
+    Serial.print("..");
+    while (millis() - time_passed < 1000) {
+      sensors[LEFT_UPPER_ARM_INDEX].mpu.update();
+    }
+    time_passed = millis();
+  }
+  digitalWrite(RED_PIN, LOW);
+  digitalWrite(YEL_PIN, LOW);
+  Serial.println(".. thank you");
+
+  Serial.println("---");
+  Serial.println("press calibration button to save current north (otherwise old data is loaded)");
+  delay(1000);
+
+  state_button = digitalRead(BUTTON_PIN);
+  if (state_button == HIGH) {
+    Serial.print("saving current north");
+    // we save the north direction and send it to the library
+    theta = sensors[LEFT_UPPER_ARM_INDEX].mpu.getYaw() * (-1);
+
+    // save angle to north in writable NVS namespace
+    if(!preferences.begin("setNorth", false)) {
+        Serial.println(".. failed");
+        Serial.println("could not open data store");
+	    return;
+    }
+    // remove old data/key-value pairs of avoid accumulation
+    if(!preferences.clear()) {
+        Serial.println(".. failed");
+        Serial.println("could clean up data store");
+        return;
+    }
+    preferences.putFloat("north", theta);
+    preferences.end();
+    Serial.println(" ... done");
+  }
+}
+
+/**
  * Do the calibration with button choices.
  *
  * @see passiveAccelerometerCalibration()
  * @see automaticMagnetometerCalibration()
  * @see manualMagnetometerCalibration()
  * @see noButtonCalibration()
+ * @see setNorth()
  * @see setup()
  */
 void buttonBasedCalibration() {
-  float time_passed = 0; // tracking time passed
-
   Serial.println("---");
-  Serial.println("Press the button for automatic calibration (otherwise previous configuration is loaded)");
+  Serial.println("Press the button for calibration (otherwise previous configuration is loaded)");
   //-------FIRST CHOICE-------
   // Two LEDs are on: you have 4 seconds to press
   // or not to press the button, to launch a calibration process
@@ -864,70 +929,16 @@ void buttonBasedCalibration() {
   //-------SECOND CHOICE-------
   // Two leds are on: you have 10 seconds to
   // use LEFT_UPPER_ARM_INDEX MPU to set new north and press the button
-  Serial.println("---");
-  Serial.println("orient the left upper arm (sensor) towards north");
-  Serial.println("leave the sensors alone for 10 seconds");
-  Serial.print("over in ");
-  digitalWrite(RED_PIN, HIGH);
-  digitalWrite(YEL_PIN, HIGH);
-
-  // sample the MPU for 10 seconds to have the good yaw if we need it
-  if (!selectI2cMultiplexerChannel(sensors[LEFT_UPPER_ARM_INDEX].multiplexer, sensors[LEFT_UPPER_ARM_INDEX].channel)) {
-    Serial.print("could not select channel ");
-    Serial.print(sensors[LEFT_UPPER_ARM_INDEX].channel);
-    Serial.print(" on multiplexer at address 0x");
-    Serial.println(sensors[LEFT_UPPER_ARM_INDEX].multiplexer, HEX);
-  }
-
-  time_passed = millis();
-  for (uint8_t sec = 10; sec != 0; sec--) {
-    Serial.print(sec);
-    Serial.print("..");
-    while (millis() - time_passed < 1000) {
-      sensors[LEFT_UPPER_ARM_INDEX].mpu.update();
-    }
-    time_passed = millis();
-  }
-  digitalWrite(RED_PIN, LOW);
-  digitalWrite(YEL_PIN, LOW);
-  Serial.println("..done");
-
-  Serial.println("---");
-  Serial.println("press calibration button to save current north (otherwise old data is loaded)");
-  delay(1000);
-
-  state_button = digitalRead(BUTTON_PIN);
-  if (state_button == HIGH) {
-    Serial.println("saving current north");
-    // we save the north direction and send it to the library
-    theta = sensors[LEFT_UPPER_ARM_INDEX].mpu.getYaw() * (-1);
-
-    // save angle to north in writable NVS namespace
-    if(!preferences.begin("setNorth", false)) {
-        Serial.println(".. failed");
-        Serial.println("could not open data store");
-	    continue;
-    }
-    // remove old data/key-value pairs of avoid accumulation
-    if(!preferences.clear()) {
-        Serial.println(".. failed");
-        Serial.println("could clean up data store");
-        continue;
-    }
-    preferences.putFloat("north", theta);
-    preferences.end();
-    Serial.println(" ... done");
-  } else {
-    Serial.println("loading former north");
-  }
+  setNorth();
 
   // retrieve angle to north from readable NVS namespace
   preferences.begin("setNorth", true);
   Serial.println("setting north for");
   for (uint8_t i = 0; i < NUMBER_OF_MPU; i++) {
 	Serial.print(" * ");
-	Serial.println(sensors[i].label);
+	Serial.print(sensors[i].label);
     sensors[i].mpu.setNorth(preferences.getFloat("north", 0.0));
+    Serial.println(" ... done");
   }
   preferences.end();
   Serial.println("north is configured");
