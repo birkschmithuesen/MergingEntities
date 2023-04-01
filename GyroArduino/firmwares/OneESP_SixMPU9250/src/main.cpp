@@ -1269,6 +1269,10 @@ void loop() {
   static unsigned long last_print = 0;
   if (millis() - last_print > 100) {
     for (int i = 0; i < NUMBER_OF_MPU; i++) {
+      // skip sensors with problems
+      if (!sensors[i].usable) {
+        continue;
+      }
       Serial.print(sensors[i].mpu.getYaw());
       Serial.print("// ");
       Serial.print(sensors[i].mpu.getYaw_r());
@@ -1282,9 +1286,9 @@ void loop() {
 
   //-------OSC communication if wifi is available --------
   if (WiFi.status() == WL_CONNECTED) {
-	 // Send data in separate message per sensor
+	// Send data in separate message per sensor
     for (size_t i = 0; i < NUMBER_OF_MPU; i++) {
-      // skip sesors with problems
+      // skip sensors with problems
       if (!sensors[i].usable) {
         continue;
       }
