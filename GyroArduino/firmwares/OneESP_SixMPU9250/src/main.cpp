@@ -827,7 +827,7 @@ void passiveMagnetometerCalibration() {
  * @see passiveMagnetometerCalibration()
  * @see manualMagnetometerCalibration()
  */
-void setNorth() {
+void calibrateNorth() {
   float time_passed = 0; // tracking time passed
 
   Serial.println("---");
@@ -893,7 +893,7 @@ void setNorth() {
  * @see automaticMagnetometerCalibration()
  * @see manualMagnetometerCalibration()
  * @see noButtonCalibration()
- * @see setNorth()
+ * @see calibrateNorth()
  * @see loadMPU9250CalibrationData(MPU9250socket *skt)
  * @see setup()
  */
@@ -950,7 +950,7 @@ void buttonBasedCalibration() {
   //-------SECOND CHOICE-------
   // Two leds are on: you have 10 seconds to
   // use LEFT_UPPER_ARM_INDEX MPU to set new north and press the button
-  setNorth();
+  calibrateNorth();
 
   // retrieve angle to north from readable NVS namespace
   preferences.begin("setNorth", true);
