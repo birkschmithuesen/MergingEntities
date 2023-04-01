@@ -33,6 +33,12 @@ all the features/functionality.
 
    doxygen DoxyFile
 
+# Calibration procedure
+The sensors need to be calibrated when at a new location. The procedure
+follows the following steps:
+
+![controller/sensor callibration routine](OneESP_SixMPU9250/doc-src/calibration.png "calibration flowchart")
+
 # Previous production code
 The codebase up until 37b29a788d612b3fe45e6455e0f8cc0fa5f2ee93 (the last documentation commit is d4299a8ecae315ee831c7e43cf189bb9288b855f)
 is soley based on the old prototyped boards.
