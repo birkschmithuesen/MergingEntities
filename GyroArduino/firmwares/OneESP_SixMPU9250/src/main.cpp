@@ -35,7 +35,7 @@
 #define NUMBER_OF_MPU 6 /**< number of IMU (MPU) (boards) attached to the controller  */
 
 // Define the number of the body : 1, 2 or 3
-#define BODY_2  /**< indicate individal controler (and thus configuration) */
+#define BODY_1  /**< indicate individal controler (and thus configuration) */
 
 // Set the magnetic declination of the light
 #define MAG_DECLINATION 2.53  /**< magnetic declination of stage light */
@@ -1066,10 +1066,10 @@ void fetchData() {
 
   // store sensor values in global structure to send out
   for (int i = 0; i < NUMBER_OF_MPU; i++) {
-    mpuData[i].quaternion.x = sensors[i].mpu.getQuaternionX();
-    mpuData[i].quaternion.y = sensors[i].mpu.getQuaternionY();
-    mpuData[i].quaternion.z = sensors[i].mpu.getQuaternionZ();
-    mpuData[i].quaternion.w = sensors[i].mpu.getQuaternionW();
+    mpuData[i].quaternion.x = sensors[i].mpu.getQuaternionRX();
+    mpuData[i].quaternion.y = sensors[i].mpu.getQuaternionRY();
+    mpuData[i].quaternion.z = sensors[i].mpu.getQuaternionRZ();
+    mpuData[i].quaternion.w = sensors[i].mpu.getQuaternionRW();
 
     mpuData[i].eulerangle.x = sensors[i].mpu.getEulerX();
     mpuData[i].eulerangle.y = sensors[i].mpu.getEulerY();
