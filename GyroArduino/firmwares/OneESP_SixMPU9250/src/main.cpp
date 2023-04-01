@@ -627,6 +627,7 @@ void checkAndConfigureGyros() {
  * Calibrate the Accelerometers and store calibration data.
  *
  * @note The device should not be moved during the calibration procedure.
+ * @note This function clears the calibration data storage on the controller to avoid the accumulation of outdated calibration data.
  *
  * @see buttonBasedCalibration()
  * @see passiveMagnetometerCalibration()
@@ -753,13 +754,6 @@ void passiveMagnetometerCalibration() {
         Serial.print("could not open data store for ");
         Serial.println(idx2string[i]);
 	    continue;
-    }
-    // remove old data/key-value pairs of avoid accumulation
-    if(!preferences.clear()) {
-        Serial.println(".. failed");
-        Serial.print("could clean up data store for ");
-        Serial.println(idx2string[i]);
-        continue;
     }
 
     preferences.putFloat("magbiasX", sensors[i].mpu.getMagBiasX());
