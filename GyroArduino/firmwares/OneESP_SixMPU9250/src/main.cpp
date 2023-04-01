@@ -555,6 +555,7 @@ uint8_t countMultiplexer() {
  *
  * @param stk is a pointer to the sensor (socket) to configure
  * @see checkAndConfigureGyros()
+ * @see loadMPU9250CalibrationData(MPU9250socket *skt)
  * @warning This function is not thread-safe (i.e. due to calling selectI2cMultiplexerChannel())
  * @note stack size is about 1500*32bit
  */
@@ -607,6 +608,41 @@ void configureMPU9250(MPU9250socket *skt) {
 
   // everything is done and now the senor is usable
   skt->usable = true;
+}
+
+/**
+ * Load the calibration data for a single sensor.
+ * This data was created and stored previously during the calibration.
+ *
+ * @see checkAndConfigureGyros()
+ * @see buttonBasedCalibration()
+ */
+void loadMPU9250CalibrationData(MPU9250socket *skt) {
+  // read preferences from namespace in NVS
+  if (!preferences.begin(idx2string[i], true)) {
+    Serial.print("no configuration data found for \"");
+    Serial.print(idx2string[i]);
+    Serial.println("\" / skipping config");
+    continue;
+  }
+
+  // Set acceleration calibration data
+  sensors[i].mpu.setAccBias(preferences.getFloat("accbiasX", 0.0),
+                            preferences.getFloat("accbiasY", 0.0),
+                            preferences.getFloat("accbiasZ", 0.0));
+  sensors[i].mpu.setGyroBias(preferences.getFloat("gyrobiasX", 0.0),
+                             preferences.getFloat("gyrobiasY", 0.0),
+                             preferences.getFloat("gyrobiasZ", 0.0));
+
+  // Set magnetometer calibration data
+  sensors[i].mpu.setMagBias(preferences.getFloat("magbiasX", 0.0),
+                            preferences.getFloat("magbiasY", 0.0),
+                            preferences.getFloat("magbiasZ", 0.0));
+  sensors[i].mpu.setMagScale(preferences.getFloat("magscaleX", 0.0),
+                             preferences.getFloat("magscaleY", 0.0),
+                             preferences.getFloat("magscaleZ", 0.0));
+  sensors[i].mpu.setMagneticDeclination(MAG_DECLINATION);
+  preferences.end();
 }
 
 /**
@@ -867,6 +903,7 @@ void setNorth() {
  * @see manualMagnetometerCalibration()
  * @see noButtonCalibration()
  * @see setNorth()
+ * @see loadMPU9250CalibrationData()
  * @see setup()
  */
 void buttonBasedCalibration() {
@@ -892,45 +929,20 @@ void buttonBasedCalibration() {
   // state_button = LOW;
   if (state_button == HIGH) {
     Serial.println("launching calibration sequence");
-    // Acceleration: get data calibration + calibrate
+    // acceleration: get data calibration + calibrate
     passiveAccelerometerCalibration();
-    // Magnetometer : get data calibration + calibrate
+    // magnetometer: get data calibration + calibrate
     passiveMagnetometerCalibration();
   } else {
-    // Button not pushed : we read the stored calibration data and calibrate
-    Serial.println("loading calibration data");
-    for (uint8_t i = 0; i < NUMBER_OF_MPU; i++) {
-      // read preferences from namespace in NVS
-      if (!preferences.begin(idx2string[i], true)) {
-        Serial.print("no configuration data found for \"");
-        Serial.print(idx2string[i]);
-        Serial.println("\" / skipping config");
-        delay(1000);
-        continue;
-      }
-
-      // Set acceleration calibration data
-      sensors[i].mpu.setAccBias(preferences.getFloat("accbiasX", 0.0),
-                                preferences.getFloat("accbiasY", 0.0),
-                                preferences.getFloat("accbiasZ", 0.0));
-      sensors[i].mpu.setGyroBias(preferences.getFloat("gyrobiasX", 0.0),
-                                 preferences.getFloat("gyrobiasY", 0.0),
-                                 preferences.getFloat("gyrobiasZ", 0.0));
-
-      // Set magnetometer calibration data
-      sensors[i].mpu.setMagBias(preferences.getFloat("magbiasX", 0.0),
-                                preferences.getFloat("magbiasY", 0.0),
-                                preferences.getFloat("magbiasZ", 0.0));
-      sensors[i].mpu.setMagScale(preferences.getFloat("magscaleX", 0.0),
-                                 preferences.getFloat("magscaleY", 0.0),
-                                 preferences.getFloat("magscaleZ", 0.0));
-      sensors[i].mpu.setMagneticDeclination(MAG_DECLINATION);
-      preferences.end();
+	// button not pushed: read the stored calibration data and calibrate
+	Serial.println("loading calibration data");
+	for (uint8_t i = 0; i < NUMBER_OF_MPU; i++) {
+	  loadMPU9250CalibrationData(&sensors[i]);
     }
     Serial.println("previous calibration data loaded");
   }
 
-  // Two leds are blinking, saying calibration is over
+  // two leds are blinking, saying calibration is over
   for (uint8_t i = 0; i < 20; i++) {
     digitalWrite(RED_PIN, state);
     digitalWrite(YEL_PIN, state);
