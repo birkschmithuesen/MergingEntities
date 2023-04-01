@@ -616,6 +616,7 @@ void loadMPU9250CalibrationData(MPU9250socket *skt) {
     Serial.print("no configuration data found for \"");
     Serial.print(skt->label);
     Serial.println("\" / skipping config");
+    skt->usable = false;
     return;
   }
 
@@ -636,6 +637,9 @@ void loadMPU9250CalibrationData(MPU9250socket *skt) {
                        preferences.getFloat("magscaleZ", 0.0));
   skt->mpu.setMagneticDeclination(MAG_DECLINATION);
   preferences.end();
+
+  // everything is done and now the senor is usable
+  skt->usable = true;
 }
 
 /**
@@ -1320,11 +1324,19 @@ void loop() {
       Serial.println(sensors[i].label);
       Serial.print("* setting up gyro");
       configureMPU9250(&sensors[i]);
-
       if (sensors[i].usable) {
         Serial.println(" ... worked");
       } else {
-        Serial.println("... failed");
+        Serial.println(" ... failed");
+      }
+      sensors[i].usable = false;
+
+      Serial.print("* loading calibration data");
+      loadMPU9250CalibrationData(&sensors[i]);
+      if (sensors[i].usable) {
+        Serial.println(" ... worked");
+      } else {
+        Serial.println(" ... failed");
       }
     }
     cleanUpCounter = 0;
