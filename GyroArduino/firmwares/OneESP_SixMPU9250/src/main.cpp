@@ -57,6 +57,7 @@ int localPort = 8888;                /**< source port for UDP communication on E
 
 //-------MPU SETTINGS AND FUNCTIONS-------
 // Parameters of the setup
+uint16_t cleanUpCounter = 0; // periodically clean up things (65535)
 
 // Addresses and pin of IMU (MPU-9250) and TCA9548A(=multiplexer)
 #define MPU_ADDRESS_1 0x68           /**< address of the MPU-9250 when its pin AD0 is low */
@@ -89,7 +90,7 @@ int state_button = LOW;  /**< current state of the button */
  * @see MPU9250data
  */
 struct MPU9250socket {
-  String label; /**< human readable identification of the sensor (for OSC path) */
+  const char* label; /**< human readable identification of the sensor (for OSC path) */
   uint8_t multiplexer; /**< I2C address of the responsible I2C multiplexer */
   uint8_t channel;     /**< channel used on the I2C multiplexer */
   uint8_t address = MPU_ADDRESS_1; /**< I2C address of the MPU9250 */
@@ -160,13 +161,6 @@ struct MPU9250data {
 #define RIGHT_LOWER_ARM_INDEX 7 /**< index for the sensor at the right lower arm (antebrachium) */
 #define LEFT_UPPER_LEG_INDEX 8  /**< index for the sensor at the left thigh (femur) */
 #define RIGHT_UPPER_LEG_INDEX 9 /**< index for the sensor at the right thigh (femur) */
-
-/** map the numerical index to string */
-const char* idx2string[] = {
-  "left_upper_arm", "right_upper_arm", "left_foot", "right_foot",
-  "back", "head", "left_lower_arm", "right_lower_arm", "left_upper_leg",
-  "right_upper_leg"
-};
 
 // Instance to store data on ESP32, name of the preference
 Preferences preferences;  /**< container for preferences to be stored in non-volatile memory on ESP32 */
@@ -547,17 +541,18 @@ uint8_t countMultiplexer() {
   return deviceCount;
 }
 
-
 /**
- * Check which MPU9250 sensor board is there and do the initial
- * configuration.
+ * Configure a single MPU9250 board.
+ * This takes care of basic settings (sensitivity, resolution etc.) to
+ * make a sensor ready for calibration.
  *
- * @see setup()
- * @see selectI2cMultiplexerChannel(uint8_t address, uint8_t channel)
- * @see countI2cDevices()
- * @todo send channel selection error via OSC
+ * @param stk is a pointer to the sensor (socket) to configure
+ * @see checkAndConfigureGyros()
+ * @see loadMPU9250CalibrationData(MPU9250socket *skt)
+ * @warning This function is not thread-safe (i.e. due to calling selectI2cMultiplexerChannel())
+ * @note stack size is about 1500*32bit
  */
-void checkAndConfigureGyros() {
+void configureMPU9250(MPU9250socket *skt) {
   // MPU parameters (sensitivity, etc)
   setting.accel_fs_sel = ACCEL_FS_SEL::A4G;
   setting.gyro_fs_sel = GYRO_FS_SEL::G500DPS;
@@ -570,6 +565,94 @@ void checkAndConfigureGyros() {
   // filter for measurement data
   QuatFilterSel sel{QuatFilterSel::MADGWICK};
 
+  // select channel on multiplexer
+  if (!selectI2cMultiplexerChannel(skt->multiplexer,
+                                   skt->channel)) {
+    // selection failed
+    skt->usable = false;
+#ifdef DEBUG
+    Serial.print(skt->channel);
+    Serial.println(skt->multiplexer);
+    Serial.println(" ... failed at multiplexer channel selection");
+#endif
+    return;
+  }
+
+#ifdef DEBUG
+  Serial.print("using multiplexer 0x");
+  Serial.print(skt->multiplexer, HEX);
+  Serial.print(" with channel ");
+  Serial.println(skt->channel);
+  skt->mpu.verbose(true);
+#endif
+  // try to initialize the multiplexer with the (global) settings
+  if (!skt->mpu.setup(skt->address, setting, Wire)) {
+    // somehow it failed
+    skt->usable = false;
+#ifdef DEBUG
+    Serial.println(" ... failed at MPU setup");
+#endif
+    return;
+  }
+
+  // configure the filter for the measured data
+  skt->mpu.selectFilter(sel);
+  skt->mpu.setFilterIterations(10);
+
+  // everything is done and now the senor is usable
+  skt->usable = true;
+}
+
+/**
+ * Load the calibration data for a single sensor.
+ * This data was created and stored previously during the calibration.
+ *
+ * @see checkAndConfigureGyros()
+ * @see buttonBasedCalibration()
+ */
+void loadMPU9250CalibrationData(MPU9250socket *skt) {
+  // read preferences from namespace in NVS
+  if (!preferences.begin(skt->label, true)) {
+    Serial.print("no configuration data found for \"");
+    Serial.print(skt->label);
+    Serial.println("\" / skipping config");
+    skt->usable = false;
+    return;
+  }
+
+  // Set acceleration calibration data
+  skt->mpu.setAccBias(preferences.getFloat("accbiasX", 0.0),
+                      preferences.getFloat("accbiasY", 0.0),
+                      preferences.getFloat("accbiasZ", 0.0));
+  skt->mpu.setGyroBias(preferences.getFloat("gyrobiasX", 0.0),
+                       preferences.getFloat("gyrobiasY", 0.0),
+                       preferences.getFloat("gyrobiasZ", 0.0));
+
+  // Set magnetometer calibration data
+  skt->mpu.setMagBias(preferences.getFloat("magbiasX", 0.0),
+                      preferences.getFloat("magbiasY", 0.0),
+                      preferences.getFloat("magbiasZ", 0.0));
+  skt->mpu.setMagScale(preferences.getFloat("magscaleX", 0.0),
+                       preferences.getFloat("magscaleY", 0.0),
+                       preferences.getFloat("magscaleZ", 0.0));
+  skt->mpu.setMagneticDeclination(MAG_DECLINATION);
+  preferences.end();
+
+  // everything is done and now the senor is usable
+  skt->usable = true;
+}
+
+/**
+ * Check which MPU9250 sensor board is there and do the initial
+ * configuration.
+ *
+ * @see setup()
+ * @see selectI2cMultiplexerChannel(uint8_t address, uint8_t channel)
+ * @see countI2cDevices()
+ * @see configureMPU9250()
+ * @todo send channel selection error via OSC
+ */
+void checkAndConfigureGyros() {
   // Lauch communication with the MPUs
   // go through list of (expected) sensors and see if they are there
   for (uint8_t i = 0; i < NUMBER_OF_MPU; i++) {
@@ -581,45 +664,13 @@ void checkAndConfigureGyros() {
       continue;
     }
 
-    // select channel on multiplexer
-    if (!selectI2cMultiplexerChannel(sensors[i].multiplexer,
-                                     sensors[i].channel)) {
-      // selection failed
-      sensors[i].usable = false;
-      Serial.print(sensors[i].channel);
-      Serial.println(sensors[i].multiplexer);
-      Serial.println(" ... failed at multiplexer channel selection");
-      continue;
+    configureMPU9250(&sensors[i]);
+
+    if (sensors[i].usable) {
+      Serial.println(" ... worked");
+    } else {
+      Serial.println("... failed");
     }
-
-    /*/ sanity check: MPU should be available - NOT AVAILABLE AT THIS STAGE?
-    if (!sensors[i].mpu.available()) {
-      Serial.println("meh ...");
-      sensors[i].usable = false;
-      continue;
-    }*/
-#ifdef DEBUG
-    Serial.print("using multiplexer 0x");
-    Serial.print(sensors[i].multiplexer, HEX);
-    Serial.print(" with channel ");
-    Serial.println(sensors[i].channel);
-    sensors[i].mpu.verbose(true);
-#endif
-    // try to initialize the multiplexer with the (global) settings
-    if (!sensors[i].mpu.setup(sensors[i].address, setting, Wire)) {
-      // somehow it failed
-      sensors[i].usable = false;
-      Serial.println(" ... failed at MPU setup");
-      continue;
-    }
-
-    // configure the filter for the measured data
-    sensors[i].mpu.selectFilter(sel);
-    sensors[i].mpu.setFilterIterations(10);
-
-    // everything is done and now the senor is usable
-    sensors[i].usable = true;
-    Serial.println(" ... worked");
   }
 }
 
@@ -669,17 +720,17 @@ void passiveAccelerometerCalibration() {
   Serial.print("storing accelerometer calibration data .");
   for (uint8_t i = 0; i < NUMBER_OF_MPU; i++) {
     // create writable namespace to store data in NVS
-    if(!preferences.begin(idx2string[i], false)) {
+    if(!preferences.begin(sensors[i].label, false)) {
         Serial.println(".. failed");
         Serial.print("could not open data store for ");
-        Serial.println(idx2string[i]);
+        Serial.println(sensors[i].label);
 	    continue;
     }
     // remove old data/key-value pairs of avoid accumulation
     if(!preferences.clear()) {
         Serial.println(".. failed");
         Serial.print("could clean up data store for ");
-        Serial.println(idx2string[i]);
+        Serial.println(sensors[i].label);
         continue;
     }
 
@@ -749,10 +800,10 @@ void passiveMagnetometerCalibration() {
   Serial.print("storing magnetometer calibration data .");
   for (uint8_t i = 0; i < NUMBER_OF_MPU; i++) {
     // create writable namespace to store data in NVS
-    if(!preferences.begin(idx2string[i], false)) {
+    if(!preferences.begin(sensors[i].label, false)) {
         Serial.println(".. failed");
         Serial.print("could not open data store for ");
-        Serial.println(idx2string[i]);
+        Serial.println(sensors[i].label);
 	    continue;
     }
 
@@ -776,7 +827,7 @@ void passiveMagnetometerCalibration() {
  * @see passiveMagnetometerCalibration()
  * @see manualMagnetometerCalibration()
  */
-void setNorth() {
+void calibrateNorth() {
   float time_passed = 0; // tracking time passed
 
   Serial.println("---");
@@ -842,7 +893,8 @@ void setNorth() {
  * @see automaticMagnetometerCalibration()
  * @see manualMagnetometerCalibration()
  * @see noButtonCalibration()
- * @see setNorth()
+ * @see calibrateNorth()
+ * @see loadMPU9250CalibrationData(MPU9250socket *skt)
  * @see setup()
  */
 void buttonBasedCalibration() {
@@ -868,45 +920,20 @@ void buttonBasedCalibration() {
   // state_button = LOW;
   if (state_button == HIGH) {
     Serial.println("launching calibration sequence");
-    // Acceleration: get data calibration + calibrate
+    // acceleration: get data calibration + calibrate
     passiveAccelerometerCalibration();
-    // Magnetometer : get data calibration + calibrate
+    // magnetometer: get data calibration + calibrate
     passiveMagnetometerCalibration();
   } else {
-    // Button not pushed : we read the stored calibration data and calibrate
-    Serial.println("loading calibration data");
-    for (uint8_t i = 0; i < NUMBER_OF_MPU; i++) {
-      // read preferences from namespace in NVS
-      if (!preferences.begin(idx2string[i], true)) {
-        Serial.print("no configuration data found for \"");
-        Serial.print(idx2string[i]);
-        Serial.println("\" / skipping config");
-        delay(1000);
-        continue;
-      }
-
-      // Set acceleration calibration data
-      sensors[i].mpu.setAccBias(preferences.getFloat("accbiasX", 0.0),
-                                preferences.getFloat("accbiasY", 0.0),
-                                preferences.getFloat("accbiasZ", 0.0));
-      sensors[i].mpu.setGyroBias(preferences.getFloat("gyrobiasX", 0.0),
-                                 preferences.getFloat("gyrobiasY", 0.0),
-                                 preferences.getFloat("gyrobiasZ", 0.0));
-
-      // Set magnetometer calibration data
-      sensors[i].mpu.setMagBias(preferences.getFloat("magbiasX", 0.0),
-                                preferences.getFloat("magbiasY", 0.0),
-                                preferences.getFloat("magbiasZ", 0.0));
-      sensors[i].mpu.setMagScale(preferences.getFloat("magscaleX", 0.0),
-                                 preferences.getFloat("magscaleY", 0.0),
-                                 preferences.getFloat("magscaleZ", 0.0));
-      sensors[i].mpu.setMagneticDeclination(MAG_DECLINATION);
-      preferences.end();
+	// button not pushed: read the stored calibration data and calibrate
+	Serial.println("loading calibration data");
+	for (uint8_t i = 0; i < NUMBER_OF_MPU; i++) {
+	  loadMPU9250CalibrationData(&sensors[i]);
     }
     Serial.println("previous calibration data loaded");
   }
 
-  // Two leds are blinking, saying calibration is over
+  // two leds are blinking, saying calibration is over
   for (uint8_t i = 0; i < 20; i++) {
     digitalWrite(RED_PIN, state);
     digitalWrite(YEL_PIN, state);
@@ -923,7 +950,7 @@ void buttonBasedCalibration() {
   //-------SECOND CHOICE-------
   // Two leds are on: you have 10 seconds to
   // use LEFT_UPPER_ARM_INDEX MPU to set new north and press the button
-  setNorth();
+  calibrateNorth();
 
   // retrieve angle to north from readable NVS namespace
   preferences.begin("setNorth", true);
@@ -1037,7 +1064,7 @@ void fetchData() {
     }
   }
 
-  // Store sensor values
+  // store sensor values in global structure to send out
   for (int i = 0; i < NUMBER_OF_MPU; i++) {
     mpuData[i].quaternion.x = sensors[i].mpu.getQuaternionX();
     mpuData[i].quaternion.y = sensors[i].mpu.getQuaternionY();
@@ -1235,7 +1262,6 @@ void setup() {
  * @todo log error remotely
  */
 void loop() {
-
   //--------MPU recording--------
   fetchData();
 
@@ -1243,6 +1269,10 @@ void loop() {
   static unsigned long last_print = 0;
   if (millis() - last_print > 100) {
     for (int i = 0; i < NUMBER_OF_MPU; i++) {
+      // skip sensors with problems
+      if (!sensors[i].usable) {
+        continue;
+      }
       Serial.print(sensors[i].mpu.getYaw());
       Serial.print("// ");
       Serial.print(sensors[i].mpu.getYaw_r());
@@ -1250,29 +1280,70 @@ void loop() {
       Serial.print(sensors[i].mpu.getNorth());
       Serial.print("// ");
     }
-
     Serial.println();
     last_print = millis();
   }
 
-  //-------OSC communication--------
-  // Send data in separate message per sensor
-  for (size_t i = 0; i < NUMBER_OF_MPU; i++) {
-	// skip sesors with problems
-	if (!sensors[i].usable) {
-       continue;
+  //-------OSC communication if wifi is available --------
+  if (WiFi.status() == WL_CONNECTED) {
+	// Send data in separate message per sensor
+    for (size_t i = 0; i < NUMBER_OF_MPU; i++) {
+      // skip sensors with problems
+      if (!sensors[i].usable) {
+        continue;
+      }
+      // Fill OSC message with data
+      body[i]
+          .add(mpuData[i].quaternion.x)
+          .add(mpuData[i].quaternion.y)
+          .add(mpuData[i].quaternion.z)
+          .add(mpuData[i].quaternion.w);
+      body[i]
+          .add(mpuData[i].eulerangle.x)
+          .add(mpuData[i].eulerangle.y)
+          .add(mpuData[i].eulerangle.z);
+      body[i]
+          .add(mpuData[i].gyrovalue.x)
+          .add(mpuData[i].gyrovalue.y)
+          .add(mpuData[i].gyrovalue.z);
+
+      // send data out
+      Udp.beginPacket(outIp, outPort);
+      body[i].send(Udp);
+      Udp.endPacket();
+
+      // clear up message cache
+      body[i].empty();
     }
-    // Fill OSC message with data
-    body[i].add(mpuData[i].quaternion.x).add(mpuData[i].quaternion.y).add(mpuData[i].quaternion.z).add(mpuData[i].quaternion.w);
-    body[i].add(mpuData[i].eulerangle.x).add(mpuData[i].eulerangle.y).add(mpuData[i].eulerangle.z);
-    body[i].add(mpuData[i].gyrovalue.x).add(mpuData[i].gyrovalue.y).add(mpuData[i].gyrovalue.z);
-
-    // send data out
-    Udp.beginPacket(outIp, outPort);
-    body[i].send(Udp);
-    Udp.endPacket();
-
-    // clear up message cache
-    body[i].empty();
   }
+
+  // try to clean up sensor sockets all 100 iterations
+  if (cleanUpCounter > 100) {
+    for (int i = 0; i < NUMBER_OF_MPU; i++) {
+      // skip sensors that are already configured (i.e. usable)
+      if (sensors[i].usable) {
+        continue;
+      }
+      Serial.print("trying to resurrect ");
+      Serial.println(sensors[i].label);
+      Serial.print("* setting up gyro");
+      configureMPU9250(&sensors[i]);
+      if (sensors[i].usable) {
+        Serial.println(" ... worked");
+      } else {
+        Serial.println(" ... failed");
+      }
+      sensors[i].usable = false;
+
+      Serial.print("* loading calibration data");
+      loadMPU9250CalibrationData(&sensors[i]);
+      if (sensors[i].usable) {
+        Serial.println(" ... worked");
+      } else {
+        Serial.println(" ... failed");
+      }
+    }
+    cleanUpCounter = 0;
+  }
+  cleanUpCounter += 1;
 }
