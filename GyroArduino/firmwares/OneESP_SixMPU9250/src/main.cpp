@@ -162,13 +162,6 @@ struct MPU9250data {
 #define LEFT_UPPER_LEG_INDEX 8  /**< index for the sensor at the left thigh (femur) */
 #define RIGHT_UPPER_LEG_INDEX 9 /**< index for the sensor at the right thigh (femur) */
 
-/** map the numerical index to string */
-const char* idx2string[] = {
-  "left_upper_arm", "right_upper_arm", "left_foot", "right_foot",
-  "back", "head", "left_lower_arm", "right_lower_arm", "left_upper_leg",
-  "right_upper_leg"
-};
-
 // Instance to store data on ESP32, name of the preference
 Preferences preferences;  /**< container for preferences to be stored in non-volatile memory on ESP32 */
 
@@ -619,29 +612,29 @@ void configureMPU9250(MPU9250socket *skt) {
  */
 void loadMPU9250CalibrationData(MPU9250socket *skt) {
   // read preferences from namespace in NVS
-  if (!preferences.begin(idx2string[i], true)) {
+  if (!preferences.begin(skt->label, true)) {
     Serial.print("no configuration data found for \"");
-    Serial.print(idx2string[i]);
+    Serial.print(skt->label);
     Serial.println("\" / skipping config");
-    continue;
+    return;
   }
 
   // Set acceleration calibration data
-  sensors[i].mpu.setAccBias(preferences.getFloat("accbiasX", 0.0),
-                            preferences.getFloat("accbiasY", 0.0),
-                            preferences.getFloat("accbiasZ", 0.0));
-  sensors[i].mpu.setGyroBias(preferences.getFloat("gyrobiasX", 0.0),
-                             preferences.getFloat("gyrobiasY", 0.0),
-                             preferences.getFloat("gyrobiasZ", 0.0));
+  skt->mpu.setAccBias(preferences.getFloat("accbiasX", 0.0),
+                      preferences.getFloat("accbiasY", 0.0),
+                      preferences.getFloat("accbiasZ", 0.0));
+  skt->mpu.setGyroBias(preferences.getFloat("gyrobiasX", 0.0),
+                       preferences.getFloat("gyrobiasY", 0.0),
+                       preferences.getFloat("gyrobiasZ", 0.0));
 
   // Set magnetometer calibration data
-  sensors[i].mpu.setMagBias(preferences.getFloat("magbiasX", 0.0),
-                            preferences.getFloat("magbiasY", 0.0),
-                            preferences.getFloat("magbiasZ", 0.0));
-  sensors[i].mpu.setMagScale(preferences.getFloat("magscaleX", 0.0),
-                             preferences.getFloat("magscaleY", 0.0),
-                             preferences.getFloat("magscaleZ", 0.0));
-  sensors[i].mpu.setMagneticDeclination(MAG_DECLINATION);
+  skt->mpu.setMagBias(preferences.getFloat("magbiasX", 0.0),
+                      preferences.getFloat("magbiasY", 0.0),
+                      preferences.getFloat("magbiasZ", 0.0));
+  skt->mpu.setMagScale(preferences.getFloat("magscaleX", 0.0),
+                       preferences.getFloat("magscaleY", 0.0),
+                       preferences.getFloat("magscaleZ", 0.0));
+  skt->mpu.setMagneticDeclination(MAG_DECLINATION);
   preferences.end();
 }
 
@@ -723,17 +716,17 @@ void passiveAccelerometerCalibration() {
   Serial.print("storing accelerometer calibration data .");
   for (uint8_t i = 0; i < NUMBER_OF_MPU; i++) {
     // create writable namespace to store data in NVS
-    if(!preferences.begin(idx2string[i], false)) {
+    if(!preferences.begin(sensors[i].label, false)) {
         Serial.println(".. failed");
         Serial.print("could not open data store for ");
-        Serial.println(idx2string[i]);
+        Serial.println(sensors[i].label);
 	    continue;
     }
     // remove old data/key-value pairs of avoid accumulation
     if(!preferences.clear()) {
         Serial.println(".. failed");
         Serial.print("could clean up data store for ");
-        Serial.println(idx2string[i]);
+        Serial.println(sensors[i].label);
         continue;
     }
 
@@ -803,10 +796,10 @@ void passiveMagnetometerCalibration() {
   Serial.print("storing magnetometer calibration data .");
   for (uint8_t i = 0; i < NUMBER_OF_MPU; i++) {
     // create writable namespace to store data in NVS
-    if(!preferences.begin(idx2string[i], false)) {
+    if(!preferences.begin(sensors[i].label, false)) {
         Serial.println(".. failed");
         Serial.print("could not open data store for ");
-        Serial.println(idx2string[i]);
+        Serial.println(sensors[i].label);
 	    continue;
     }
 
@@ -897,7 +890,7 @@ void setNorth() {
  * @see manualMagnetometerCalibration()
  * @see noButtonCalibration()
  * @see setNorth()
- * @see loadMPU9250CalibrationData()
+ * @see loadMPU9250CalibrationData(MPU9250socket *skt)
  * @see setup()
  */
 void buttonBasedCalibration() {
