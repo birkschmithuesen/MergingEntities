@@ -1064,7 +1064,7 @@ void fetchData() {
     }
   }
 
-  // Store sensor values
+  // store sensor values in global structure to send out
   for (int i = 0; i < NUMBER_OF_MPU; i++) {
     mpuData[i].quaternion.x = sensors[i].mpu.getQuaternionX();
     mpuData[i].quaternion.y = sensors[i].mpu.getQuaternionY();
