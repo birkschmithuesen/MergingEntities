@@ -165,6 +165,9 @@ struct IOBundle {
 };
     
 // manually create indexes to emulate a hashmap with an array
+// Note that this is just the order in a global list and has no
+// connection to the sensor jacks. Look at MPU9250Socket & IOBundle
+// to fiddle with the physical routing/data tagging.
 #define LEFT_UPPER_ARM_INDEX 0  /**< index for the sensor at the left upper arm (brachium) */
 #define RIGHT_UPPER_ARM_INDEX 1 /**< index for the sensor at the right upper arm (brachium) */
 #define LEFT_FOOT_INDEX 2       /**< index for the sensor at the left foot (pes) */
@@ -1208,7 +1211,7 @@ void setup() {
     }
     iobundle[LEFT_UPPER_ARM_INDEX].socket.label = "left_upper_arm";
     iobundle[LEFT_UPPER_ARM_INDEX].socket.multiplexer = TCA_ADDRESS_RIGHT_SIDE;
-    iobundle[LEFT_UPPER_ARM_INDEX].socket.channel = 0;
+    iobundle[LEFT_UPPER_ARM_INDEX].socket.channel = 1;
 #ifdef BODY_1
     iobundle[LEFT_UPPER_ARM_INDEX].message = OSCMessage("/body/1/gyro/left_upper_arm/");
 #endif
@@ -1217,7 +1220,7 @@ void setup() {
 #endif
     iobundle[RIGHT_UPPER_ARM_INDEX].socket.label = "right_upper_arm";
     iobundle[RIGHT_UPPER_ARM_INDEX].socket.multiplexer = TCA_ADDRESS_RIGHT_SIDE;
-    iobundle[RIGHT_UPPER_ARM_INDEX].socket.channel = 1;
+    iobundle[RIGHT_UPPER_ARM_INDEX].socket.channel = 3;
 #ifdef BODY_1
     iobundle[RIGHT_UPPER_ARM_INDEX].message = OSCMessage("/body/1/gyro/right_upper_arm/");
 #endif
@@ -1235,7 +1238,7 @@ void setup() {
 #endif
     iobundle[RIGHT_FOOT_INDEX].socket.label = "right_foot";
     iobundle[RIGHT_FOOT_INDEX].socket.multiplexer = TCA_ADDRESS_RIGHT_SIDE;
-    iobundle[RIGHT_FOOT_INDEX].socket.channel = 3;
+    iobundle[RIGHT_FOOT_INDEX].socket.channel = 5;
 #ifdef BODY_1
     iobundle[RIGHT_FOOT_INDEX].message = OSCMessage("/body/1/gyro/right_foot/");
 #endif
@@ -1253,7 +1256,7 @@ void setup() {
 #endif
     iobundle[HEAD_INDEX].socket.label = "head";
     iobundle[HEAD_INDEX].socket.multiplexer = TCA_ADDRESS_RIGHT_SIDE;
-    iobundle[HEAD_INDEX].socket.channel = 5;
+    iobundle[HEAD_INDEX].socket.channel = 0;
 #ifdef BODY_1
     iobundle[HEAD_INDEX].message = OSCMessage("/body/1/gyro/head/");
 #endif
