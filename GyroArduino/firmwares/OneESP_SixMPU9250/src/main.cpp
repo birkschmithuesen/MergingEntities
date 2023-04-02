@@ -88,6 +88,7 @@ int state_button = LOW;  /**< current state of the button */
  *
  * @todo Also move data read from sensor here (?)
  * @see MPU9250data
+ * @see IOBundle
  */
 struct MPU9250socket {
   const char* label; /**< human readable identification of the sensor (for OSC path) */
@@ -143,6 +144,7 @@ struct GyroValue {
  * 
  * @note This is not a model for the sensor board itself.
  * @see MPU9250socket
+ * @see IOBundle
  */
 struct MPU9250data {
 	Quaternion quaternion; /**< gyroscope data as quaternion */
@@ -150,6 +152,18 @@ struct MPU9250data {
 	GyroValue gyrovalue;   /**< gyroscope data along axis */
 };
 
+/**
+ * A bundle to handle all communication from sensor to OSC message.
+ * 
+ * @see MPU9250socket
+ * @see MPU9250data
+ */
+struct IOBundle {
+	MPU9250socket socket;  /**< the source for the (sensor) data */
+	MPU9250data data;      /**< the temporary storage for the (sensor) data */
+	OSCMessage message;    /**< the target (OSC) destination for the (sensor) data */
+};
+    
 // manually create indexes to emulate a hashmap with an array
 #define LEFT_UPPER_ARM_INDEX 0  /**< index for the sensor at the left upper arm (brachium) */
 #define RIGHT_UPPER_ARM_INDEX 1 /**< index for the sensor at the right upper arm (brachium) */
@@ -166,8 +180,7 @@ struct MPU9250data {
 Preferences preferences;  /**< container for preferences to be stored in non-volatile memory on ESP32 */
 
 // MPU9250 settings and data storage
-MPU9250socket sensors[NUMBER_OF_MPU];   /**< communication abstractions for all MPUs */
-MPU9250data mpuData[NUMBER_OF_MPU]; /**< bundled MPU9250 data to be accessed by index */
+IOBundle iobundle[NUMBER_OF_MPU];  /**< one global handler to deal with MPU9250 data (communication) to be accessed by index */
 float accbias[6][3];     /**< bias/drift/offset profile for the accelerator */
 float gyrobias[6][3];    /**< bias/drift/offset profile for the gyroscope */
 MPU9250Setting setting;  /**< configuration settings of the MPU9250 stored in memory */
@@ -431,14 +444,14 @@ void manualMagnetometerCalibration() {
 
     Serial.println(i);
 
-    if (!selectI2cMultiplexerChannel(sensors[i].multiplexer, sensors[i].channel)) {
+    if (!selectI2cMultiplexerChannel(iobundle[i].socket.multiplexer, iobundle[i].socket.channel)) {
       Serial.print("could not select channel ");
-      Serial.print(sensors[i].channel);
+      Serial.print(iobundle[i].socket.channel);
       Serial.print(" on multiplexer at address ");
-      Serial.println(sensors[i].multiplexer);
+      Serial.println(iobundle[i].socket.multiplexer);
     }
-    sensors[i].mpu.setMagneticDeclination(MAG_DECLINATION);
-    sensors[i].mpu.calibrateMag();
+    iobundle[i].socket.mpu.setMagneticDeclination(MAG_DECLINATION);
+    iobundle[i].socket.mpu.calibrateMag();
 
     calibration.empty();
   }
@@ -462,9 +475,9 @@ void automaticMagnetometerCalibration() {
   calibration.empty();
 
   for (uint8_t i = 0; i < NUMBER_OF_MPU; i++) {
-    sensors[i].mpu.setMagneticDeclination(MAG_DECLINATION);
-    sensors[i].mpu.setMagBias(magbias[i][0], magbias[i][1], magbias[i][2]);
-    sensors[i].mpu.setMagScale(magscale[i][0], magscale[i][1], magscale[i][2]);
+    iobundle[i].socket.mpu.setMagneticDeclination(MAG_DECLINATION);
+    iobundle[i].socket.mpu.setMagBias(magbias[i][0], magbias[i][1], magbias[i][2]);
+    iobundle[i].socket.mpu.setMagScale(magscale[i][0], magscale[i][1], magscale[i][2]);
   }
   Serial.println("Mag calibration done");
 }
@@ -657,16 +670,16 @@ void checkAndConfigureGyros() {
   // go through list of (expected) sensors and see if they are there
   for (uint8_t i = 0; i < NUMBER_OF_MPU; i++) {
     Serial.print("setting up gyro for ");
-    Serial.print(sensors[i].label);
+    Serial.print(iobundle[i].socket.label);
     // skip sensors that are already configured (i.e. usable)
-    if (sensors[i].usable) {
+    if (iobundle[i].socket.usable) {
       Serial.println(" ... already done");
       continue;
     }
 
-    configureMPU9250(&sensors[i]);
+    configureMPU9250(&iobundle[i].socket);
 
-    if (sensors[i].usable) {
+    if (iobundle[i].socket.usable) {
       Serial.println(" ... worked");
     } else {
       Serial.println("... failed");
@@ -696,21 +709,21 @@ void passiveAccelerometerCalibration() {
   Serial.println("calibrating accelerometer for");
   for (uint8_t i = 0; i < NUMBER_OF_MPU; i++) {
 	Serial.print(" * ");
-	Serial.print(sensors[i].label);
-    if (!sensors[i].usable) {
+	Serial.print(iobundle[i].socket.label);
+    if (!iobundle[i].socket.usable) {
       Serial.println(" skipped because sensor is unusable");
       continue;
     }
-    if (!selectI2cMultiplexerChannel(sensors[i].multiplexer,
-                                     sensors[i].channel)) {
+    if (!selectI2cMultiplexerChannel(iobundle[i].socket.multiplexer,
+                                     iobundle[i].socket.channel)) {
       Serial.print(" could not select channel ");
-      Serial.print(sensors[i].channel);
+      Serial.print(iobundle[i].socket.channel);
       Serial.print(" on multiplexer at address ");
-      Serial.println(sensors[i].multiplexer);
-      sensors[i].usable = false;
+      Serial.println(iobundle[i].socket.multiplexer);
+      iobundle[i].socket.usable = false;
       continue;
     }
-    sensors[i].mpu.calibrateAccelGyro();
+    iobundle[i].socket.mpu.calibrateAccelGyro();
     Serial.println(" ... done");
   }
   digitalWrite(RED_PIN, LOW);
@@ -720,27 +733,27 @@ void passiveAccelerometerCalibration() {
   Serial.print("storing accelerometer calibration data .");
   for (uint8_t i = 0; i < NUMBER_OF_MPU; i++) {
     // create writable namespace to store data in NVS
-    if(!preferences.begin(sensors[i].label, false)) {
+    if(!preferences.begin(iobundle[i].socket.label, false)) {
         Serial.println(".. failed");
         Serial.print("could not open data store for ");
-        Serial.println(sensors[i].label);
+        Serial.println(iobundle[i].socket.label);
 	    continue;
     }
     // remove old data/key-value pairs of avoid accumulation
     if(!preferences.clear()) {
         Serial.println(".. failed");
         Serial.print("could clean up data store for ");
-        Serial.println(sensors[i].label);
+        Serial.println(iobundle[i].socket.label);
         continue;
     }
 
-    preferences.putFloat("accbiasX", sensors[i].mpu.getAccBiasX());
-    preferences.putFloat("accbiasY", sensors[i].mpu.getAccBiasY());
-    preferences.putFloat("accbiasZ", sensors[i].mpu.getAccBiasZ());
+    preferences.putFloat("accbiasX", iobundle[i].socket.mpu.getAccBiasX());
+    preferences.putFloat("accbiasY", iobundle[i].socket.mpu.getAccBiasY());
+    preferences.putFloat("accbiasZ", iobundle[i].socket.mpu.getAccBiasZ());
 
-    preferences.putFloat("gyrobiasX", sensors[i].mpu.getGyroBiasX());
-    preferences.putFloat("gyrobiasY", sensors[i].mpu.getGyroBiasY());
-    preferences.putFloat("gyrobiasZ", sensors[i].mpu.getGyroBiasZ());
+    preferences.putFloat("gyrobiasX", iobundle[i].socket.mpu.getGyroBiasX());
+    preferences.putFloat("gyrobiasY", iobundle[i].socket.mpu.getGyroBiasY());
+    preferences.putFloat("gyrobiasZ", iobundle[i].socket.mpu.getGyroBiasZ());
 
     preferences.end();
   }
@@ -763,8 +776,8 @@ void passiveMagnetometerCalibration() {
   Serial.println("calibrating magnetometer for");
   for (uint8_t i = 0; i < NUMBER_OF_MPU; i++) {
 	Serial.print(" * ");
-	Serial.print(sensors[i].label);
-    if (!sensors[i].usable) {
+	Serial.print(iobundle[i].socket.label);
+    if (!iobundle[i].socket.usable) {
       Serial.println(" skipped because sensor is unusable");
       continue;
     }
@@ -775,22 +788,22 @@ void passiveMagnetometerCalibration() {
       digitalWrite(YEL_PIN, state);
       state = HIGH;
     }
-    calibration.add("calibration of ").add(sensors[i].label);
+    calibration.add("calibration of ").add(iobundle[i].socket.label);
     Udp.beginPacket(outIp, outPort);
     calibration.send(Udp);
     Udp.endPacket();
 
-    if (!selectI2cMultiplexerChannel(sensors[i].multiplexer,
-                                     sensors[i].channel)) {
+    if (!selectI2cMultiplexerChannel(iobundle[i].socket.multiplexer,
+                                     iobundle[i].socket.channel)) {
       Serial.print("could not select channel ");
-      Serial.print(sensors[i].channel);
+      Serial.print(iobundle[i].socket.channel);
       Serial.print(" on multiplexer at address ");
-      Serial.println(sensors[i].multiplexer);
-      sensors[i].usable = false;
+      Serial.println(iobundle[i].socket.multiplexer);
+      iobundle[i].socket.usable = false;
       continue;
     }
-    sensors[i].mpu.setMagneticDeclination(MAG_DECLINATION);
-    sensors[i].mpu.calibrateMag();
+    iobundle[i].socket.mpu.setMagneticDeclination(MAG_DECLINATION);
+    iobundle[i].socket.mpu.calibrateMag();
     calibration.empty();
     Serial.println(" ... done");
   }
@@ -800,20 +813,20 @@ void passiveMagnetometerCalibration() {
   Serial.print("storing magnetometer calibration data .");
   for (uint8_t i = 0; i < NUMBER_OF_MPU; i++) {
     // create writable namespace to store data in NVS
-    if(!preferences.begin(sensors[i].label, false)) {
+    if(!preferences.begin(iobundle[i].socket.label, false)) {
         Serial.println(".. failed");
         Serial.print("could not open data store for ");
-        Serial.println(sensors[i].label);
+        Serial.println(iobundle[i].socket.label);
 	    continue;
     }
 
-    preferences.putFloat("magbiasX", sensors[i].mpu.getMagBiasX());
-    preferences.putFloat("magbiasY", sensors[i].mpu.getMagBiasY());
-    preferences.putFloat("magbiasZ", sensors[i].mpu.getMagBiasZ());
+    preferences.putFloat("magbiasX", iobundle[i].socket.mpu.getMagBiasX());
+    preferences.putFloat("magbiasY", iobundle[i].socket.mpu.getMagBiasY());
+    preferences.putFloat("magbiasZ", iobundle[i].socket.mpu.getMagBiasZ());
 
-    preferences.putFloat("magscaleX", sensors[i].mpu.getMagScaleX());
-    preferences.putFloat("magscaleY", sensors[i].mpu.getMagScaleY());
-    preferences.putFloat("magscaleZ", sensors[i].mpu.getMagScaleZ());
+    preferences.putFloat("magscaleX", iobundle[i].socket.mpu.getMagScaleX());
+    preferences.putFloat("magscaleY", iobundle[i].socket.mpu.getMagScaleY());
+    preferences.putFloat("magscaleZ", iobundle[i].socket.mpu.getMagScaleZ());
 
     preferences.end();
   }
@@ -838,11 +851,11 @@ void calibrateNorth() {
   digitalWrite(YEL_PIN, HIGH);
 
   // sample the MPU for 10 seconds to have the good yaw if we need it
-  if (!selectI2cMultiplexerChannel(sensors[LEFT_UPPER_ARM_INDEX].multiplexer, sensors[LEFT_UPPER_ARM_INDEX].channel)) {
+  if (!selectI2cMultiplexerChannel(iobundle[LEFT_UPPER_ARM_INDEX].socket.multiplexer, iobundle[LEFT_UPPER_ARM_INDEX].socket.channel)) {
     Serial.print("could not select channel ");
-    Serial.print(sensors[LEFT_UPPER_ARM_INDEX].channel);
+    Serial.print(iobundle[LEFT_UPPER_ARM_INDEX].socket.channel);
     Serial.print(" on multiplexer at address 0x");
-    Serial.println(sensors[LEFT_UPPER_ARM_INDEX].multiplexer, HEX);
+    Serial.println(iobundle[LEFT_UPPER_ARM_INDEX].socket.multiplexer, HEX);
   }
 
   time_passed = millis();
@@ -850,7 +863,7 @@ void calibrateNorth() {
     Serial.print(sec);
     Serial.print("..");
     while (millis() - time_passed < 1000) {
-      sensors[LEFT_UPPER_ARM_INDEX].mpu.update();
+      iobundle[LEFT_UPPER_ARM_INDEX].socket.mpu.update();
     }
     time_passed = millis();
   }
@@ -866,7 +879,7 @@ void calibrateNorth() {
   if (state_button == HIGH) {
     Serial.print("saving current north");
     // we save the north direction and send it to the library
-    theta = sensors[LEFT_UPPER_ARM_INDEX].mpu.getYaw() * (-1);
+    theta = iobundle[LEFT_UPPER_ARM_INDEX].socket.mpu.getYaw() * (-1);
 
     // save angle to north in writable NVS namespace
     if(!preferences.begin("setNorth", false)) {
@@ -928,7 +941,7 @@ void buttonBasedCalibration() {
 	// button not pushed: read the stored calibration data and calibrate
 	Serial.println("loading calibration data");
 	for (uint8_t i = 0; i < NUMBER_OF_MPU; i++) {
-	  loadMPU9250CalibrationData(&sensors[i]);
+	  loadMPU9250CalibrationData(&iobundle[i].socket);
     }
     Serial.println("previous calibration data loaded");
   }
@@ -957,8 +970,8 @@ void buttonBasedCalibration() {
   Serial.println("setting north for");
   for (uint8_t i = 0; i < NUMBER_OF_MPU; i++) {
 	Serial.print(" * ");
-	Serial.print(sensors[i].label);
-    sensors[i].mpu.setNorth(preferences.getFloat("north", 0.0));
+	Serial.print(iobundle[i].socket.label);
+    iobundle[i].socket.mpu.setNorth(preferences.getFloat("north", 0.0));
     Serial.println(" ... done");
   }
   preferences.end();
@@ -1000,20 +1013,20 @@ void noButtonCalibration(bool autocalibration = true) {
   digitalWrite(RED_PIN, HIGH);
   // calibrate one by one
   for (uint8_t i = 0; i < NUMBER_OF_MPU; i++) {
-    if (!sensors[i].usable) {
+    if (!iobundle[i].socket.usable) {
       Serial.print("skipping unusable sensor for ");
-      Serial.println(sensors[i].label);
+      Serial.println(iobundle[i].socket.label);
       continue;
     }
     Serial.print("calibrating sensor for ");
-    Serial.println(sensors[i].label);
-    if (!selectI2cMultiplexerChannel(sensors[i].multiplexer, sensors[i].channel)) {
+    Serial.println(iobundle[i].socket.label);
+    if (!selectI2cMultiplexerChannel(iobundle[i].socket.multiplexer, iobundle[i].socket.channel)) {
       Serial.print("could not select channel ");
-      Serial.print(sensors[i].channel);
+      Serial.print(iobundle[i].socket.channel);
       Serial.print(" on multiplexer at address 0x");
-      Serial.println(sensors[i].multiplexer, HEX);
+      Serial.println(iobundle[i].socket.multiplexer, HEX);
     }
-    sensors[i].mpu.calibrateAccelGyro();
+    iobundle[i].socket.mpu.calibrateAccelGyro();
   }
   digitalWrite(RED_PIN, LOW);
   Serial.println("acceleration calibration done.");
@@ -1044,40 +1057,40 @@ void noButtonCalibration(bool autocalibration = true) {
 void fetchData() {
   // fetch data from each MPU
   for (uint8_t i = 0; i < NUMBER_OF_MPU; i++) {
-    if (!selectI2cMultiplexerChannel(sensors[i].multiplexer,
-                                     sensors[i].channel)) {
+    if (!selectI2cMultiplexerChannel(iobundle[i].socket.multiplexer,
+                                     iobundle[i].socket.channel)) {
       Serial.print("could not select channel ");
-      Serial.print(sensors[i].channel);
+      Serial.print(iobundle[i].socket.channel);
       Serial.print(" on multiplexer at address ");
-      Serial.println(sensors[i].multiplexer);
+      Serial.println(iobundle[i].socket.multiplexer);
     }
-    if (sensors[i].usable) {
-      if(!sensors[i].mpu.update()) {
+    if (iobundle[i].socket.usable) {
+      if(!iobundle[i].socket.mpu.update()) {
         // too harsh?
-        sensors[i].usable = false;
+        iobundle[i].socket.usable = false;
       }
     } else {
       // TODO: log errors remotely
       Serial.print("sensor for ");
-      Serial.print(sensors[i].label);
+      Serial.print(iobundle[i].socket.label);
       Serial.println(" is not usable");
     }
   }
 
   // store sensor values in global structure to send out
   for (int i = 0; i < NUMBER_OF_MPU; i++) {
-    mpuData[i].quaternion.x = sensors[i].mpu.getQuaternionRX();
-    mpuData[i].quaternion.y = sensors[i].mpu.getQuaternionRY();
-    mpuData[i].quaternion.z = sensors[i].mpu.getQuaternionRZ();
-    mpuData[i].quaternion.w = sensors[i].mpu.getQuaternionRW();
+    iobundle[i].data.quaternion.x = iobundle[i].socket.mpu.getQuaternionRX();
+    iobundle[i].data.quaternion.y = iobundle[i].socket.mpu.getQuaternionRY();
+    iobundle[i].data.quaternion.z = iobundle[i].socket.mpu.getQuaternionRZ();
+    iobundle[i].data.quaternion.w = iobundle[i].socket.mpu.getQuaternionRW();
 
-    mpuData[i].eulerangle.x = sensors[i].mpu.getEulerX();
-    mpuData[i].eulerangle.y = sensors[i].mpu.getEulerY();
-    mpuData[i].eulerangle.z = sensors[i].mpu.getEulerZ();
+    iobundle[i].data.eulerangle.x = iobundle[i].socket.mpu.getEulerX();
+    iobundle[i].data.eulerangle.y = iobundle[i].socket.mpu.getEulerY();
+    iobundle[i].data.eulerangle.z = iobundle[i].socket.mpu.getEulerZ();
 
-    mpuData[i].gyrovalue.x = sensors[i].mpu.getGyroX();
-    mpuData[i].gyrovalue.y = sensors[i].mpu.getGyroY();
-    mpuData[i].gyrovalue.z = sensors[i].mpu.getGyroZ();
+    iobundle[i].data.gyrovalue.x = iobundle[i].socket.mpu.getGyroX();
+    iobundle[i].data.gyrovalue.y = iobundle[i].socket.mpu.getGyroY();
+    iobundle[i].data.gyrovalue.z = iobundle[i].socket.mpu.getGyroZ();
   }
 }
 
@@ -1151,59 +1164,155 @@ void setup() {
       // put ESP32 into deep sleep (closest to shutdown)
       esp_deep_sleep_start();
     }
-    sensors[LEFT_UPPER_ARM_INDEX].label = "left_upper_arm";
-    sensors[LEFT_UPPER_ARM_INDEX].multiplexer = TCA_ADDRESS_RIGHT_SIDE;
-    sensors[LEFT_UPPER_ARM_INDEX].channel = 0;
-    sensors[RIGHT_UPPER_ARM_INDEX].label = "right_upper_arm";
-    sensors[RIGHT_UPPER_ARM_INDEX].multiplexer = TCA_ADDRESS_RIGHT_SIDE;
-    sensors[RIGHT_UPPER_ARM_INDEX].channel = 1;
-    sensors[LEFT_FOOT_INDEX].label = "left_foot";
-    sensors[LEFT_FOOT_INDEX].multiplexer = TCA_ADDRESS_RIGHT_SIDE;
-    sensors[LEFT_FOOT_INDEX].channel = 2;
-    sensors[RIGHT_FOOT_INDEX].label = "right_foot";
-    sensors[RIGHT_FOOT_INDEX].multiplexer = TCA_ADDRESS_RIGHT_SIDE;
-    sensors[RIGHT_FOOT_INDEX].channel = 3;
-    sensors[BACK_INDEX].label = "back";
-    sensors[BACK_INDEX].multiplexer = TCA_ADDRESS_RIGHT_SIDE;
-    sensors[BACK_INDEX].channel = 4;
-    sensors[HEAD_INDEX].label = "head";
-    sensors[HEAD_INDEX].multiplexer = TCA_ADDRESS_RIGHT_SIDE;
-    sensors[HEAD_INDEX].channel = 5;
+    iobundle[LEFT_UPPER_ARM_INDEX].socket.label = "left_upper_arm";
+    iobundle[LEFT_UPPER_ARM_INDEX].socket.multiplexer = TCA_ADDRESS_RIGHT_SIDE;
+    iobundle[LEFT_UPPER_ARM_INDEX].socket.channel = 0;
+#ifdef BODY_1
+    iobundle[LEFT_UPPER_ARM_INDEX].message = OSCMessage("/body/1/gyro/left_upper_arm/");
+#endif
+#ifdef BODY_2
+    iobundle[LEFT_UPPER_ARM_INDEX].message = OSCMessage("/body/2/gyro/left_upper_arm/");
+#endif
+    iobundle[RIGHT_UPPER_ARM_INDEX].socket.label = "right_upper_arm";
+    iobundle[RIGHT_UPPER_ARM_INDEX].socket.multiplexer = TCA_ADDRESS_RIGHT_SIDE;
+    iobundle[RIGHT_UPPER_ARM_INDEX].socket.channel = 1;
+#ifdef BODY_1
+    iobundle[RIGHT_UPPER_ARM_INDEX].message = OSCMessage("/body/1/gyro/right_upper_arm/");
+#endif
+#ifdef BODY_2
+    iobundle[RIGHT_UPPER_ARM_INDEX].message = OSCMessage("/body/2/gyro/right_upper_arm/");
+#endif
+    iobundle[LEFT_FOOT_INDEX].socket.label = "left_foot";
+    iobundle[LEFT_FOOT_INDEX].socket.multiplexer = TCA_ADDRESS_RIGHT_SIDE;
+    iobundle[LEFT_FOOT_INDEX].socket.channel = 2;
+#ifdef BODY_1
+    iobundle[LEFT_FOOT_INDEX].message = OSCMessage("/body/1/gyro/left_foot/");
+#endif
+#ifdef BODY_2
+    iobundle[LEFT_FOOT_INDEX].message = OSCMessage("/body/2/gyro/left_foot/");
+#endif
+    iobundle[RIGHT_FOOT_INDEX].socket.label = "right_foot";
+    iobundle[RIGHT_FOOT_INDEX].socket.multiplexer = TCA_ADDRESS_RIGHT_SIDE;
+    iobundle[RIGHT_FOOT_INDEX].socket.channel = 3;
+#ifdef BODY_1
+    iobundle[RIGHT_FOOT_INDEX].message = OSCMessage("/body/1/gyro/right_foot/");
+#endif
+#ifdef BODY_2
+    iobundle[RIGHT_FOOT_INDEX].message = OSCMessage("/body/2/gyro/right_foot/");
+#endif
+    iobundle[BACK_INDEX].socket.label = "back";
+    iobundle[BACK_INDEX].socket.multiplexer = TCA_ADDRESS_RIGHT_SIDE;
+    iobundle[BACK_INDEX].socket.channel = 4;
+#ifdef BODY_1
+    iobundle[BACK_INDEX].message = OSCMessage("/body/1/gyro/back/");
+#endif
+#ifdef BODY_2
+    iobundle[BACK_INDEX].message = OSCMessage("/body/2/gyro/back/");
+#endif
+    iobundle[HEAD_INDEX].socket.label = "head";
+    iobundle[HEAD_INDEX].socket.multiplexer = TCA_ADDRESS_RIGHT_SIDE;
+    iobundle[HEAD_INDEX].socket.channel = 5;
+#ifdef BODY_1
+    iobundle[HEAD_INDEX].message = OSCMessage("/body/1/gyro/head/");
+#endif
+#ifdef BODY_2
+    iobundle[HEAD_INDEX].message = OSCMessage("/body/2/gyro/head/");
+#endif
     break;
   case 2:
     // first do the minimal setup
-    sensors[RIGHT_UPPER_ARM_INDEX].label = "right_upper_arm";
-    sensors[RIGHT_UPPER_ARM_INDEX].multiplexer = TCA_ADDRESS_RIGHT_SIDE;
-    sensors[RIGHT_UPPER_ARM_INDEX].channel = 2;
-    sensors[RIGHT_FOOT_INDEX].label = "right_foot";
-    sensors[RIGHT_FOOT_INDEX].multiplexer = TCA_ADDRESS_RIGHT_SIDE;
-    sensors[RIGHT_FOOT_INDEX].channel = 5;
-    sensors[BACK_INDEX].label = "hip";
-    sensors[BACK_INDEX].multiplexer = TCA_ADDRESS_RIGHT_SIDE;
-    sensors[BACK_INDEX].channel = 7;
-    sensors[LEFT_UPPER_ARM_INDEX].label = "left_upper_arm";
-    sensors[LEFT_UPPER_ARM_INDEX].multiplexer = TCA_ADDRESS_LEFT_SIDE;
-    sensors[LEFT_UPPER_ARM_INDEX].channel = 2;
-    sensors[LEFT_FOOT_INDEX].label = "left_foot";
-    sensors[LEFT_FOOT_INDEX].multiplexer = TCA_ADDRESS_LEFT_SIDE;
-    sensors[LEFT_FOOT_INDEX].channel = 5;
-    sensors[HEAD_INDEX].label = "head";
-    sensors[HEAD_INDEX].multiplexer = TCA_ADDRESS_LEFT_SIDE;
-    sensors[HEAD_INDEX].channel = 7;
-    // add the additional sensors if build is configured that way
+    iobundle[RIGHT_UPPER_ARM_INDEX].socket.label = "right_upper_arm";
+    iobundle[RIGHT_UPPER_ARM_INDEX].socket.multiplexer = TCA_ADDRESS_RIGHT_SIDE;
+    iobundle[RIGHT_UPPER_ARM_INDEX].socket.channel = 2;
+#ifdef BODY_1
+    iobundle[RIGHT_UPPER_ARM_INDEX].message = OSCMessage("/body/1/gyro/right_upper_arm/");
+#endif
+#ifdef BODY_2
+    iobundle[RIGHT_UPPER_ARM_INDEX].message = OSCMessage("/body/2/gyro/right_upper_arm/");
+#endif
+    iobundle[RIGHT_FOOT_INDEX].socket.label = "right_foot";
+    iobundle[RIGHT_FOOT_INDEX].socket.multiplexer = TCA_ADDRESS_RIGHT_SIDE;
+    iobundle[RIGHT_FOOT_INDEX].socket.channel = 5;
+#ifdef BODY_1
+    iobundle[RIGHT_FOOT_INDEX].message = OSCMessage("/body/1/gyro/right_foot/");
+#endif
+#ifdef BODY_2
+    iobundle[RIGHT_FOOT_INDEX].message = OSCMessage("/body/2/gyro/right_foot/");
+#endif
+    iobundle[BACK_INDEX].socket.label = "back";
+    iobundle[BACK_INDEX].socket.multiplexer = TCA_ADDRESS_RIGHT_SIDE;
+    iobundle[BACK_INDEX].socket.channel = 7;
+#ifdef BODY_1
+    iobundle[BACK_INDEX].message = OSCMessage("/body/1/gyro/back/");
+#endif
+#ifdef BODY_2
+    iobundle[BACK_INDEX].message = OSCMessage("/body/2/gyro/back/");
+#endif
+    iobundle[LEFT_UPPER_ARM_INDEX].socket.label = "left_upper_arm";
+    iobundle[LEFT_UPPER_ARM_INDEX].socket.multiplexer = TCA_ADDRESS_LEFT_SIDE;
+    iobundle[LEFT_UPPER_ARM_INDEX].socket.channel = 2;
+#ifdef BODY_1
+    iobundle[LEFT_UPPER_ARM_INDEX].message = OSCMessage("/body/1/gyro/left_upper_arm/");
+#endif
+#ifdef BODY_2
+    iobundle[LEFT_UPPER_ARM_INDEX].message = OSCMessage("/body/2/gyro/left_upper_arm/");
+#endif
+    iobundle[LEFT_FOOT_INDEX].socket.label = "left_foot";
+    iobundle[LEFT_FOOT_INDEX].socket.multiplexer = TCA_ADDRESS_LEFT_SIDE;
+    iobundle[LEFT_FOOT_INDEX].socket.channel = 5;
+#ifdef BODY_1
+    iobundle[LEFT_FOOT_INDEX].message = OSCMessage("/body/1/gyro/left_foot/");
+#endif
+#ifdef BODY_2
+    iobundle[LEFT_FOOT_INDEX].message = OSCMessage("/body/2/gyro/left_foot/");
+#endif
+    iobundle[HEAD_INDEX].socket.label = "head";
+    iobundle[HEAD_INDEX].socket.multiplexer = TCA_ADDRESS_LEFT_SIDE;
+    iobundle[HEAD_INDEX].socket.channel = 7;
+#ifdef BODY_1
+    iobundle[HEAD_INDEX].message = OSCMessage("/body/1/gyro/head/");
+#endif
+#ifdef BODY_2
+    iobundle[HEAD_INDEX].message = OSCMessage("/body/2/gyro/head/");
+#endif
+    // add the additional iobundle if build is configured that way
     if (10 == NUMBER_OF_MPU) {
-      sensors[RIGHT_LOWER_ARM_INDEX].label = "right_lower_arm";
-      sensors[RIGHT_LOWER_ARM_INDEX].multiplexer = TCA_ADDRESS_RIGHT_SIDE;
-      sensors[RIGHT_LOWER_ARM_INDEX].channel = 3;
-      sensors[RIGHT_UPPER_LEG_INDEX].label = "right_upper_leg";
-      sensors[RIGHT_UPPER_LEG_INDEX].multiplexer = TCA_ADDRESS_RIGHT_SIDE;
-      sensors[RIGHT_UPPER_LEG_INDEX].channel = 4;
-      sensors[LEFT_LOWER_ARM_INDEX].label = "left_lower_arm";
-      sensors[LEFT_LOWER_ARM_INDEX].multiplexer = TCA_ADDRESS_LEFT_SIDE;
-      sensors[LEFT_LOWER_ARM_INDEX].channel = 3;
-      sensors[LEFT_UPPER_LEG_INDEX].label = "left_upper_leg";
-      sensors[LEFT_UPPER_LEG_INDEX].multiplexer = TCA_ADDRESS_LEFT_SIDE;
-      sensors[LEFT_UPPER_LEG_INDEX].channel = 4;
+      iobundle[RIGHT_LOWER_ARM_INDEX].socket.label = "right_lower_arm";
+      iobundle[RIGHT_LOWER_ARM_INDEX].socket.multiplexer = TCA_ADDRESS_RIGHT_SIDE;
+      iobundle[RIGHT_LOWER_ARM_INDEX].socket.channel = 3;
+#ifdef BODY_1
+      iobundle[RIGHT_LOWER_ARM_INDEX].message = OSCMessage("/body/1/gyro/right_lower_arm/");
+#endif
+#ifdef BODY_2
+      iobundle[RIGHT_LOWER_ARM_INDEX].message = OSCMessage("/body/2/gyro/right_lower_arm/");
+#endif
+      iobundle[RIGHT_UPPER_LEG_INDEX].socket.label = "right_upper_leg";
+      iobundle[RIGHT_UPPER_LEG_INDEX].socket.multiplexer = TCA_ADDRESS_RIGHT_SIDE;
+      iobundle[RIGHT_UPPER_LEG_INDEX].socket.channel = 4;
+#ifdef BODY_1
+      iobundle[RIGHT_UPPER_LEG_INDEX].message = OSCMessage("/body/1/gyro/right_upper_leg/");
+#endif
+#ifdef BODY_2
+      iobundle[RIGHT_UPPER_LEG_INDEX].message = OSCMessage("/body/2/gyro/right_upper_leg/");
+#endif
+      iobundle[LEFT_LOWER_ARM_INDEX].socket.label = "left_lower_arm";
+      iobundle[LEFT_LOWER_ARM_INDEX].socket.multiplexer = TCA_ADDRESS_LEFT_SIDE;
+      iobundle[LEFT_LOWER_ARM_INDEX].socket.channel = 3;
+#ifdef BODY_1
+      iobundle[LEFT_LOWER_ARM_INDEX].message = OSCMessage("/body/1/gyro/left_lower_arm/");
+#endif
+#ifdef BODY_2
+      iobundle[LEFT_LOWER_ARM_INDEX].message = OSCMessage("/body/2/gyro/left_lower_arm/");
+#endif
+      iobundle[LEFT_UPPER_LEG_INDEX].socket.label = "left_upper_leg";
+      iobundle[LEFT_UPPER_LEG_INDEX].socket.multiplexer = TCA_ADDRESS_LEFT_SIDE;
+      iobundle[LEFT_UPPER_LEG_INDEX].socket.channel = 4;
+ #ifdef BODY_1
+      iobundle[LEFT_UPPER_LEG_INDEX].message = OSCMessage("/body/1/gyro/left_upper_leg/");
+#endif
+#ifdef BODY_2
+      iobundle[LEFT_UPPER_LEG_INDEX].message = OSCMessage("/body/2/gyro/left_upper_leg/");
+#endif 
     }
     break;
   default:
@@ -1236,7 +1345,7 @@ void setup() {
   //Print/send the calibration of magnetometer - USE IT TO AUTO CALIB AGAIN
   Serial.println("Calibration data :");
   for(int i=0; i<NUMBER_OF_MPU; i++) {
-    selectI2cMultiplexerChannel(sensors[i].multiplexer, sensors[i].channel);
+    selectI2cMultiplexerChannel(iobundle[i].socket.multiplexer, iobundle[i].socket.channel);
 
     //Send calibration data to TouchDesigner
     calibration.add("MAGSCALE").add(i).add(mpu[i].getMagScaleX()).add(mpu[i].getMagScaleY()).add(mpu[i].getMagScaleZ());
@@ -1270,14 +1379,14 @@ void loop() {
   if (millis() - last_print > 100) {
     for (int i = 0; i < NUMBER_OF_MPU; i++) {
       // skip sensors with problems
-      if (!sensors[i].usable) {
+      if (!iobundle[i].socket.usable) {
         continue;
       }
-      Serial.print(sensors[i].mpu.getYaw());
+      Serial.print(iobundle[i].socket.mpu.getYaw());
       Serial.print("// ");
-      Serial.print(sensors[i].mpu.getYaw_r());
+      Serial.print(iobundle[i].socket.mpu.getYaw_r());
       Serial.print("// ");
-      Serial.print(sensors[i].mpu.getNorth());
+      Serial.print(iobundle[i].socket.mpu.getNorth());
       Serial.print("// ");
     }
     Serial.println();
@@ -1289,23 +1398,23 @@ void loop() {
 	// Send data in separate message per sensor
     for (size_t i = 0; i < NUMBER_OF_MPU; i++) {
       // skip sensors with problems
-      if (!sensors[i].usable) {
+      if (!iobundle[i].socket.usable) {
         continue;
       }
       // Fill OSC message with data
       body[i]
-          .add(mpuData[i].quaternion.x)
-          .add(mpuData[i].quaternion.y)
-          .add(mpuData[i].quaternion.z)
-          .add(mpuData[i].quaternion.w);
+          .add(iobundle[i].data.quaternion.x)
+          .add(iobundle[i].data.quaternion.y)
+          .add(iobundle[i].data.quaternion.z)
+          .add(iobundle[i].data.quaternion.w);
       body[i]
-          .add(mpuData[i].eulerangle.x)
-          .add(mpuData[i].eulerangle.y)
-          .add(mpuData[i].eulerangle.z);
+          .add(iobundle[i].data.eulerangle.x)
+          .add(iobundle[i].data.eulerangle.y)
+          .add(iobundle[i].data.eulerangle.z);
       body[i]
-          .add(mpuData[i].gyrovalue.x)
-          .add(mpuData[i].gyrovalue.y)
-          .add(mpuData[i].gyrovalue.z);
+          .add(iobundle[i].data.gyrovalue.x)
+          .add(iobundle[i].data.gyrovalue.y)
+          .add(iobundle[i].data.gyrovalue.z);
 
       // send data out
       Udp.beginPacket(outIp, outPort);
@@ -1321,23 +1430,23 @@ void loop() {
   if (cleanUpCounter > 100) {
     for (int i = 0; i < NUMBER_OF_MPU; i++) {
       // skip sensors that are already configured (i.e. usable)
-      if (sensors[i].usable) {
+      if (iobundle[i].socket.usable) {
         continue;
       }
       Serial.print("trying to resurrect ");
-      Serial.println(sensors[i].label);
+      Serial.println(iobundle[i].socket.label);
       Serial.print("* setting up gyro");
-      configureMPU9250(&sensors[i]);
-      if (sensors[i].usable) {
+      configureMPU9250(&iobundle[i].socket);
+      if (iobundle[i].socket.usable) {
         Serial.println(" ... worked");
       } else {
         Serial.println(" ... failed");
       }
-      sensors[i].usable = false;
+      iobundle[i].socket.usable = false;
 
       Serial.print("* loading calibration data");
-      loadMPU9250CalibrationData(&sensors[i]);
-      if (sensors[i].usable) {
+      loadMPU9250CalibrationData(&iobundle[i].socket);
+      if (iobundle[i].socket.usable) {
         Serial.println(" ... worked");
       } else {
         Serial.println(" ... failed");
