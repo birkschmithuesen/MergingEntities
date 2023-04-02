@@ -88,6 +88,7 @@ int state_button = LOW;  /**< current state of the button */
  *
  * @todo Also move data read from sensor here (?)
  * @see MPU9250data
+ * @see IOBundle
  */
 struct MPU9250socket {
   const char* label; /**< human readable identification of the sensor (for OSC path) */
@@ -143,6 +144,7 @@ struct GyroValue {
  * 
  * @note This is not a model for the sensor board itself.
  * @see MPU9250socket
+ * @see IOBundle
  */
 struct MPU9250data {
 	Quaternion quaternion; /**< gyroscope data as quaternion */
@@ -150,6 +152,18 @@ struct MPU9250data {
 	GyroValue gyrovalue;   /**< gyroscope data along axis */
 };
 
+/**
+ * A bundle to handle all communication from sensor to OSC message.
+ * 
+ * @see MPU9250socket
+ * @see MPU9250data
+ */
+struct IOBundle {
+	MPU9250socket socket;  /**< the source for the (sensor) data */
+	MPU9250data data;      /**< the temporary storage for the (sensor) data */
+	OSCMessage message;    /**< the target (OSC) destination for the (sensor) data */
+};
+    
 // manually create indexes to emulate a hashmap with an array
 #define LEFT_UPPER_ARM_INDEX 0  /**< index for the sensor at the left upper arm (brachium) */
 #define RIGHT_UPPER_ARM_INDEX 1 /**< index for the sensor at the right upper arm (brachium) */
