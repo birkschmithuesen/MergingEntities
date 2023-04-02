@@ -650,7 +650,16 @@ void loadMPU9250CalibrationData(MPU9250socket *skt) {
                        preferences.getFloat("gyrobiasY", 0.0),
                        preferences.getFloat("gyrobiasZ", 0.0));
 
-  // Set magnetometer calibration data
+  // set magnetometer calibration data
+  if (!(preferences.isKey("magbiasX") && preferences.isKey("magbiasY") &&
+        preferences.isKey("magbiasZ") && preferences.isKey("magscaleX") &&
+        preferences.isKey("magscaleY") && preferences.isKey("magscaleZ"))) {
+    Serial.println("-------------------------------------------------------");
+    Serial.println("magnetometer configuration data is insufficient !");
+    Serial.println("shutting down so you can go through calibration routine");
+    // put ESP32 into deep sleep (closest to shutdown)
+    esp_deep_sleep_start();
+  }
   skt->mpu.setMagBias(preferences.getFloat("magbiasX", 0.0),
                       preferences.getFloat("magbiasY", 0.0),
                       preferences.getFloat("magbiasZ", 0.0));
