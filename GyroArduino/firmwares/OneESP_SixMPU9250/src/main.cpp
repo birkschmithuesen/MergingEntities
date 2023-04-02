@@ -168,12 +168,12 @@ struct IOBundle {
 // Note that this is just the order in a global list and has no
 // connection to the sensor jacks. Look at MPU9250Socket & IOBundle
 // to fiddle with the physical routing/data tagging.
-#define LEFT_UPPER_ARM_INDEX 0  /**< index for the sensor at the left upper arm (brachium) */
-#define RIGHT_UPPER_ARM_INDEX 1 /**< index for the sensor at the right upper arm (brachium) */
+#define LEFT_UPPER_ARM_INDEX 1  /**< index for the sensor at the left upper arm (brachium) */
+#define RIGHT_UPPER_ARM_INDEX 3 /**< index for the sensor at the right upper arm (brachium) */
 #define LEFT_FOOT_INDEX 2       /**< index for the sensor at the left foot (pes) */
-#define RIGHT_FOOT_INDEX 3      /**< index for the sensor at the right foot (pes) */
+#define RIGHT_FOOT_INDEX 5      /**< index for the sensor at the right foot (pes) */
 #define BACK_INDEX 4            /**< index for the sensor at the back (dorsum) */
-#define HEAD_INDEX 5            /**< index for the sensor at the head (cranium) */
+#define HEAD_INDEX 0            /**< index for the sensor at the head (cranium) */
 #define LEFT_LOWER_ARM_INDEX 6  /**< index for the sensor at the left lower arm (antebrachium) */
 #define RIGHT_LOWER_ARM_INDEX 7 /**< index for the sensor at the right lower arm (antebrachium) */
 #define LEFT_UPPER_LEG_INDEX 8  /**< index for the sensor at the left thigh (femur) */
