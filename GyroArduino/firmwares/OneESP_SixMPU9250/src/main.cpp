@@ -579,15 +579,39 @@ void configureMPU9250(MPU9250socket *skt) {
   QuatFilterSel sel{QuatFilterSel::MADGWICK};
 
   // select channel on multiplexer
-  if (!selectI2cMultiplexerChannel(skt->multiplexer,
-                                   skt->channel)) {
+  if (!selectI2cMultiplexerChannel(skt->multiplexer, skt->channel)) {
     // selection failed
     skt->usable = false;
 #ifdef DEBUG
     Serial.print(skt->channel);
-    Serial.println(skt->multiplexer);
+    Serial.println(skt->multiplexer, HEX);
     Serial.println(" ... failed at multiplexer channel selection");
 #endif
+    return;
+  }
+
+  // check if suitable sensor is connected
+  if (!skt->mpu.isConnected()) {
+    Serial.print("!!! unsuitable sensor for ");
+    Serial.print(skt->label);
+    Serial.print(" detected (multiplexer 0x");
+    Serial.print(skt->multiplexer);
+    Serial.print(", channel ");
+    Serial.print(skt->channel);
+    Serial.println(") !!!");
+    Serial.println("* gyro seems ");
+    if (skt->mpu.isConnectedMPU9250()) {
+      Serial.println("suitable");
+    } else {
+      Serial.println("wrong");
+    }
+    Serial.println("* magnetometer seems ");
+    if (skt->mpu.isConnectedAK8963()) {
+      Serial.println("suitable");
+    } else {
+      Serial.println("wrong");
+    }
+    skt->usable = false;
     return;
   }
 
@@ -1453,7 +1477,7 @@ void loop() {
       }
       Serial.print("trying to resurrect ");
       Serial.println(iobundle[i].socket.label);
-      Serial.print("* setting up gyro");
+      Serial.print("* setting up the gyroscope");
       configureMPU9250(&iobundle[i].socket);
       if (iobundle[i].socket.usable) {
         Serial.println(" ... worked");
