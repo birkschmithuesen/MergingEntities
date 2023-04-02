@@ -593,7 +593,9 @@ void configureMPU9250(MPU9250socket *skt) {
     return;
   }
 
-  // check if suitable sensor is connected
+  /*/ check if suitable sensor is connected
+   * This was an attempt, but probably better done after mpu.setup()
+   * and with actual hardware
   if (!skt->mpu.isConnected()) {
     Serial.print("!!! unsuitable sensor for ");
     Serial.print(skt->label);
@@ -616,7 +618,7 @@ void configureMPU9250(MPU9250socket *skt) {
     }
     skt->usable = false;
     return;
-  }
+  }*/
 
 #ifdef DEBUG
   Serial.print("using multiplexer 0x");
