@@ -1440,7 +1440,12 @@ void loop() {
       if (iobundle[i].socket.usable) {
         Serial.println(" ... worked");
       } else {
+		// could not configure the MPU, so
+		// ... make sure socket is marked unusable
+        iobundle[i].socket.usable = false;
         Serial.println(" ... failed");
+        // return early to avoid unnecessary further work
+        return;
       }
       iobundle[i].socket.usable = false;
 
