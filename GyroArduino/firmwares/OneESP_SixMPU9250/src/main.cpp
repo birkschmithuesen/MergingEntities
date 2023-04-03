@@ -898,6 +898,8 @@ void calibrateNorth() {
     }
     preferences.putFloat("north", theta);
     preferences.end();
+    Serial.println("new north from upper_arm_left for rotation is: ");
+    Serial.print(theta);
     Serial.println(" ... done");
   }
 }

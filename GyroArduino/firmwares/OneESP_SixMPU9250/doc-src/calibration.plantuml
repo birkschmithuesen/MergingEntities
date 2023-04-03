@@ -66,7 +66,7 @@ endif
 :both LEDs on;
 
 :if stage north should be set
-point gyro on input 1 (head) direction FOH;
+point gyro on hardware input 2 (left_upper_arm) direction FOH;
 
 :do not move sensors for 10 seconds 
 and hold button pressed to apply new north;
