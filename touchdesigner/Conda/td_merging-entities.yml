@@ -7,6 +7,7 @@ dependencies:
   - certifi=2022.5.18.1=py39hcbf5309_0
   - cudatoolkit=11.7.0=ha6f8bbd_10
   - cupy=10.5.0=py39hc474d4a_0
+  - fastrlock=0.8=py39h415ef7b_2
   - intel-openmp=2022.1.0=h57928b3_3787
   - libblas=3.9.0=14_win64_mkl
   - libcblas=3.9.0=14_win64_mkl
@@ -30,7 +31,9 @@ dependencies:
     - astunparse==1.6.3
     - cachetools==5.2.0
     - charset-normalizer==2.0.12
-    - fastrlock==0.8
+    - cloudpickle==2.2.1
+    - decorator==5.1.1
+    - dm-tree==0.1.8
     - flatbuffers==1.12
     - gast==0.4.0
     - google-auth==2.6.6
@@ -41,6 +44,7 @@ dependencies:
     - idna==3.3
     - importlib-metadata==4.11.4
     - keras==2.9.0
+    - keras-mdn-layer==0.3.0
     - keras-preprocessing==1.1.2
     - libclang==14.0.1
     - markdown==3.3.7
@@ -61,6 +65,7 @@ dependencies:
     - tensorflow==2.9.1
     - tensorflow-estimator==2.9.0
     - tensorflow-io-gcs-filesystem==0.26.0
+    - tensorflow-probability==0.17.0
     - termcolor==1.1.0
     - typing-extensions==4.2.0
     - urllib3==1.26.9
