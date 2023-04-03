@@ -205,10 +205,13 @@ class MLExtension:
 				debug("Couldn't Fit Model", e)
 		#self.Model.summary()
 		debug("Initial Training finished... ")
+		self.SaveModel()
 
 	def SaveModel(self):
 		location = parent.Ml.par.Modelname
-		self.Model.save('Models/' + location) #saving as SavedModel format
+		suffix = os.path.basename(os.path.dirname(self.Trainingdata.val)) + location
+		print(suffix)
+		self.Model.save('Models/' + suffix) #saving as SavedModel format
 		self.CreateModelConfigFile()
 		debug("Saved Model")
 
