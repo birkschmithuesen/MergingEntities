@@ -31,6 +31,8 @@ import json
 
 from TDStoreTools import StorageManager
 import TDFunctions as TDF
+import time
+import threading
 
 class MLExtension:
 	"""
@@ -177,6 +179,11 @@ class MLExtension:
 		return a[np.arange(a.shape[0]-n+1)[:,None] + np.arange(n)]
 
 	def FitModel(self):
+		seperateThread = threading.Thread(target=self.ComputeFitModel)
+		seperateThread.start()
+
+	def ComputeFitModel(self):
+		start_time = time.time
 		debug("Fitting Model")
 		if self.Modelname == 'linear_regression':
 			debug("Starting Linear Regression Fit")
@@ -204,7 +211,9 @@ class MLExtension:
 			except ValueError as e:
 				debug("Couldn't Fit Model", e)
 		#self.Model.summary()
-		debug("Initial Training finished... ")
+		end_time = time.time 
+		debug("Initial Training finished... "+str(end_time-start_time))
+
 
 	def SaveModel(self):
 		location = parent.Ml.par.Modelname
