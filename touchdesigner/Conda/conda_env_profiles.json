@@ -13,5 +13,10 @@
 		"username": "CapturedBodies",
 		"environment-name": "td_merging-entities",
 		"environment-location": " C:/Users/CapturedBodies/anaconda3/envs/td_merging-entities"
+	},
+	"Nina":{
+		"username": "Nina",
+		"environment-name": "td_merging-entities",
+		"environment-location": "C:/Users/Nina/anaconda3/envs/td_merging-entities"
 	}
  }
