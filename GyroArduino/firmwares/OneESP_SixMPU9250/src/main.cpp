@@ -295,11 +295,6 @@ uint8_t countI2cDevices() {
 //-------WIFI SETTINGS AND FUNCTIONS-------
 #ifdef BODY_1
 int outPort = 8000;  /**< UDP server port on OSC receiver (i.e. central server) */
-/** OSC messages with senor values for given part */
-OSCMessage body[] = {
-    OSCMessage("/body/1/gyro/left_upper_arm/"), OSCMessage("/body/1/gyro/right_upper_arm/"),
-    OSCMessage("/body/1/gyro/left_foot/"), OSCMessage("/body/1/gyro/right_foot/"),
-    OSCMessage("/body/1/gyro/back/"), OSCMessage("/body/1/gyro/head/")};
 OSCMessage calibration("/calibration/1");  /**< OSC endpoint for calibration messages */
 /** scaling factors for magnetometer */
 float magscale[6][3] = {{1.01, 1.06, 0.94}, {1.01, 1.00, 0.99},
@@ -313,11 +308,6 @@ float magbias[6][3] = {{-40.82, -108.61, -405.33}, {128.62, 104.29, -164.14},
 
 #ifdef BODY_2
 int outPort = 8001;  /**< UDP server port on OSC receiver (i.e. central server) */
-/** OSC messages with senor values for given part */
-OSCMessage body[] = {
-    OSCMessage("/body/2/gyro/left_upper_arm/"), OSCMessage("/body/2/gyro/right_upper_arm/"),
-    OSCMessage("/body/2/gyro/left_foot/"), OSCMessage("/body/2/gyro/right_foot/"),
-    OSCMessage("/body/2/gyro/back/"), OSCMessage("/body/2/gyro/head/")};
 OSCMessage calibration("/calibration/2");  /**< OSC endpoint for calibration messages */
 /** scaling factors for magnetometer */
 float magscale[6][3] = {{0.99, 1.01, 1.00}, {0.98, 1.00, 1.02},
@@ -1449,27 +1439,27 @@ void loop() {
         continue;
       }
       // Fill OSC message with data
-      body[i]
+      iobundle[i].message
           .add(iobundle[i].data.quaternion.x)
           .add(iobundle[i].data.quaternion.y)
           .add(iobundle[i].data.quaternion.z)
           .add(iobundle[i].data.quaternion.w);
-      body[i]
+      iobundle[i].message
           .add(iobundle[i].data.eulerangle.x)
           .add(iobundle[i].data.eulerangle.y)
           .add(iobundle[i].data.eulerangle.z);
-      body[i]
+      iobundle[i].message
           .add(iobundle[i].data.gyrovalue.x)
           .add(iobundle[i].data.gyrovalue.y)
           .add(iobundle[i].data.gyrovalue.z);
 
       // send data out
       Udp.beginPacket(outIp, outPort);
-      body[i].send(Udp);
+      iobundle[i].message.send(Udp);
       Udp.endPacket();
 
       // clear up message cache
-      body[i].empty();
+      iobundle[i].message.empty();
     }
   }
 
