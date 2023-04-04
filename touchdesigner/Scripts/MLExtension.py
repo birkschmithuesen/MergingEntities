@@ -209,9 +209,9 @@ class MLExtension:
 
 	def SaveModel(self):
 		location = parent.Ml.par.Modelname
-		suffix = os.path.basename(os.path.dirname(self.Trainingdata.val)) + location
-		print(suffix)
-		self.Model.save('Models/' + suffix) #saving as SavedModel format
+		#suffix = os.path.basename(os.path.dirname(self.Trainingdata.val)) + location
+		#print(suffix)
+		self.Model.save('Models/' + location) #suffix) #saving as SavedModel format
 		self.CreateModelConfigFile()
 		debug("Saved Model")
 
