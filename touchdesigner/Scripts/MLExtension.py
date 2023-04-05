@@ -31,7 +31,7 @@ import json
 
 from TDStoreTools import StorageManager
 import TDFunctions as TDF
-
+import time
 class MLExtension:
 	"""
 	MLExtension description
@@ -178,6 +178,7 @@ class MLExtension:
 
 	def FitModel(self):
 		debug("Fitting Model")
+		start_time = time.time()
 		if self.Modelname == 'linear_regression':
 			debug("Starting Linear Regression Fit")
 			self.Model.fit(self.Features,self.Targets,epochs=self.Initialepochs.val,batch_size=self.Batchsize.val,shuffle=True)
@@ -204,7 +205,7 @@ class MLExtension:
 			except ValueError as e:
 				debug("Couldn't Fit Model", e)
 		#self.Model.summary()
-		debug("Initial Training Fit finished... ")
+		debug("Initial Training Fit finished... : "+str(time.time()-start_time) + "time")
 
 	def SaveModel(self,location,name):
 		#suffix = os.path.basename(os.path.dirname(self.Trainingdata.val)) + location
