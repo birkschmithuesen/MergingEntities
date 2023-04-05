@@ -69,7 +69,7 @@ SynthDef(\lead, {
 
 	// add some 70's euro-space-rock echo
 	sig = sig * exc * 0.4;
-	sig = CombN.ar(sig, 0.31, 0.31, 2, 1, sig) * amp;
+	sig = CombN.ar(sig, 0.2, 0.2, 0.5, 1, sig) * amp;
 	Out.ar(out, sig);
 }).add;
 
