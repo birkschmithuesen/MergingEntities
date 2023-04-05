@@ -205,14 +205,18 @@ class MLExtension:
 				debug("Couldn't Fit Model", e)
 		#self.Model.summary()
 		debug("Initial Training finished... ")
+		self.SaveModel()
 
-	def SaveModel(self, location, name):
-		self.Model.save(location + '/' + name) #saving as SavedModel format
-		self.CreateModelConfigFile(location, name)
+	def SaveModel(self):
+		location = parent.Ml.par.Modelname
+		#suffix = os.path.basename(os.path.dirname(self.Trainingdata.val)) + location
+		#print(suffix)
+		self.Model.save('Models/' + location) #suffix) #saving as SavedModel format
+		self.CreateModelConfigFile()
 		debug("Saved Model")
 
-	def CreateModelConfigFile(self, location, name):
-		file = location + '/' + name
+	def CreateModelConfigFile(self):
+		location = parent.Ml.par.Modelname
 		json_config = {}
 		json_config['Model_Type'] = self.Modeltype.val
 		json_config['MDN_Layer'] = self.MDNLayer.val
@@ -227,7 +231,7 @@ class MLExtension:
 		json_config['HIDDEN_DIM'] = self.Hiddendim.val
 		json_config['LEARNING_RATE'] = self.Learningrate.val
 		json_config['TIME_STEPS'] = self.Timesteps.val
-		with open(file + '/model_config.json', 'w') as jsonFile:
+		with open('Models/' + location + '/model_config.json', 'w') as jsonFile:
 			json.dump(json_config,jsonFile)
 
 	def LoadModel(self):

@@ -14,12 +14,14 @@ Get an overview in the flowchart.PDF
 * Light: MagicQ (chamsys) to calibrate the Movingheads
 
 ## Machine Learning Install
-#### Windows 11
-#### TouchDesigner  Build 2022.32120
-#### Python 3.9.5
-#### CUDA 11.2
-#### cuDNN 8.1.1
-#### TensorFlow 2.9.0
+#### Versions
+* Windows 11
+* TouchDesigner  Build 2022.32120
+* Python 3.9.5
+* CUDA 11.2
+* cuDNN 8.1.1
+* TensorFlow 2.9.0
+#### Install
 TouchDesigner will always use its shipped cuDNN file, no matter which conda environment is loaded. Therefore we need to build the system around this cuDNN file -> cuDNN 8.1.1
 It was not able to include a matching Cudatoolkit and cuDNN file in the environment therefore this needs to be downloaded and installed manually on Windows level. 
 * Step 1: Download and install CUDA Toolkit v11.2.2: https://developer.nvidia.com/cuda-11-2-2-download-archive (you only need the runtime libraries, selectable through custom install)
