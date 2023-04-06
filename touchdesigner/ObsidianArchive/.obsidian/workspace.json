@@ -6,20 +6,8 @@
       {
         "id": "3a846188a421bed4",
         "type": "tabs",
-        "dimension": 87.30964467005076,
+        "dimension": 56.40862944162437,
         "children": [
-          {
-            "id": "98a0efe97b301414",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "Models/New Model.md",
-                "mode": "source",
-                "source": false
-              }
-            }
-          },
           {
             "id": "5c82973fef5323ac",
             "type": "leaf",
@@ -52,15 +40,17 @@
       {
         "id": "25552ddba26b50e6",
         "type": "tabs",
-        "dimension": 12.690355329949238,
+        "dimension": 43.59137055837564,
         "children": [
           {
             "id": "7e65ef59595fbca6",
             "type": "leaf",
             "state": {
-              "type": "database-plugin",
+              "type": "markdown",
               "state": {
-                "file": "Models/Modells DB.md"
+                "file": "Models/New Template Model Old.md",
+                "mode": "source",
+                "source": false
               }
             }
           }
@@ -130,7 +120,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "Models/New Model.md",
+                "file": "Models/New Template Model Old.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -147,7 +137,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "Models/New Model.md",
+                "file": "Models/New Template Model Old.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -170,7 +160,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "Models/New Model.md"
+                "file": "Models/New Template Model Old.md"
               }
             }
           }
@@ -194,12 +184,14 @@
       "obsidian-focus-mode:Toggle Focus Mode (Shift + Click to show active pane only)": false
     }
   },
-  "active": "98a0efe97b301414",
+  "active": "7e65ef59595fbca6",
   "lastOpenFiles": [
     "Models/Modells DB.md",
     "Models/New Model.md",
     "Models/New Template Model Old.md",
+    "Models/test.md",
     "Recordings/Dummy Recording 1.md",
+    "test.md",
     "Modells/Dummy Modell.md",
     "Overview.canvas",
     "Modells/Dummy Modell 3.md",

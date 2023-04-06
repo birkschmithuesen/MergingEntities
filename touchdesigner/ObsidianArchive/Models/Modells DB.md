@@ -63,6 +63,7 @@ columns:
       - { label: "Gesture", value: "Gesture", color: "hsl(304,100%,50%)"}
       - { label: "Impro", value: "Impro", color: "hsl(135,100%,50%)"}
       - { label: "Other", value: "Other", color: "hsl(32,100%,50%)"}
+      - { label: "", value: "", color: "hsl(70, 95%, 90%)"}
     config:
       enable_media_view: true
       link_alias_enabled: true
@@ -109,6 +110,7 @@ columns:
       - { label: "Dock11 Eden", value: "Dock11 Eden", color: "hsl(167, 95%, 90%)"}
       - { label: "Dock11 Digital", value: "Dock11 Digital", color: "hsl(118, 95%, 90%)"}
       - { label: "Alte Hölle", value: "Alte Hölle", color: "hsl(112, 95%, 90%)"}
+      - { label: "", value: "", color: "hsl(181, 95%, 90%)"}
     config:
       enable_media_view: true
       link_alias_enabled: true
@@ -195,6 +197,7 @@ columns:
     options:
       - { label: "Back", value: "Back", color: "hsl(115, 95%, 90%)"}
       - { label: "LeftFoot", value: "LeftFoot", color: "hsl(226, 95%, 90%)"}
+      - { label: "Head", value: "Head", color: "hsl(135, 95%, 90%)"}
     config:
       enable_media_view: true
       link_alias_enabled: true
@@ -283,6 +286,7 @@ columns:
     options:
       - { label: "lstm", value: "lstm", color: "hsl(32, 95%, 90%)"}
       - { label: "linear regression", value: "linear regression", color: "hsl(59, 95%, 90%)"}
+      - { label: "", value: "", color: "hsl(48, 95%, 90%)"}
     config:
       enable_media_view: true
       link_alias_enabled: true
