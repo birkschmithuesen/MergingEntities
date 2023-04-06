@@ -1,0 +1,7 @@
+{
+	"nodes":[
+		{"type":"text","text":"```dataview\ntable Name, rating\nfrom \"Modells\"\nwhere rating > 0\nwhere contains(Performers, \"Kate\") or contains(Performers, \"Howool\")\n```\n","id":"d71a9cdd905aabea","x":-492,"y":-116,"width":812,"height":256},
+		{"id":"82da3d869079d01b","x":-492,"y":200,"width":812,"height":180,"type":"text","text":"```dataviewjs\nfor (let group of dv.pages(\"#book\").where(p => p[\"time-read\"].year == 2021).groupBy(p => p.genre)) {\n\tdv.header(3, group.key);\n\tdv.table([\"Name\", \"Time Read\", \"Rating\"],\n\t\tgroup.rows\n\t\t\t.sort(k => k.rating, 'desc')\n\t\t\t.map(k => [k.file.link, k[\"time-read\"], k.rating]))\n}\n```"}
+	],
+	"edges":[]
+}
