@@ -32,6 +32,7 @@ import json
 from TDStoreTools import StorageManager
 import TDFunctions as TDF
 import time
+import datetime
 class MLExtension:
 	"""
 	MLExtension description
@@ -71,6 +72,7 @@ class MLExtension:
 		self.SetTrainingDataType()
 		self.Features = ''
 		self.Targets = ''
+		self.fitTime = tdu.Dependency(-1)
 
 		# Config Attributes
 		config_attributes = [ 			
@@ -205,14 +207,77 @@ class MLExtension:
 			except ValueError as e:
 				debug("Couldn't Fit Model", e)
 		#self.Model.summary()
-		debug("Initial Training Fit finished... : "+str(time.time()-start_time) + "time")
+		self.fitTime = time.time()-start_time
+		debug("Initial Training Fit finished... : "+str(self.fitTime) + "time")
+
 
 	def SaveModel(self,location,name):
 		#suffix = os.path.basename(os.path.dirname(self.Trainingdata.val)) + location
 		#print(suffix)
 		self.Model.save(location + '/' + name) #suffix) #saving as SavedModel format
 		self.CreateModelConfigFile(location,name)
+		if(parent.Ml.par.Obsidianexport):
+			self.CreateObsidianMDFile()
 		debug("Saved Model")
+
+	def CreateObsidianMDFile(self):
+		print("obsidian Export:")
+		
+		file = parent.Ml.par.Obsidianfolder+"/"+parent.Ml.par.Modelname+".md"
+		#Obsidianfolder
+		#Context
+		#Location
+		#Performers
+		with open(file,'w') as md:
+			md.write('---\n')
+			md.write('Description: describe here \n')
+			md.write('Rating: -1 \n')
+			md.write('Context: '+parent.Ml.par.Context+'\n')
+			md.write('DateTime: ' + datetime.datetime.now().strftime('%Y-%m-%dT%H:%M:%S')+'\n')
+			md.write('Location: '+parent.Ml.par.Location+'\n')
+			md.write('Targets:\n')
+			targets = self.Selectedtargets.val.split()
+			for t in targets:
+				md.write('  - '+t.replace('*','')+'\n')
+			md.write('Features:\n')
+			features = str(self.Selectedfeatures.val).split()
+			for f in features:
+				md.write('  - '+f.replace('*','')+'\n')
+			performers = str(parent.Ml.par.Performers).split()
+			md.write('Performers:\n')
+			for p in performers:
+				md.write('  - '+p+'\n')
+			md.write('Type: '+str(self.Modeltype.val)+'\n')
+			md.write('InputDim: '+str(self.Inputdim.val)+'\n')
+			md.write('OutputDim: '+str(self.Outputdim.val)+'\n')
+
+			md.write('Batch_Size: '+str(self.Batchsize.val)+'\n')
+
+			md.write('Epochs: '+str(self.Epochs.val)+'\n')
+			md.write('Init_Epochs: '+str(self.Initialepochs.val)+'\n')
+
+			md.write('HiddenDim: '+str(self.Hiddendim.val)+'\n')
+
+			md.write('LearningRate: '+str(self.Learningrate.val)+'\n')
+
+
+			md.write('TimeSteps: '+str(self.Timesteps.val)+'\n')
+
+
+			md.write('ComputationTime: '+str(self.fitTime)+'\n')
+			if(parent.Ml.par.Mdnlayer):
+				md.write('MDN: true\n')
+			else:
+				md.write('MDN: false\n')
+				
+			
+			md.write('---\n')
+			folder_path = os.path.dirname(self.Trainingdata.val)
+			upper_folder_name = os.path.split(folder_path)[-2].upper()
+			md.write('Mod_Rec:: [[Recordings/'+upper_folder_name+'.md|'+upper_folder_name+']]')			
+		
+
+
 
 	def CreateModelConfigFile(self,location,name):
 		file = location + '/' + name
