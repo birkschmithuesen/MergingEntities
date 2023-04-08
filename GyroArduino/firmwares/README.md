@@ -34,8 +34,9 @@ all the features/functionality.
    doxygen DoxyFile
 
 # Calibration procedure
-The sensors need to be calibrated when at a new location. The procedure
-follows the following steps:
+The sensors need to be calibrated when at a new location. 
+The order for calibration is physical input: 2, 4, 3, 6, 5, 1
+The procedure follows the following steps:
 
 ![controller/sensor callibration routine](OneESP_SixMPU9250/doc-src/calibration.png "calibration flowchart")
 
