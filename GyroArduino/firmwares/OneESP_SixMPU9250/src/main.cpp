@@ -38,7 +38,7 @@
 #define BODY_1  /**< indicate individal controler (and thus configuration) */
 
 // Set the magnetic declination of the light
-#define MAG_DECLINATION 2.53  /**< magnetic declination of stage light */
+#define MAG_DECLINATION 4.02  /**< magnetic declination of stage light */
 
 // Define BUTTON to activate the button
 #define BUTTON  /**< indicate existence of button (to trigger calibration procedure) */
