@@ -1,10 +1,10 @@
 OscMoog{
-	var <synth, address;
+	var <synth, address, detune_min, detune_max;
 
 	classvar ctrcutoff, ctrres, ctrdepth, ctrspeed;
 
-	*new { arg synth, address;
-		^super.newCopyArgs(synth, address).init;
+	*new { arg synth, address, detune_min, detune_max;
+		^super.newCopyArgs(synth, address, detune_min, detune_max).init;
 	}
 
 	init {
@@ -34,6 +34,11 @@ OscMoog{
 			);
 			if (msg[5] != nil,
 				{synth.set(\speed, ctrspeed.map(msg[5]));},
+				{("received wrong OSC message length on address: " ++ address).postln}
+			);
+			if (msg[6] != nil,
+				{synth.set(\detune, msg[6].linlin(0, 1, detune_min, detune_max));
+				},
 				{("received wrong OSC message length on address: " ++ address).postln}
 			);
 		},
@@ -120,10 +125,10 @@ OscSaw{
 
 
 OscLead{
-	var <synth, address, degree_min, degree_max;
+	var <synth, address, degree_min, degree_max, detune_min, detune_max;
 
-	*new {arg synth, address, degree_min, degree_max;
-		^super.newCopyArgs(synth, address, degree_min, degree_max).init;
+	*new {arg synth, address, degree_min, degree_max, detune_min, detune_max;
+		^super.newCopyArgs(synth, address, degree_min, degree_max, detune_min, detune_max).init;
 	}
 
 	init {
@@ -137,6 +142,11 @@ OscLead{
 			);
 			if (msg[2] != nil,
 				{synth.set(\degree, msg[2].linlin(0, 1, degree_min, degree_max).round);
+				},
+				{("received wrong OSC message length on address: " ++ address).postln}
+			);
+			if (msg[3] != nil,
+				{synth.set(\detune, msg[3].linlin(0, 1, detune_min, detune_max));
 				},
 				{("received wrong OSC message length on address: " ++ address).postln}
 			);
@@ -185,7 +195,7 @@ OscKling{
 				{("received wrong OSC message length on address: " ++ address).postln}
 			);
 			if (msg[6] != nil,
-				{synth.set(\dens, msg[6].linlin(0, 1, 1.0, 20.0));
+				{synth.set(\dens, msg[6].linlin(0, 1, 5.0, 15.0));
 				},
 				{("received wrong OSC message length on address: " ++ address).postln}
 			);

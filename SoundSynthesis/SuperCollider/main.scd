@@ -30,7 +30,7 @@ var scale;
 (~path++"synthlib.scd").load;
 
 // define number of performers bodies
-~numBodies = 1;
+~numBodies = 2;
 
 // create Synths
 scale = FloatArray[48, 55, 60, 67];//some 5ths starting from c4
@@ -51,8 +51,8 @@ scale = FloatArray[48, 55, 60, 67];//some 5ths starting from c4
 
 
 // make the Synth controllable via OSC
-~oscMoog = {arg i; OscMoog.new(~moogs[i], ('/moog/' ++ i))}!~numBodies;
-~oscMoogGroup = OscDetuneGroup.new(~moogGroup, ('/moog/group'), 0.0, 2.0);
+~oscMoog = {arg i; OscMoog.new(~moogs[i], ('/moog/' ++ i), 0.0, 1.3)}!~numBodies;
+~oscMoogGroup = OscStandartGroup.new(~moogGroup, ('/moog/group'), 0.0, 2.0);
 
 ~oscNoise = {arg i; OscNoise.new(~noises[i], ('/noise/' ++ i))}!~numBodies;
 ~oscNoiseGroup = OscStandartGroup.new(~noiseGroup, ('/noise/group'));
@@ -60,8 +60,8 @@ scale = FloatArray[48, 55, 60, 67];//some 5ths starting from c4
 ~oscSaw = {arg i; OscSaw.new(~saws[i], ('/saw/' ++ i))}!~numBodies;
 ~oscSawGroup = OscDetuneGroup.new(~sawGroup, ('/saw/group'), 1.01, 1.5);
 
-~oscLead = {arg i; OscLead.new(~leads[i], ('/lead/' ++ i), 0, 13)}!~numBodies;
-~oscLeadGroup = OscDetuneGroup.new(~leadGroup, ('/lead/group'), 0.04, 1.0);
+~oscLead = {arg i; OscLead.new(~leads[i], ('/lead/' ++ i), 0, 13, 0.04, 2.0)}!~numBodies;
+~oscLeadGroup = OscStandartGroup.new(~leadGroup, ('/lead/group'));
 )
 
 

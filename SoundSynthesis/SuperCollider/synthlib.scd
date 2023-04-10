@@ -50,7 +50,7 @@ SynthDef(\saw, {
 
 
 SynthDef(\lead, {
-	arg amp = 1, exc = 1, degree = 7, detune = 0.04, out = 0;
+	arg amp = 1, exc = 1, degree = 7, detune = 0.04, out = 0, pan = 0;
 	var scale, buffer, sig;
 	scale =  FloatArray[0, 3, 5, 7, 10]; // dorian scale FloatArray[0, 2, 3.2, 5, 7, 9, 10];
 	buffer = Buffer.alloc(s, scale.size,1, {|b| b.setnMsg(0, scale) });
