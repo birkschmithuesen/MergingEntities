@@ -41,6 +41,11 @@ OscMoog{
 				},
 				{("received wrong OSC message length on address: " ++ address).postln}
 			);
+			if (msg[7] != nil,
+				{synth.set(\pan, msg[7].linlin(0, 1, -1, 1));
+				},
+				{("received wrong OSC message length on address: " ++ address).postln}
+			);
 		},
 		(address)
 		);
@@ -73,6 +78,11 @@ OscNoise{
 			);
 			if (msg[3] != nil,
 				{synth.set(\moog_gain, msg[3].linlin(0, 1, 0.0, 3.9));},
+				{("received wrong OSC message length on address: " ++ address).postln}
+			);
+			if (msg[4] != nil,
+				{synth.set(\pan, msg[4].linlin(0, 1, -1.0, 1.0));
+				},
 				{("received wrong OSC message length on address: " ++ address).postln}
 			);
 			/*
@@ -147,6 +157,11 @@ OscLead{
 			);
 			if (msg[3] != nil,
 				{synth.set(\detune, msg[3].linlin(0, 1, detune_min, detune_max));
+				},
+				{("received wrong OSC message length on address: " ++ address).postln}
+			);
+			if (msg[4] != nil,
+				{synth.set(\pan, msg[4].linlin(0, 1, -1.0, 1.0));
 				},
 				{("received wrong OSC message length on address: " ++ address).postln}
 			);

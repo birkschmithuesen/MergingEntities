@@ -78,7 +78,7 @@ scale = FloatArray[48, 55, 60, 67];//some 5ths starting from c4
 (~path++"synthlib.scd").load;
 
 // define number of performers bodies
-~numBodies = 1;
+~numBodies = 2;
 
 // create Synths
 ~klings = {Synth.head(~klingGroup, \kling)}!~numBodies;
