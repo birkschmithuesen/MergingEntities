@@ -120,7 +120,15 @@ class MLExtension:
 		debug(['GPU Devices', device_list])
 		debug(['GPU Logical Devices', vGpus_device_list])
 
+	def UpdateModelName(self):
+		folder_path = os.path.dirname(self.Trainingdata.val)
+		upper_folder_name = os.path.split(folder_path)[-1]
+		suffix = parent.Ml.par.Suffix
+		targets = str(self.Selectedtargets.val).replace('*','').replace(' ','_')
+		parent.Ml.par.Modelname = (upper_folder_name+"_M_"+suffix+"_"+targets+"_"+str(datetime.datetime.now().strftime('%H:%M'))).replace('-','_').replace(':','_').replace('*','').replace('/','').replace('[','').replace(']','')
+
 	def InitiateModel(self):
+		self.UpdateModelName()	
 		with tf.device(tf.config.list_logical_devices('GPU')[0].name):
 			self.Model = Sequential()
 			debug("Initiated Model")
@@ -222,8 +230,10 @@ class MLExtension:
 
 	def CreateObsidianMDFile(self):
 		print("obsidian Export:")
+		#upper_folder_name = os.path.split(location)[-1]#.upper()
+		file = str(parent.Ml.par.Filelocation)+"/"+str(parent.Ml.par.Modelname)+"/"+str(parent.Ml.par.Modelname)+".md"
+		#file = parent.Ml.par.Obsidianfolder+"/"+parent.Ml.par.Modelname+".md"
 		
-		file = parent.Ml.par.Obsidianfolder+"/"+parent.Ml.par.Modelname+".md"
 		#Obsidianfolder
 		#Context
 		#Location
@@ -250,9 +260,7 @@ class MLExtension:
 			md.write('Type: '+str(self.Modeltype.val)+'\n')
 			md.write('InputDim: '+str(self.Inputdim.val)+'\n')
 			md.write('OutputDim: '+str(self.Outputdim.val)+'\n')
-
 			md.write('Batch_Size: '+str(self.Batchsize.val)+'\n')
-
 			md.write('Epochs: '+str(self.Epochs.val)+'\n')
 			md.write('Init_Epochs: '+str(self.Initialepochs.val)+'\n')
 
@@ -269,13 +277,27 @@ class MLExtension:
 				md.write('MDN: true\n')
 			else:
 				md.write('MDN: false\n')
-				
-			
+			md.write('MDN_Distribution: '+str(parent.Ml.par.Mdndistribution)+'\n')
+
 			md.write('---\n')
 			folder_path = os.path.dirname(self.Trainingdata.val)
-			upper_folder_name = os.path.split(folder_path)[-2].upper()
-			md.write('Mod_Rec:: [[Recordings/'+upper_folder_name+'.md|'+upper_folder_name+']]')			
-		
+			upper_folder_name = os.path.split(folder_path)[-1]
+			md.write('Mod_Rec:: [['+upper_folder_name+']]\n')			
+
+			md.write('# Notes:\n\n\n')
+
+			
+			#md.write('# Video:\n')
+			#md.write('![The Video](./Video_rec.mov)\n\n\n')
+
+			md.write('# Used Recordings:\n')
+			md.write('![['+upper_folder_name+']]\n')			
+			#for m in loadedModels:
+			#	md.write('  - [['+m.replace('*','')+']]\n')		
+			md.write('\n\n')
+
+			md.write('# Tags:\n')
+			md.write('  - #Model\n')		
 
 
 
