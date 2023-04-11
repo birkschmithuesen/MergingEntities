@@ -125,7 +125,7 @@ class MLExtension:
 		upper_folder_name = os.path.split(folder_path)[-1]
 		suffix = parent.Ml.par.Suffix
 		targets = str(self.Selectedtargets.val).replace('*','').replace(' ','_')
-		parent.Ml.par.Modelname = (upper_folder_name+"_M_"+suffix+"_"+targets+"_"+str(datetime.datetime.now().strftime('%H:%M'))).replace('-','_').replace(':','_').replace('*','').replace('/','').replace('[','').replace(']','')
+		parent.Ml.par.Modelname = (upper_folder_name+"_M_"+suffix+"_"+str(datetime.datetime.now().strftime('%H:%M'))+"_"+targets).replace('-','_').replace(':','_').replace('*','').replace('/','').replace('[','').replace(']','')
 
 	def InitiateModel(self):
 		self.UpdateModelName()	
