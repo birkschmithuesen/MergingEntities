@@ -214,6 +214,11 @@ OscKling{
 				},
 				{("received wrong OSC message length on address: " ++ address).postln}
 			);
+			if (msg[7] != nil,
+				{synth.set(\pan, msg[7]);
+				},
+				{("received wrong OSC message length on address: " ++ address).postln}
+			);
 		},
 		(address)
 		);

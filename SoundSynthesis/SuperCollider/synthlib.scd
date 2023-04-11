@@ -51,7 +51,7 @@ SynthDef(\saw, {
 
 
 SynthDef(\lead, {
-	arg amp = 1, exc = 1, degree = 7, detune = 0.04, out = 0, pan = 0;
+	arg amp = 1, exc = 1, degree = 7, detune = 0.04, out = 0, pan = 0.9;
 	var scale, buffer, sig;
 	scale =  FloatArray[0, 3, 5, 7, 10]; // dorian scale FloatArray[0, 2, 3.2, 5, 7, 9, 10];
 	buffer = Buffer.alloc(s, scale.size,1, {|b| b.setnMsg(0, scale) });
@@ -71,20 +71,20 @@ SynthDef(\lead, {
 	// add some 70's euro-space-rock echo
 	sig = sig * exc * 0.4;
 	sig = CombN.ar(sig, 0.2, 0.2, 0.5, 1, sig) * amp;
-	sig = Pan2.ar(sig, pan);
+	sig = Pan2.ar(Mix.ar(sig), pan);
 	Out.ar(out, sig);
 }).add;
 
 
 SynthDef(\kling, {
-	arg amp = 1, exc = 1, dens = 1, freq = 1000, dev = 1.01, lfodepth = 10, decay = 1.0, wide = 0.02, out = 0;
+	arg amp = 1, exc = 1, dens = 1, freq = 1000, dev = 1.01, lfodepth = 10, decay = 1.0, wide = 0.02, pan = 0.9, out = 0;
 	var sig;
 	sig = {arg count; Impulse.ar(dens, count * wide, exc * 0.2) * LFNoise0.kr(10, 0.5, 0.5)}!2;
 	sig = Ringz.ar(sig, [
 		LFSaw.kr(dens, 0.0).range(freq - lfodepth, freq),
 		LFSaw.kr(dens, 1.0).range(freq, freq + lfodepth) * dev
 	], decay);
-	sig = Pan2.ar(sig[0], -0.3) + Pan2.ar(sig[1], 0.3);//Mix.new(sig * amp);
+	sig = Pan2.ar(sig[0], -0.3 + pan) + Pan2.ar(sig[1], 0.3 + pan);//Mix.new(sig * amp);
 	sig = sig * amp;
 	Out.ar(out, sig);
 }).add;
