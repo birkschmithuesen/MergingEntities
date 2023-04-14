@@ -11,6 +11,7 @@ Help: search "Extensions" in wiki
 import sys
 import os
 import platform
+from datetime import datetime
 
 from io import StringIO
 
@@ -101,6 +102,11 @@ class MLExtension:
 				debug(e)
 
 		self.PrintGPUInfo()
+
+
+		# profiling
+		self.Logs = None
+		self.Tboard_callback = None
 	
 	def SetTrainingDataType(self):
 		location, extension = os.path.splitext(self.Trainingdata.val)
@@ -157,7 +163,7 @@ class MLExtension:
 		#file = open(file_loc)
 		#values = np.loadtxt(file_loc, skiprows=1, dtype='float32')
 		string_values = StringIO(op('selected_data').text)
-		values = np.loadtxt(string_values,skiprows=1,dtype='float32')
+		values = np.loadtxt(string_values,skiprows=1,dtype='float16')
 		debug('Training Data Points: ', values.shape[0])
 		self.Features, self.Targets = values[:,:-self.Outputdim.val], values[:,self.Inputdim.val:]
 		if self.Modelname == 'lstm':
@@ -176,6 +182,12 @@ class MLExtension:
 		# n: Group/sliding window length
 		return a[np.arange(a.shape[0]-n+1)[:,None] + np.arange(n)]
 
+	def CreateTensorBoardCallback(self):
+		self.Logs = "logs/" + datetime.now().strftime("%Y%m%d-%H%M%S")
+		self.Tboard_callback = tf.keras.callbacks.TensorBoard(log_dir = self.Logs,
+											histogram_freq = 1,
+											profile_batch = '500,520')
+		
 	def FitModel(self):
 		debug("Fitting Model")
 		if self.Modelname == 'linear_regression':
@@ -184,7 +196,13 @@ class MLExtension:
 		elif self.Modelname == 'lstm':
 			debug("Starting LSTM Fit")
 			try:
-				self.Model.fit(x=self.Features,y=self.Targets,batch_size=self.Batchsize.val,epochs=self.Initialepochs.val,use_multiprocessing=False)
+				self.Model.fit(x=self.Features,
+		   					y=self.Targets,
+							batch_size=self.Batchsize.val,
+							epochs=self.Initialepochs.val,
+							use_multiprocessing=False,
+							validation_data=(self.Features,self.Targets),
+							callbacks=[self.Tboard_callback])
 				# save tmp weights to later set into new model with batchsize 1
 				tmp_model_weights = self.Model.get_weights()
 				# set new batchsize
