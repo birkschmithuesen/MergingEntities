@@ -200,7 +200,7 @@ OscKling{
 				{("received wrong OSC message length on address: " ++ address).postln}
 			);
 			if (msg[4] != nil,
-				{synth.set(\lfodepth, msg[4].linexp(0, 1, 5.0, 800.0));
+				{synth.set(\lfodepth, msg[4].linexp(0, 1, 5.0, 600.0));
 				},
 				{("received wrong OSC message length on address: " ++ address).postln}
 			);

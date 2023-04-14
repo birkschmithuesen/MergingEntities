@@ -77,7 +77,7 @@ SynthDef(\lead, {
 
 
 SynthDef(\kling, {
-	arg amp = 1, exc = 1, dens = 1, freq = 1000, dev = 1.01, lfodepth = 10, decay = 1.0, wide = 0.02, pan = 0.9, out = 0;
+	arg amp = 1, exc = 1, dens = 1, freq = 1000, dev = 1.01, lfodepth = 10, decay = 1.0, wide = 0.02, pan = 0.0, out = 0;
 	var sig;
 	sig = {arg count; Impulse.ar(dens, count * wide, exc * 0.2) * LFNoise0.kr(10, 0.5, 0.5)}!2;
 	sig = Ringz.ar(sig, [
