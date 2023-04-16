@@ -2,20 +2,22 @@
 Scale.directory
 
 Server.killAll;
-
+s.plotTree;
 
 //////////////////////////
 // PATTERNS WITH SynthDef
 //////////////////////////
 
-(
+
 ~tempo = 60/120 * 4; //60/90 * 4 //60sec / 128 BPM * 4 bars
 
 (
 SynthDef.new(\sine, {
-	arg freq=440, atk=0.005, rel=0.3, amp=1, pan=0, bus=0;
-	var sig, env;
-	sig = SinOsc.ar(freq);
+	arg freq=440, atk=0.005, rel=0.3, shape = 0, amp=1, pan=0, bus=0;
+	var sig, osc1, osc2, env;
+	osc1 = SinOsc.ar(freq);
+	osc2 = VarSaw.ar(freq)*0.7;
+	sig = (osc1 * (1-shape)) + (osc2 * shape);
 	env = EnvGen.kr(Env.new([0, 1, 0], [atk, rel], [1,-1]), doneAction:2);
 	sig = Pan2.ar(sig, pan, amp);
 	sig = sig * env;
@@ -26,11 +28,85 @@ SynthDef.new(\sine, {
 x = Synth.new(\sine, [\amp, 0.5]);
 
 
-// PDEVs
+a = Pdefn(\shape, 0.0);
+
 (
-Pdef.new(
-	\sinepat,
-	Pbind(
+Pdef(\tripples,
+Pbind(
+	\instrument, \sine,
+	\dur, Pseq([1/4],inf),
+	\midinote, Pseq([60, 65, 68],inf),
+	\amp, Pwhite().linlin(0, 1, 0.1, 1),
+	\stretch, Pfunc {~tempo},
+	\shape, a,
+	\atk, 0.005,//Pfunc { ~attack },
+));
+)
+
+y = Pdef.new(\tripples).play;
+
+a.source = 1
+
+
+
+~shape = 0.005
+
+(
+Pdef(\tripples,
+Pbind(
+	\instrument, \sine,
+	\dur, Pseq([1/4],inf),
+	\midinote, Pseq([60, 65, 68],inf),
+	\amp, Pwhite().linlin(0, 1, 0.1, 1),
+	\stretch, Pfunc {~tempo},
+	\shape, Pfunc {~shape},
+	\atk, 0.005,//Pfunc { ~attack },
+));
+)
+
+x = Pdef.new(\tripples);
+
+y = Pbind(
+	\instrument, \sine,
+	\dur, Pseq([1/6],inf),
+	\midinote, 53,
+	\amp, Pwhite(),
+	\shape, 0,
+	\stretch, Pfunc{~tempo},
+).play(quant:1);
+)
+
+
+x.unmute;
+
+(
+OSCFunc({
+	arg msg;
+	if (msg[1] != nil,
+		{
+			~shape = msg[1].postln;
+		}
+	);
+},
+('/freq')
+);
+)
+
+
+/*
+x.stream=Pbind(
+				\instrument, \sine,
+				\dur, Pseq([1/4],inf),
+				\midinote, Pseq([60, 65, 68],inf),
+				\amp, Pwhite().linlin(0, 1, 0.1, 1),
+				\stretch, ~tempo,
+				\atk, msg[1].linlin(0,1,0.005,0.1),
+			).asStream;
+*/
+
+
+(
+y = Pbind(
 		\instrument, \sine,
 		\dur, Pseq([1/16], inf),
 		\stretch, ~tempo,
@@ -42,9 +118,33 @@ Pdef.new(
 		\rel, Pwhite(0.005, 0.2, inf),
 		\pan, Pwhite(-0.8, 0.8, inf),
 	)
+)
+// PDEVs
+
+(
+Pdef.new(
+	\sinepat,
+	y
 ).play(quant:~tempo);//quant_(~tempo);//play(quant:~tempo);
 )
+
+y.stop;
+(
+y.stream = Pbind(
+		\instrument, \sine,
+		\dur, Pseq([1/16], inf),
+		\stretch, ~tempo,
+		\midinote, Pseq([33], inf),
+		\harmonic, Pexprand(1, 6, inf).round.trace,
+		// \amp, Pkey(\harmonic).reciprocal * 0.2,
+		\amp, Pkey(\harmonic).reciprocal * Pseq([Pexprand(0.4, 0.5, 1),Pexprand(0.1, 0.3, 3)], inf),
+		\atk, 0.005, //Pwhite(0.002, 0.1, inf),
+		\rel, Pwhite(0.005, 0.2, inf),
+		\pan, Pwhite(-0.8, 0.8, inf),
+	).asStream;
 )
+
+
 
 
 

@@ -3,6 +3,7 @@ Server.killAll
 ServerOptions.devices; // all devices
 Server.default.options.inDevice_("Built-in Microph");
 Server.default.options.outDevice_("BlackHole 64ch");
+Server.default.options.outDevice_("MacBook Pro Speakers");
 s.numOutputBusChannels = numChannels: 64;
 
 (
@@ -14,7 +15,15 @@ s.freqscope;
 
 (
 s.reboot{
+	Server.default.options.outDevice_("BlackHole 64ch");
 	s.options.numOutputBusChannels = 64;
+}
+)
+
+(
+s.reboot{
+	Server.default.options.outDevice_("External Headphones"); //MacBook Pro Speakers
+	s.options.numOutputBusChannels = 2;
 }
 )
 
@@ -25,9 +34,10 @@ s.reboot{
 
 var scale;
 
-// load Synth Defs
+// load Synth Defs and Pattern Defs
 ~path = PathName(thisProcess.nowExecutingPath).parentPath;
 (~path++"synthlib.scd").load;
+(~path++"patternlib.scd").load;
 
 // define number of performers bodies
 ~numBodies = 2;
@@ -89,16 +99,50 @@ scale = FloatArray[48, 55, 60, 67];//some 5ths starting from c4
 ~numBodies = 2;
 
 // create Synths
-~klings = {Synth.head(~klingGroup, \kling)}!~numBodies;
+~klings = {arg i; Synth.head(~klingGroup, \kling, [\out, i*2])}!~numBodies;
 {arg i; ("Created "++~klings[i]).postln}!~numBodies;
 
 
 // make the Synth controllable via OSC
 ~oscKling = {arg i; OscKling.new(~klings[i], ('/kling/' ++ i))}!~numBodies;
 ~oscKlingGroup = OscStandartGroup.new(~klingGroup, ('/kling/group'));
-
-
 )
 
-s.meter;
-~moogGroup.set(\amp, );
+
+
+(
+// PATTERNS
+
+// load Synth Defs and Pattern Defs
+~path = PathName(thisProcess.nowExecutingPath).parentPath;
+(~path++"synthlib.scd").load;
+
+// define number of performers bodies
+~numBodies = 2;
+
+~tempo = 60/120 * 4; //60/90 * 4 //60sec / 128 BPM * 4 bars
+
+
+// create pattern proxies
+~exc = {PatternProxy.new}!~numBodies;
+~shape = {PatternProxy.new}!~numBodies;
+~atk = {PatternProxy.new}!~numBodies;
+~rel = {PatternProxy.new}!~numBodies;
+// initialize pattern proxies
+{arg i; ~exc[i].source = 0.3}!~numBodies;
+{arg i; ~shape[i].source = 0.0}!~numBodies;
+{arg i; ~atk[i].source = 0.5}!~numBodies;
+{arg i; ~rel[i].source = 0.3}!~numBodies;
+
+// load Pattern Defs
+(~path++"patternlib.scd").load;
+
+// create patterns
+~pattern = [Pdef.new(\tripples), Pdef.new(\steady)];
+// play the patterns
+{arg i; ~pattern[i].play()}!~numBodies;
+
+~pattern[0].reset;
+
+~oscPattern = {arg i; OscPattern.new([~exc[i], ~shape[i], ~atk[i], ~rel[i]], ('/sequencer/' ++ i))}!~numBodies;
+)

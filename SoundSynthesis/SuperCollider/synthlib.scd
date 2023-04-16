@@ -88,8 +88,17 @@ SynthDef(\kling, {
 	sig = sig * amp;
 	Out.ar(out, sig);
 }).add;
+
+
+SynthDef.new(\sine, {
+	arg amp=1, exc = 1, freq=440, atk=0.005, rel=0.3, shape = 0, pan=0, out=0;
+	var sig, osc1, osc2, env;
+	osc1 = SinOsc.ar(freq) * exc;
+	osc2 = VarSaw.ar(freq) * exc;
+	sig = (osc1 * (1-shape)) + (osc2 * shape);
+	env = EnvGen.kr(Env.new([0, 1, 0], [atk, rel], [1,-1]), doneAction:2);
+	sig = Pan2.ar(sig, pan, amp);
+	sig = sig * env;
+	Out.ar(out, sig);
+}).add
 )
-//
-// SynthDef(\dist, {
-// 	arg in =
-// 	}
