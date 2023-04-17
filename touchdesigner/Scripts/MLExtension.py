@@ -8,30 +8,21 @@ can be accessed externally, e.g. op('yourComp').PromotedFunction().
 Help: search "Extensions" in wiki
 """
 
-import sys
 import os
-import platform
 from datetime import datetime
 
 from io import StringIO
 
 import tensorflow as tf
-import keras
-from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import Dense, LSTM, Dropout, Activation
+from tensorflow import keras
+from tensorflow.keras import layers
 from tensorflow.keras.optimizers import SGD
-from tensorflow.python.client import device_lib
 
 import mdn
-
-import gc
 
 import numpy as np
 
 import json
-
-from TDStoreTools import StorageManager
-import TDFunctions as TDF
 
 class MLExtension:
 	"""
@@ -45,30 +36,31 @@ class MLExtension:
 		self.Model = None
 
 		# Model Settings
-		self.Modeltype = tdu.Dependency(0)
+		self.Modeltype = tdu.Dependency(parent.Ml.par.Modeltype.menuIndex)
 		self.Modeltypes = ['linear_regression','lstm']
 		self.Modelname = self.Modeltypes[self.Modeltype.val]
 
-		self.MDNLayer = tdu.Dependency(0)
-		self.MDNDistribution = tdu.Dependency(10)
+		self.MDNLayer = tdu.Dependency(parent.Ml.par.Mdnlayer.val)
+		self.MDNDistribution = tdu.Dependency(parent.Ml.par.Mdndistribution.val)
 
-		self.Inputdim = tdu.Dependency(67)
-		self.Outputdim = tdu.Dependency(8)
-		self.Batchsize= tdu.Dependency(1)
-		self.Epochs = tdu.Dependency(1)
-		self.Initialepochs = tdu.Dependency(1)
-		self.Hiddendim = tdu.Dependency(10)
-		self.Learningrate = tdu.Dependency(1)
-		self.Timesteps = tdu.Dependency(8)
+		self.Cells = tdu.Dependency(parent.Ml.par.Cells.val)
+		self.Inputdim = tdu.Dependency(parent.Ml.par.Inputdim.val)
+		self.Outputdim = tdu.Dependency(parent.Ml.par.Outputdim.val)
+		self.Batchsize= tdu.Dependency(parent.Ml.par.Batchsize.val)
+		self.Epochs = tdu.Dependency(parent.Ml.par.Epochs.val)
+		self.Initialepochs = tdu.Dependency(parent.Ml.par.Initialepochs.val)
+		self.Hiddendim = tdu.Dependency(parent.Ml.par.Hiddendim.val)
+		self.Learningrate = tdu.Dependency(parent.Ml.par.Learningrate.val)
+		self.Timesteps = tdu.Dependency(parent.Ml.par.Timesteps.val)
 
 		# Selected Data Points
-		self.Selectedfeatures = tdu.Dependency('^sound_*')
-		self.Selectedtargets = tdu.Dependency('sound_*')
+		self.Selectedfeatures = tdu.Dependency(parent.Ml.par.Selectedfeatures.val)
+		self.Selectedtargets = tdu.Dependency(parent.Ml.par.Selectedtargets.val)
 		self.DatapointsList = ''		   
 
 		# Training Settings
-		self.Trainingdata = tdu.Dependency('Entity-Recordings/default.txt')
-		self.Trainingdatatype = tdu.Dependency('file')
+		self.Trainingdata = tdu.Dependency(parent.Ml.par.Trainingdata.val)
+		self.Trainingdatatype = tdu.Dependency(parent.Ml.par.Datatype.val)
 		self.SetTrainingDataType()
 		self.Features = ''
 		self.Targets = ''
@@ -77,6 +69,7 @@ class MLExtension:
 		config_attributes = [ 			
 			"Modeltype",
 			"Modelname",
+			"Cells",
 			"Inputdim",
 			"Outputdim",
 			"Batchsize",
@@ -103,10 +96,12 @@ class MLExtension:
 
 		self.PrintGPUInfo()
 
-
 		# profiling
 		self.Logs = None
 		self.Tboard_callback = None
+
+		# test model
+		self.X_Test = None
 	
 	def SetTrainingDataType(self):
 		location, extension = os.path.splitext(self.Trainingdata.val)
@@ -126,7 +121,7 @@ class MLExtension:
 
 	def InitiateModel(self):
 		with tf.device(tf.config.list_logical_devices('GPU')[0].name):
-			self.Model = Sequential()
+			self.Model = keras.Sequential()
 			debug("Initiated Model")
 
 	def ModelName(self):
@@ -143,19 +138,24 @@ class MLExtension:
 	def BuildModel(self):
 		if self.Modelname == 'linear_regression':
 			my_init=keras.initializers.RandomNormal(mean=0.0, stddev=0.05, seed=None)
-			self.Model.add(Dense(self.Hiddendim.val, activation='sigmoid', input_dim=self.Inputdim.val, kernel_initializer=my_init, bias_initializer=my_init))
-			self.Model.add(Dense(self.Outputdim.val, activation='sigmoid',kernel_initializer=my_init, bias_initializer=my_init))
+			self.Model.add(layers.Dense(self.Hiddendim.val, activation='sigmoid', input_dim=self.Inputdim.val, kernel_initializer=my_init, bias_initializer=my_init))
+			self.Model.add(layers.Dense(self.Outputdim.val, activation='sigmoid',kernel_initializer=my_init, bias_initializer=my_init))
 			sgd = SGD(learning_rate=self.Learningrate.val, decay=1e-6, momentum=0.9, nesterov=True)
 			self.Model.compile(loss='binary_crossentropy', optimizer=sgd, metrics=['accuracy'])
 		elif self.Modelname == 'lstm':
-			self.Model.add(LSTM(units=128, batch_input_shape=(self.Batchsize.val, self.Timesteps.val, self.Inputdim.val), stateful=True, return_sequences=True))
-			self.Model.add(LSTM(units=128, batch_input_shape=(self.Batchsize.val, self.Timesteps.val, self.Inputdim.val), stateful=True, return_sequences=False))
-			self.Model.add(Dense(units=self.Outputdim.val, activation='sigmoid'))
+			self.Model.add(layers.LSTM(units=64, batch_input_shape=(self.Batchsize.val, self.Timesteps.val, self.Inputdim.val), activation='tanh', dropout=0.2))
+			self.Model.add(layers.Dense(units=32, activation='relu'))
+			self.Model.add(layers.Dense(units=16, activation='relu'))
+			self.Model.add(layers.Dense(units=8, activation='relu'))
+			self.Model.add(layers.Dense(units=4, activation='relu'))
+			self.Model.add(layers.Dense(units=2, activation='relu'))
+			self.Model.add(layers.Dense(units=1, activation='relu'))
+			optimizer = keras.optimizers.Adam()
 			if self.MDNLayer.val == 1:
 				self.Model.add(mdn.MDN(self.Outputdim.val,self.MDNDistribution.val))
-				self.Model.compile(loss=mdn.get_mixture_loss_func(self.Outputdim.val,self.MDNDistribution.val), optimizer=keras.optimizers.Adam())
+				self.Model.compile(loss=mdn.get_mixture_loss_func(self.Outputdim.val,self.MDNDistribution.val), optimizer=optimizer)
 			else:
-				self.Model.compile(optimizer='rmsprop',loss='mse')
+				self.Model.compile(optimizer=optimizer,loss='mean_squared_error')
 		debug("Built ", self.ModelName(), " Model")
 
 	def LoadTrainingData(self):
@@ -184,15 +184,20 @@ class MLExtension:
 
 	def CreateTensorBoardCallback(self):
 		self.Logs = "logs/" + datetime.now().strftime("%Y%m%d-%H%M%S")
-		self.Tboard_callback = tf.keras.callbacks.TensorBoard(log_dir = self.Logs,
+		self.Tboard_callback = keras.callbacks.TensorBoard(log_dir = self.Logs,
 											histogram_freq = 1,
 											profile_batch = '500,520')
 		
 	def FitModel(self):
+		#self.CreateTensorBoardCallback()
 		debug("Fitting Model")
 		if self.Modelname == 'linear_regression':
 			debug("Starting Linear Regression Fit")
-			self.Model.fit(self.Features,self.Targets,epochs=self.Initialepochs.val,batch_size=self.Batchsize.val,shuffle=True)
+			self.Model.fit(self.Features,
+		  				self.Targets,
+						epochs=self.Initialepochs.val,
+						batch_size=self.Batchsize.val,
+						shuffle=True)
 		elif self.Modelname == 'lstm':
 			debug("Starting LSTM Fit")
 			try:
@@ -201,28 +206,55 @@ class MLExtension:
 							batch_size=self.Batchsize.val,
 							epochs=self.Initialepochs.val,
 							use_multiprocessing=False,
-							validation_data=(self.Features,self.Targets),
-							callbacks=[self.Tboard_callback])
+							#validation_data=(self.Features,self.Targets),
+							#callbacks=[self.Tboard_callback])
+							)
 				# save tmp weights to later set into new model with batchsize 1
 				tmp_model_weights = self.Model.get_weights()
 				# set new batchsize
 				#self.Batchsize.val = 1
 				# make new model
-				self.Model = Sequential()
-				self.Model.add(LSTM(units=128, batch_input_shape=(1, self.Timesteps.val, self.Inputdim.val), stateful=True, return_sequences=True))
-				self.Model.add(LSTM(units=128, batch_input_shape=(1, self.Timesteps.val, self.Inputdim.val), stateful=True, return_sequences=False))
-				self.Model.add(Dense(units=self.Outputdim.val, activation='sigmoid'))
+				self.Model = keras.Sequential()
+				self.Model.add(layers.LSTM(units=64, batch_input_shape=(self.Batchsize.val, self.Timesteps.val, self.Inputdim.val), activation='relu', dropout=0.2))
+				self.Model.add(layers.Dense(units=32, activation='relu'))
+				self.Model.add(layers.Dense(units=16, activation='relu'))
+				self.Model.add(layers.Dense(units=8, activation='relu'))
+				self.Model.add(layers.Dense(units=4, activation='relu'))
+				self.Model.add(layers.Dense(units=2, activation='relu'))
+				self.Model.add(layers.Dense(units=1, activation='relu'))
 				# set weights from tmp model
 				self.Model.set_weights(tmp_model_weights)
+				optimizer = tf.keras.optimizers.Adam()
 				if self.MDNLayer.val == 1:
 					self.Model.add(mdn.MDN(self.Outputdim.val,self.MDNDistribution.val))
-					self.Model.compile(loss=mdn.get_mixture_loss_func(self.Outputdim.val,self.MDNDistribution.val), optimizer=keras.optimizers.Adam())
+					self.Model.compile(loss=mdn.get_mixture_loss_func(self.Outputdim.val,self.MDNDistribution.val), optimizer=optimizer)
 				else:
-					self.Model.compile(optimizer='rmsprop',loss='mse')
+					self.Model.compile(optimizer=optimizer,loss='mean_squared_error')
 			except ValueError as e:
 				debug("Couldn't Fit Model", e)
-		#self.Model.summary()
+		self.Model.summary()
 		debug("Initial Training finished... ")
+
+	def CreateExample(self):
+		self.Model = keras.Sequential()
+		self.Model.add(layers.LSTM(128,input_shape=(None,28)))
+		self.Model.add(layers.BatchNormalization())
+		self.Model.add(layers.Dense(10))
+		debug(self.Model.summary())
+		# get data
+		mnist = keras.datasets.mnist
+		(x_train, y_train),  (self.X_test, y_test) = mnist.load_data()
+		x_train, self.X_test = x_train/255.0, self.X_test/255.0
+		x_validate, y_validate = self.X_test[:10], y_test[:10]
+		self.X_test, y_test = self.X_test[-10:], y_test[-10:]
+		self.Model.compile(
+			loss=keras.losses.SparseCategoricalCrossentropy(from_logits=True),
+    			optimizer="sgd",
+    			metrics=["accuracy"],
+		)
+		self.Model.fit(x_train, y_train,validation_data=(self.X_test,y_test),batch_size=64,epochs=1)
+		self.Model.fit(x_train, y_train,validation_data=(x_validate,y_validate),batch_size=64,epochs=10)
+		debug(self.Model.summary())
 
 	def SaveModel(self):
 		location = parent.Ml.par.Modelname
@@ -238,6 +270,7 @@ class MLExtension:
 		json_config['Training_Data'] = self.Trainingdata.val
 		json_config['Selected_Features'] = self.Selectedfeatures.val
 		json_config['Selected_Targets'] = self.Selectedtargets.val
+		json_config['CELLS'] = self.Cells.val
 		json_config['INPUT_DIM'] = self.Inputdim.val
 		json_config['OUTPUT_DIM'] = self.Outputdim.val
 		json_config['BATCH_SIZE'] = self.Batchsize.val
@@ -270,6 +303,11 @@ class MLExtension:
 		self.SetTrainingDataType()
 		self.Selectedfeatures.val = model_config.result['Selected_Features']
 		self.Selectedtargets.val = model_config.result['Selected_Targets']
+		try:
+			self.Cells.val = model_config.result['CELLS']
+		except:
+			self.Cells.val = 128
+			debug("Old Model without Cells Par")
 		self.Inputdim.val = model_config.result['INPUT_DIM']
 		self.Outputdim.val = model_config.result['OUTPUT_DIM']
 		self.Batchsize.val = model_config.result['BATCH_SIZE']
@@ -284,4 +322,5 @@ class MLExtension:
 			distributions = self.Model.predict(np.array([features]))
 			return np.apply_along_axis(mdn.sample_from_output,1,distributions,self.Outputdim.val,self.MDNDistribution,temp=1.0)
 		else:
-			return self.Model.predict(np.array([features]))
+			with tf.device('/gpu:0'):
+				return self.Model.predict(np.array([features]))
