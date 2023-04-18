@@ -45,7 +45,7 @@ class MLExtension:
 		self.Model = None
 
 		# Model Settings
-		self.Modeltype = tdu.Dependency(0)
+		self.Modeltype = tdu.Dependency(1)
 		self.Modeltypes = ['linear_regression','lstm']
 		self.Modelname = self.Modeltypes[self.Modeltype.val]
 
