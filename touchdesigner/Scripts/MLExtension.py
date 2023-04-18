@@ -49,21 +49,21 @@ class MLExtension:
 		self.Modeltypes = ['linear_regression','lstm']
 		self.Modelname = self.Modeltypes[self.Modeltype.val]
 
-		self.MDNLayer = tdu.Dependency(0)
+		self.MDNLayer = tdu.Dependency(1)
 		self.MDNDistribution = tdu.Dependency(10)
 
 		self.Inputdim = tdu.Dependency(67)
 		self.Outputdim = tdu.Dependency(8)
-		self.Batchsize= tdu.Dependency(1)
-		self.Epochs = tdu.Dependency(1)
-		self.Initialepochs = tdu.Dependency(1)
+		self.Batchsize= tdu.Dependency(32)
+		self.Epochs = tdu.Dependency(60)
+		self.Initialepochs = tdu.Dependency(60)
 		self.Hiddendim = tdu.Dependency(10)
 		self.Learningrate = tdu.Dependency(1)
 		self.Timesteps = tdu.Dependency(8)
 
 		# Selected Data Points
-		self.Selectedfeatures = tdu.Dependency('^sound_*')
-		self.Selectedtargets = tdu.Dependency('sound_*')
+		self.Selectedfeatures = tdu.Dependency('*back/rot_mat* *left_foot/rot_mat* *right_foot/rot_mat* *left_upper_arm/rot_mat* *right_upper_arm/rot_mat* *head/rot_mat*')
+		self.Selectedtargets = tdu.Dependency('noise/0[1-2]')
 		self.DatapointsList = ''		   
 
 		# Training Settings
