@@ -65,17 +65,28 @@ Pbind(
 )
 
 x = Pdef.new(\tripples);
-
+(
 y = Pbind(
 	\instrument, \sine,
-	\dur, Pseq([1/6],inf),
+	\dur, Pseq([1/2],inf),
 	\midinote, 53,
-	\amp, Pwhite(),
+	\amp, 1, //Pwhite(),
 	\shape, 0,
 	\stretch, Pfunc{~tempo},
-).play(quant:1);
+).play(quant:0);
+
+z = Pbind(
+	\instrument, \sine,
+	\dur, Pseq([1/2],inf),
+	\midinote, 60,
+	\amp, 1,//Pwhite(),
+	\shape, 0,
+	\stretch, Pfunc{~tempo},
+).play(quant:0);
 )
 
+y.start;
+z.start;
 
 x.unmute;
 

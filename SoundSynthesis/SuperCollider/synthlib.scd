@@ -84,7 +84,7 @@ SynthDef(\kling, {
 		LFSaw.kr(dens, 0.0).range(freq - lfodepth, freq),
 		LFSaw.kr(dens, 1.0).range(freq, freq + lfodepth) * dev
 	], decay);
-	sig = Pan2.ar(sig[0], -0.3 + pan) + Pan2.ar(sig[1], 0.3 + pan);//Mix.new(sig * amp);
+	sig = Pan2.ar(sig[0], (-0.2 + pan)) + Pan2.ar(sig[1], (0.2 + pan));//Mix.new(sig * amp);
 	sig = sig * amp;
 	Out.ar(out, sig);
 }).add;

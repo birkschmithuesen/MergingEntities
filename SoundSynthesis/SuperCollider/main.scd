@@ -129,20 +129,30 @@ scale = FloatArray[48, 55, 60, 67];//some 5ths starting from c4
 ~atk = {PatternProxy.new}!~numBodies;
 ~rel = {PatternProxy.new}!~numBodies;
 // initialize pattern proxies
-{arg i; ~exc[i].source = 0.3}!~numBodies;
-{arg i; ~shape[i].source = 0.0}!~numBodies;
-{arg i; ~atk[i].source = 0.5}!~numBodies;
-{arg i; ~rel[i].source = 0.3}!~numBodies;
+{arg i; ~exc[i].source = 1.0}!~numBodies;
+{arg i; ~shape[i].source = 1.0}!~numBodies;
+{arg i; ~atk[i].source = 0.0}!~numBodies;
+{arg i; ~rel[i].source = 0.1}!~numBodies;
 
-// load Pattern Defs
+// load patterns
 (~path++"patternlib.scd").load;
+// play patterns
+
 
 // create patterns
-~pattern = [Pdef.new(\tripples), Pdef.new(\steady)];
+//~pattern = [Pdef.new(\tripples), Pdef.new(\steady)];
 // play the patterns
-{arg i; ~pattern[i].play()}!~numBodies;
-
-~pattern[0].reset;
+//{arg i; ~pattern[i].play(quant:0)}!~numBodies;
 
 ~oscPattern = {arg i; OscPattern.new([~exc[i], ~shape[i], ~atk[i], ~rel[i]], ('/sequencer/' ++ i))}!~numBodies;
+)
+
+
+(
+~tripples.stop;
+~steady.stop;
+~tripples.reset;
+~steady.reset;
+~tripples.play;
+~steady.play;
 )
