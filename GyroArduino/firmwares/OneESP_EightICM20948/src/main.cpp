@@ -79,9 +79,15 @@ void setup(void) {
     break;
   case 5:
     Serial.println(".. failed (I2C bus timeout)");
+    Serial.println("... stopping everything");
+    // put ESP32 into deep sleep (closest to shutdown)
+    esp_deep_sleep_start();
     break;
   default:
     Serial.println(".. failed");
+    Serial.println("... stopping everything");
+    // put ESP32 into deep sleep (closest to shutdown)
+    esp_deep_sleep_start();
     break;
   }
 }
