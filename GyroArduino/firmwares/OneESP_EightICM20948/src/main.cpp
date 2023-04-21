@@ -14,9 +14,34 @@
 #define TCA_ADDRESS 0x70 /**< I2C address of the TCA9548A (I2C multiplexer) */
 
 /**
+ * Switch to the given channel on the multiplexer for I2C communication.
+ *
+ * This function updates the control register in the switch to select one
+ * of the eight I2C devices (numbered 0..7) attached to it.
+ *
+ * @param channel The channel to select to communicate with I2C client
+ * @return true if selection was successful, false if not
+ * @see setup()
+ * @see loop()
+ * @todo limit processing to valid values (0..7)
+ */
+bool selectI2cMultiplexerChannel(uint8_t channel) {
+  bool result = false;
+  // select the multiplexer by its hardware address
+  Wire.beginTransmission(TCA_ADDRESS);
+  // select a channel on the multiplexer
+  if (1 == Wire.write(1 << channel)) {
+    result = true;
+  }
+  Wire.endTransmission();
+  return result;
+}
+
+/**
  * Bring the controller into a working state.
  *
  * @see loop()
+ * @see selectI2cMultiplexerChannel(uint8_t channel)
  */
 void setup(void) {
   uint8_t result = 0; // track results/error codes
@@ -65,6 +90,7 @@ void setup(void) {
  * The main processing loop.
  *
  * @see setup()
+ * @see selectI2cMultiplexerChannel(uint8_t channel)
  */
 void loop() {
   Serial.print(".");
