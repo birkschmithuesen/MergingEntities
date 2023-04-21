@@ -8,3 +8,4 @@ The "-main" branch always contains working code. The "-dev" branch contains the
 
 # links
 * [Adafruit ICM-20948 documentation](https://learn.adafruit.com/adafruit-tdk-invensense-icm-20948-9-dof-imu)
+* [Adafruit Arduino library for ICM20X ](https://github.com/adafruit/Adafruit_ICM20X)
