@@ -12,6 +12,7 @@
 #define SDA_PIN 21       /**< I2C data pin (on ESP32) */
 #define SCL_PIN 22       /**< I2C clock pin (on ESP32) */
 #define TCA_ADDRESS 0x70 /**< I2C address of the TCA9548A (I2C multiplexer) */
+#define ICM_ADDRESS 0x69 /**< I2C address of the ICM20948 sensor */
 
 /**
  * Switch to the given channel on the multiplexer for I2C communication.
@@ -63,13 +64,22 @@ void setup(void) {
   Serial.println();
   delay(1000);
 
+  // inital sanity check
+  if (ICM_ADDRESS == TCA_ADDRESS) {
+    Serial.println("error: sensor(s) and multiplexer have the same address");
+    Serial.println("this leads to communication conflicts");
+    Serial.println("... stopping now");
+    // put ESP32 into deep sleep (closest to shutdown)
+    esp_deep_sleep_start();
+  }
+
   // set up I2C communication
   Serial.print("setting up I2C pins .");
   Wire.begin(SDA_PIN, SCL_PIN);
   delay(1000);
   Serial.println(".. done");
 
-  // check of one TCA9548A
+  // see if (expected) multiplexer is there
   Serial.print("searching TCA9548A .");
   Wire.beginTransmission(TCA_ADDRESS);
   result = Wire.endTransmission(true);
@@ -89,6 +99,30 @@ void setup(void) {
     // put ESP32 into deep sleep (closest to shutdown)
     esp_deep_sleep_start();
     break;
+  }
+
+  // check for sensors
+  for (uint8_t ch = 0; ch < 8; ch++) {
+    Serial.print("checking for sensor on channel ");
+    Serial.print(ch);
+    Serial.print(" .");
+    if (!selectI2cMultiplexerChannel(ch)) {
+      Serial.println(".. failed (channel selection)");
+      continue;
+    }
+    Wire.beginTransmission(ICM_ADDRESS);
+    result = Wire.endTransmission(true);
+    switch (result) {
+    case 0:
+      Serial.println(".. found");
+      break;
+    case 5:
+      Serial.println(".. failed (I2C bus timeout)");
+      break;
+    default:
+      Serial.println(".. failed");
+      break;
+    }
   }
 }
 
