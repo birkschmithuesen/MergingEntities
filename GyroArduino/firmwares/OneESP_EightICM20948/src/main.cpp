@@ -56,7 +56,7 @@ void setup(void) {
     Serial.println(".. failed (I2C bus timeout)");
     break;
   default:
-    Serial.println(".. failed (I2C bus timeout)");
+    Serial.println(".. failed");
     break;
   }
 }
