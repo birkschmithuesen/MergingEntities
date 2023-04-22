@@ -94,7 +94,9 @@ void setup(void) {
     esp_deep_sleep_start();
     break;
   default:
-    Serial.println(".. failed");
+    Serial.print(".. failed (error ");
+    Serial.print(result);
+    Serial.println(")");
     Serial.println("... stopping everything");
     // put ESP32 into deep sleep (closest to shutdown)
     esp_deep_sleep_start();
@@ -111,16 +113,21 @@ void setup(void) {
       continue;
     }
     Wire.beginTransmission(ICM_ADDRESS);
-    result = Wire.endTransmission(true);
+    result = Wire.endTransmission();
     switch (result) {
     case 0:
       Serial.println(".. found");
+      break;
+    case 2:
+      Serial.println(".. failed (error 2) maybe not connected?");
       break;
     case 5:
       Serial.println(".. failed (I2C bus timeout)");
       break;
     default:
-      Serial.println(".. failed");
+      Serial.print(".. failed (error ");
+      Serial.print(result);
+      Serial.println(")");
       break;
     }
   }
