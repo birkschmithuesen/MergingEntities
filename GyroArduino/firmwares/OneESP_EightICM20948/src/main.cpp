@@ -14,6 +14,26 @@
 #define TCA_ADDRESS 0x70 /**< I2C address of the TCA9548A (I2C multiplexer) */
 #define ICM_ADDRESS 0x69 /**< I2C address of the ICM20948 sensor */
 
+#define NUMBER_OF_SENSORS 8 /**< number of ICM20948 sensors */
+
+/**
+ * A data structure to handle hardware related data and
+ * communication of one ICM20948.
+ */
+struct ICM20948socket {
+  const char
+      *label; /**< human readable identification of the sensor (for OSC path) */
+  uint8_t channel; /**< channel used on the I2C multiplexer */
+  Adafruit_ICM20948
+      sensor; /**< software handler/abstraction for ICM20948 at given channel */
+  bool usable = false; /**< indicate that sensor (data) is present and no errors
+                          occured */
+};
+
+// IOBundle iobundle[NUMBER_OF_MPU];
+ICM20948socket socket[NUMBER_OF_SENSORS]; /**< a (global) list of sockets to
+                                             bundle communication */
+
 /**
  * Switch to the given channel on the multiplexer for I2C communication.
  *
@@ -45,7 +65,8 @@ bool selectI2cMultiplexerChannel(uint8_t channel) {
  * @see selectI2cMultiplexerChannel(uint8_t channel)
  */
 void setup(void) {
-  uint8_t result = 0; // track results/error codes
+  uint8_t result = 0;     // track results/error codes
+  uint8_t nonworking = 0; // track number of non-working sensors
   //-------HARDWARE SETUP-------
   Serial.begin(115200);
   // pause until serial line is available
@@ -63,6 +84,25 @@ void setup(void) {
   Serial.println("----------------------------------------");
   Serial.println();
   delay(1000);
+
+  Serial.print("setting up sensor sockets .");
+  socket[0].label = "label_1";
+  socket[0].channel = 0;
+  socket[1].label = "label_2";
+  socket[1].channel = 1;
+  socket[2].label = "label_3";
+  socket[2].channel = 2;
+  socket[3].label = "label_4";
+  socket[3].channel = 3;
+  socket[4].label = "label_5";
+  socket[4].channel = 4;
+  socket[5].label = "label_6";
+  socket[5].channel = 5;
+  socket[6].label = "label_7";
+  socket[6].channel = 6;
+  socket[7].label = "label_8";
+  socket[7].channel = 7;
+  Serial.println(".. done");
 
   // inital sanity check
   if (ICM_ADDRESS == TCA_ADDRESS) {
@@ -103,20 +143,21 @@ void setup(void) {
     break;
   }
 
-  // check for sensors
-  for (uint8_t ch = 0; ch < 8; ch++) {
-    Serial.print("checking for sensor on channel ");
+  // see if (expected) sensors are there
+  for (uint8_t ch = 0; ch < NUMBER_OF_SENSORS; ch++) {
+    Serial.print("checking for serial communication for sensor on channel ");
     Serial.print(ch);
     Serial.print(" .");
     if (!selectI2cMultiplexerChannel(ch)) {
       Serial.println(".. failed (channel selection)");
+      nonworking += 1;
       continue;
     }
     Wire.beginTransmission(ICM_ADDRESS);
     result = Wire.endTransmission();
     switch (result) {
     case 0:
-      Serial.println(".. found");
+      Serial.println(".. worked");
       break;
     case 2:
       Serial.println(".. failed (error 2) maybe not connected?");
@@ -130,6 +171,27 @@ void setup(void) {
       Serial.println(")");
       break;
     }
+    Serial.print("found ");
+    Serial.print(NUMBER_OF_SENSORS - nonworking);
+    Serial.println(" sensors");
+
+    // check for correct sensor communication
+    nonworking = 0;
+    Serial.print("checking sensor on channel ");
+    Serial.print(ch);
+    Serial.print(" (");
+    Serial.print(socket[ch].label);
+    Serial.print(") .");
+    if (socket[ch].sensor.begin_I2C()) {
+      socket[ch].usable = true;
+      Serial.println(".. works");
+    } else {
+      nonworking += 1;
+      Serial.println(".. failed");
+    }
+    Serial.print("can communicate with ");
+    Serial.print(NUMBER_OF_SENSORS - nonworking);
+    Serial.println(" sensors");
   }
 }
 
