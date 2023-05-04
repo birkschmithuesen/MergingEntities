@@ -21,18 +21,14 @@
  * communication of one ICM20948.
  */
 struct ICM20948socket {
-  const char
-      *label; /**< human readable identification of the sensor (for OSC path) */
+  const char *label; /**< human readable identification of the sensor (for OSC path) */
   uint8_t channel; /**< channel used on the I2C multiplexer */
-  Adafruit_ICM20948
-      sensor; /**< software handler/abstraction for ICM20948 at given channel */
-  bool usable = false; /**< indicate that sensor (data) is present and no errors
-                          occured */
+  Adafruit_ICM20948 sensor; /**< software handler/abstraction for ICM20948 at given channel */
+  bool usable = false; /**< indicate that sensor (data) is present and no errors occured */
 };
 
 // IOBundle iobundle[NUMBER_OF_MPU];
-ICM20948socket socket[NUMBER_OF_SENSORS]; /**< a (global) list of sockets to
-                                             bundle communication */
+ICM20948socket socket[NUMBER_OF_SENSORS]; /**< a (global) list of sockets to bundle communication */
 
 /**
  * Switch to the given channel on the multiplexer for I2C communication.
