@@ -17,20 +17,6 @@
 #define NUMBER_OF_SENSORS 8 /**< number of ICM20948 sensors */
 
 /**
- * A data structure to handle hardware related data and
- * communication of one ICM20948.
- */
-struct ICM20948socket {
-  const char *label; /**< human readable identification of the sensor (for OSC path) */
-  uint8_t channel; /**< channel used on the I2C multiplexer */
-  Adafruit_ICM20948 sensor; /**< software handler/abstraction for ICM20948 at given channel */
-  bool usable = false; /**< indicate that sensor (data) is present and no errors occured */
-};
-
-// IOBundle iobundle[NUMBER_OF_MPU];
-ICM20948socket socket[NUMBER_OF_SENSORS]; /**< a (global) list of sockets to bundle communication */
-
-/**
  * Switch to the given channel on the multiplexer for I2C communication.
  *
  * This function updates the control register in the switch to select one
@@ -55,10 +41,46 @@ bool selectI2cMultiplexerChannel(uint8_t channel) {
 }
 
 /**
+ * A data structure to handle hardware related data and
+ * communication of one ICM20948.
+ */
+struct ICM20948socket {
+  const char *label; /**< human readable identification of the sensor (for OSC path) */
+  uint8_t channel; /**< channel used on the I2C multiplexer */
+  Adafruit_ICM20948 sensor; /**< software handler/abstraction for ICM20948 at given channel */
+  bool usable = false; /**< indicate that sensor (data) is present and no errors occured */
+  sensors_event_t accel_event; /**< accelerometer information (transmitted via event) */
+  sensors_event_t gyro_event;  /**< gyroscope information (transmitted via event) */
+  sensors_event_t mag_event;   /**< magnetometer information (transmitted via event) */
+  sensors_event_t temp_event;  /**< temperature information (transmitted via event) */
+
+  /**
+   * Update the internal sensor information.
+   *
+   * @return false if error occured
+   */
+  bool update() {
+	if (!selectI2cMultiplexerChannel(this->channel)) {
+      return false;
+    }
+    if (this->usable) {
+      this->sensor.getEvent(&this->accel_event, &this->gyro_event,
+                            &this->temp_event, &this->mag_event);
+      return true;
+    }
+    return false;
+  }
+};
+
+ICM20948socket socket[NUMBER_OF_SENSORS]; /**< a (global) list of sockets to bundle communication */
+
+
+/**
  * Bring the controller into a working state.
  *
  * @see loop()
  * @see selectI2cMultiplexerChannel(uint8_t channel)
+ * @todo dedicated setup function for single sensor
  */
 void setup(void) {
   uint8_t result = 0;     // track results/error codes
@@ -185,6 +207,7 @@ void setup(void) {
       nonworking += 1;
       Serial.println(".. failed");
     }
+
     Serial.print("can communicate with ");
     Serial.print(NUMBER_OF_SENSORS - nonworking);
     Serial.println(" sensors");
@@ -200,4 +223,9 @@ void setup(void) {
 void loop() {
   Serial.print(".");
   delay(1000);
+
+  // sequentially get all sensor data via each channel
+  for (uint8_t chan = 0; chan < NUMBER_OF_SENSORS; chan++) {
+	  socket[chan].update();
+  }
 }
