@@ -1,6 +1,11 @@
 /** @file
  * This firmware uses one TCA9548A to read data from 8 ICM20948 sensors
  * via I2C. This data is slightly prepocessed passed on via OSC.
+ *
+ * @todo bootstrapping for each sensor
+ * @todo implement conversion for quaternions
+ * @todo implement conversion for euler angles
+ * @todo implement OSC message sending
  */
 
 #include <Adafruit_ICM20948.h>
@@ -125,7 +130,8 @@ ICM20948socket socket[NUMBER_OF_SENSORS]; /**< a (global) list of sockets to bun
  */
 void setup(void) {
   uint8_t result = 0;     // track results/error codes
-  uint8_t nonworking = 0; // track number of non-working sensors
+  uint8_t channel_missing = 0; // track number of channels missing
+  uint8_t sensors_failed = 0; // track number of non-working sensors
   //-------HARDWARE SETUP-------
   Serial.begin(115200);
   // pause until serial line is available
@@ -209,7 +215,7 @@ void setup(void) {
     Serial.print(" .");
     if (!selectI2cMultiplexerChannel(i)) {
       Serial.println(".. failed (channel selection)");
-      nonworking += 1;
+      channel_missing += 1;
       continue;
     }
     Wire.beginTransmission(ICM_ADDRESS);
@@ -230,12 +236,8 @@ void setup(void) {
       Serial.println(")");
       break;
     }
-    Serial.print("found ");
-    Serial.print(NUMBER_OF_SENSORS - nonworking);
-    Serial.println(" sensors");
 
     // check for correct sensor communication
-    nonworking = 0;
     Serial.print("checking sensor on channel ");
     Serial.print(socket[i].channel);
     Serial.print(" (");
@@ -245,14 +247,19 @@ void setup(void) {
       socket[i].usable = true;
       Serial.println(".. works");
     } else {
-      nonworking += 1;
+      sensors_failed += 1;
       Serial.println(".. failed");
     }
-
-    Serial.print("can communicate with ");
-    Serial.print(NUMBER_OF_SENSORS - nonworking);
-    Serial.println(" sensors");
   }
+
+  // general state of sensors
+  Serial.print("found ");
+  Serial.print(NUMBER_OF_SENSORS - channel_missing);
+  Serial.println(" multiplexer channels");
+
+  Serial.print("can communicate with ");
+  Serial.print(NUMBER_OF_SENSORS - sensors_failed);
+  Serial.println(" sensors");
 }
 
 /**
