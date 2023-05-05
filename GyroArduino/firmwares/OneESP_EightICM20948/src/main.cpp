@@ -2,7 +2,6 @@
  * This firmware uses one TCA9548A to read data from 8 ICM20948 sensors
  * via I2C. This data is slightly prepocessed passed on via OSC.
  *
- * @todo bootstrapping for each sensor
  * @todo implement conversion for quaternions
  * @todo implement conversion for euler angles
  * @todo implement OSC message sending
@@ -58,6 +57,37 @@ struct ICM20948socket {
   sensors_event_t gyro_event;  /**< gyroscope information (transmitted via event) */
   sensors_event_t mag_event;   /**< magnetometer information (transmitted via event) */
   sensors_event_t temp_event;  /**< temperature information (transmitted via event) */
+
+  /**
+   * Set up / configure the sensor.
+   *
+   * @returns true if successful
+   * @todo more detailed error codes
+   */
+  bool setup() {
+    if (!selectI2cMultiplexerChannel(this->channel)) {
+      return false;
+    }
+    // accel range +/- 4g
+    this->sensor.setAccelRange(ICM20948_ACCEL_RANGE_4_G);
+    if (ICM20948_ACCEL_RANGE_4_G != this->sensor.getAccelRange()) {
+      return false;
+    }
+    // gyro 500 degree/s;
+    this->sensor.setGyroRange(ICM20948_GYRO_RANGE_500_DPS);
+    if (ICM20948_GYRO_RANGE_500_DPS != this->sensor.getGyroRange()) {
+      return false;
+    }
+
+    // highest data rate (MPU9250 fifo rate 125 Hz)
+    if (!this->sensor.setMagDataRate(AK09916_MAG_DATARATE_100_HZ)) {
+      return false;
+    }
+    if (AK09916_MAG_DATARATE_100_HZ != this->sensor.getMagDataRate()) {
+      return false;
+    }
+    return true;
+  }
 
   /**
    * Update the internal sensor information.
@@ -126,11 +156,13 @@ ICM20948socket socket[NUMBER_OF_SENSORS]; /**< a (global) list of sockets to bun
  *
  * @see loop()
  * @see selectI2cMultiplexerChannel(uint8_t channel)
+ * @see ICM20948socket
  * @todo dedicated setup function for single sensor
  */
 void setup(void) {
   uint8_t result = 0;     // track results/error codes
   uint8_t channel_missing = 0; // track number of channels missing
+  uint8_t sensors_missing = 0; // track number of missing sensors
   uint8_t sensors_failed = 0; // track number of non-working sensors
   //-------HARDWARE SETUP-------
   Serial.begin(115200);
@@ -247,8 +279,14 @@ void setup(void) {
       socket[i].usable = true;
       Serial.println(".. works");
     } else {
-      sensors_failed += 1;
+      sensors_missing += 1;
       Serial.println(".. failed");
+    }
+
+    // configure the sensor
+    if(!socket[i].setup()){
+      sensors_failed += 1;
+      continue;
     }
   }
 
@@ -258,8 +296,12 @@ void setup(void) {
   Serial.println(" multiplexer channels");
 
   Serial.print("can communicate with ");
-  Serial.print(NUMBER_OF_SENSORS - sensors_failed);
+  Serial.print(NUMBER_OF_SENSORS - sensors_missing);
   Serial.println(" sensors");
+
+  Serial.print("setup of ");
+  Serial.print(NUMBER_OF_SENSORS - sensors_failed);
+  Serial.println(" sensors worked");
 }
 
 /**
