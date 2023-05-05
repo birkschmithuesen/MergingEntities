@@ -155,6 +155,7 @@ struct ICM20948socket {
    * Update the internal sensor information.
    *
    * @return false if error occured
+   * @see assembleOSCmessage()
    */
   bool update() {
 	if (!selectI2cMultiplexerChannel(this->channel)) {
@@ -170,22 +171,26 @@ struct ICM20948socket {
 
   /**
    * @return x axis acceleration of the gyro (in m/s^2)
+   * @see assembleOSCmessage()
    */
   float getGyroX() const { return this->gyro_event.gyro.x; }
 
   /**
    * @return y axis acceleration of the gyro (in m/s^2)
+   * @see assembleOSCmessage()
    */
   float getGyroY() const { return this->gyro_event.gyro.y; }
 
   /**
    * @return z axis acceleration of the gyro (in m/s^2)
+   * @see assembleOSCmessage()
    */
   float getGyroZ() const { return this->gyro_event.gyro.z; }
 
   /**
    * @return euler angle around x axis
    *
+   * @see assembleOSCmessage()
    * @todo implementation
    */
   float getEulerX() const { return 0.0f; }
@@ -200,6 +205,7 @@ struct ICM20948socket {
   /**
    * @return euler angle around z axis
    *
+   * @see assembleOSCmessage()
    * @todo implementation
    */
   float getEulerZ() const { return 0.0f; }
@@ -208,9 +214,29 @@ struct ICM20948socket {
   float getQuaternionRY() const { return 0.0f; }
   float getQuaternionRZ() const { return 0.0f; }
   float getQuaternionRW() const { return 0.0f; }
+  
+  /**
+   * Assemble an OSC message based on current sensor values.
+   */
+  void assembleOSCmessage() {
+    // clear the message (buffer)
+    this->osc.empty();
+    // set the quaternion data
+    this->osc.add(this->getQuaternionRX())
+        .add(this->getQuaternionRY())
+        .add(this->getQuaternionRZ())
+        .add(this->getQuaternionRW());
+    // set the euler angle data
+    this->osc.add(this->getEulerX())
+        .add(this->getEulerY())
+        .add(this->getEulerZ());
+    // set the gyro data
+    this->osc.add(this->getGyroX()).add(this->getGyroY()).add(this->getGyroZ());
+  }
 };
 
-ICM20948socket socket[NUMBER_OF_SENSORS]; /**< a (global) list of sockets to bundle communication */
+ICM20948socket socket[NUMBER_OF_SENSORS]; /**< a (global) list of sockets to
+                                             bundle communication */
 
 /**
  * This function establishes a connection to the preconfigured wifi network.
