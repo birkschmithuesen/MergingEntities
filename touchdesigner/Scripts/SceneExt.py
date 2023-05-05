@@ -49,7 +49,7 @@ class SceneExt:
 
 	def UnloadEngine(self, index):
 		model = self.Models[index]
-		model.op('predict_engine').par.unload.pulse()
+		model.par.Enginecomp = 0
 		self.EngineStates.setItem(index,0)
 		self.ModelStates.setItem(index,0)
 		self.CookingStates.setItem(index,0)
@@ -63,8 +63,7 @@ class SceneExt:
 		model = self.Models[index]
 		self.EngineStates.setItem(index,0)
 		self.CookingStates.setItem(index,0)
-		model.op('predict_engine').par.initialize.pulse()
-		model.op('predict_engine').par.play = 1
+		model.par.Enginecomp = 1
 		
 	def LoadAllModelEngines(self):
 		self.FillModelList()
