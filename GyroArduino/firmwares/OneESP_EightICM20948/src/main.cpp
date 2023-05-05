@@ -70,6 +70,47 @@ struct ICM20948socket {
     }
     return false;
   }
+
+  /**
+   * @return x axis acceleration of the gyro (in m/s^2)
+   */
+  float getGyroX() const { return this->gyro_event.gyro.x; }
+
+  /**
+   * @return y axis acceleration of the gyro (in m/s^2)
+   */
+  float getGyroY() const { return this->gyro_event.gyro.y; }
+
+  /**
+   * @return z axis acceleration of the gyro (in m/s^2)
+   */
+  float getGyroZ() const { return this->gyro_event.gyro.z; }
+
+  /**
+   * @return euler angle around x axis
+   *
+   * @todo implementation
+   */
+  float getEulerX() const { return 0.0f; }
+
+  /**
+   * @return euler angle around y axis
+   *
+   * @todo implementation
+   */
+  float getEulerY() const { return 0.0f; }
+
+  /**
+   * @return euler angle around z axis
+   *
+   * @todo implementation
+   */
+  float getEulerZ() const { return 0.0f; }
+
+  float getQuaternionRX() const { return 0.0f; }
+  float getQuaternionRY() const { return 0.0f; }
+  float getQuaternionRZ() const { return 0.0f; }
+  float getQuaternionRW() const { return 0.0f; }
 };
 
 ICM20948socket socket[NUMBER_OF_SENSORS]; /**< a (global) list of sockets to bundle communication */
@@ -162,11 +203,11 @@ void setup(void) {
   }
 
   // see if (expected) sensors are there
-  for (uint8_t ch = 0; ch < NUMBER_OF_SENSORS; ch++) {
+  for (uint8_t i = 0; i < NUMBER_OF_SENSORS; i++) {
     Serial.print("checking for serial communication for sensor on channel ");
-    Serial.print(ch);
+    Serial.print(i);
     Serial.print(" .");
-    if (!selectI2cMultiplexerChannel(ch)) {
+    if (!selectI2cMultiplexerChannel(i)) {
       Serial.println(".. failed (channel selection)");
       nonworking += 1;
       continue;
@@ -196,12 +237,12 @@ void setup(void) {
     // check for correct sensor communication
     nonworking = 0;
     Serial.print("checking sensor on channel ");
-    Serial.print(ch);
+    Serial.print(socket[i].channel);
     Serial.print(" (");
-    Serial.print(socket[ch].label);
+    Serial.print(socket[i].label);
     Serial.print(") .");
-    if (socket[ch].sensor.begin_I2C()) {
-      socket[ch].usable = true;
+    if (socket[i].sensor.begin_I2C()) {
+      socket[i].usable = true;
       Serial.println(".. works");
     } else {
       nonworking += 1;
@@ -225,7 +266,11 @@ void loop() {
   delay(1000);
 
   // sequentially get all sensor data via each channel
-  for (uint8_t chan = 0; chan < NUMBER_OF_SENSORS; chan++) {
-	  socket[chan].update();
+  for (uint8_t i = 0; i < NUMBER_OF_SENSORS; i++) {
+	  socket[i].update();
+      // quaternion: x,y,z,w
+      // euler angle: x,y,z
+      // gyro: x,y,z
+      Serial.print(socket[i].getGyroX());
   }
 }
