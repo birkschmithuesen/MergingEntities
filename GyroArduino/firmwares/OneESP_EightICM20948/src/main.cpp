@@ -4,7 +4,6 @@
  *
  * @todo implement conversion for quaternions
  * @todo implement conversion for euler angles
- * @todo implement OSC message sending
  * @todo implement sensor resurection
  */
 // libraries for local sensor communication
@@ -17,14 +16,14 @@
 #include <WiFiUdp.h>
 #include <OSCMessage.h>
 
-//-------BEGIN WIFI SETTINGS--------
+//-------BEGIN NETWORK SETTINGS--------
 WiFiUDP Udp;                         /**< handler for UDP communication */
 #define WIFI_SSID "ArtNet4Hans"     /**< SSID / name of the wifi network to use */
 #define WIFI_PASS "kaesimira"  /**< password for the wifi network to use */
 IPAddress receiverIp(192, 168, 0, 2);     /**< IP address of the (target) OSC server */
 int receiverPort = 8000;             /**< UDP server port on OSC receiver (i.e. central server) */
 int localPort = 8888;                /**< source port for UDP communication on ESP32 */
-//-------END WIFI SETTINGS--------
+//-------END NETWORK SETTINGS--------
 
 // SDA and SCL pin of the soft and hard wire mode
 #define SDA_PIN 21       /**< I2C data pin (on ESP32) */
@@ -219,8 +218,6 @@ struct ICM20948socket {
    * Assemble an OSC message based on current sensor values.
    */
   void assembleOSCmessage() {
-    // clear the message (buffer)
-    this->osc.empty();
     // set the quaternion data
     this->osc.add(this->getQuaternionRX())
         .add(this->getQuaternionRY())
@@ -235,8 +232,7 @@ struct ICM20948socket {
   }
 };
 
-ICM20948socket socket[NUMBER_OF_SENSORS]; /**< a (global) list of sockets to
-                                             bundle communication */
+ICM20948socket socket[NUMBER_OF_SENSORS]; /**< a (global) list of sockets to bundle communication */
 
 /**
  * This function establishes a connection to the preconfigured wifi network.
@@ -474,10 +470,18 @@ void loop() {
 
   // sequentially get all sensor data via each channel
   for (uint8_t i = 0; i < NUMBER_OF_SENSORS; i++) {
-	  socket[i].update();
-      // quaternion: x,y,z,w
-      // euler angle: x,y,z
-      // gyro: x,y,z
-      Serial.print(socket[i].getGyroX());
+    // skip processing unusable socket
+    if (!socket[i].usable) {
+      continue;
+    }
+    // update the sensor measurements
+    socket[i].update();
+    // construct the OSC message
+    socket[i].assembleOSCmessage();
+    // send the OSC message
+    Udp.beginPacket(receiverIp, receiverPort + getControllerID() - 1);
+    socket[i].osc.send(Udp);
+    Udp.endPacket();
+    socket[i].osc.empty();
   }
 }
