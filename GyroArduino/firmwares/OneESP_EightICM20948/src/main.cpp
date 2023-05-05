@@ -7,12 +7,24 @@
  * @todo implement OSC message sending
  * @todo implement sensor resurection
  */
-
+// libraries for local sensor communication
 #include <Adafruit_ICM20948.h>
 #include <Adafruit_ICM20X.h>
 #include <Adafruit_Sensor.h>
 #include <Wire.h>
+// libraries for wireless communication
+#include <WiFi.h>
+#include <WiFiUdp.h>
+#include <OSCMessage.h>
 
+//-------BEGIN WIFI SETTINGS--------
+WiFiUDP Udp;                         /**< handler for UDP communication */
+#define WIFI_SSID "ArtNet4Hans"     /**< SSID / name of the wifi network to use */
+#define WIFI_PASS "kaesimira"  /**< password for the wifi network to use */
+IPAddress receiverIp(192, 168, 0, 2);     /**< IP address of the (target) OSC server */
+int receiverPort = 8000;             /**< UDP server port on OSC receiver (i.e. central server) */
+int localPort = 8888;                /**< source port for UDP communication on ESP32 */
+//-------END WIFI SETTINGS--------
 
 // SDA and SCL pin of the soft and hard wire mode
 #define SDA_PIN 21       /**< I2C data pin (on ESP32) */
@@ -59,6 +71,7 @@ struct ICM20948socket {
   sensors_event_t gyro_event;  /**< gyroscope information (transmitted via event) */
   sensors_event_t mag_event;   /**< magnetometer information (transmitted via event) */
   sensors_event_t temp_event;  /**< temperature information (transmitted via event) */
+  OSCMessage osc;
 
   /**
    * Set up / configure the sensor.
@@ -152,6 +165,57 @@ struct ICM20948socket {
 
 ICM20948socket socket[NUMBER_OF_SENSORS]; /**< a (global) list of sockets to bundle communication */
 
+/**
+ * This function establishes a connection to the preconfigured wifi network.
+ *
+ * @see #WIFI_SSID
+ * @see #WIFI_PASS
+ * @see startUdp()
+ * @see setup()
+ */
+void connectWiFi() {
+  Serial.print("Connecting to wifi network \"");
+  Serial.print(WIFI_SSID);
+  Serial.print("\" .");
+  // Mode of the WiFi
+  //   STA = STATION MODE (connect to access point),
+  //   APM = Access Point Mode (create a network)
+  WiFi.mode(WIFI_STA);
+  WiFi.begin(WIFI_SSID, WIFI_PASS);
+
+  long start = millis();
+  // try for ten seconds to connect every 500 ms (i.e. make 10000/500 = 20 attempts)
+  while (WiFi.status() != WL_CONNECTED && millis() - start < 10000) {
+    Serial.print(".");
+    delay(500);
+  }
+
+  // print result of connection attempt(s) on serial console
+  if (WiFi.status() != WL_CONNECTED) {
+    Serial.println(" failed");
+  } else {
+	Serial.println(" succeeded");
+    Serial.print("local IP address is ");
+    Serial.println(WiFi.localIP());
+  }
+}
+
+/**
+ * Set up UDP communication locally.
+ *
+ * @param port local port to bind to
+ * @see localPort
+ * @see connectWiFi()
+ */
+void startUdp(int port) {
+  Serial.print("Starting UDP connection to local port ");
+  Serial.print(port);
+  if (0 == Udp.begin(port)) {
+	  // no socket available for use
+	  Serial.println(" ... failed");
+  }
+  Serial.println(" ... succeeded");
+}
 
 /**
  * Bring the controller into a working state.
@@ -183,6 +247,15 @@ void setup(void) {
   Serial.println("----------------------------------------");
   Serial.println();
   delay(1000);
+
+  //-------WIFI SETUP-------
+  connectWiFi();
+  startUdp(localPort);
+  Serial.print("target OSC server is ");
+  Serial.print(receiverIp);
+  Serial.print(" port ");
+  Serial.println(receiverPort);
+
 
   Serial.print("setting up sensor sockets .");
   socket[0].label = "label_1";
