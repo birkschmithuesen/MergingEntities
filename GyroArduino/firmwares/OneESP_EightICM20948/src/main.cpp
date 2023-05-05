@@ -32,6 +32,11 @@ int localPort = 8888;                /**< source port for UDP communication on E
 #define TCA_ADDRESS 0x70 /**< I2C address of the TCA9548A (I2C multiplexer) */
 #define ICM_ADDRESS 0x69 /**< I2C address of the ICM20948 sensor */
 
+#define ID_PIN1 27   /**< 1st bit pin of ID DIP switch (D27) */
+#define ID_PIN2 14   /**< 2nd bit pin of ID DIP switch (D14) */
+#define ID_PIN3 12   /**< 3rd bit pin of ID DIP switch (D12) */
+#define ID_PIN4 13   /**< 4rd bit pin of ID DIP switch (D13) */
+
 #define NUMBER_OF_SENSORS 8 /**< number of ICM20948 sensors */
 
 /**
@@ -56,6 +61,48 @@ bool selectI2cMultiplexerChannel(uint8_t channel) {
   }
   Wire.endTransmission();
   return result;
+}
+
+/**
+ * Retrieve the (unique) ID configured for this controller.
+ * This ID is used in the OSC messages to identify the sender.
+ * Its value is between 0 and 15 inclusively.
+ *
+ * @return configured ID of the controller.
+ * @see getControllerIdChars()
+ */
+uint8_t getControllerID() {
+  uint8_t id = 0;
+
+  // read the switch state from left to right and add value at position
+  if (HIGH == digitalRead(ID_PIN1)) {
+	id = 8;
+  }
+  if (HIGH == digitalRead(ID_PIN2)) {
+	id += 4;
+  }
+  if (HIGH == digitalRead(ID_PIN3)) {
+	id += 2;
+  }
+  if (HIGH == digitalRead(ID_PIN4)) {
+	id += 1;
+  }
+  return id;
+}
+
+/**
+ * Retrieve the (unique) ID of the controller board
+ *
+ * @return ID as const char*
+ * @see getControllerID()
+ */
+const char* getControllerIdChars() {
+  // ID as four bit, i.e. max value is 15, to 3 bytes (for NULL)
+  char* str = (char*)malloc(3*sizeof(char));
+  str[2] = '\n'; // just to be sure
+  uint8_t id = getControllerID();
+  sprintf(str,"%d",id);
+  return str;
 }
 
 /**
@@ -223,7 +270,6 @@ void startUdp(int port) {
  * @see loop()
  * @see selectI2cMultiplexerChannel(uint8_t channel)
  * @see ICM20948socket
- * @todo dedicated setup function for single sensor
  */
 void setup(void) {
   uint8_t result = 0;     // track results/error codes
@@ -256,7 +302,7 @@ void setup(void) {
   Serial.print(" port ");
   Serial.println(receiverPort);
 
-
+  // socket label & channel
   Serial.print("setting up sensor sockets .");
   socket[0].label = "label_1";
   socket[0].channel = 0;
@@ -275,6 +321,17 @@ void setup(void) {
   socket[7].label = "label_8";
   socket[7].channel = 7;
   Serial.println(".. done");
+
+  // build OSC paths
+  for (uint8_t i = 0; i < NUMBER_OF_SENSORS; i++) {
+    char path[100];
+    strcpy(path, "/body/");
+    strcat(path, getControllerIdChars());
+    strcat(path, "/gyro/");
+    strcat(path, socket[i].label);
+    strcat(path, "/");
+    socket[i].osc = OSCMessage(path);
+  }
 
   // inital sanity check
   if (ICM_ADDRESS == TCA_ADDRESS) {
