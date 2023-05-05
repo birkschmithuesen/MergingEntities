@@ -5,12 +5,14 @@
  * @todo implement conversion for quaternions
  * @todo implement conversion for euler angles
  * @todo implement OSC message sending
+ * @todo implement sensor resurection
  */
 
 #include <Adafruit_ICM20948.h>
 #include <Adafruit_ICM20X.h>
 #include <Adafruit_Sensor.h>
 #include <Wire.h>
+
 
 // SDA and SCL pin of the soft and hard wire mode
 #define SDA_PIN 21       /**< I2C data pin (on ESP32) */
