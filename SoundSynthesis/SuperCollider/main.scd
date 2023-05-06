@@ -2,7 +2,9 @@ Server.killAll
 
 ServerOptions.devices; // all devices
 Server.default.options.inDevice_("Built-in Microph");
-Server.default.options.outDevice_("External Headphones");
+Server.default.options.outDevice_("BlackHole 64ch");
+Server.default.options.outDevice_("MacBook Pro Speakers");
+s.numOutputBusChannels = numChannels: 64;
 
 (
 s.boot;
@@ -11,6 +13,19 @@ s.meter;
 s.freqscope;
 )
 
+(
+s.reboot{
+	Server.default.options.outDevice_("BlackHole 64ch");
+	s.options.numOutputBusChannels = 64;
+}
+)
+
+(
+s.reboot{
+	Server.default.options.outDevice_("External Headphones"); //MacBook Pro Speakers
+	s.options.numOutputBusChannels = 2;
+}
+)
 
 (
 // DOMINO -
@@ -19,49 +34,52 @@ s.freqscope;
 
 var scale;
 
+// load Synth Defs and Pattern Defs
+~path = PathName(thisProcess.nowExecutingPath).parentPath;
+(~path++"synthlib.scd").load;
+(~path++"patternlib.scd").load;
+
+// define number of performers bodies
+~numBodies = 2;
+
 // create groups
 ~moogGroup = Group.new;
 ~noiseGroup = Group.new;
-~sawGroup = Group.new;
+//~sawGroup = Group.new;
 ~leadGroup = Group.new;
-
-// load Synth Defs
-~path = PathName(thisProcess.nowExecutingPath).parentPath;
-(~path++"synthlib.scd").load;
-
-// define number of performers bodies
-~numBodies = 1;
 
 // create Synths
 scale = FloatArray[48, 55, 60, 67];//some 5ths starting from c4
-~moogs = {Synth.head(~moogGroup,\moog)}!~numBodies;
+~moogs = {arg i; Synth.head(~moogGroup, \moog, [\out, i*2])}!~numBodies;
 {arg i;
 	~moogs[i].set(\freq, scale[i].midicps);
 	("Created "++~moogs[i]++" with freq: "++(300+ (i*52))).postln;
 }!~numBodies;
 
-~noises = {Synth.head(~noiseGroup,\noise)}!~numBodies;
+~noises = {arg i; Synth.head(~noiseGroup,\noise, [\out, i*2])}!~numBodies;
 {arg i; ("Created "++~noises[i]).postln}!~numBodies;
 
-~saws = {Synth.head(~sawGroup,\saw)}!~numBodies;
+/*
+~saws = {arg i; Synth.head(~performerGroup[i],\saw)}!~numBodies;
 {arg i; ("Created "++~saws[i]).postln}!~numBodies;
+*/
 
-~leads = {Synth.head(~leadGroup, \lead)}!~numBodies;
+~leads = {arg i; Synth.head(~leadGroup, \lead, [\out, i*2])}!~numBodies;
 {arg i; ("Created "++~leads[i]).postln}!~numBodies;
 
 
 // make the Synth controllable via OSC
-~oscMoog = {arg i; OscMoog.new(~moogs[i], ('/moog/' ++ i))}!~numBodies;
-~oscMoogGroup = OscDetuneGroup.new(~moogGroup, ('/moog/group'), 0.0, 2.0);
+~oscMoog = {arg i; OscMoog.new(~moogs[i], ('/moog/' ++ i), 0.0, 1.3)}!~numBodies;
+~oscMoogGroup = OscStandartGroup.new(~moogGroup, ('/moog/group'), 0.0, 2.0);
 
 ~oscNoise = {arg i; OscNoise.new(~noises[i], ('/noise/' ++ i))}!~numBodies;
 ~oscNoiseGroup = OscStandartGroup.new(~noiseGroup, ('/noise/group'));
 
-~oscSaw = {arg i; OscSaw.new(~saws[i], ('/saw/' ++ i))}!~numBodies;
-~oscSawGroup = OscDetuneGroup.new(~sawGroup, ('/saw/group'), 1.01, 1.5);
+//~oscSaw = {arg i; OscSaw.new(~saws[i], ('/saw/' ++ i))}!~numBodies;
+//~oscSawGroup = OscDetuneGroup.new(~sawGroup, ('/saw/group'), 1.01, 1.5);
 
-~oscLead = {arg i; OscLead.new(~leads[i], ('/lead/' ++ i), 0, 13)}!~numBodies;
-~oscLeadGroup = OscDetuneGroup.new(~leadGroup, ('/lead/group'), 0.04, 1.0);
+~oscLead = {arg i; OscLead.new(~leads[i], ('/lead/' ++ i), 0, 13, 0.04, 2.0)}!~numBodies;
+~oscLeadGroup = OscStandartGroup.new(~leadGroup, ('/lead/group'));
 )
 
 
@@ -78,19 +96,63 @@ scale = FloatArray[48, 55, 60, 67];//some 5ths starting from c4
 (~path++"synthlib.scd").load;
 
 // define number of performers bodies
-~numBodies = 1;
+~numBodies = 2;
 
 // create Synths
-~klings = {Synth.head(~klingGroup, \kling)}!~numBodies;
+~klings = {arg i; Synth.head(~klingGroup, \kling, [\out, i*2])}!~numBodies;
 {arg i; ("Created "++~klings[i]).postln}!~numBodies;
 
 
 // make the Synth controllable via OSC
 ~oscKling = {arg i; OscKling.new(~klings[i], ('/kling/' ++ i))}!~numBodies;
 ~oscKlingGroup = OscStandartGroup.new(~klingGroup, ('/kling/group'));
-
-
 )
 
-s.meter;
-~moogGroup.set(\amp, );
+
+
+(
+// PATTERNS
+
+// load Synth Defs and Pattern Defs
+~path = PathName(thisProcess.nowExecutingPath).parentPath;
+(~path++"synthlib.scd").load;
+
+// define number of performers bodies
+~numBodies = 2;
+
+~tempo = 60/120 * 4; //60/90 * 4 //60sec / 128 BPM * 4 bars
+
+
+// create pattern proxies
+~exc = {PatternProxy.new}!~numBodies;
+~shape = {PatternProxy.new}!~numBodies;
+~atk = {PatternProxy.new}!~numBodies;
+~rel = {PatternProxy.new}!~numBodies;
+// initialize pattern proxies
+{arg i; ~exc[i].source = 1.0}!~numBodies;
+{arg i; ~shape[i].source = 1.0}!~numBodies;
+{arg i; ~atk[i].source = 0.0}!~numBodies;
+{arg i; ~rel[i].source = 0.1}!~numBodies;
+
+// load patterns
+(~path++"patternlib.scd").load;
+// play patterns
+
+
+// create patterns
+//~pattern = [Pdef.new(\tripples), Pdef.new(\steady)];
+// play the patterns
+//{arg i; ~pattern[i].play(quant:0)}!~numBodies;
+
+~oscPattern = {arg i; OscPattern.new([~exc[i], ~shape[i], ~atk[i], ~rel[i]], ('/sequencer/' ++ i))}!~numBodies;
+)
+
+
+(
+~tripples.stop;
+~steady.stop;
+~tripples.reset;
+~steady.reset;
+~tripples.play;
+~steady.play;
+)
