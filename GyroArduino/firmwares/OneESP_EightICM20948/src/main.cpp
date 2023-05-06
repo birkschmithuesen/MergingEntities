@@ -2,8 +2,8 @@
  * This firmware uses one TCA9548A to read data from 8 ICM20948 sensors
  * via I2C. This data is slightly prepocessed passed on via OSC.
  *
- * @todo implement conversion for quaternions
  * @todo implement conversion for euler angles
+ * @todo implement magnetic north calibration
  * @todo implement sensor resurection
  */
 // libraries for local sensor communication
@@ -107,6 +107,8 @@ const char* getControllerIdChars() {
 /**
  * A data structure to handle hardware related data and
  * communication of one ICM20948.
+ *
+ * @todo public/private visibility of members
  */
 struct ICM20948socket {
   const char *label; /**< human readable identification of the sensor (for OSC path) */
@@ -118,6 +120,10 @@ struct ICM20948socket {
   sensors_event_t mag_event;   /**< magnetometer information (transmitted via event) */
   sensors_event_t temp_event;  /**< temperature information (transmitted via event) */
   OSCMessage osc;              /**< OSC message with sensor values to send out */
+  float q[4] = {1.0f, 0.0f, 0.0f, 0.0f}; /**< internal quaternion storage */
+  float q_r[4] = {1.0f, 0.0f, 0.0f, 0.0f}; /**< internal rotated quaternion storage */
+  unsigned long last_update = 0;  /**< timestamp of last quaternion update (in microseconds since boot) */
+  float theta = 0.0f; /**< sensor angle to (reference) north */
 
   /**
    * Set up / configure the sensor.
@@ -163,9 +169,51 @@ struct ICM20948socket {
     if (this->usable) {
       this->sensor.getEvent(&this->accel_event, &this->gyro_event,
                             &this->temp_event, &this->mag_event);
+      this->update_quaternion();
       return true;
     }
     return false;
+  }
+
+  /**
+   * Update the quaternion without any value filtering.
+   * This includes the rotation.
+   *
+   * @see getQuaternionRX()
+   * @see getQuaternionRY()
+   * @see getQuaternionRZ()
+   * @see getQuaternionRW()
+   */
+  void update_quaternion() {
+    // determine time passed since last update
+    unsigned long now = micros();
+    unsigned long deltaTus = now - this->last_update;
+    this->last_update = now;
+    float deltaT = fabs(deltaTus * 0.001 * 0.001);
+
+    // adjust gyro values
+    float gx = this->gyro_event.gyro.x * DEG_TO_RAD;
+    float gy = -(this->gyro_event.gyro.y) * DEG_TO_RAD;
+    float gz = -(this->gyro_event.gyro.z) * DEG_TO_RAD;
+
+    // calculate quaternion
+    this->q[0] += 0.5f * (-(this->q[1]) * gx - (this->q[2]) * gy - (this->q[3]) * gz) * deltaT;
+    this->q[1] += 0.5f * ((this->q[0]) * gx + (this->q[2]) * gz - (this->q[3]) * gy) * deltaT;
+    this->q[2] += 0.5f * ((this->q[0]) * gy - (this->q[1]) * gz + (this->q[3]) * gx) * deltaT;
+    this->q[3] += 0.5f * ((this->q[0]) * gz + (this->q[1]) * gy - (this->q[2]) * gx) * deltaT;
+    float recipNorm = 1.0 / sqrt((this->q[0] * this->q[0]) + (this->q[1] * this->q[1]) + (this->q[2] * q[2]) + (this->q[3] * this->q[3]));
+    this->q[0] *= recipNorm;
+    this->q[1] *= recipNorm;
+    this->q[2] *= recipNorm;
+    this->q[3] *= recipNorm;
+
+    // rotate quaternion
+    float halfcos = cos(theta/2);
+    float halfsin = sin(theta/2);
+    this->q_r[0] = this->q[0]*halfcos - this->q[3]*halfsin;
+    this->q_r[1] = this->q[1]*halfcos - this->q[2]*halfsin;
+    this->q_r[2] = this->q[2]*halfcos + this->q[1]*halfsin;
+    this->q_r[3] = this->q[3]*halfcos + this->q[0]*halfsin;
   }
 
   /**
@@ -209,13 +257,47 @@ struct ICM20948socket {
    */
   float getEulerZ() const { return 0.0f; }
 
-  float getQuaternionRX() const { return 0.0f; }
-  float getQuaternionRY() const { return 0.0f; }
-  float getQuaternionRZ() const { return 0.0f; }
-  float getQuaternionRW() const { return 0.0f; }
-  
+  /**
+   * Retrieve x component of the rotated quaternion.
+   *
+   * @see update_quaternion()
+   * @see getQuaternionRY()
+   * @see getQuaternionRZ()
+   * @see getQuaternionRW()
+   */
+  float getQuaternionRX() const { return q_r[1]; }
+  /**
+   * Retrieve y component of the rotated quaternion.
+   *
+   * @see update_quaternion()
+   * @see getQuaternionRX()
+   * @see getQuaternionRZ()
+   * @see getQuaternionRW()
+   */
+  float getQuaternionRY() const { return q_r[2]; }
+  /**
+   * Retrieve z component of the rotated quaternion.
+   *
+   * @see update_quaternion()
+   * @see getQuaternionRX()
+   * @see getQuaternionRY()
+   * @see getQuaternionRW()
+   */
+  float getQuaternionRZ() const { return q_r[3]; }
+  /**
+   * Retrieve w component of the rotated quaternion.
+   *
+   * @see update_quaternion()
+   * @see getQuaternionRX()
+   * @see getQuaternionRY()
+   * @see getQuaternionRZ()
+   */
+  float getQuaternionRW() const { return q_r[0]; }
+
   /**
    * Assemble an OSC message based on current sensor values.
+   *
+   * @see printOSC()
    */
   void assembleOSCmessage() {
     // set the quaternion data
@@ -229,6 +311,33 @@ struct ICM20948socket {
         .add(this->getEulerZ());
     // set the gyro data
     this->osc.add(this->getGyroX()).add(this->getGyroY()).add(this->getGyroZ());
+  }
+
+  /**
+   * Print the OSC data on the serial line.
+   *
+   * @see assembleOSCmessage()
+   */
+  void printOSC() {
+    Serial.print(this->getQuaternionRX());
+    Serial.print(" ");
+    Serial.print(this->getQuaternionRY());
+    Serial.print(" ");
+    Serial.print(this->getQuaternionRZ());
+    Serial.print(" ");
+    Serial.print(this->getQuaternionRW());
+    Serial.print(" # ");
+    Serial.print(this->getEulerX());
+    Serial.print(" ");
+    Serial.print(this->getEulerY());
+    Serial.print(" ");
+    Serial.print(this->getEulerZ());
+    Serial.print(" # ");
+    Serial.print(this->getGyroX());
+    Serial.print(" ");
+    Serial.print(this->getGyroY());
+    Serial.print(" ");
+    Serial.println(this->getGyroZ());
   }
 };
 
@@ -465,7 +574,6 @@ void setup(void) {
  * @see selectI2cMultiplexerChannel(uint8_t channel)
  */
 void loop() {
-  Serial.print(".");
   delay(1000);
 
   // sequentially get all sensor data via each channel
@@ -483,5 +591,6 @@ void loop() {
     socket[i].osc.send(Udp);
     Udp.endPacket();
     socket[i].osc.empty();
+    socket[i].printOSC();
   }
 }
