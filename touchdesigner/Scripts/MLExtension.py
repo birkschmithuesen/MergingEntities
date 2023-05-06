@@ -167,7 +167,7 @@ class MLExtension:
 		#file = open(file_loc)
 		#values = np.loadtxt(file_loc, skiprows=1, dtype='float32')
 		string_values = StringIO(op('selected_data').text)
-		values = np.loadtxt(string_values,skiprows=1,dtype='float32')
+		values = np.loadtxt(string_values,skiprows=1,dtype='float16')
 		debug('Training Data Points: ', values.shape[0])
 		self.Features, self.Targets = values[:,:-self.Outputdim.val], values[:,self.Inputdim.val:]
 		if self.Modelname == 'lstm':
