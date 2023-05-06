@@ -165,6 +165,8 @@ struct ICM20948socket {
    *
    * @return false if error occured
    * @see assembleOSCmessage()
+   * @see update_quaternion()
+   * @see update_angles()
    */
   bool update() {
 	if (!selectI2cMultiplexerChannel(this->channel)) {
@@ -187,6 +189,8 @@ struct ICM20948socket {
    * @see getQuaternionRY()
    * @see getQuaternionRZ()
    * @see getQuaternionRW()
+   * @see update()
+   * @see update_angles()
    */
   void update_quaternion() {
     // determine time passed since last update
@@ -218,6 +222,29 @@ struct ICM20948socket {
     this->q_r[1] = this->q[1]*halfcos - this->q[2]*halfsin;
     this->q_r[2] = this->q[2]*halfcos + this->q[1]*halfsin;
     this->q_r[3] = this->q[3]*halfcos + this->q[0]*halfsin;
+  }
+
+  /**
+   * Update the internal values for roll, pitch, and yaw.
+   *
+   * @see update_quaternion()
+   */
+  void update_angles() {
+	// http://en.wikipedia.org/wiki/Conversion_between_quaternions_and_Euler_angles
+	// make sure quaternions are up to date
+	this->update_quaternion();
+	// use parts of the quaternion as Tait-Bryan angles
+	// rotation matrix coefficients for Euler angles and gravity components
+	float a12, a22, a31, a32, a33;
+	float qx = this->getQuaternionX();
+	float qy = this->getQuaternionY();
+	float qz = this->getQuaternionZ();
+	float qw = this->getQuaternionW();
+	a12 = 2.0f * (qx * qy + qw * qz);
+    a22 = qw * qw + qx * qx - qy * qy - qz * qz;
+    a31 = 2.0f * (qw * qx + qy * qz);
+    a32 = 2.0f * (qx * qz - qw * qy);
+    a33 = qw * qw - qx * qx - qy * qy + qz * qz;
   }
 
   /**
@@ -262,6 +289,46 @@ struct ICM20948socket {
   float getEulerZ() const { return 0.0f; }
 
   /**
+   * Retrieve x component of the quaternion.
+   *
+   * @see update_quaternion()
+   * @see getQuaternionY()
+   * @see getQuaternionZ()
+   * @see getQuaternionW()
+   */
+  float getQuaternionX() const { return q[1]; }
+
+  /**
+   * Retrieve y component of the quaternion.
+   *
+   * @see update_quaternion()
+   * @see getQuaternionX()
+   * @see getQuaternionZ()
+   * @see getQuaternionW()
+   */
+  float getQuaternionY() const { return q[2]; }
+
+  /**
+   * Retrieve z component of the quaternion.
+   *
+   * @see update_quaternion()
+   * @see getQuaternionX()
+   * @see getQuaternionY()
+   * @see getQuaternionW()
+   */
+  float getQuaternionZ() const { return q[3]; }
+
+  /**
+   * Retrieve w component of the quaternion.
+   *
+   * @see update_quaternion()
+   * @see getQuaternionX()
+   * @see getQuaternionY()
+   * @see getQuaternionZ()
+   */
+  float getQuaternionW() const { return q[0]; }
+
+  /**
    * Retrieve x component of the rotated quaternion.
    *
    * @see update_quaternion()
@@ -270,6 +337,7 @@ struct ICM20948socket {
    * @see getQuaternionRW()
    */
   float getQuaternionRX() const { return q_r[1]; }
+
   /**
    * Retrieve y component of the rotated quaternion.
    *
@@ -278,6 +346,7 @@ struct ICM20948socket {
    * @see getQuaternionRZ()
    * @see getQuaternionRW()
    */
+
   float getQuaternionRY() const { return q_r[2]; }
   /**
    * Retrieve z component of the rotated quaternion.
@@ -287,6 +356,7 @@ struct ICM20948socket {
    * @see getQuaternionRY()
    * @see getQuaternionRW()
    */
+
   float getQuaternionRZ() const { return q_r[3]; }
   /**
    * Retrieve w component of the rotated quaternion.
