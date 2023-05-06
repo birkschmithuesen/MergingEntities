@@ -124,6 +124,10 @@ struct ICM20948socket {
   float q_r[4] = {1.0f, 0.0f, 0.0f, 0.0f}; /**< internal rotated quaternion storage */
   unsigned long last_update = 0;  /**< timestamp of last quaternion update (in microseconds since boot) */
   float theta = 0.0f; /**< sensor angle to (reference) north */
+  // https://en.wikipedia.org/wiki/Aircraft_principal_axes
+  float roll = 0.0f; /**< rotation around center of gravity and and forward direction */
+  float pitch = 0.0f; /**< rotation around lateral axis / center of gravity (directed) to the right (think wingtip to wingtip) */
+  float yaw = 0.0f; /**< rotation around axis from the center of gravity (directed) towards the bottom of the sensor */
 
   /**
    * Set up / configure the sensor.
