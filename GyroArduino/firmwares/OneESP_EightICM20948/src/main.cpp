@@ -117,7 +117,7 @@ struct ICM20948socket {
   sensors_event_t gyro_event;  /**< gyroscope information (transmitted via event) */
   sensors_event_t mag_event;   /**< magnetometer information (transmitted via event) */
   sensors_event_t temp_event;  /**< temperature information (transmitted via event) */
-  OSCMessage osc;
+  OSCMessage osc;              /**< OSC message with sensor values to send out */
 
   /**
    * Set up / configure the sensor.
