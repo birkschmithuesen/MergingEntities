@@ -134,9 +134,10 @@ struct ICM20948socket {
    * Set up / configure the sensor.
    *
    * @returns true if successful
+   * @see update()
    * @todo more detailed error codes
    */
-  bool setup() {
+  bool configure() {
     if (!selectI2cMultiplexerChannel(this->channel)) {
       return false;
     }
@@ -165,6 +166,7 @@ struct ICM20948socket {
    * Update the internal sensor information.
    *
    * @return false if error occured
+   * @see configure()
    * @see assembleOSCmessage()
    * @see update_quaternion()
    * @see update_angles()
@@ -637,7 +639,7 @@ void setup(void) {
     }
 
     // configure the sensor
-    if(!socket[i].setup()){
+    if(!socket[i].configure()){
       sensors_failed += 1;
       continue;
     }
