@@ -4,6 +4,7 @@
  *
  * @todo implement magnetic north calibration
  * @todo implement sensor resurection
+ * @todo handle sensor dropping out, investigale usabe & lock flag
  * @todo implement sensor calibration
  */
 // libraries for local sensor communication
@@ -184,8 +185,16 @@ struct ICM20948socket {
    */
   bool update() {
 	if (!selectI2cMultiplexerChannel(this->channel)) {
+      this->usable = false;
       return false;
     }
+
+    Wire.beginTransmission(ICM_ADDRESS);
+    if (Wire.endTransmission() != 0) {
+      this->usable = false;
+      return false;
+    }
+
     if (this->usable && (!this->configlock)) {
       this->sensor.getEvent(&this->accel_event, &this->gyro_event,
                             &this->temp_event, &this->mag_event);
@@ -452,6 +461,7 @@ ICM20948socket socket[NUMBER_OF_SENSORS]; /**< a (global) list of sockets to bun
  * @param *cfg_ptr is a pointer to the configuration data
  * @see ICM20948config
  * @see selectI2cMultiplexerChannel(channel)
+ * @see sensorResurrection(void*)
  * @note This is a dedicated function to help with multi-threading.
  * @note The functions as void* in the signature to satisfy the OS interface definition.
  */
@@ -459,7 +469,7 @@ void configureICM20948(void *cfg_ptr) {
   ICM20948config *config = (ICM20948config*)cfg_ptr;
   // somehow locked, don't do anything
   if(true == *(config->lock)) {
-    *(config->result) = 6;
+    *(config->result) = 1;
     return;
   }
 
@@ -468,7 +478,15 @@ void configureICM20948(void *cfg_ptr) {
 
   // select proper channel on the multiplexer
   if (!selectI2cMultiplexerChannel(config->channel)) {
-    *(config->result) = 1;
+    *(config->result) = 2;
+    *(config->lock) = false;
+    return;
+  }
+
+  // make sure a sensor is connected and responds to I2C
+  Wire.beginTransmission(ICM_ADDRESS);
+  if(Wire.endTransmission() != 0) {
+    *(config->result) = 3;
     *(config->lock) = false;
     return;
   }
@@ -476,25 +494,25 @@ void configureICM20948(void *cfg_ptr) {
   // accel range +/- 4g
   config->sensor->setAccelRange(ICM20948_ACCEL_RANGE_4_G);
   if (ICM20948_ACCEL_RANGE_4_G != config->sensor->getAccelRange()) {
-    *(config->result) = 2;
+    *(config->result) = 4;
     *(config->lock) = false;
     return;
   }
   // gyro 500 degree/s;
   config->sensor->setGyroRange(ICM20948_GYRO_RANGE_500_DPS);
   if (ICM20948_GYRO_RANGE_500_DPS != config->sensor->getGyroRange()) {
-    *(config->result) = 3;
+    *(config->result) = 5;
     *(config->lock) = false;
     return;
   }
   // highest data rate (MPU9250 fifo rate 125 Hz)
   if (!config->sensor->setMagDataRate(AK09916_MAG_DATARATE_100_HZ)) {
-    *(config->result) = 4;
+    *(config->result) = 6;
     *(config->lock) = false;
     return;
   }
   if (AK09916_MAG_DATARATE_100_HZ != config->sensor->getMagDataRate()) {
-    *(config->result) = 5;
+    *(config->result) = 7;
     *(config->lock) = false;
     return;
   }
@@ -556,11 +574,63 @@ void startUdp(int port) {
 }
 
 /**
+ * A dedicated OS task to bring usuable sensors back.
+ *
+ * @see configureICM20948(void *cfg_ptr)
+ * @note This task runs an endless loop and needs to be started only one.
+ * @note This function accesses the global socket list.
+ */
+void sensorResurrection(void *) {
+  uint8_t error[NUMBER_OF_SENSORS];         // store error code per sensor
+  ICM20948config config[NUMBER_OF_SENSORS]; // sensor configurations
+
+  // fill data structures
+  for (uint8_t i = 0; i < NUMBER_OF_SENSORS; i++) {
+    config[i] = (ICM20948config){.sensor = &(socket[i].sensor),
+                                 .channel = socket[i].channel,
+                                 .lock = &(socket[i].configlock),
+                                 .result = &error[i]};
+  }
+
+  // endless loop for processing dead sensors
+  for (;;) {
+    for (uint8_t i = 0; i < NUMBER_OF_SENSORS; i++) {
+      // ignore sensors that are ok
+      if (socket[i].usable) {
+        continue;
+      }
+      // ignore sensors that are being configured
+      if (socket[i].configlock) {
+        continue;
+      }
+
+      // configure the sensor
+      configureICM20948(&config[i]);
+
+      // handle any potential errors
+      if (0 == error[i]) {
+        socket[i].usable = true;
+      } else {
+        socket[i].usable = false;
+      }
+    }
+    // wait for a second
+    vTaskDelay(1000 / portTICK_PERIOD_MS);
+  }
+}
+
+#define TASKSTACKSIZE 2000 /**< size of initial stack (in bytes) */
+TaskHandle_t resurrectionTaskHandle = NULL; /**< OS task handler (for profiling and control) */
+UBaseType_t current_mark = 0; /**< watermark queried from task */
+UBaseType_t mark_min = TASKSTACKSIZE; /**< size of initial stack */
+
+/**
  * Bring the controller into a working state.
  *
  * @see loop()
  * @see selectI2cMultiplexerChannel(uint8_t channel)
  * @see ICM20948socket
+ * @note This function spawns a task to handle sensor issues.
  */
 void setup(void) {
   uint8_t result = 0;     // track results/error codes
@@ -725,6 +795,18 @@ void setup(void) {
   Serial.print("setup of ");
   Serial.print(NUMBER_OF_SENSORS - sensors_failed);
   Serial.println(" sensors worked");
+
+  // try to fix sensor issues
+  Serial.print("setting up background task to handle sensor issues ...");
+  xTaskCreate(
+    sensorResurrection,
+    "fix sensors", // pretty name
+    TASKSTACKSIZE,  // stack size in bytes
+    NULL, // parameter
+    1,  // task priority
+    &resurrectionTaskHandle // Task handle
+  );
+  Serial.println(" done");
 }
 
 /**
@@ -757,4 +839,14 @@ void loop() {
     socket[i].osc.empty();
     socket[i].printOSC();
   }
+  /* stack profiling
+  while(NULL != resurrectionTaskHandle) {
+    current_mark = uxTaskGetStackHighWaterMark( resurrectionTaskHandle );
+    if (current_mark < mark_min) {
+      mark_min = current_mark;
+    }
+    Serial.println(mark_min);
+    delay(1000);
+  }
+  */
 }
