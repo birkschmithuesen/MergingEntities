@@ -673,7 +673,11 @@ void loop() {
       continue;
     }
     // update the sensor measurements
-    socket[i].update();
+    if(!socket[i].update()) {
+      // update failed, mark sensor as unusable
+      socket[i].usable = false;
+      continue;
+    }
     // construct the OSC message
     socket[i].assembleOSCmessage();
     // send the OSC message
