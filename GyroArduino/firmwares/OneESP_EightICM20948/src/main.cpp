@@ -115,7 +115,7 @@ struct ICM20948config {
   uint8_t *result;           /**< result code to indicate errors (0 = ok) */
 };
 // forward declaration
-void configureICM20948(ICM20948config *config);
+void configureICM20948(void *cfg_ptr);
 
 
 /**
@@ -449,12 +449,14 @@ ICM20948socket socket[NUMBER_OF_SENSORS]; /**< a (global) list of sockets to bun
 /**
  * Configure an ICM20948 sensor.
  *
- * @param *config is a pointer to the configuration data
+ * @param *cfg_ptr is a pointer to the configuration data
  * @see ICM20948config
  * @see selectI2cMultiplexerChannel(channel)
  * @note This is a dedicated function to help with multi-threading.
+ * @note The functions as void* in the signature to satisfy the OS interface definition.
  */
-void configureICM20948(ICM20948config *config) {
+void configureICM20948(void *cfg_ptr) {
+  ICM20948config *config = (ICM20948config*)cfg_ptr;
   // somehow locked, don't do anything
   if(true == *(config->lock)) {
     *(config->result) = 6;
