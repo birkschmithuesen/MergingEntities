@@ -106,6 +106,18 @@ const char* getControllerIdChars() {
 }
 
 /**
+ * A structure to hold the configuration data for a ICM20948 sensor.
+ */
+struct ICM20948config {
+  Adafruit_ICM20948 *sensor; /**< pointer to the sensor class */
+  uint8_t channel;           /**< channel to use on the multiplexer */
+  uint8_t *result;           /**< result code to indicate errors (0 = ok) */
+};
+// forward declaration
+void configureICM20948(ICM20948config *config);
+
+
+/**
  * A data structure to handle hardware related data and
  * communication of one ICM20948.
  *
@@ -135,28 +147,24 @@ struct ICM20948socket {
    *
    * @returns true if successful
    * @see update()
+   * @see ICM20948config
+   * @see void configureICM20948(ICM20948config *config)
    * @todo more detailed error codes
    */
   bool configure() {
-    if (!selectI2cMultiplexerChannel(this->channel)) {
-      return false;
-    }
-    // accel range +/- 4g
-    this->sensor.setAccelRange(ICM20948_ACCEL_RANGE_4_G);
-    if (ICM20948_ACCEL_RANGE_4_G != this->sensor.getAccelRange()) {
-      return false;
-    }
-    // gyro 500 degree/s;
-    this->sensor.setGyroRange(ICM20948_GYRO_RANGE_500_DPS);
-    if (ICM20948_GYRO_RANGE_500_DPS != this->sensor.getGyroRange()) {
-      return false;
-    }
+    // prepare config
+    uint8_t error;
+    ICM20948config config;
+    config = (ICM20948config){.sensor = &(this->sensor),
+                              .channel = this->channel,
+                              .result = &error};
 
-    // highest data rate (MPU9250 fifo rate 125 Hz)
-    if (!this->sensor.setMagDataRate(AK09916_MAG_DATARATE_100_HZ)) {
-      return false;
-    }
-    if (AK09916_MAG_DATARATE_100_HZ != this->sensor.getMagDataRate()) {
+    // configure the sensor
+    configureICM20948(&config);
+
+    // handle any potential errors
+    if (0 != error) {
+      this->usable = false;
       return false;
     }
     return true;
@@ -434,6 +442,45 @@ struct ICM20948socket {
 };
 
 ICM20948socket socket[NUMBER_OF_SENSORS]; /**< a (global) list of sockets to bundle communication */
+
+/**
+ * Configure an ICM20948 sensor.
+ *
+ * @param *config is a pointer to the configuration data
+ * @see ICM20948config
+ * @see selectI2cMultiplexerChannel(channel)
+ * @note This is a dedicated function to help with multi-threading.
+ */
+void configureICM20948(ICM20948config *config) {
+  // select proper channel on the multiplexer
+  if (!selectI2cMultiplexerChannel(config->channel)) {
+    *(config->result) = 1;
+    return;
+  }
+  // accel range +/- 4g
+  config->sensor->setAccelRange(ICM20948_ACCEL_RANGE_4_G);
+  if (ICM20948_ACCEL_RANGE_4_G != config->sensor->getAccelRange()) {
+    *(config->result) = 2;
+    return;
+  }
+  // gyro 500 degree/s;
+  config->sensor->setGyroRange(ICM20948_GYRO_RANGE_500_DPS);
+  if (ICM20948_GYRO_RANGE_500_DPS != config->sensor->getGyroRange()) {
+    *(config->result) = 3;
+    return;
+  }
+
+  // highest data rate (MPU9250 fifo rate 125 Hz)
+  if (!config->sensor->setMagDataRate(AK09916_MAG_DATARATE_100_HZ)) {
+    *(config->result) = 4;
+    return;
+  }
+  if (AK09916_MAG_DATARATE_100_HZ != config->sensor->getMagDataRate()) {
+    *(config->result) = 5;
+    return;
+  }
+  *(config->result) = 0;
+}
 
 /**
  * This function establishes a connection to the preconfigured wifi network.
