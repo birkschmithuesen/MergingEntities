@@ -111,6 +111,7 @@ const char* getControllerIdChars() {
 struct ICM20948config {
   Adafruit_ICM20948 *sensor; /**< pointer to the sensor class */
   uint8_t channel;           /**< channel to use on the multiplexer */
+  bool *lock;                /**< lock to block other processing */
   uint8_t *result;           /**< result code to indicate errors (0 = ok) */
 };
 // forward declaration
@@ -127,6 +128,7 @@ struct ICM20948socket {
   const char *label; /**< human readable identification of the sensor (for OSC path) */
   uint8_t channel; /**< channel used on the I2C multiplexer */
   Adafruit_ICM20948 sensor; /**< software handler/abstraction for ICM20948 at given channel */
+  bool configlock = false;  /**< indicate that sensor is currently being configured and no other data retrieval should happen */
   bool usable = false; /**< indicate that sensor (data) is present and no errors occured */
   sensors_event_t accel_event; /**< accelerometer information (transmitted via event) */
   sensors_event_t gyro_event;  /**< gyroscope information (transmitted via event) */
@@ -157,6 +159,7 @@ struct ICM20948socket {
     ICM20948config config;
     config = (ICM20948config){.sensor = &(this->sensor),
                               .channel = this->channel,
+                              .lock = &(this->configlock),
                               .result = &error};
 
     // configure the sensor
@@ -183,7 +186,7 @@ struct ICM20948socket {
 	if (!selectI2cMultiplexerChannel(this->channel)) {
       return false;
     }
-    if (this->usable) {
+    if (this->usable && (!this->configlock)) {
       this->sensor.getEvent(&this->accel_event, &this->gyro_event,
                             &this->temp_event, &this->mag_event);
       this->update_quaternion();
@@ -452,34 +455,50 @@ ICM20948socket socket[NUMBER_OF_SENSORS]; /**< a (global) list of sockets to bun
  * @note This is a dedicated function to help with multi-threading.
  */
 void configureICM20948(ICM20948config *config) {
+  // somehow locked, don't do anything
+  if(true == *(config->lock)) {
+    *(config->result) = 6;
+    return;
+  }
+
+  // lock socket to avoid accidental reads
+  *(config->lock) = true;
+
   // select proper channel on the multiplexer
   if (!selectI2cMultiplexerChannel(config->channel)) {
     *(config->result) = 1;
+    *(config->lock) = false;
     return;
   }
+
   // accel range +/- 4g
   config->sensor->setAccelRange(ICM20948_ACCEL_RANGE_4_G);
   if (ICM20948_ACCEL_RANGE_4_G != config->sensor->getAccelRange()) {
     *(config->result) = 2;
+    *(config->lock) = false;
     return;
   }
   // gyro 500 degree/s;
   config->sensor->setGyroRange(ICM20948_GYRO_RANGE_500_DPS);
   if (ICM20948_GYRO_RANGE_500_DPS != config->sensor->getGyroRange()) {
     *(config->result) = 3;
+    *(config->lock) = false;
     return;
   }
-
   // highest data rate (MPU9250 fifo rate 125 Hz)
   if (!config->sensor->setMagDataRate(AK09916_MAG_DATARATE_100_HZ)) {
     *(config->result) = 4;
+    *(config->lock) = false;
     return;
   }
   if (AK09916_MAG_DATARATE_100_HZ != config->sensor->getMagDataRate()) {
     *(config->result) = 5;
+    *(config->lock) = false;
     return;
   }
+
   *(config->result) = 0;
+  *(config->lock) = false;
 }
 
 /**
