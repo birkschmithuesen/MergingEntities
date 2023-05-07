@@ -2,9 +2,9 @@
  * This firmware uses one TCA9548A to read data from 8 ICM20948 sensors
  * via I2C. This data is slightly prepocessed passed on via OSC.
  *
- * @todo implement conversion for euler angles
  * @todo implement magnetic north calibration
  * @todo implement sensor resurection
+ * @todo implement sensor calibration
  */
 // libraries for local sensor communication
 #include <Adafruit_ICM20948.h>
@@ -24,6 +24,7 @@ IPAddress receiverIp(192, 168, 0, 2);     /**< IP address of the (target) OSC se
 int receiverPort = 8000;             /**< UDP server port on OSC receiver (i.e. central server) */
 int localPort = 8888;                /**< source port for UDP communication on ESP32 */
 //-------END NETWORK SETTINGS--------
+#define MAGNETIC_DECLINATION 4.80 /**< difference between true north and magnetic north, see https://www.magnetic-declination.com/ */
 
 // SDA and SCL pin of the soft and hard wire mode
 #define SDA_PIN 21       /**< I2C data pin (on ESP32) */
@@ -176,6 +177,7 @@ struct ICM20948socket {
       this->sensor.getEvent(&this->accel_event, &this->gyro_event,
                             &this->temp_event, &this->mag_event);
       this->update_quaternion();
+      this->update_angles();
       return true;
     }
     return false;
@@ -228,23 +230,36 @@ struct ICM20948socket {
    * Update the internal values for roll, pitch, and yaw.
    *
    * @see update_quaternion()
+   * @note make sure quaternions are up to date
    */
   void update_angles() {
-	// http://en.wikipedia.org/wiki/Conversion_between_quaternions_and_Euler_angles
-	// make sure quaternions are up to date
-	this->update_quaternion();
-	// use parts of the quaternion as Tait-Bryan angles
-	// rotation matrix coefficients for Euler angles and gravity components
-	float a12, a22, a31, a32, a33;
-	float qx = this->getQuaternionX();
-	float qy = this->getQuaternionY();
-	float qz = this->getQuaternionZ();
-	float qw = this->getQuaternionW();
-	a12 = 2.0f * (qx * qy + qw * qz);
+    // http://en.wikipedia.org/wiki/Conversion_between_quaternions_and_Euler_angles
+    // use parts of the quaternion as Tait-Bryan angles
+    // rotation matrix coefficients for Euler angles and gravity components
+    float a12, a22, a31, a32, a33;
+    float qx = this->getQuaternionX();
+    float qy = this->getQuaternionY();
+    float qz = this->getQuaternionZ();
+    float qw = this->getQuaternionW();
+    a12 = 2.0f * (qx * qy + qw * qz);
     a22 = qw * qw + qx * qx - qy * qy - qz * qz;
     a31 = 2.0f * (qw * qx + qy * qz);
     a32 = 2.0f * (qx * qz - qw * qy);
     a33 = qw * qw - qx * qx - qy * qy + qz * qz;
+    this->roll = atan2f(a31, a33);
+    this->pitch = -asinf(a32);
+    this->yaw = atan2f(a12, a22);
+    this->roll *= 180.0f / PI;
+    this->pitch *= 180.0f / PI;
+    this->yaw *= 180.0f / PI;
+    this->yaw += MAGNETIC_DECLINATION;
+    if (this->yaw >= +180.f) {
+      this->yaw -= 360.f;
+    } else {
+      if (this->yaw < -180.f) {
+        this->yaw += 360.f;
+      }
+    }
   }
 
   /**
@@ -266,27 +281,28 @@ struct ICM20948socket {
   float getGyroZ() const { return this->gyro_event.gyro.z; }
 
   /**
-   * @return euler angle around x axis
+   * @return euler angle around x axis (in degree)
    *
    * @see assembleOSCmessage()
-   * @todo implementation
+   * @see update_angles()
    */
-  float getEulerX() const { return 0.0f; }
+  float getEulerX() const { return this->roll; }
 
   /**
-   * @return euler angle around y axis
-   *
-   * @todo implementation
-   */
-  float getEulerY() const { return 0.0f; }
-
-  /**
-   * @return euler angle around z axis
+   * @return euler angle around y axis (in degree)
    *
    * @see assembleOSCmessage()
-   * @todo implementation
+   * @see update_angles()
    */
-  float getEulerZ() const { return 0.0f; }
+  float getEulerY() const { return -this->pitch; }
+
+  /**
+   * @return euler angle around z axis (in degree)
+   *
+   * @see assembleOSCmessage()
+   * @see update_angles()
+   */
+  float getEulerZ() const { return -this->yaw; }
 
   /**
    * Retrieve x component of the quaternion.
