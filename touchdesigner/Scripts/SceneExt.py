@@ -24,7 +24,6 @@ class SceneExt:
 
 		TDF.createProperty(self,'AmountModels',value=iop.ListModels.numRows-1,dependable=True,readOnly=False)		
 		TDF.createProperty(self,'Models',value=list(),dependable=True,readOnly=False)
-		self.FillModelList()
 
 		# Scene ML States
 		TDF.createProperty(self,'EngineStates',value=list(),dependable="deep",readOnly=False)
@@ -35,23 +34,31 @@ class SceneExt:
 			self.ModelStates.append(0)
 			self.CookingStates.append(0)
 
+		self.FillModelList()
+
 		# start the Scene "empty"
 		self.UnloadAllModelEngines()	
 
 		# prediction toggle of the engines
-		self.Predict = tdu.Dependency(0)
+		self.Predict = tdu.Dependency(int(0))
 
 	def FillModelList(self):
 		self.AmountModels = iop.ListModels.numRows-1
 		self.Models = list() #empty list first
-		self.EngineStates = list()
-		self.ModelStates = list()
-		self.CookingStates = list()
 		for i in range(self.AmountModels):
 			self.Models.append(op('model_prediction_' + str(i+1)))
-			self.EngineStates.append(0)
-			self.ModelStates.append(0)
-			self.CookingStates.append(0)
+			if i >= len(self.EngineStates):
+				self.EngineStates.append(0)
+				self.ModelStates.append(0)
+				self.CookingStates.append(0)
+		
+		diff = len(self.EngineStates) - len(self.Models)
+		if diff > 0:
+			for i in range(diff):
+				self.EngineStates.pop(i)
+				self.ModelStates.pop(i)
+				self.CookingStates.pop(i)
+
 
 	def UnloadEngine(self, index):
 		model = self.Models[index]
