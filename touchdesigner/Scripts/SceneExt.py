@@ -40,7 +40,7 @@ class SceneExt:
 		self.UnloadAllModelEngines()	
 
 		# prediction toggle of the engines
-		self.Predict = tdu.Dependency(int(0))
+		self.Predict = tdu.Dependency(False)
 
 	def FillModelList(self):
 		self.AmountModels = iop.ListModels.numRows-1
