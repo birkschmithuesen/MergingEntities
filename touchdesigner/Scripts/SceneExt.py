@@ -44,8 +44,14 @@ class SceneExt:
 	def FillModelList(self):
 		self.AmountModels = iop.ListModels.numRows-1
 		self.Models = list() #empty list first
+		self.EngineStates = list()
+		self.ModelStates = list()
+		self.CookingStates = list()
 		for i in range(self.AmountModels):
 			self.Models.append(op('model_prediction_' + str(i+1)))
+			self.EngineStates.append(0)
+			self.ModelStates.append(0)
+			self.CookingStates.append(0)
 
 	def UnloadEngine(self, index):
 		model = self.Models[index]
