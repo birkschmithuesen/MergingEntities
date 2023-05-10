@@ -16,6 +16,7 @@ def onPulse(par):
 		parent.Scene.Reload()
 	elif par.name == 'Reinit':
 		parent.Scene.par.reinitextensions.pulse()
+		parent.Scene.op('states/timer1').par.initialize.pulse()
 	elif par.name == 'Unloadallengines':
 		parent.Scene.UnloadAllModelEngines()
 	elif par.name == 'Loadallengines':
