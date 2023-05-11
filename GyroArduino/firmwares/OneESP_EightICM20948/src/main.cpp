@@ -27,8 +27,8 @@ int localPort = 8888;                /**< source port for UDP communication on E
 #define MAGNETIC_DECLINATION 4.80 /**< difference between true north and magnetic north, see https://www.magnetic-declination.com/ */
 
 // SDA and SCL pin of the soft and hard wire mode
-#define SDA_PIN 21       /**< I2C data pin (on ESP32) */
-#define SCL_PIN 22       /**< I2C clock pin (on ESP32) */
+#define SDA_PIN 22       /**< I2C data pin (on ESP32) */
+#define SCL_PIN 21       /**< I2C clock pin (on ESP32) */
 #define TCA_ADDRESS 0x70 /**< I2C address of the TCA9548A (I2C multiplexer) */
 #define ICM_ADDRESS 0x69 /**< I2C address of the ICM20948 sensor */
 
