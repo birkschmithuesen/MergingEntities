@@ -8,10 +8,10 @@
 	\amp, 1, //Pwhite().linlin(0, 1, 0.1, 1),
 	\stretch, Pfunc {~tempo},
 	\shape, ~shape[0],
-	\atk, ~atk[0], // 0.005,//Pfunc { ~attack },
-	\rel, ~rel[0],
+	\atk, ~atk[0].linlin(0.01, 1.0, 0.0, 0.15), // 0.005,//Pfunc { ~attack },
+	\rel, ~rel[0].linlin(0.0, 1.0, 0.0, 0.25),
 	\out, 0,
-).play(quant:0);
+).play(quant:1);
 
 
 ~steady = Pbind(
@@ -21,13 +21,54 @@
 	\exc, ~exc[1],
 	\amp, 1, //Pwhite(),
 	\shape, ~shape[1],
-	\atk, ~atk[1], // 0.005,//Pfunc { ~attack },
-	\rel, ~rel[1],
+	\atk, ~atk[1].linlin(0.01, 1.0, 0.0, 0.15), // 0.005,//Pfunc { ~attack },
+	\rel, ~rel[1].linlin(0.0, 1.0, 0.0, 0.25),
 	\stretch, Pfunc{~tempo},
 	\out, 2,
-).play(quant:0);
-)
+).play(quant:1);
 
+~bass = Pbind(
+	\instrument, \sine,
+	\dur, Pseq([1/2, 1/8, 3/8], inf),
+	\midinote, Pseq([46, 47, 46], inf),
+	\exc, ~exc[3],
+	\amp, 1, //Pwhite(),
+	\shape, ~shape[3],
+	\atk, ~atk[3].linlin(0.01, 1.0, 0.0, 0.15), // 0.005,//Pfunc { ~attack },
+	\rel, ~rel[3].linlin(0.0, 1.0, 0.02, 0.2),
+	\stretch, Pfunc{~tempo},
+	\out, 6,
+).play(quant:1);
+
+~shaker = Pbind(
+	\instrument, \shaker,
+	\dur, Pseq([1/8],inf),
+	\midinote, 72,
+	\exc, ~exc[2],
+	\amp, 1, //Pwhite(),
+	\shape, ~shape[2],
+	\atk, ~atk[2].linlin(0.01, 1.0, 6000, 9000), // 0.005,//Pfunc { ~attack },
+	\rel, ~rel[2].linlin(0.0, 1.0, 0.0, 0.25),
+	\stretch, Pfunc{~tempo},
+	\rev, ~rev[2],
+	\out, ~reverbBus,
+	\group, ~sourceGrp,
+).play(quant:1);
+
+~kick = Pbind(
+	\instrument, \sine,
+	\dur, Pseq([1/4],inf), // + Pgauss(0, 0.005)),
+	\midinote, 30,
+	\exc, 1,
+	\amp, 1.25, //Pwhite(),
+	\shape, 0.5,
+	\atk, 0.001, // 0.005,//Pfunc { ~attack },
+	\rel, 0.08,
+	\stretch, Pfunc{~tempo},
+	\out, 10,
+).play(quant:1);
+
+)
 
 /*
 (

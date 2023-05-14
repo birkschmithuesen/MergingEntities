@@ -98,7 +98,23 @@ SynthDef.new(\sine, {
 	sig = (osc1 * (1-shape)) + (osc2 * shape);
 	env = EnvGen.kr(Env.new([0, 1, 0], [atk, rel], [1,-1]), doneAction:2);
 	sig = Pan2.ar(sig, pan, amp);
-	sig = sig * env;
+	sig = sig * env * 0.2;
 	Out.ar(out, sig);
-}).add
+}).add;
+
+
+SynthDef(\shaker, {
+	arg amp = 1, exc = 1, atk = 600, pan = 0.0, rel = 0.5, shape = 1, rev = 0.5, out = 0;
+	var sig, osc1, osc2, env;
+	//osc1 = BrownNoise.ar(0.3) * exc;
+	osc1 = WhiteNoise.ar(0.3) * exc;
+	osc2 = MoogFF.ar(osc1, atk, 2);
+	sig = (osc1 * (0.2 - shape.linlin(0.0, 1.0, 0.0, 0.2)) + (osc2 * shape.linlin(0.0, 1.0, 0.5, 1.0)));
+	//sig = MoogFF.ar(sig, atk, 2);
+	env = EnvGen.kr(Env.new([0, 1, 0], [0.01, rel.linlin(0.0, 1.0, 0.001, 0.2)], [1,-1]), doneAction:2);
+	sig = sig * amp * 0.2;
+	//sig = Pan2.ar(sig, pan) * env;
+	//sig = FreeVerb.ar(sig, rev, 0.5)!2;
+	Out.ar(out, sig);
+}).add;
 )

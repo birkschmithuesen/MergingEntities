@@ -37,7 +37,7 @@ var scale;
 // load Synth Defs and Pattern Defs
 ~path = PathName(thisProcess.nowExecutingPath).parentPath;
 (~path++"synthlib.scd").load;
-(~path++"patternlib.scd").load;
+//(~path++"patternlib.scd").load;
 
 // define number of performers bodies
 ~numBodies = 2;
@@ -116,9 +116,10 @@ scale = FloatArray[48, 55, 60, 67];//some 5ths starting from c4
 // load Synth Defs and Pattern Defs
 ~path = PathName(thisProcess.nowExecutingPath).parentPath;
 (~path++"synthlib.scd").load;
+(~path++"efxlib.scd").load;
 
 // define number of performers bodies
-~numBodies = 2;
+~numBodies = 4;
 
 ~tempo = 60/120 * 4; //60/90 * 4 //60sec / 128 BPM * 4 bars
 
@@ -128,24 +129,35 @@ scale = FloatArray[48, 55, 60, 67];//some 5ths starting from c4
 ~shape = {PatternProxy.new}!~numBodies;
 ~atk = {PatternProxy.new}!~numBodies;
 ~rel = {PatternProxy.new}!~numBodies;
+~rev = {PatternProxy.new}!~numBodies;
+
 // initialize pattern proxies
 {arg i; ~exc[i].source = 1.0}!~numBodies;
 {arg i; ~shape[i].source = 1.0}!~numBodies;
 {arg i; ~atk[i].source = 0.0}!~numBodies;
 {arg i; ~rel[i].source = 0.1}!~numBodies;
+{arg i; ~rev[i].source = 0.1}!~numBodies;
 
-// load patterns
+// create groups
+~sourceGrp = Group.new;
+~fxGrp = Group.after(~sourceGrp);
+
+// create busses
+~reverbBus = Bus.audio(s, 2);
+
+// load fx
+~reverb = Synth.new(\reverb, [\in, ~reverbBus], ~fxGrp);
+
+// load & play patterns
 (~path++"patternlib.scd").load;
-// play patterns
 
 
-// create patterns
-//~pattern = [Pdef.new(\tripples), Pdef.new(\steady)];
-// play the patterns
-//{arg i; ~pattern[i].play(quant:0)}!~numBodies;
-
-~oscPattern = {arg i; OscPattern.new([~exc[i], ~shape[i], ~atk[i], ~rel[i]], ('/sequencer/' ++ i))}!~numBodies;
+// make the patterns controllable via osc
+~oscPattern = {arg i; OscPattern.new([~exc[i], ~shape[i], ~atk[i], ~rel[i], ~rev[i]], '/sequencer/' ++ i, ~reverb)}!~numBodies;
 )
+
+
+
 
 
 (
