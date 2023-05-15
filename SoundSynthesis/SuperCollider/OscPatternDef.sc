@@ -31,6 +31,15 @@ OscPattern{
 				{synth.set(\mix, msg[5])},
 			{("received wrong OSC message length on address: " ++ address)}
 			);
+			if (msg[6] != nil,
+				{//pattern_proxie[4].source = msg[7].linlin(0.0, 1.0, -1.0, 1.0);
+				},
+			{("received wrong OSC message length on address: " ++ address)}
+			);
+			if (msg[7] != nil,
+				{pattern_proxie[4].source = msg[7].linlin(0.0, 1.0, -1.0, 1.0);},
+			{("received wrong OSC message length on address: " ++ address)}
+			);
 		},
 		(address)
 		);

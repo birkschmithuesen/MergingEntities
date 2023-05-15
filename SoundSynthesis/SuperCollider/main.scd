@@ -129,31 +129,36 @@ scale = FloatArray[48, 55, 60, 67];//some 5ths starting from c4
 ~shape = {PatternProxy.new}!~numBodies;
 ~atk = {PatternProxy.new}!~numBodies;
 ~rel = {PatternProxy.new}!~numBodies;
-~rev = {PatternProxy.new}!~numBodies;
+~pan = {PatternProxy.new}!~numBodies;
+
 
 // initialize pattern proxies
 {arg i; ~exc[i].source = 1.0}!~numBodies;
-{arg i; ~shape[i].source = 1.0}!~numBodies;
-{arg i; ~atk[i].source = 0.0}!~numBodies;
-{arg i; ~rel[i].source = 0.1}!~numBodies;
-{arg i; ~rev[i].source = 0.1}!~numBodies;
+{arg i; ~shape[i].source = 0.5}!~numBodies;
+{arg i; ~atk[i].source = 0.1}!~numBodies;
+{arg i; ~rel[i].source = 0.5}!~numBodies;
+{arg i; ~pan[i].source = 0.0}!~numBodies;
 
 // create groups
 ~sourceGrp = Group.new;
 ~fxGrp = Group.after(~sourceGrp);
 
 // create busses
-~reverbBus = Bus.audio(s, 2);
+~efxBus = {Bus.audio(s, 2)}!~numBodies;
 
 // load fx
-~reverb = Synth.new(\reverb, [\in, ~reverbBus], ~fxGrp);
+~efx = {0}!~numBodies;
+~efx[0] = Synth.new(\fx, [\in, ~efxBus[0], \out, 0], ~fxGrp);
+~efx[1] = Synth.new(\fx, [\in, ~efxBus[1], \out, 2], ~fxGrp);
+~efx[2] = Synth.new(\reverb, [\in, ~efxBus[2], \out, 4], ~fxGrp);
+~efx[3] = Synth.new(\fx, [\in, ~efxBus[3], \out, 6], ~fxGrp);
 
 // load & play patterns
 (~path++"patternlib.scd").load;
 
 
 // make the patterns controllable via osc
-~oscPattern = {arg i; OscPattern.new([~exc[i], ~shape[i], ~atk[i], ~rel[i], ~rev[i]], '/sequencer/' ++ i, ~reverb)}!~numBodies;
+~oscPattern = {arg i; OscPattern.new([~exc[i], ~shape[i], ~atk[i], ~rel[i], ~pan[i]], '/sequencer/' ++ i, ~efx[i])}!~numBodies;
 )
 
 

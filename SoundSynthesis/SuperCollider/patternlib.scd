@@ -10,6 +10,7 @@
 	\shape, ~shape[0],
 	\atk, ~atk[0].linlin(0.01, 1.0, 0.0, 0.15), // 0.005,//Pfunc { ~attack },
 	\rel, ~rel[0].linlin(0.0, 1.0, 0.0, 0.25),
+	\pan, ~pan[0],
 	\out, 0,
 ).play(quant:1);
 
@@ -24,6 +25,7 @@
 	\atk, ~atk[1].linlin(0.01, 1.0, 0.0, 0.15), // 0.005,//Pfunc { ~attack },
 	\rel, ~rel[1].linlin(0.0, 1.0, 0.0, 0.25),
 	\stretch, Pfunc{~tempo},
+	\pan, ~pan[1],
 	\out, 2,
 ).play(quant:1);
 
@@ -37,6 +39,7 @@
 	\atk, ~atk[3].linlin(0.01, 1.0, 0.0, 0.15), // 0.005,//Pfunc { ~attack },
 	\rel, ~rel[3].linlin(0.0, 1.0, 0.02, 0.2),
 	\stretch, Pfunc{~tempo},
+	\pan, ~pan[3],
 	\out, 6,
 ).play(quant:1);
 
@@ -50,9 +53,9 @@
 	\atk, ~atk[2].linlin(0.01, 1.0, 6000, 9000), // 0.005,//Pfunc { ~attack },
 	\rel, ~rel[2].linlin(0.0, 1.0, 0.0, 0.25),
 	\stretch, Pfunc{~tempo},
-	\rev, ~rev[2],
-	\out, ~reverbBus,
+	\out, ~efxBus[2],
 	\group, ~sourceGrp,
+	\pan, ~pan[2],
 ).play(quant:1);
 
 ~kick = Pbind(
