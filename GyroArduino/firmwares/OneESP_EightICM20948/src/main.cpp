@@ -48,10 +48,13 @@ int localPort = 8888;                /**< source port for UDP communication on E
  * @return true if selection was successful, false if not
  * @see setup()
  * @see loop()
- * @todo limit processing to valid values (0..7)
  */
 bool selectI2cMultiplexerChannel(uint8_t channel) {
   bool result = false;
+  if (channel > 7) {
+    // channel out of (hardware) range
+    return false;
+  }
   // select the multiplexer by its hardware address
   Wire.beginTransmission(TCA_ADDRESS);
   // select a channel on the multiplexer
