@@ -1,6 +1,6 @@
 /** @file
  * This firmware uses one TCA9548A to read data from 8 ICM20948 sensors
- * via I2C. This data is slightly prepocessed passed on via OSC.
+ * via I2C. This data is slightly prepocessed and passed on via OSC.
  *
  * @todo implement magnetic north calibration
  * @todo implement sensor calibration
