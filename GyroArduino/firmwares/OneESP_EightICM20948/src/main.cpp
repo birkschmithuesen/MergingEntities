@@ -452,7 +452,7 @@ ICM20948socket socket[NUMBER_OF_SENSORS]; /**< a (global) list of sockets to bun
  *
  * @param *cfg_ptr is a pointer to the configuration data
  * @see ICM20948config
- * @see selectI2cMultiplexerChannel(channel)
+ * @see selectI2cMultiplexerChannel(uint8_t channel)
  * @see sensorResurrection(void*)
  * @note This is a dedicated function to help with multi-threading.
  * @note The functions as void* in the signature to satisfy the OS interface definition.
