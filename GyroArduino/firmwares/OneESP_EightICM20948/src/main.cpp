@@ -189,12 +189,6 @@ struct ICM20948socket {
       return false;
     }
 
-    Wire.beginTransmission(ICM_ADDRESS);
-    if (Wire.endTransmission() != 0) {
-      this->usable = false;
-      return false;
-    }
-
     if (this->usable && (!this->configlock)) {
       this->sensor.getEvent(&this->accel_event, &this->gyro_event,
                             &this->temp_event, &this->mag_event);
