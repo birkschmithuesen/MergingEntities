@@ -3,8 +3,6 @@
  * via I2C. This data is slightly prepocessed passed on via OSC.
  *
  * @todo implement magnetic north calibration
- * @todo implement sensor resurection
- * @todo handle sensor dropping out, investigale usabe & lock flag
  * @todo implement sensor calibration
  */
 // libraries for local sensor communication
@@ -833,14 +831,4 @@ void loop() {
     socket[i].osc.empty();
     socket[i].printOSC();
   }
-  /* stack profiling
-  while(NULL != resurrectionTaskHandle) {
-    current_mark = uxTaskGetStackHighWaterMark( resurrectionTaskHandle );
-    if (current_mark < mark_min) {
-      mark_min = current_mark;
-    }
-    Serial.println(mark_min);
-    delay(1000);
-  }
-  */
 }
