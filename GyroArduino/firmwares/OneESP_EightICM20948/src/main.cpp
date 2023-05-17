@@ -642,9 +642,33 @@ UBaseType_t mark_min = TASKSTACKSIZE; /**< size of initial stack */
 
 /**
  * Interactive calibration of potentially all sensors.
+ *
+ * @todo better menue options / selection paths
  */
 void interactiveSensorCalibration() {
-  Serial.println("----");
+  int index = 0;
+  Serial.println("-------------------------------------------------");
+  Serial.println("- welcome to the great sensor calibration menue -");
+  Serial.println("-------------------------------------------------");
+  Serial.println();
+  delay(1000);
+  Serial.print("select a sensor (");
+  for (uint8_t i = 0; i < NUMBER_OF_SENSORS; i++) {
+    if (socket[i].usable) {
+      Serial.print(i);
+      Serial.print(',');
+	}
+  }
+  Serial.print(") ");
+  index = Serial.parseInt();
+  Serial.println(index);
+  if (!socket[index-1].usable) {
+    Serial.print("The senor");
+    Serial.print(index);
+    Serial.println(" is (marked) unusable for calibration");
+    return;
+  }
+  delay(10*1000);
 }
 
 /**
