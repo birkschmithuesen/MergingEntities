@@ -204,6 +204,7 @@ struct ICM20948socket {
    * @see assembleOSCmessage()
    * @see update_quaternion()
    * @see update_angles()
+   * @see sendMotioncal()
    */
   bool update() {
 	if (!selectI2cMultiplexerChannel(this->channel)) {
@@ -445,6 +446,7 @@ struct ICM20948socket {
    * Print the OSC data on the serial line.
    *
    * @see assembleOSCmessage()
+   * @see sendMotioncal()
    */
   void printOSC() {
     Serial.print(this->getQuaternionRX());
@@ -466,6 +468,55 @@ struct ICM20948socket {
     Serial.print(this->getGyroY());
     Serial.print(" ");
     Serial.println(this->getGyroZ());
+  }
+
+  /**
+   * Print data for Motioncal on serial line.
+   *
+   * @see update()
+   * @see printOSC()
+   */
+  void sendMotioncal() {
+    // raw data format
+    Serial.print("Raw:");
+    Serial.print(int(this->accel_event.acceleration.x * 8192 / 9.8));
+    Serial.print(",");
+    Serial.print(int(this->accel_event.acceleration.y * 8192 / 9.8));
+    Serial.print(",");
+    Serial.print(int(this->accel_event.acceleration.z * 8192 / 9.8));
+    Serial.print(",");
+    Serial.print(int(this->gyro_event.gyro.x * SENSORS_RADS_TO_DPS * 16));
+    Serial.print(",");
+    Serial.print(int(this->gyro_event.gyro.y * SENSORS_RADS_TO_DPS * 16));
+    Serial.print(",");
+    Serial.print(int(this->gyro_event.gyro.z * SENSORS_RADS_TO_DPS * 16));
+    Serial.print(",");
+    Serial.print(int(this->mag_event.magnetic.x * 10));
+    Serial.print(",");
+    Serial.print(int(this->mag_event.magnetic.y * 10));
+    Serial.print(",");
+    Serial.print(int(this->mag_event.magnetic.z * 10));
+    Serial.println("");
+    // unified data format
+    Serial.print("Uni:");
+    Serial.print(this->accel_event.acceleration.x);
+    Serial.print(",");
+    Serial.print(this->accel_event.acceleration.y);
+    Serial.print(",");
+    Serial.print(this->accel_event.acceleration.z);
+    Serial.print(",");
+    Serial.print(this->gyro_event.gyro.x, 4);
+    Serial.print(",");
+    Serial.print(this->gyro_event.gyro.y, 4);
+    Serial.print(",");
+    Serial.print(this->gyro_event.gyro.z, 4);
+    Serial.print(",");
+    Serial.print(this->mag_event.magnetic.x);
+    Serial.print(",");
+    Serial.print(this->mag_event.magnetic.y);
+    Serial.print(",");
+    Serial.print(this->mag_event.magnetic.z);
+    Serial.println("");
   }
 };
 
