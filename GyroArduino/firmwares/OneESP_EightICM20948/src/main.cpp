@@ -22,6 +22,7 @@ WiFiUDP Udp;                         /**< handler for UDP communication */
 IPAddress receiverIp(192, 168, 0, 2);     /**< IP address of the (target) OSC server */
 int receiverPort = 8000;             /**< UDP server port on OSC receiver (i.e. central server) */
 int localPort = 8888;                /**< source port for UDP communication on ESP32 */
+#define NOWIFI                       /**< skip wifi setup for faster booting */
 //-------END NETWORK SETTINGS--------
 #define MAGNETIC_DECLINATION 4.80 /**< difference between true north and magnetic north, see https://www.magnetic-declination.com/ */
 
@@ -37,6 +38,26 @@ int localPort = 8888;                /**< source port for UDP communication on E
 #define ID_PIN4 13   /**< 4rd bit pin of ID DIP switch (D13) */
 
 #define NUMBER_OF_SENSORS 8 /**< number of ICM20948 sensors */
+
+/**
+ * An implementation of a CRC16.
+ *
+ * @param crc - current state of the CRC
+ * @param databyte - new byte to add to CRC calculation
+ * @returns updated crc value
+ */
+uint16_t crc16_update(uint16_t crc, uint8_t databyte) {
+  uint8_t i;
+  crc ^= databyte;
+  for (i = 0; i < 8; i++) {
+    if (crc & 1) {
+      crc = (crc >> 1) ^ 0xA001;
+    } else {
+      crc = (crc >> 1);
+    }
+  }
+  return crc;
+}
 
 /**
  * Switch to the given channel on the multiplexer for I2C communication.
@@ -620,6 +641,13 @@ UBaseType_t current_mark = 0; /**< watermark queried from task */
 UBaseType_t mark_min = TASKSTACKSIZE; /**< size of initial stack */
 
 /**
+ * Interactive calibration of potentially all sensors.
+ */
+void interactiveSensorCalibration() {
+  Serial.println("----");
+}
+
+/**
  * Bring the controller into a working state.
  *
  * @see loop()
@@ -634,6 +662,7 @@ void setup(void) {
   uint8_t sensors_failed = 0; // track number of non-working sensors
   //-------HARDWARE SETUP-------
   Serial.begin(115200);
+  Serial.setTimeout(3*1000); // set 3 seconds timeout for input
   // pause until serial line is available
   while (!Serial) {
     delay(10);
@@ -651,12 +680,16 @@ void setup(void) {
   delay(1000);
 
   //-------WIFI SETUP-------
+#ifdef NOWIFI
+  Serial.println("skipping wifi setup ...");
+#else
   connectWiFi();
   startUdp(localPort);
   Serial.print("target OSC server is ");
   Serial.print(receiverIp);
   Serial.print(" port ");
   Serial.println(receiverPort);
+#endif
 
   // socket label & channel
   Serial.print("setting up sensor sockets .");
@@ -790,6 +823,16 @@ void setup(void) {
   Serial.print("setup of ");
   Serial.print(NUMBER_OF_SENSORS - sensors_failed);
   Serial.println(" sensors worked");
+
+  // calibrate if needed
+  Serial.print("enter sensor calibration (y/n)? ");
+  String choice = Serial.readString();
+  Serial.println("");
+  if ('y' == choice[0]) {
+    interactiveSensorCalibration();
+  } else {
+    Serial.println("proceeding without calibration ...");
+  }
 
   // try to fix sensor issues
   Serial.print("setting up background task to handle sensor issues ...");
