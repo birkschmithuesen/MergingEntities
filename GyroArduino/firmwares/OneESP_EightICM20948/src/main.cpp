@@ -130,6 +130,9 @@ const char* getControllerIdChars() {
 
 /**
  * A structure to hold the configuration data for a ICM20948 sensor.
+ *
+ * @see ICM20948socket
+ * @see ICM20948bias
  */
 struct ICM20948config {
   Adafruit_ICM20948 *sensor; /**< pointer to the sensor class */
@@ -140,11 +143,44 @@ struct ICM20948config {
 // forward declaration
 void configureICM20948(void *cfg_ptr);
 
+/**
+ * A structure to hold the calibration data for a ICM20948 sensor.
+ *
+ * @see ICM20948socket
+ * @see ICM20948config
+ */
+struct ICM20948bias {
+  float accel_x; /**< zero g offset along x-axis */
+  float accel_y; /**< zero g offset along y-axis */
+  float accel_z; /**< zero g offset along y-axis */
+
+  float gyro_x; /**< gyroscope offset along x-axis */
+  float gyro_y; /**< gyroscope offset along y-axis */
+  float gyro_z; /**< gyroscope offset along z-axis */
+
+  float magnetic_field; /**< magnetic filed offset in uTesla */
+
+  float hardiron_x; /**< hard iron error along x-axis */
+  float hardiron_y; /**< hard iron error along y-axis */
+  float hardiron_z; /**< hard iron error along z-axis */
+
+  float softiron_1_1; /**< value at (1,1) of soft iron matrix */
+  float softiron_1_2; /**< value at (1,2) of soft iron matrix */
+  float softiron_1_3; /**< value at (1,3) of soft iron matrix */
+  float softiron_2_1; /**< value at (2,1) of soft iron matrix */
+  float softiron_2_2; /**< value at (2,2) of soft iron matrix */
+  float softiron_2_3; /**< value at (2,3) of soft iron matrix */
+  float softiron_3_1; /**< value at (3,1) of soft iron matrix */
+  float softiron_3_2; /**< value at (3,2) of soft iron matrix */
+  float softiron_3_3; /**< value at (3,3) of soft iron matrix */
+};
 
 /**
  * A data structure to handle hardware related data and
  * communication of one ICM20948.
  *
+ * @see ICM20948config
+ * @see ICM20948bias
  * @todo public/private visibility of members
  */
 struct ICM20948socket {
