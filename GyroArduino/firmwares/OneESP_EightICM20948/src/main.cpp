@@ -832,6 +832,8 @@ void setup(void) {
     if(!socket[i].configure()){
       sensors_failed += 1;
       continue;
+    } else {
+      socket[i].usable = true;
     }
   }
 
