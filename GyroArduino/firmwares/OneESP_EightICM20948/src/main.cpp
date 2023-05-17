@@ -678,6 +678,7 @@ void interactiveSensorCalibration() {
  * @see selectI2cMultiplexerChannel(uint8_t channel)
  * @see ICM20948socket
  * @note This function spawns a task to handle sensor issues.
+ * @todo use button for calibration
  */
 void setup(void) {
   uint8_t result = 0;     // track results/error codes
