@@ -968,7 +968,7 @@ void calibrateSensor(uint8_t index) {
   while(true) {
     socket[index].update();
     socket[index].sendMotioncal();
-    socket[index].receiveMotioncal();
+    socket[index].receiveMotioncal(index);
     delay(10);
   }
 }
