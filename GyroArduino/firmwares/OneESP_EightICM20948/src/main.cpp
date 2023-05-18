@@ -512,6 +512,7 @@ struct ICM20948socket {
    *
    * @see update()
    * @see printOSC()
+   * @note Make sure to update the internal data before sending.
    */
   void sendMotioncal() {
     // raw data format
