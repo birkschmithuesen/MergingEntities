@@ -1071,7 +1071,7 @@ void setup(void) {
     Serial.println("proceeding without calibration ...");
   }
   */
-  calibrateSensor(2);
+  calibrateSensor(3);
 
   // try to fix sensor issues
   Serial.print("setting up background task to handle sensor issues ...");
