@@ -507,7 +507,8 @@ struct ICM20948socket {
   }
 
   /**
-   * Print data for Motioncal on serial line.
+   * Print data for MotionCal on serial line.
+   * For more information on MotionCal, check https://www.pjrc.com/store/prop_shield.html
    *
    * @see update()
    * @see printOSC()
@@ -731,6 +732,7 @@ UBaseType_t mark_min = TASKSTACKSIZE; /**< size of initial stack */
  * Interactive calibration of potentially all sensors.
  *
  * @todo better menue options / selection paths
+ * @note This requires MotionCal from https://www.pjrc.com/store/prop_shield.html
  */
 void interactiveSensorCalibration() {
   int index = 0;
