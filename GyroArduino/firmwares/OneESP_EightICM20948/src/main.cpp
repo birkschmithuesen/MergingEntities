@@ -38,6 +38,10 @@ int localPort = 8888;                /**< source port for UDP communication on E
 #define ID_PIN4 13   /**< 4rd bit pin of ID DIP switch (D13) */
 
 #define NUMBER_OF_SENSORS 8 /**< number of ICM20948 sensors */
+#define TASKSTACKSIZE 2000 /**< size of initial stack (in bytes) */
+TaskHandle_t resurrectionTaskHandle = NULL; /**< OS task handler (for profiling and control) */
+UBaseType_t current_mark = 0; /**< watermark queried from task */
+UBaseType_t mark_min = TASKSTACKSIZE; /**< size of initial stack */
 
 /**
  * An implementation of a CRC16.
@@ -654,8 +658,7 @@ struct ICM20948socket {
       }
     }
   }
-}
-;
+};
 
 ICM20948socket socket[NUMBER_OF_SENSORS]; /**< a (global) list of sockets to bundle communication */
 
@@ -822,11 +825,6 @@ void sensorResurrection(void *) {
     vTaskDelay(1000 / portTICK_PERIOD_MS);
   }
 }
-
-#define TASKSTACKSIZE 2000 /**< size of initial stack (in bytes) */
-TaskHandle_t resurrectionTaskHandle = NULL; /**< OS task handler (for profiling and control) */
-UBaseType_t current_mark = 0; /**< watermark queried from task */
-UBaseType_t mark_min = TASKSTACKSIZE; /**< size of initial stack */
 
 /**
  * Interactive calibration of potentially all sensors.
