@@ -872,9 +872,12 @@ void calibrateSensor(uint8_t index) {
     return;
   }
 
-  socket[index].update();
-  socket[index].sendMotioncal();
-  //socket[index].receiveMotioncal();
+  while(true) {
+    socket[index].update();
+    socket[index].sendMotioncal();
+    socket[index].receiveMotioncal();
+    delay(10);
+  }
 }
 
 /**
@@ -1058,6 +1061,7 @@ void setup(void) {
   Serial.println(" sensors worked");
 
   // calibrate if needed
+  /*
   Serial.print("enter sensor calibration (y/n)? ");
   String choice = Serial.readString();
   Serial.println("");
@@ -1066,6 +1070,8 @@ void setup(void) {
   } else {
     Serial.println("proceeding without calibration ...");
   }
+  */
+  calibrateSensor(2);
 
   // try to fix sensor issues
   Serial.print("setting up background task to handle sensor issues ...");
