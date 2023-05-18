@@ -732,6 +732,7 @@ UBaseType_t mark_min = TASKSTACKSIZE; /**< size of initial stack */
  * Interactive calibration of potentially all sensors.
  *
  * @todo better menue options / selection paths
+ * @warning This function is far from being complete/functional.
  * @note This requires MotionCal from https://www.pjrc.com/store/prop_shield.html
  */
 void interactiveSensorCalibration() {
@@ -758,6 +759,22 @@ void interactiveSensorCalibration() {
     return;
   }
   delay(10*1000);
+}
+
+/**
+ * Calibrate a single sensor by its index.
+ *
+ * @param index ... in global socket array
+ * @see ICM20948socket
+ */
+void calibrateSensor(uint8_t index) {
+  if (!socket[index].usable) {
+    return;
+  }
+
+  socket[index].update();
+  socket[index].sendMotioncal();
+  //socket[index].receiveMotioncal();
 }
 
 /**
