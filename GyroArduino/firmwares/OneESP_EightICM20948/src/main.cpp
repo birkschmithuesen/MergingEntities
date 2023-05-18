@@ -521,7 +521,7 @@ struct ICM20948socket {
    * For more information on MotionCal, check https://www.pjrc.com/store/prop_shield.html
    *
    * @see update()
-   * @see receiveMotioncal(uint8_t slot)
+   * @see receiveMotioncal()
    * @see printOSC()
    * @note Make sure to update the internal data before sending.
    */
@@ -573,11 +573,10 @@ struct ICM20948socket {
    * The protocol consists of binary packets of 68 bytes transmittted
    * via the serial line. Each packet starts with the values 117,84.
    *
-   * @param slot to save to (= index in the global socket list)
    * @see storeCalibration(uint8_t slot)
    * @see sendMotioncal()
    */
-  void receiveMotioncal(uint8_t slot) {
+  void receiveMotioncal() {
     uint16_t crc; // the CRC value for error checking
     byte b; // the current byte
     uint8_t i; // the index to go over the packet
@@ -640,7 +639,7 @@ struct ICM20948socket {
         this->bias.softiron_3_3 = offsets[12];
 
         // save calibration data on chip
-        this->storeCalibration(slot);
+        this->storeCalibration();
 
         // set counter properly
         this->calcount = 0;
@@ -671,21 +670,17 @@ struct ICM20948socket {
   /**
    * Store sensor calibration on chip.
    *
-   * @param slot to save to (= index in the global socket list)
-   * @see loadCalibration(uint8_t slot)
-   * @see receiveMotioncal(uint8_t slot)
+   * @see loadCalibration()
+   * @see receiveMotioncal()
    *
    * @note This function accesses the global NMV object.
    * @todo indicate errors
    * @todo check for available (remaining) entries
    */
-  void storeCalibration(uint8_t slot) {
-    char* name;  // namespace
-    if (slot > 7) {
-	  return;
-	}
+  void storeCalibration() {
+    char *name; // namespace
 	// build namespace name
-	sprintf(name,"sensor%d",slot);
+	sprintf(name,"sensor%d",this->channel);
     // open NVM as read-write
     nvm.begin(name, false);
     // store the data
@@ -714,19 +709,15 @@ struct ICM20948socket {
   /**
    * Load calibration data from chip.
    *
-   * @param slot to read from (= index in the global socket list)
-   * @see storeCalibration(uint8_t slot)
-   * @see reveiveMotioncal(uint8_t slot)
+   * @see storeCalibration()
+   * @see reveiveMotioncal()
    * @todo error indication
    * @todo check for errors reading (non-existent) data
    */
-  void loadCalibration(uint8_t slot) {
+  void loadCalibration() {
     char *name; // namespace
-    if (slot > 7) {
-          return;
-    }
     // build namespace name
-    sprintf(name, "sensor%d", slot);
+    sprintf(name, "sensor%d", this->channel);
     // open NVM as read-only
     if(!nvm.begin(name, true)) {
       return;
@@ -968,7 +959,7 @@ void calibrateSensor(uint8_t index) {
   while(true) {
     socket[index].update();
     socket[index].sendMotioncal();
-    socket[index].receiveMotioncal(index);
+    socket[index].receiveMotioncal();
     delay(10);
   }
 }
