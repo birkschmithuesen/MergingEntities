@@ -202,6 +202,9 @@ struct ICM20948socket {
   float roll = 0.0f; /**< rotation around center of gravity and and forward direction */
   float pitch = 0.0f; /**< rotation around lateral axis / center of gravity (directed) to the right (think wingtip to wingtip) */
   float yaw = 0.0f; /**< rotation around axis from the center of gravity (directed) towards the bottom of the sensor */
+  byte calbuffer[68]; /**< buffer to receive magnetic calibration data from MotionCal */
+  byte calcount=0; /**< number of bytes read into the MotionCal data buffer */
+  ICM20948bias bias; /**< bias/calibration data for the specific sensor */
 
   /**
    * Set up / configure the sensor.
@@ -556,7 +559,103 @@ struct ICM20948socket {
     Serial.print(this->mag_event.magnetic.z);
     Serial.println("");
   }
-};
+  
+  /**
+   * Receive data from MotionCal.
+   * The protocol consists of binary packets of 68 bytes transmittted
+   * via the serial line. Each packet starts with the values 117,84.
+   */
+  void receiveMotioncal() {
+    uint16_t crc; // the CRC value for error checking
+    byte b; // the current byte
+    uint8_t i; // the index to go over the packet
+
+    // read data as long as there is something there
+    while (Serial.available()) {
+      b = Serial.read();
+      //check for correct packet preamble
+      if (this->calcount == 0 && b != 117) {
+        return;
+      }
+      if (this->calcount == 1 && b != 84) {
+        this->calcount = 0;
+        return;
+      }
+
+      // store the current byte read from the serial line
+      calbuffer[calcount++] = b;
+      if (calcount < 68) {
+        // data stream is longer than calibration message (and thus invalid)
+        return;
+      }
+
+      // verify the checksum
+      crc = 0xFFFF;
+      for (i = 0; i < 68; i++) {
+        crc = crc16_update(crc, calbuffer[i]);
+      }
+      if (crc == 0) {
+        // data stream is free of errors
+        float offsets[16];
+        // copy all received bytes into a temp buffer
+        // (for implicit memory alignment to read proper values)
+        memcpy(offsets, calbuffer + 2, 16 * 4);
+        
+        // assign config values from temp buffer
+        this->bias.accel_x = offsets[0];
+        this->bias.accel_y = offsets[1];
+        this->bias.accel_y = offsets[2];
+
+        this->bias.gyro_x = offsets[3];
+        this->bias.gyro_y = offsets[4];
+        this->bias.gyro_z = offsets[5];
+
+        this->bias.hardiron_x = offsets[6];
+        this->bias.hardiron_y = offsets[7];
+        this->bias.hardiron_z = offsets[8];
+
+        this->bias.magnetic_field = offsets[9];
+
+        // note that this is a matrix, not a scalar value
+        this->bias.softiron_1_1 = offsets[10];
+        this->bias.softiron_1_2 = offsets[13];
+        this->bias.softiron_1_3 = offsets[14];
+        this->bias.softiron_2_1 = offsets[13];
+        this->bias.softiron_2_2 = offsets[11];
+        this->bias.softiron_2_3 = offsets[15];
+        this->bias.softiron_3_1 = offsets[14];
+        this->bias.softiron_3_2 = offsets[15];
+        this->bias.softiron_3_3 = offsets[12];
+
+        // TODO: save (& print?) calibration
+        
+        // set counter properly
+        this->calcount = 0;
+        return;
+      }
+
+      // look for the 117,84 in the incoming data, before discarding
+      // (the search frame is adjusted for the size of the possible packet)
+      for (i = 2; i < 67; i++) {
+		// look for potential packet preamble
+        if (this->calbuffer[i] == 117 && this->calbuffer[i + 1] == 84) {
+          // move data fragment
+          this->calcount = 68 - i;
+          memmove(this->calbuffer, this->calbuffer + i, this->calcount);
+          return;
+        }
+      }
+      // look for 117 in last byte
+      if (this->calbuffer[67] == 117) {
+        this->calbuffer[0] = 117;
+        this->calcount = 1;
+      } else {
+        this->calcount = 0;
+      }
+    }
+  }
+}
+;
 
 ICM20948socket socket[NUMBER_OF_SENSORS]; /**< a (global) list of sockets to bundle communication */
 
