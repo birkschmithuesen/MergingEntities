@@ -1110,10 +1110,12 @@ void loop() {
     // construct the OSC message
     socket[i].assembleOSCmessage();
     // send the OSC message
+#ifndef NOWIFI
     Udp.beginPacket(receiverIp, receiverPort + getControllerID() - 1);
     socket[i].osc.send(Udp);
     Udp.endPacket();
     socket[i].osc.empty();
+#endif
     socket[i].printOSC();
   }
 }
