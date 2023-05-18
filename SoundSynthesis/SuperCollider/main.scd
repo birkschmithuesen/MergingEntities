@@ -163,13 +163,29 @@ scale = FloatArray[48, 55, 60, 67];//some 5ths starting from c4
 
 
 
-
-
 (
-~tripples.stop;
-~steady.stop;
-~tripples.reset;
-~steady.reset;
-~tripples.play;
-~steady.play;
+// GRANULATORS
+
+// load Synth Defs
+~path = PathName(thisProcess.nowExecutingPath).parentPath;
+(~path++"synthlib.scd").load;
+
+
+// create groups
+~grainGroup = Group.new;
+
+// define number of performers bodies
+~numBodies = 1;
+
+// load samples
+~b1 = Buffer.read(s, Platform.resourceDir +/+ "sounds/a11wlk01.wav");
+
+// create Synths
+~grains = {arg i; Synth.head(~grainGroup, \grain, [\out, i*2, \sndbuf, ~b1])}!~numBodies;
+{arg i; ("Created "++~grains[i]).postln}!~numBodies;
+
+
+// make the Synth controllable via OSC
+~oscGrain = {arg i; OscGrain.new(~grains[i], ('/grain/' ++ i))}!~numBodies;
+~oscGrainGroup = OscStandartGroup.new(~grainGroup, ('/grain/group'));
 )

@@ -90,6 +90,16 @@ SynthDef(\kling, {
 }).add;
 
 
+SynthDef(\grain, {
+	arg sndbuf, amp = 1, exc = 1, dur = 0.5, rate = 0.5, pos = 0, out = 0;
+    var sig, dur_mapped, rate_mapped;
+	dur_mapped = dur.linlin(0.0, 1.0, 0.05, 0.5);
+	rate_mapped = rate.linlin(0.0, 1.0, 0.5, 1.5);
+	sig = BufGrain.ar(Impulse.kr(1/dur_mapped), dur_mapped, sndbuf, rate_mapped, pos, 2)*exc;
+	Out.ar(out, sig);
+}).add;
+
+
 SynthDef.new(\sine, {
 	arg amp=1, exc = 1, freq=440, atk=0.005, rel=0.3, shape = 0, pan=0, out=0;
 	var sig, osc1, osc2, env;

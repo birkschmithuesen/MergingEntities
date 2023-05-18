@@ -227,6 +227,44 @@ OscKling{
 }
 
 
+OscGrain{
+	var <synth, address;
+
+	*new {arg synth, address;
+		^super.newCopyArgs(synth, address).init;
+	}
+
+	init {
+		("Connect " ++ synth ++ " with OSC address " ++ address).postln;
+
+		OSCFunc({
+			arg msg;
+			if (msg[1] != nil,
+				{synth.set(\exc, msg[1]);},
+				{("received wrong OSC message length on address: " ++ address).postln}
+			);
+			if (msg[2] != nil,
+				{synth.set(\dur, msg[2]);
+				},
+				{("received wrong OSC message length on address: " ++ address).postln}
+			);
+			if (msg[3] != nil,
+				{synth.set(\rate, msg[3]);
+				},
+				{("received wrong OSC message length on address: " ++ address).postln}
+			);
+			if (msg[4] != nil,
+				{synth.set(\pos, msg[4]);
+				},
+				{("received wrong OSC message length on address: " ++ address).postln}
+			);
+		},
+		(address)
+		);
+
+	}
+}
+
 // GROUPS
 
 OscStandartGroup{

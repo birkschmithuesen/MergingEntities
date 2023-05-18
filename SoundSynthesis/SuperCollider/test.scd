@@ -344,3 +344,89 @@ play {
 	Limiter.ar(sig+chain);    // dry + wet
 }
 )
+
+
+
+
+s.meter;
+
+
+(
+SynthDef(\buf_grain_test, {arg gate = 1, sndbuf, amp = 1, envbuf;
+    Out.ar(0,
+        BufGrainB.ar(Impulse.kr(10), MouseY.kr(0.0, 5.0), sndbuf, 1.0, MouseX.kr(0.0, 0.8),
+            envbuf, 2,
+            EnvGen.kr(
+                Env([0, 1, 0], [1, 1], \sin, 1),
+                gate,
+                levelScale: amp,
+                doneAction: 2)
+        ) * 2
+    )
+}).add;
+)
+
+s.sendMsg(\b_allocRead, x = s.bufferAllocator.alloc(1), "/Users/macbook/Documents/___MySoundbank/02karmanoia/eis12.wav");
+z = Env([0, 1, 0], [1, 1], [10, -10]).asSignal(1024);
+s.sendMsg(\b_alloc, b = s.bufferAllocator.alloc(1), 1024, 1, [\b_setn, b, 0, 1024] ++ z)
+s.sendMsg(\s_new, \buf_grain_test, a=s.nextNodeID, 0, 1, \amp, 0.2, \sndbuf, x, \envbuf, b);
+s.sendMsg(\n_set, a, \gate, 0);
+s.sendMsg(\b_free, b);
+s.sendMsg(\b_free, x);
+
+
+
+
+
+
+
+
+
+
+(
+SynthDef(\buf_grain_test, {arg gate = 1, sndbuf, amp = 1, envbuf;
+    Out.ar(0,
+		BufGrainB.ar(Impulse.kr(1), MouseY.kr(0.0, 1.0), sndbuf, 1.0, MouseX.kr(0.0, 1.0),
+            envbuf, 2,
+            EnvGen.kr(
+                Env([1, 1, 1], [1, 1], \sin, 1),
+                gate,
+                levelScale: amp,
+                doneAction: 2)
+        )*2
+    )
+}).add;
+)
+
+s.sendMsg(\b_allocRead, x = s.bufferAllocator.alloc(1), "/Users/macbook/Music/Ableton/Live Recordings/2023-05-17 194323 Temp Project/Samples/Processed/Consolidate/Audio [2023-05-17 194518].aif");
+z = Env([0, 1, 0], [1, 1], [10, -10]).asSignal(1024);
+s.sendMsg(\b_alloc, b = s.bufferAllocator.alloc(1), 1024, 1, [\b_setn, b, 0, 1024] ++ z)
+s.sendMsg(\s_new, \buf_grain_test, a=s.nextNodeID, 0, 1, \amp, 0.2, \sndbuf, x, \envbuf, b);
+s.sendMsg(\n_set, a, \gate, 0);
+s.sendMsg(\b_free, b);
+s.sendMsg(\b_free, x);
+
+
+
+
+Env([0, 1, 0], [1, 1], \sin, 1).plot
+
+
+
+(
+SynthDef(\buf_grain_test, {arg gate = 1, sndbuf, amp = 1;
+    Out.ar(0,
+        BufGrain.ar(Impulse.kr(1/MouseY.kr(0.0, 0.5)), MouseY.kr(0.0, 0.5), sndbuf, 2.0, MouseX.kr(0.0, 1.0), 2, 1
+        )
+    )
+}).add;
+)
+
+~b1 = Buffer.read(s, Platform.resourceDir +/+ "sounds/a11wlk01.wav");
+
+Synth(\buf_grain_test, [\sndbuf, ~b1]).play
+
+
+
+
+
