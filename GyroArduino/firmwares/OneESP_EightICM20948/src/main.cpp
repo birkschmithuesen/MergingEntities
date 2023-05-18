@@ -5,6 +5,8 @@
  * @todo implement magnetic north calibration
  * @todo implement sensor calibration
  */
+// to store data beyond reboot
+#include <Preferences.h>
 // libraries for local sensor communication
 #include <Adafruit_ICM20948.h>
 #include <Adafruit_ICM20X.h>
@@ -38,6 +40,7 @@ int localPort = 8888;                /**< source port for UDP communication on E
 #define ID_PIN4 13   /**< 4rd bit pin of ID DIP switch (D13) */
 
 #define NUMBER_OF_SENSORS 8 /**< number of ICM20948 sensors */
+Preferences nvm;  /**< handler for ESP32 NVM */
 #define TASKSTACKSIZE 2000 /**< size of initial stack (in bytes) */
 TaskHandle_t resurrectionTaskHandle = NULL; /**< OS task handler (for profiling and control) */
 UBaseType_t current_mark = 0; /**< watermark queried from task */
@@ -518,6 +521,7 @@ struct ICM20948socket {
    * For more information on MotionCal, check https://www.pjrc.com/store/prop_shield.html
    *
    * @see update()
+   * @see receiveMotioncal(uint8_t slot)
    * @see printOSC()
    * @note Make sure to update the internal data before sending.
    */
@@ -565,11 +569,15 @@ struct ICM20948socket {
   }
   
   /**
-   * Receive data from MotionCal.
+   * Receive (and save) data from MotionCal.
    * The protocol consists of binary packets of 68 bytes transmittted
    * via the serial line. Each packet starts with the values 117,84.
+   *
+   * @param slot to save to (= index in the global socket list)
+   * @see storeCalibration(uint8_t slot)
+   * @see sendMotioncal()
    */
-  void receiveMotioncal() {
+  void receiveMotioncal(uint8_t slot) {
     uint16_t crc; // the CRC value for error checking
     byte b; // the current byte
     uint8_t i; // the index to go over the packet
@@ -608,7 +616,7 @@ struct ICM20948socket {
         // assign config values from temp buffer
         this->bias.accel_x = offsets[0];
         this->bias.accel_y = offsets[1];
-        this->bias.accel_y = offsets[2];
+        this->bias.accel_z = offsets[2];
 
         this->bias.gyro_x = offsets[3];
         this->bias.gyro_y = offsets[4];
@@ -631,8 +639,9 @@ struct ICM20948socket {
         this->bias.softiron_3_2 = offsets[15];
         this->bias.softiron_3_3 = offsets[12];
 
-        // TODO: save (& print?) calibration
-        
+        // save calibration data on chip
+        this->storeCalibration(slot);
+
         // set counter properly
         this->calcount = 0;
         return;
@@ -657,6 +666,47 @@ struct ICM20948socket {
         this->calcount = 0;
       }
     }
+  }
+
+  /**
+   * Store sensor calibration on chip.
+   *
+   * @param slot to save to (= index in the global socket list)
+   * @see receiveMotioncal(uint8_t slot)
+   *
+   * @note This function accesses the global NMV object.
+   * @todo indicate errors
+   */
+  void storeCalibration(uint8_t slot) {
+    char* name;  // namespace
+    if (slot > 7) {
+	  return;
+	}
+	// build namespace name
+	sprintf(name,"sensor%d",slot);
+    // open NVM as read-write
+    nvm.begin(name, false);
+    // store the data
+    nvm.putFloat("accel_x", this->bias.accel_x);
+    nvm.putFloat("accel_y", this->bias.accel_y);
+    nvm.putFloat("accel_z", this->bias.accel_z);
+    nvm.putFloat("gyro_x", this->bias.gyro_x);
+    nvm.putFloat("gyro_y", this->bias.gyro_y);
+    nvm.putFloat("gyro_z", this->bias.gyro_z);
+    nvm.putFloat("hardiron_x", this->bias.hardiron_x);
+    nvm.putFloat("hardiron_y", this->bias.hardiron_y);
+    nvm.putFloat("hardiron_z", this->bias.hardiron_z);
+    nvm.putFloat("magnetic_field", this->bias.magnetic_field);
+    nvm.putFloat("softiron_1_1", this->bias.softiron_1_1);
+    nvm.putFloat("softiron_1_2", this->bias.softiron_1_2);
+    nvm.putFloat("softiron_1_3", this->bias.softiron_1_3);
+    nvm.putFloat("softiron_2_1", this->bias.softiron_2_1);
+    nvm.putFloat("softiron_2_2", this->bias.softiron_2_2);
+    nvm.putFloat("softiron_2_3", this->bias.softiron_2_3);
+    nvm.putFloat("softiron_3_1", this->bias.softiron_3_1);
+    nvm.putFloat("softiron_3_2", this->bias.softiron_3_2);
+    nvm.putFloat("softiron_3_3", this->bias.softiron_3_3);
+    nvm.end();
   }
 };
 
