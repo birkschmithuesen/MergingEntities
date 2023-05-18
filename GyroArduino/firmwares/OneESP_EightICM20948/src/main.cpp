@@ -150,29 +150,29 @@ void configureICM20948(void *cfg_ptr);
  * @see ICM20948config
  */
 struct ICM20948bias {
-  float accel_x; /**< zero g offset along x-axis */
-  float accel_y; /**< zero g offset along y-axis */
-  float accel_z; /**< zero g offset along y-axis */
+  float accel_x = 0.0; /**< zero g offset along x-axis */
+  float accel_y = 0.0; /**< zero g offset along y-axis */
+  float accel_z = 0.0; /**< zero g offset along y-axis */
 
-  float gyro_x; /**< gyroscope offset along x-axis */
-  float gyro_y; /**< gyroscope offset along y-axis */
-  float gyro_z; /**< gyroscope offset along z-axis */
+  float gyro_x = 0.0; /**< gyroscope offset along x-axis */
+  float gyro_y = 0.0; /**< gyroscope offset along y-axis */
+  float gyro_z = 0.0; /**< gyroscope offset along z-axis */
 
-  float magnetic_field; /**< magnetic filed offset in uTesla */
+  float magnetic_field = 0.0; /**< magnetic filed offset in uTesla */
 
-  float hardiron_x; /**< hard iron error along x-axis */
-  float hardiron_y; /**< hard iron error along y-axis */
-  float hardiron_z; /**< hard iron error along z-axis */
+  float hardiron_x = 0.0; /**< hard iron error along x-axis */
+  float hardiron_y = 0.0; /**< hard iron error along y-axis */
+  float hardiron_z = 0.0; /**< hard iron error along z-axis */
 
-  float softiron_1_1; /**< value at (1,1) of soft iron matrix */
-  float softiron_1_2; /**< value at (1,2) of soft iron matrix */
-  float softiron_1_3; /**< value at (1,3) of soft iron matrix */
-  float softiron_2_1; /**< value at (2,1) of soft iron matrix */
-  float softiron_2_2; /**< value at (2,2) of soft iron matrix */
-  float softiron_2_3; /**< value at (2,3) of soft iron matrix */
-  float softiron_3_1; /**< value at (3,1) of soft iron matrix */
-  float softiron_3_2; /**< value at (3,2) of soft iron matrix */
-  float softiron_3_3; /**< value at (3,3) of soft iron matrix */
+  float softiron_1_1 = 0.0; /**< value at (1,1) of soft iron matrix */
+  float softiron_1_2 = 0.0; /**< value at (1,2) of soft iron matrix */
+  float softiron_1_3 = 0.0; /**< value at (1,3) of soft iron matrix */
+  float softiron_2_1 = 0.0; /**< value at (2,1) of soft iron matrix */
+  float softiron_2_2 = 0.0; /**< value at (2,2) of soft iron matrix */
+  float softiron_2_3 = 0.0; /**< value at (2,3) of soft iron matrix */
+  float softiron_3_1 = 0.0; /**< value at (3,1) of soft iron matrix */
+  float softiron_3_2 = 0.0; /**< value at (3,2) of soft iron matrix */
+  float softiron_3_3 = 0.0; /**< value at (3,3) of soft iron matrix */
 };
 
 /**
