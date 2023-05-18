@@ -672,10 +672,12 @@ struct ICM20948socket {
    * Store sensor calibration on chip.
    *
    * @param slot to save to (= index in the global socket list)
+   * @see loadCalibration(uint8_t slot)
    * @see receiveMotioncal(uint8_t slot)
    *
    * @note This function accesses the global NMV object.
    * @todo indicate errors
+   * @todo check for available (remaining) entries
    */
   void storeCalibration(uint8_t slot) {
     char* name;  // namespace
@@ -706,6 +708,49 @@ struct ICM20948socket {
     nvm.putFloat("softiron_3_1", this->bias.softiron_3_1);
     nvm.putFloat("softiron_3_2", this->bias.softiron_3_2);
     nvm.putFloat("softiron_3_3", this->bias.softiron_3_3);
+    nvm.end();
+  }
+
+  /**
+   * Load calibration data from chip.
+   *
+   * @param slot to read from (= index in the global socket list)
+   * @see storeCalibration(uint8_t slot)
+   * @see reveiveMotioncal(uint8_t slot)
+   * @todo error indication
+   * @todo check for errors reading (non-existent) data
+   */
+  void loadCalibration(uint8_t slot) {
+    char *name; // namespace
+    if (slot > 7) {
+          return;
+    }
+    // build namespace name
+    sprintf(name, "sensor%d", slot);
+    // open NVM as read-only
+    if(!nvm.begin(name, true)) {
+      return;
+    }
+    // load the data
+    this->bias.accel_x = nvm.getFloat("accel_x", 0.0);
+    this->bias.accel_y = nvm.getFloat("accel_y", 0.0);
+    this->bias.accel_y = nvm.getFloat("accel_y", 0.0);
+    this->bias.gyro_x = nvm.getFloat("gyro_x", 0.0);
+    this->bias.gyro_y = nvm.getFloat("gyro_y", 0.0);
+    this->bias.gyro_z = nvm.getFloat("gyro_z", 0.0);
+    this->bias.hardiron_x = nvm.getFloat("hardiron_x", 0.0);
+    this->bias.hardiron_y = nvm.getFloat("hardiron_y", 0.0);
+    this->bias.hardiron_z = nvm.getFloat("hardiron_z", 0.0);
+    this->bias.magnetic_field = nvm.getFloat("magnetic_field", 0.0);
+    this->bias.softiron_1_1 = nvm.getFloat("softiron_1_1", 0.0);
+    this->bias.softiron_1_2 = nvm.getFloat("softiron_1_2", 0.0);
+    this->bias.softiron_1_3 = nvm.getFloat("softiron_1_3", 0.0);
+    this->bias.softiron_2_1 = nvm.getFloat("softiron_2_1", 0.0);
+    this->bias.softiron_2_2 = nvm.getFloat("softiron_2_2", 0.0);
+    this->bias.softiron_2_3 = nvm.getFloat("softiron_2_3", 0.0);
+    this->bias.softiron_3_1 = nvm.getFloat("softiron_3_1", 0.0);
+    this->bias.softiron_3_2 = nvm.getFloat("softiron_3_2", 0.0);
+    this->bias.softiron_3_3 = nvm.getFloat("softiron_3_3", 0.0);
     nvm.end();
   }
 };
