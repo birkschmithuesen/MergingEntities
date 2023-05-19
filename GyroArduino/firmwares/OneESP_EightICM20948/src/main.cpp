@@ -34,6 +34,7 @@ int localPort = 8888;                /**< source port for UDP communication on E
 #define ICM_ADDRESS 0x69 /**< I2C address of the ICM20948 sensor */
 #define GREENLED 33      /**< green LED pin */
 #define BLUELED 32       /**< blue LED pin */
+#define CALIBRATIONBUTON 23 /**< calibration button pin */
 
 #define ID_PIN1 13   /**< 1st bit pin of ID DIP switch (D13) */
 #define ID_PIN2 12   /**< 2nd bit pin of ID DIP switch (D12) */
@@ -998,6 +999,7 @@ void setup(void) {
   uint8_t sensors_failed = 0; // track number of non-working sensors
   //-------HARDWARE SETUP-------
   pinMode(GREENLED, OUTPUT);
+  pinMode(CALIBRATIONBUTON, INPUT);
   digitalWrite(GREENLED, HIGH);
   Serial.begin(115200);
   Serial.setTimeout(3*1000); // set 3 seconds timeout for input
@@ -1168,6 +1170,10 @@ void setup(void) {
   Serial.println(" sensors worked");
 
   // calibrate if needed
+  if (LOW == digitalRead(CALIBRATIONBUTON)) {
+    Serial.println("starting calibration routine ...");
+    delay(1000);
+  }
   /*
   Serial.print("enter sensor calibration (y/n)? ");
   String choice = Serial.readString();
