@@ -23,7 +23,7 @@ WiFiUDP Udp;                         /**< handler for UDP communication */
 IPAddress receiverIp(192, 168, 0, 2);     /**< IP address of the (target) OSC server */
 int receiverPort = 8000;             /**< default UDP server port on OSC receiver (i.e. central server), gets offset by controller ID */
 int localPort = 8888;                /**< source port for UDP communication on ESP32 */
-#define NOWIFI                       /**< skip wifi setup for faster booting */
+//#define NOWIFI                       /**< skip wifi setup for faster booting */
 //-------END NETWORK SETTINGS--------
 #define MAGNETIC_DECLINATION 4.80 /**< difference between true north and magnetic north, see https://www.magnetic-declination.com/ */
 
@@ -514,6 +514,7 @@ struct ICM20948socket {
    *
    * @see assembleOSCmessage()
    * @see sendMotioncal()
+   * @note This prints the data packed into OSC, not the actual message.
    */
   void printOSC() {
     Serial.print(this->getQuaternionRX());
@@ -1201,6 +1202,19 @@ void setup(void) {
   socket[4].bias.softiron_3_3 = 0.996;
   socket[5].label = "left_upper_arm";
   socket[5].channel = 5;
+  /*socket[5].bias.hardiron_x = 5.63;
+  socket[5].bias.hardiron_y = -5.7;
+  socket[5].bias.hardiron_z = -14.6;
+  socket[5].bias.magnetic_field = 38.75;
+  socket[5].bias.softiron_1_1 = 1.028;
+  socket[5].bias.softiron_1_2 = 0.19;
+  socket[5].bias.softiron_1_3 = -0.006;
+  socket[5].bias.softiron_2_1 = socket[5].bias.softiron_1_2;
+  socket[5].bias.softiron_2_2 = 0.974;
+  socket[5].bias.softiron_2_3 = 0.001;
+  socket[5].bias.softiron_3_1 = socket[5].bias.softiron_1_3;
+  socket[5].bias.softiron_3_2 = socket[5].bias.softiron_2_3;
+  socket[5].bias.softiron_3_3 = 0.996;*/
   socket[6].label = "head";
   socket[6].channel = 6;
   socket[7].label = "left_foot";
@@ -1329,9 +1343,10 @@ void setup(void) {
     delay(1000);
     interactiveSensorCalibration();
   }
-  calibrateSensor(4);
+  //calibrateSensor(5);
 
   // try to fix sensor issues
+  /*
   Serial.print("setting up background task to handle sensor issues ...");
   xTaskCreate(
     sensorResurrection,
@@ -1340,7 +1355,7 @@ void setup(void) {
     NULL, // parameter
     1,  // task priority
     &resurrectionTaskHandle // Task handle
-  );
+  );*/
   Serial.println(" done");
   digitalWrite(GREENLED, LOW);
 }
