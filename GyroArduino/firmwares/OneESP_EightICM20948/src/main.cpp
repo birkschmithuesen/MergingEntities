@@ -946,38 +946,6 @@ void sensorResurrection(void *) {
 }
 
 /**
- * Interactive calibration of potentially all sensors.
- *
- * @see calibrateSensor(uint8_t index)
- * @warning This function is far from being complete/functional.
- * @note This requires MotionCal from https://www.pjrc.com/store/prop_shield.html
- */
-void interactiveSensorCalibration() {
-  // blink green LED to indicate calibration mode
-  xTaskCreate(
-    sensorResurrection,
-    "green blink",
-    TASKSTACKSIZE,
-    NULL,
-    1,
-    &greenBlinkTaskHandle
-  );
-  // block execution until button is lifted
-  while(LOW == digitalRead(CALIBRATIONBUTON) {}
-  delay(1000);
-  for (uint8_t i = 0; i < NUMBER_OF_SENSORS; i++) {
-	// TODO: more interaction handling code
-    calibrateSensor(i);
-  }
-  delay(10*1000);
-
-  // stop green blinking LED
-  if(NULL != greenBlinkTaskHandle){
-    vTaskDelete(greenBlinkTaskHandle);
-  }
-}
-
-/**
  * Calibrate a single sensor by its index.
  *
  * @param index ... in global socket array
@@ -999,7 +967,39 @@ void calibrateSensor(uint8_t index) {
     }
   }
   // only terminate function when button is lifted
-  while(LOW == digitalRead(CALIBRATIONBUTON) {}
+  while(LOW == digitalRead(CALIBRATIONBUTON)) {}
+}
+
+/**
+ * Interactive calibration of potentially all sensors.
+ *
+ * @see calibrateSensor(uint8_t index)
+ * @warning This function is far from being complete/functional.
+ * @note This requires MotionCal from https://www.pjrc.com/store/prop_shield.html
+ */
+void interactiveSensorCalibration() {
+  // blink green LED to indicate calibration mode
+  xTaskCreate(
+    sensorResurrection,
+    "green blink",
+    TASKSTACKSIZE,
+    NULL,
+    1,
+    &greenBlinkTaskHandle
+  );
+  // block execution until button is lifted
+  while(LOW == digitalRead(CALIBRATIONBUTON)) {}
+  delay(1000);
+  for (uint8_t i = 0; i < NUMBER_OF_SENSORS; i++) {
+	// TODO: more interaction handling code
+    calibrateSensor(i);
+  }
+  delay(10*1000);
+
+  // stop green blinking LED
+  if(NULL != greenBlinkTaskHandle){
+    vTaskDelete(greenBlinkTaskHandle);
+  }
 }
 
 /**
@@ -1198,17 +1198,7 @@ void setup(void) {
     delay(1000);
     interactiveSensorCalibration();
   }
-  /*
-  Serial.print("enter sensor calibration (y/n)? ");
-  String choice = Serial.readString();
-  Serial.println("");
-  if ('y' == choice[0]) {
-    interactiveSensorCalibration();
-  } else {
-    Serial.println("proceeding without calibration ...");
-  }
-  */
-  //calibrateSensor(3);
+  calibrateSensor(0);
 
   // try to fix sensor issues
   Serial.print("setting up background task to handle sensor issues ...");
