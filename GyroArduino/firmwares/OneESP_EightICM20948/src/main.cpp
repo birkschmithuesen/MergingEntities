@@ -32,6 +32,8 @@ int localPort = 8888;                /**< source port for UDP communication on E
 #define SCL_PIN 21       /**< I2C clock pin (on ESP32) */
 #define TCA_ADDRESS 0x70 /**< I2C address of the TCA9548A (I2C multiplexer) */
 #define ICM_ADDRESS 0x69 /**< I2C address of the ICM20948 sensor */
+#define GREENLED 33      /**< green LED pin */
+#define BLUELED 32       /**< blue LED pin */
 
 #define ID_PIN1 13   /**< 1st bit pin of ID DIP switch (D13) */
 #define ID_PIN2 12   /**< 2nd bit pin of ID DIP switch (D12) */
@@ -995,6 +997,8 @@ void setup(void) {
   uint8_t sensors_missing = 0; // track number of missing sensors
   uint8_t sensors_failed = 0; // track number of non-working sensors
   //-------HARDWARE SETUP-------
+  pinMode(GREENLED, OUTPUT);
+  digitalWrite(GREENLED, HIGH);
   Serial.begin(115200);
   Serial.setTimeout(3*1000); // set 3 seconds timeout for input
   // pause until serial line is available
@@ -1187,6 +1191,7 @@ void setup(void) {
     &resurrectionTaskHandle // Task handle
   );
   Serial.println(" done");
+  digitalWrite(GREENLED, LOW);
 }
 
 /**
