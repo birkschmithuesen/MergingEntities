@@ -33,10 +33,10 @@ int localPort = 8888;                /**< source port for UDP communication on E
 #define TCA_ADDRESS 0x70 /**< I2C address of the TCA9548A (I2C multiplexer) */
 #define ICM_ADDRESS 0x69 /**< I2C address of the ICM20948 sensor */
 
-#define ID_PIN1 27   /**< 1st bit pin of ID DIP switch (D27) */
-#define ID_PIN2 14   /**< 2nd bit pin of ID DIP switch (D14) */
-#define ID_PIN3 12   /**< 3rd bit pin of ID DIP switch (D12) */
-#define ID_PIN4 13   /**< 4rd bit pin of ID DIP switch (D13) */
+#define ID_PIN1 13   /**< 1st bit pin of ID DIP switch (D13) */
+#define ID_PIN2 12   /**< 2nd bit pin of ID DIP switch (D12) */
+#define ID_PIN3 14   /**< 3rd bit pin of ID DIP switch (D14) */
+#define ID_PIN4 27   /**< 4rd bit pin of ID DIP switch (D27) */
 
 #define NUMBER_OF_SENSORS 8 /**< number of ICM20948 sensors */
 Preferences nvm;  /**< handler for ESP32 NVM */
@@ -104,16 +104,16 @@ uint8_t getControllerID() {
   uint8_t id = 0;
 
   // read the switch state from left to right and add value at position
-  if (HIGH == digitalRead(ID_PIN1)) {
+  if (LOW == digitalRead(ID_PIN1)) {
 	id = 8;
   }
-  if (HIGH == digitalRead(ID_PIN2)) {
+  if (LOW == digitalRead(ID_PIN2)) {
 	id += 4;
   }
-  if (HIGH == digitalRead(ID_PIN3)) {
+  if (LOW == digitalRead(ID_PIN3)) {
 	id += 2;
   }
-  if (HIGH == digitalRead(ID_PIN4)) {
+  if (LOW == digitalRead(ID_PIN4)) {
 	id += 1;
   }
   return id;
@@ -1013,6 +1013,9 @@ void setup(void) {
   Serial.println();
   delay(1000);
 
+  Serial.print("configuring controller ");
+  Serial.println(getControllerID());
+
   //-------WIFI SETUP-------
 #ifdef NOWIFI
   Serial.println("skipping wifi setup ...");
@@ -1171,7 +1174,7 @@ void setup(void) {
     Serial.println("proceeding without calibration ...");
   }
   */
-  calibrateSensor(3);
+  //calibrateSensor(3);
 
   // try to fix sensor issues
   Serial.print("setting up background task to handle sensor issues ...");
