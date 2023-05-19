@@ -261,6 +261,7 @@ struct ICM20948socket {
     if (this->usable && (!this->configlock)) {
       this->sensor.getEvent(&this->accel_event, &this->gyro_event,
                             &this->temp_event, &this->mag_event);
+      // TODO: add calibration here
       this->update_quaternion();
       this->update_angles();
       return true;
