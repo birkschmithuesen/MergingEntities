@@ -265,6 +265,9 @@ struct ICM20948socket {
       this->accel_event.acceleration.x -= this->bias.accel_x;
       this->accel_event.acceleration.y -= this->bias.accel_y;
       this->accel_event.acceleration.z -= this->bias.accel_z;
+      this->gyro_event.gyro.x -= this->bias.gyro_x;
+      this->gyro_event.gyro.y -= this->bias.gyro_x;
+      this->gyro_event.gyro.z -= this->bias.gyro_x;
       // update other dependend data
       this->update_quaternion();
       this->update_angles();
