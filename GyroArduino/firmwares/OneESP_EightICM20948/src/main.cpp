@@ -274,6 +274,9 @@ struct ICM20948socket {
       hardiron_x_tmp = this->mag_event.magnetic.x - this->bias.hardiron_x;
       hardiron_y_tmp = this->mag_event.magnetic.y - this->bias.hardiron_y;
       hardiron_z_tmp = this->mag_event.magnetic.z - this->bias.hardiron_z;
+      this->mag_event.magnetic.x = (hardiron_x_tmp * this->bias.softiron_1_1) + (hardiron_y_tmp * this->bias.softiron_1_2) + (hardiron_z_tmp * this->bias.softiron_1_3);
+      this->mag_event.magnetic.x = (hardiron_x_tmp * this->bias.softiron_2_1) + (hardiron_y_tmp * this->bias.softiron_2_2) + (hardiron_z_tmp * this->bias.softiron_2_3);
+      this->mag_event.magnetic.x = (hardiron_x_tmp * this->bias.softiron_3_1) + (hardiron_y_tmp * this->bias.softiron_3_2) + (hardiron_z_tmp * this->bias.softiron_3_3);
       // update other dependend data
       this->update_quaternion();
       this->update_angles();
