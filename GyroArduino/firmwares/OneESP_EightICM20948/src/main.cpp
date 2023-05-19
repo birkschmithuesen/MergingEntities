@@ -175,13 +175,13 @@ struct ICM20948bias {
   float hardiron_y = 0.0; /**< hard iron error along y-axis */
   float hardiron_z = 0.0; /**< hard iron error along z-axis */
 
-  float softiron_1_1 = 0.0; /**< value at (1,1) of soft iron matrix */
+  float softiron_1_1 = 1.0; /**< value at (1,1) of soft iron matrix */
   float softiron_1_2 = 0.0; /**< value at (1,2) of soft iron matrix */
   float softiron_1_3 = 0.0; /**< value at (1,3) of soft iron matrix */
-  float softiron_2_1 = 0.0; /**< value at (2,1) of soft iron matrix */
+  float softiron_2_1 = 1.0; /**< value at (2,1) of soft iron matrix */
   float softiron_2_2 = 0.0; /**< value at (2,2) of soft iron matrix */
   float softiron_2_3 = 0.0; /**< value at (2,3) of soft iron matrix */
-  float softiron_3_1 = 0.0; /**< value at (3,1) of soft iron matrix */
+  float softiron_3_1 = 1.0; /**< value at (3,1) of soft iron matrix */
   float softiron_3_2 = 0.0; /**< value at (3,2) of soft iron matrix */
   float softiron_3_3 = 0.0; /**< value at (3,3) of soft iron matrix */
 };
@@ -662,6 +662,47 @@ struct ICM20948socket {
         // save calibration data on chip
         this->storeCalibration();
 
+        // mirror calibration back to MotionCal
+        Serial.print("Cal1:");
+        Serial.print(this->bias.accel_x, 3);
+        Serial.print(",");
+        Serial.print(this->bias.accel_y, 3);
+        Serial.print(",");
+        Serial.print(this->bias.accel_z, 3);
+        Serial.print(",");
+        Serial.print(this->bias.gyro_x, 3);
+        Serial.print(",");
+        Serial.print(this->bias.gyro_y, 3);
+        Serial.print(",");
+        Serial.print(this->bias.gyro_z, 3);
+        Serial.print(",");
+        Serial.print(this->bias.hardiron_x, 3);
+        Serial.print(",");
+        Serial.print(this->bias.hardiron_y, 3);
+        Serial.print(",");
+        Serial.print(this->bias.hardiron_z, 3);
+        Serial.print(",");
+        Serial.println(this->bias.magnetic_field, 3);
+        Serial.print("Cal2:");
+        Serial.print(this->bias.softiron_1_1, 4);
+        Serial.print(',');
+        Serial.print(this->bias.softiron_1_2, 4);
+        Serial.print(',');
+        Serial.print(this->bias.softiron_1_3, 4);
+        Serial.print(',');
+        Serial.print(this->bias.softiron_2_1, 4);
+        Serial.print(',');
+        Serial.print(this->bias.softiron_2_2, 4);
+        Serial.print(',');
+        Serial.print(this->bias.softiron_2_3, 4);
+        Serial.print(',');
+        Serial.print(this->bias.softiron_3_1, 4);
+        Serial.print(',');
+        Serial.print(this->bias.softiron_3_2, 4);
+        Serial.print(',');
+        Serial.print(this->bias.softiron_3_3, 4);
+        Serial.println();
+
         // set counter properly
         this->calcount = 0;
         return;
@@ -754,13 +795,13 @@ struct ICM20948socket {
     this->bias.hardiron_y = nvm.getFloat("hardiron_y", 0.0);
     this->bias.hardiron_z = nvm.getFloat("hardiron_z", 0.0);
     this->bias.magnetic_field = nvm.getFloat("magnetic_field", 0.0);
-    this->bias.softiron_1_1 = nvm.getFloat("softiron_1_1", 0.0);
+    this->bias.softiron_1_1 = nvm.getFloat("softiron_1_1", 1.0);
     this->bias.softiron_1_2 = nvm.getFloat("softiron_1_2", 0.0);
     this->bias.softiron_1_3 = nvm.getFloat("softiron_1_3", 0.0);
-    this->bias.softiron_2_1 = nvm.getFloat("softiron_2_1", 0.0);
+    this->bias.softiron_2_1 = nvm.getFloat("softiron_2_1", 1.0);
     this->bias.softiron_2_2 = nvm.getFloat("softiron_2_2", 0.0);
     this->bias.softiron_2_3 = nvm.getFloat("softiron_2_3", 0.0);
-    this->bias.softiron_3_1 = nvm.getFloat("softiron_3_1", 0.0);
+    this->bias.softiron_3_1 = nvm.getFloat("softiron_3_1", 1.0);
     this->bias.softiron_3_2 = nvm.getFloat("softiron_3_2", 0.0);
     this->bias.softiron_3_3 = nvm.getFloat("softiron_3_3", 0.0);
     nvm.end();
