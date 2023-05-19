@@ -46,6 +46,7 @@ uint8_t buttonstate;     /**< track push button state across function calls */
 Preferences nvm;  /**< handler for ESP32 NVM */
 #define TASKSTACKSIZE 2000 /**< size of initial stack (in bytes) */
 TaskHandle_t resurrectionTaskHandle = NULL; /**< OS task handler (for profiling and control) */
+TaskHandle_t greenBlinkTaskHandle = NULL; /**< green LED blinking task handler */
 UBaseType_t current_mark = 0; /**< watermark queried from task */
 UBaseType_t mark_min = TASKSTACKSIZE; /**< size of initial stack */
 
@@ -835,6 +836,18 @@ void configureICM20948(void *cfg_ptr) {
 }
 
 /**
+ * Blink only the green LED.
+ */
+void blinkGreenOnly(void *) {
+  while(true) {
+    digitalWrite(GREENLED, HIGH);
+    delay(1000);
+    digitalWrite(GREENLED, LOW);
+    delay(1000);
+  }
+}
+
+/**
  * This function establishes a connection to the preconfigured wifi network.
  *
  * @see #WIFI_SSID
@@ -940,6 +953,15 @@ void sensorResurrection(void *) {
  * @note This requires MotionCal from https://www.pjrc.com/store/prop_shield.html
  */
 void interactiveSensorCalibration() {
+  // blink green LED to indicate calibration mode
+  xTaskCreate(
+    sensorResurrection,
+    "green blink",
+    TASKSTACKSIZE,
+    NULL,
+    1,
+    &greenBlinkTaskHandle
+  );
   // block execution until button is lifted
   while(LOW == digitalRead(CALIBRATIONBUTON) {
   }
@@ -961,6 +983,11 @@ void interactiveSensorCalibration() {
     return;
   }
   delay(10*1000);
+
+  // stop green blinking LED
+  if(NULL != greenBlinkTaskHandle){
+    vTaskDelete(greenBlinkTaskHandle);
+  }
 }
 
 /**
