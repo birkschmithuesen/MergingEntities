@@ -253,6 +253,9 @@ struct ICM20948socket {
    * @see sendMotioncal()
    */
   bool update() {
+    float hardiron_x_tmp = 0.0; // temporary hardiron calibration x
+    float hardiron_y_tmp = 0.0; // temporary hardiron calibration y
+    float hardiron_z_tmp = 0.0; // temporary hardiron calibration z
 	if (!selectI2cMultiplexerChannel(this->channel)) {
       this->usable = false;
       return false;
@@ -268,6 +271,9 @@ struct ICM20948socket {
       this->gyro_event.gyro.x -= this->bias.gyro_x;
       this->gyro_event.gyro.y -= this->bias.gyro_x;
       this->gyro_event.gyro.z -= this->bias.gyro_x;
+      hardiron_x_tmp = this->mag_event.magnetic.x - this->bias.hardiron_x;
+      hardiron_y_tmp = this->mag_event.magnetic.y - this->bias.hardiron_y;
+      hardiron_z_tmp = this->mag_event.magnetic.z - this->bias.hardiron_z;
       // update other dependend data
       this->update_quaternion();
       this->update_angles();
