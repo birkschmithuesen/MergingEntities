@@ -948,7 +948,7 @@ void sensorResurrection(void *) {
 /**
  * Interactive calibration of potentially all sensors.
  *
- * @todo better menue options / selection paths
+ * @see calibrateSensor(uint8_t index)
  * @warning This function is far from being complete/functional.
  * @note This requires MotionCal from https://www.pjrc.com/store/prop_shield.html
  */
@@ -963,24 +963,11 @@ void interactiveSensorCalibration() {
     &greenBlinkTaskHandle
   );
   // block execution until button is lifted
-  while(LOW == digitalRead(CALIBRATIONBUTON) {
-  }
+  while(LOW == digitalRead(CALIBRATIONBUTON) {}
   delay(1000);
-  Serial.print("select a sensor (");
   for (uint8_t i = 0; i < NUMBER_OF_SENSORS; i++) {
-    if (socket[i].usable) {
-      Serial.print(i);
-      Serial.print(',');
-	}
-  }
-  Serial.print(") ");
-  index = Serial.parseInt();
-  Serial.println(index);
-  if (!socket[index-1].usable) {
-    Serial.print("The senor");
-    Serial.print(index);
-    Serial.println(" is (marked) unusable for calibration");
-    return;
+	// TODO: more interaction handling code
+    calibrateSensor(i);
   }
   delay(10*1000);
 
@@ -994,6 +981,7 @@ void interactiveSensorCalibration() {
  * Calibrate a single sensor by its index.
  *
  * @param index ... in global socket array
+ * @see interactiveSensorCalibration()
  * @see ICM20948socket
  */
 void calibrateSensor(uint8_t index) {
@@ -1010,6 +998,8 @@ void calibrateSensor(uint8_t index) {
       break;
     }
   }
+  // only terminate function when button is lifted
+  while(LOW == digitalRead(CALIBRATIONBUTON) {}
 }
 
 /**
