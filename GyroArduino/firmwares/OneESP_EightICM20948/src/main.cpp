@@ -21,7 +21,7 @@ WiFiUDP Udp;                         /**< handler for UDP communication */
 #define WIFI_SSID "ArtNet4Hans"     /**< SSID / name of the wifi network to use */
 #define WIFI_PASS "kaesimira"  /**< password for the wifi network to use */
 IPAddress receiverIp(192, 168, 0, 2);     /**< IP address of the (target) OSC server */
-int receiverPort = 8000;             /**< UDP server port on OSC receiver (i.e. central server) */
+int receiverPort = 8000;             /**< default UDP server port on OSC receiver (i.e. central server), gets offset by controller ID */
 int localPort = 8888;                /**< source port for UDP communication on ESP32 */
 #define NOWIFI                       /**< skip wifi setup for faster booting */
 //-------END NETWORK SETTINGS--------
@@ -1026,6 +1026,7 @@ void setup(void) {
 #ifdef NOWIFI
   Serial.println("skipping wifi setup ...");
 #else
+  receiverPort += getControllerID();
   connectWiFi();
   startUdp(localPort);
   Serial.print("target OSC server is ");
@@ -1225,7 +1226,7 @@ void loop() {
     socket[i].assembleOSCmessage();
     // send the OSC message
 #ifndef NOWIFI
-    Udp.beginPacket(receiverIp, receiverPort + getControllerID() - 1);
+    Udp.beginPacket(receiverIp, receiverPort);
     socket[i].osc.send(Udp);
     Udp.endPacket();
     socket[i].osc.empty();
