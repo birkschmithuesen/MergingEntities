@@ -35,6 +35,7 @@ int localPort = 8888;                /**< source port for UDP communication on E
 #define GREENLED 33      /**< green LED pin */
 #define BLUELED 32       /**< blue LED pin */
 #define CALIBRATIONBUTON 23 /**< calibration button pin */
+uint8_t buttonstate;     /**< track push button state across function calls */
 
 #define ID_PIN1 13   /**< 1st bit pin of ID DIP switch (D13) */
 #define ID_PIN2 12   /**< 2nd bit pin of ID DIP switch (D12) */
@@ -939,11 +940,9 @@ void sensorResurrection(void *) {
  * @note This requires MotionCal from https://www.pjrc.com/store/prop_shield.html
  */
 void interactiveSensorCalibration() {
-  int index = 0;
-  Serial.println("-------------------------------------------------");
-  Serial.println("- welcome to the great sensor calibration menue -");
-  Serial.println("-------------------------------------------------");
-  Serial.println();
+  // block execution until button is lifted
+  while(LOW == digitalRead(CALIBRATIONBUTON) {
+  }
   delay(1000);
   Serial.print("select a sensor (");
   for (uint8_t i = 0; i < NUMBER_OF_SENSORS; i++) {
@@ -980,6 +979,9 @@ void calibrateSensor(uint8_t index) {
     socket[index].sendMotioncal();
     socket[index].receiveMotioncal();
     delay(10);
+    if (LOW == digitalRead(CALIBRATIONBUTON)) {
+      break;
+    }
   }
 }
 
@@ -999,8 +1001,10 @@ void setup(void) {
   uint8_t sensors_failed = 0; // track number of non-working sensors
   //-------HARDWARE SETUP-------
   pinMode(GREENLED, OUTPUT);
+  pinMode(BLUELED, OUTPUT);
   pinMode(CALIBRATIONBUTON, INPUT);
   digitalWrite(GREENLED, HIGH);
+  digitalWrite(BLUELED, LOW);
   Serial.begin(115200);
   Serial.setTimeout(3*1000); // set 3 seconds timeout for input
   // pause until serial line is available
@@ -1172,8 +1176,10 @@ void setup(void) {
 
   // calibrate if needed
   if (LOW == digitalRead(CALIBRATIONBUTON)) {
+    buttonstate = LOW;
     Serial.println("starting calibration routine ...");
     delay(1000);
+    interactiveSensorCalibration();
   }
   /*
   Serial.print("enter sensor calibration (y/n)? ");
