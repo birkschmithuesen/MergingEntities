@@ -777,7 +777,7 @@ struct ICM20948socket {
    * @todo check for errors reading (non-existent) data
    */
   void loadCalibration() {
-    char *name; // namespace
+    char name[7]; // namespace
     // build namespace name
     sprintf(name, "sensor%d", this->channel);
     // open NVM as read-only
@@ -805,6 +805,24 @@ struct ICM20948socket {
     this->bias.softiron_3_2 = nvm.getFloat("softiron_3_2", 0.0);
     this->bias.softiron_3_3 = nvm.getFloat("softiron_3_3", 0.0);
     nvm.end();
+  }
+
+  /**
+   * Print the stored calibration data.
+   *
+   * @todo implement for softiron data
+   * @todo implement for accelerometer data
+   * @todo implement for gyro data
+   */
+  void printCalibration() {
+	this->loadCalibration();
+    Serial.println("--- senor offsets / calibration data ---");
+    Serial.println("hard iron:");
+    Serial.print(this->bias.hardiron_x);
+    Serial.print(", ");
+    Serial.print(this->bias.hardiron_y);
+    Serial.print(", ");
+    Serial.println(this->bias.hardiron_z);
   }
 };
 
@@ -1101,6 +1119,8 @@ void setup(void) {
   Serial.print("setting up sensor sockets .");
   socket[0].label = "right_lower_arm";
   socket[0].channel = 0;
+  socket[0].printCalibration();
+  esp_deep_sleep_start();
   // hardcode data collected from MotionCal
   socket[0].bias.hardiron_x = -7.21;
   socket[0].bias.hardiron_y = -28.69;
