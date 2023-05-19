@@ -1030,21 +1030,21 @@ void setup(void) {
 
   // socket label & channel
   Serial.print("setting up sensor sockets .");
-  socket[0].label = "label_1";
+  socket[0].label = "right_lower_arm";
   socket[0].channel = 0;
-  socket[1].label = "label_2";
+  socket[1].label = "right_upper_arm";
   socket[1].channel = 1;
-  socket[2].label = "label_3";
+  socket[2].label = "back";
   socket[2].channel = 2;
-  socket[3].label = "label_4";
+  socket[3].label = "right_foot";
   socket[3].channel = 3;
-  socket[4].label = "label_5";
+  socket[4].label = "left_lower_arm";
   socket[4].channel = 4;
-  socket[5].label = "label_6";
+  socket[5].label = "left_upper_arm";
   socket[5].channel = 5;
-  socket[6].label = "label_7";
+  socket[6].label = "head";
   socket[6].channel = 6;
-  socket[7].label = "label_8";
+  socket[7].label = "left_foot";
   socket[7].channel = 7;
   Serial.println(".. done");
 
