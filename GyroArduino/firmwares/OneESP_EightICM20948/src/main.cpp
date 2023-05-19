@@ -740,11 +740,14 @@ struct ICM20948socket {
    * @todo check for available (remaining) entries
    */
   void storeCalibration() {
-    char *name; // namespace
+    char name[7]; // namespace
 	// build namespace name
 	sprintf(name,"sensor%d",this->channel);
     // open NVM as read-write
-    nvm.begin(name, false);
+    if(!nvm.begin(name, false)) {
+      nvm.end();
+      return;
+    }
     // store the data
     nvm.putFloat("accel_x", this->bias.accel_x);
     nvm.putFloat("accel_y", this->bias.accel_y);
@@ -782,6 +785,7 @@ struct ICM20948socket {
     sprintf(name, "sensor%d", this->channel);
     // open NVM as read-only
     if(!nvm.begin(name, true)) {
+      nvm.end();
       return;
     }
     // load the data
@@ -1119,8 +1123,8 @@ void setup(void) {
   Serial.print("setting up sensor sockets .");
   socket[0].label = "right_lower_arm";
   socket[0].channel = 0;
-  socket[0].printCalibration();
-  esp_deep_sleep_start();
+  //socket[0].printCalibration();
+  //esp_deep_sleep_start();
   // hardcode data collected from MotionCal
   socket[0].bias.hardiron_x = -7.21;
   socket[0].bias.hardiron_y = -28.69;
@@ -1312,7 +1316,7 @@ void setup(void) {
     delay(1000);
     interactiveSensorCalibration();
   }
-  calibrateSensor(3);
+  calibrateSensor(4);
 
   // try to fix sensor issues
   Serial.print("setting up background task to handle sensor issues ...");
