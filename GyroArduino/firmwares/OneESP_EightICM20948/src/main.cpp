@@ -1202,7 +1202,7 @@ void setup(void) {
   socket[4].bias.softiron_3_3 = 0.996;
   socket[5].label = "left_upper_arm";
   socket[5].channel = 5;
-  /*socket[5].bias.hardiron_x = 5.63;
+  socket[5].bias.hardiron_x = 5.63;
   socket[5].bias.hardiron_y = -5.7;
   socket[5].bias.hardiron_z = -14.6;
   socket[5].bias.magnetic_field = 38.75;
@@ -1214,11 +1214,37 @@ void setup(void) {
   socket[5].bias.softiron_2_3 = 0.001;
   socket[5].bias.softiron_3_1 = socket[5].bias.softiron_1_3;
   socket[5].bias.softiron_3_2 = socket[5].bias.softiron_2_3;
-  socket[5].bias.softiron_3_3 = 0.996;*/
+  socket[5].bias.softiron_3_3 = 0.996;
   socket[6].label = "head";
   socket[6].channel = 6;
+  socket[6].bias.hardiron_x = -31.63;
+  socket[6].bias.hardiron_y = -7.8;
+  socket[6].bias.hardiron_z = -8.67;
+  socket[6].bias.magnetic_field = 38.75;
+  socket[6].bias.softiron_1_1 = 1.028;
+  socket[6].bias.softiron_1_2 = -0.14;
+  socket[6].bias.softiron_1_3 = -0.006;
+  socket[6].bias.softiron_2_1 = socket[6].bias.softiron_1_2;
+  socket[6].bias.softiron_2_2 = 0.984;
+  socket[6].bias.softiron_2_3 = 0.001;
+  socket[6].bias.softiron_3_1 = socket[6].bias.softiron_1_3;
+  socket[6].bias.softiron_3_2 = socket[6].bias.softiron_2_3;
+  socket[6].bias.softiron_3_3 = 1.001;
   socket[7].label = "left_foot";
   socket[7].channel = 7;
+  socket[7].bias.hardiron_x = 5.65;
+  socket[7].bias.hardiron_y = -4.59;
+  socket[7].bias.hardiron_z = -21.54;
+  socket[7].bias.magnetic_field = 38.85;
+  socket[7].bias.softiron_1_1 = 1.016;
+  socket[7].bias.softiron_1_2 = -0.004;
+  socket[7].bias.softiron_1_3 = 0.007;
+  socket[7].bias.softiron_2_1 = socket[2].bias.softiron_1_2;
+  socket[7].bias.softiron_2_2 = 0.989;
+  socket[7].bias.softiron_2_3 = 0.002;
+  socket[7].bias.softiron_3_1 = socket[7].bias.softiron_1_3;
+  socket[7].bias.softiron_3_2 = socket[7].bias.softiron_2_3;
+  socket[7].bias.softiron_3_3 = 0.998;
   Serial.println(".. done");
 
   // build OSC paths
