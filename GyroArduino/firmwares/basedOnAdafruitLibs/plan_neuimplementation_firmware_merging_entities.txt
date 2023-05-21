@@ -1,6 +1,12 @@
-Kalibrierung
-Multiplexer delay
+Was fehlt noch:
 
-Resurrection
+Kalibrierung (Vorschlag: Manuell über https://learn.adafruit.com/adafruit-sensorlab-magnetometer-calibration/magnetic-calibration-with-motioncal )
+Status-LEDs
+Multiplexer delay (nicht nötig?)
+
+Reconnect zu wackeligen Sensoren
+	- wie feststellen das was klemmt?
 	- maximale Anzahl von Versuchen
 	- Timeout
+
+

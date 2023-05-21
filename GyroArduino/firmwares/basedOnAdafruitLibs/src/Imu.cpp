@@ -5,7 +5,7 @@ void Imu::setup (const char * oscName, HardCodedCalibration calibration){+
     strcpy(this->oscName, oscName);
     this->calibration= calibration;
     configureSensor();
-
+    oscMessage.init(oscName,10);
 }
 
 void Imu::update(){
@@ -36,6 +36,8 @@ void Imu::update(){
 }
 
 void Imu::printSerial(){
+  Serial.print("Timestamp: ");Serial.println(accel_event.timestamp);
+
   Serial.print("Raw: ");
   Serial.print(accel_event.acceleration.x, 4); Serial.print(", ");
   Serial.print(accel_event.acceleration.y, 4); Serial.print(", ");
@@ -67,6 +69,9 @@ void Imu::sendOsc(WiFiUDP& Udp,IPAddress& receiverIp,int receiverPort){
 
     float qw, qx, qy, qz;   
     filter.getQuaternion(&qw, &qx, &qy, &qz);
+
+    oscMessage.setData(qw, qx, qy, qz,roll,pitch,yaw,gx,gy,gz);
+    /*
     OSCMessage message(oscName);
         // set the quaternion data
 
@@ -80,8 +85,10 @@ void Imu::sendOsc(WiFiUDP& Udp,IPAddress& receiverIp,int receiverPort){
         .add(yaw);
     // set the gyro data
     message.add(gx).add(gy).add(gz);
+    */
     Udp.beginPacket(receiverIp, receiverPort);
-    message.send(Udp);
+    //message.send(Udp);
+    Udp.write((uint8_t*)oscMessage.buffer,oscMessage.messageLength);
     Udp.endPacket();
 }
 
