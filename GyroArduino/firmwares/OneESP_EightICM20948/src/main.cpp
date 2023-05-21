@@ -18,9 +18,13 @@
 
 //-------BEGIN NETWORK SETTINGS--------
 WiFiUDP Udp;                         /**< handler for UDP communication */
-#define WIFI_SSID "ArtNet4Hans"     /**< SSID / name of the wifi network to use */
-#define WIFI_PASS "kaesimira"  /**< password for the wifi network to use */
-IPAddress receiverIp(192, 168, 0, 2);     /**< IP address of the (target) OSC server */
+//#define WIFI_SSID "ArtNet4Hans"     /**< SSID / name of the wifi network to use */
+//#define WIFI_PASS "kaesimira"  /**< password for the wifi network to use */
+
+#define WIFI_SSID "syntheticwire"     /**< SSID / name of the wifi network to use */
+#define WIFI_PASS "doesnotmatter"  /**< password for the wifi network to use */
+
+IPAddress receiverIp(192, 168, 0, 104);     /**< IP address of the (target) OSC server */
 int receiverPort = 8000;             /**< default UDP server port on OSC receiver (i.e. central server), gets offset by controller ID */
 int localPort = 8888;                /**< source port for UDP communication on ESP32 */
 //#define NOWIFI                       /**< skip wifi setup for faster booting */
@@ -495,18 +499,19 @@ struct ICM20948socket {
    *
    * @see printOSC()
    */
-  void assembleOSCmessage() {
+  void assembleOSCmessage(OSCMessage& message) {
     // set the quaternion data
-    this->osc.add(this->getQuaternionRX())
+    message.setAddress(this->label);
+    message.add(this->getQuaternionRX())
         .add(this->getQuaternionRY())
         .add(this->getQuaternionRZ())
         .add(this->getQuaternionRW());
     // set the euler angle data
-    this->osc.add(this->getEulerX())
+    message.add(this->getEulerX())
         .add(this->getEulerY())
         .add(this->getEulerZ());
     // set the gyro data
-    this->osc.add(this->getGyroX()).add(this->getGyroY()).add(this->getGyroZ());
+    message.add(this->getGyroX()).add(this->getGyroY()).add(this->getGyroZ());
   }
 
   /**
@@ -1285,7 +1290,7 @@ void setup(void) {
     Serial.println(".. failed (I2C bus timeout)");
     Serial.println("... stopping everything");
     // put ESP32 into deep sleep (closest to shutdown)
-    esp_deep_sleep_start();
+   // esp_deep_sleep_start();
     break;
   default:
     Serial.print(".. failed (error ");
@@ -1293,7 +1298,7 @@ void setup(void) {
     Serial.println(")");
     Serial.println("... stopping everything");
     // put ESP32 into deep sleep (closest to shutdown)
-    esp_deep_sleep_start();
+   // esp_deep_sleep_start();
     break;
   }
 
@@ -1361,7 +1366,7 @@ void setup(void) {
   Serial.print("setup of ");
   Serial.print(NUMBER_OF_SENSORS - sensors_failed);
   Serial.println(" sensors worked");
-
+/*
   // calibrate if needed
   if (LOW == digitalRead(CALIBRATIONBUTON)) {
     buttonstate = LOW;
@@ -1369,6 +1374,7 @@ void setup(void) {
     delay(1000);
     interactiveSensorCalibration();
   }
+  */
   //calibrateSensor(5);
 
   // try to fix sensor issues
@@ -1393,28 +1399,33 @@ void setup(void) {
  * @see selectI2cMultiplexerChannel(uint8_t channel)
  */
 void loop() {
-  delay(1000);
+  Serial.println("loop");
+  delay(100);
 
   // sequentially get all sensor data via each channel
   for (uint8_t i = 0; i < NUMBER_OF_SENSORS; i++) {
     // skip processing unusable socket
     if (!socket[i].usable) {
-      continue;
+    //  continue;
     }
     // update the sensor measurements
     if(!socket[i].update()) {
       // update failed, mark sensor as unusable
       socket[i].usable = false;
-      continue;
+      //continue;
     }
+    
     // construct the OSC message
-    socket[i].assembleOSCmessage();
+
     // send the OSC message
 #ifndef NOWIFI
+    OSCMessage someMessage("dummy");
+    socket[i].assembleOSCmessage(someMessage);
     Udp.beginPacket(receiverIp, receiverPort);
-    socket[i].osc.send(Udp);
+    someMessage.send(Udp);
     Udp.endPacket();
-    socket[i].osc.empty();
+
+
 #endif
     socket[i].printOSC();
   }
