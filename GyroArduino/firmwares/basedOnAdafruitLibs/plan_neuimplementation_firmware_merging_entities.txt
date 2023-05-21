@@ -1,17 +1,5 @@
-
-==multiplexing
-Klasse "I2CMultiplexer"
-Klasse "MultiplexedImus"
-	- kennt den Multiplexer
-	- baut die Imu-Klassen, und stattet sie mit Namen und Offsets aus
-	- kümmert sich um die Updates 
-Klasse "Imu"
-	- kennt den Multiplexer
-	- hat die Kalibrierungen, kennt deren Offset
-	- hat die Sensordatenfusion
-	- führt ggf die Wiederauferstehung durch
-
-
+Kalibrierung
+Multiplexer delay
 
 Resurrection
 	- maximale Anzahl von Versuchen
