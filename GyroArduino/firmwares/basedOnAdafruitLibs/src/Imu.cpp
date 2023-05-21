@@ -86,10 +86,12 @@ void Imu::sendOsc(WiFiUDP& Udp,IPAddress& receiverIp,int receiverPort){
     // set the gyro data
     message.add(gx).add(gy).add(gz);
     */
+   
     Udp.beginPacket(receiverIp, receiverPort);
     //message.send(Udp);
     Udp.write((uint8_t*)oscMessage.buffer,oscMessage.messageLength);
     Udp.endPacket();
+    
 }
 
 
