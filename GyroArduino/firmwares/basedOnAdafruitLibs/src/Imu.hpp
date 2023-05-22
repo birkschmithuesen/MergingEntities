@@ -16,13 +16,16 @@
 #include "CalibData.hpp"
 #include "HardCodedCalibration.hpp"
 #include "ImuOscMessage.h"
+
+#include <mutex>
 class Imu
 {
 public:
     Imu();
-    void setup(const char *oscName, HardCodedCalibration calibration);
+    void setup(const char *oscName, Adafruit_Sensor_Calibration* calibration);
     void update();
     void printSerial();
+
     void sendOsc(WiFiUDP& Udp,IPAddress& receiverIp,int receiverPort);
     enum ImuErrorStates
     {
@@ -36,7 +39,8 @@ private:
     void configureSensor();
 
     char oscName[200];
-    ImuOscMessage oscMessage;
+    std::mutex oscMessageMutex; /**< controls access to the content of @oscMessage */
+    ImuOscMessage oscMessage; /**< a buffer for a pre formed oscMessage, ready to be sent by the WiFi-send-task. lock @oscMessageMutex during access*/
 
     Adafruit_ICM20948 sensor; /**< software handler/abstraction for ICM20948 at given channel */
     // pick your filter! slower == better quality output
@@ -44,7 +48,7 @@ private:
     // Adafruit_Madgwick filter;  // faster than NXP
     //Adafruit_Mahony filter; // fastest/smallest
 
-    HardCodedCalibration calibration;
+    Adafruit_Sensor_Calibration* calibration;
     sensors_event_t mag_event, gyro_event, temp_event, accel_event;
     float gx, gy, gz; // for gyro, as these need to be converted for filtering
 };

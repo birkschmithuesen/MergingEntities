@@ -1,11 +1,13 @@
 #include "Imu.hpp"
 #define AHRS_DEBUG_OUTPUT
 Imu::Imu(){}
-void Imu::setup (const char * oscName, HardCodedCalibration calibration){+
+void Imu::setup (const char * oscName, Adafruit_Sensor_Calibration* calibration){+
     strcpy(this->oscName, oscName);
     this->calibration= calibration;
     configureSensor();
+    oscMessageMutex.lock(); // keep "Wifi send task" from accessing data while it is written
     oscMessage.init(oscName,10);
+    oscMessageMutex.unlock(); 
 }
 
 void Imu::update(){
@@ -16,10 +18,10 @@ void Imu::update(){
   // Serial.print("I2C took "); Serial.print(micros()-timestamp); Serial.println(" mus");
 #endif
 
-    calibration.calibrate(accel_event);
-    calibration.calibrate(gyro_event);
-    calibration.calibrate(temp_event);
-    calibration.calibrate(mag_event);
+    calibration->calibrate(accel_event);
+    calibration->calibrate(gyro_event);
+    calibration->calibrate(temp_event);
+    calibration->calibrate(mag_event);
     // Gyroscope needs to be converted from Rad/s to Degree/s
     // the rest are not unit-important
     gx = gyro_event.gyro.x * SENSORS_RADS_TO_DPS;
@@ -33,6 +35,18 @@ void Imu::update(){
 #if defined(AHRS_DEBUG_OUTPUT)
    // Serial.print("Update took "); Serial.print(micros()-timestamp); Serial.println("mus");
 #endif
+
+  // put new values into the osc Message buffer
+    float roll = filter.getRoll();
+    float pitch = filter.getPitch();
+    float yaw = filter.getYaw();
+
+    float qw, qx, qy, qz;   
+    filter.getQuaternion(&qw, &qx, &qy, &qz);
+
+    oscMessageMutex.lock(); // keep "Wifi send task" from accessing data while it is written
+    oscMessage.setData(qw, qx, qy, qz,roll,pitch,yaw,gx,gy,gz);
+    oscMessageMutex.unlock();
 }
 
 void Imu::printSerial(){
@@ -63,14 +77,7 @@ void Imu::printSerial(){
 
 void Imu::sendOsc(WiFiUDP& Udp,IPAddress& receiverIp,int receiverPort){
 
-    float roll = filter.getRoll();
-    float pitch = filter.getPitch();
-    float yaw = filter.getYaw();
-
-    float qw, qx, qy, qz;   
-    filter.getQuaternion(&qw, &qx, &qy, &qz);
-
-    oscMessage.setData(qw, qx, qy, qz,roll,pitch,yaw,gx,gy,gz);
+  // for comparison: the "old way" of building osc messages  
     /*
     OSCMessage message(oscName);
         // set the quaternion data
@@ -85,11 +92,15 @@ void Imu::sendOsc(WiFiUDP& Udp,IPAddress& receiverIp,int receiverPort){
         .add(yaw);
     // set the gyro data
     message.add(gx).add(gy).add(gz);
-    */
-   
     Udp.beginPacket(receiverIp, receiverPort);
-    //message.send(Udp);
+    message.send(Udp);
+    Udp.endPacket();
+    */
+
+    Udp.beginPacket(receiverIp, receiverPort);
+    oscMessageMutex.lock(); 
     Udp.write((uint8_t*)oscMessage.buffer,oscMessage.messageLength);
+    oscMessageMutex.unlock(); 
     Udp.endPacket();
     
 }

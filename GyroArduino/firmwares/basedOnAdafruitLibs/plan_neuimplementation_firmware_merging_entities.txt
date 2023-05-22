@@ -1,6 +1,4 @@
 Was fehlt noch:
-Speed-Up: Das Versenden der Pakete braucht gerade am meisten Zeit von allem (~10ms). Vielleicht in einen separaten Task auf der 2. CPU auslagern?
-
 Kalibrierung: Vorschlag: Manuell über https://learn.adafruit.com/adafruit-sensorlab-magnetometer-calibration/magnetic-calibration-with-motioncal 
 Status-LEDs
 Multiplexer delay (nicht nötig?)

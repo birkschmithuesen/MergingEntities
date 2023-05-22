@@ -31,5 +31,9 @@ bool HardCodedCalibration::loadCalibration()
             return true;
         }
     }
+            Serial.print("!!!!! Found no matching calibration set  - using defaults for controller#");
+            Serial.print(controllerIndex);
+            Serial.print(" sensor# ");
+            Serial.println(sensorIndex);
     return false;
 }

@@ -16,9 +16,9 @@ void MultiplexedImus::setupAll(int controllerId)
         buildOscName(controllerId,i,oscNameBuffer);
 
         // get calibration info
-        HardCodedCalibration curCalib;
-        curCalib.begin(controllerId,i);
-        curCalib.loadCalibration();
+        HardCodedCalibration* curCalib=&(calibrations[i]);
+        curCalib->begin(controllerId,i);
+        curCalib->loadCalibration();
         
         //let the imu do its setup 
         imus[i].setup(oscNameBuffer, curCalib);

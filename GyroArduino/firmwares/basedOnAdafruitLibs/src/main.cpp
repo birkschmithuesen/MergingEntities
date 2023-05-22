@@ -14,6 +14,7 @@
 #include "MultiplexedImu.hpp"
 
 WiFiUDP Udp;                            /**< handler for UDP communication */
+TaskHandle_t oscSendTask;               /**< sends  osc updates parallel to computation*/
 IPAddress receiverIp(192, 168, 0, 104); /**< IP address of the (target) OSC server */
 int receiverPortStart = 8000;           /**< default UDP server port on OSC receiver (i.e. central server), gets offset by controller ID */
 int receiverPort;                       // set later according to controller ID
@@ -25,6 +26,17 @@ MultiplexedImus imuCollection;
 // for limiting the rate of reports
 uint32_t lastReportMillis = 0;
 uint32_t reportInterval = 10; // ms
+
+// Task1code: blinks an LED every 1000 ms
+void oscSendFun(void *pvParameters)
+{
+    while (true)
+    {
+        imuCollection.sendOscAll(Udp, receiverIp, receiverPort);
+        vTaskDelay(1); // to avoid starving other tasks;
+    }
+}
+
 void setup()
 {
     Serial.begin(115200);
@@ -46,10 +58,6 @@ void setup()
         controllerID = 7;
     }
 
-    /////////////////ATTENTION!///////////////////
-    controllerID = 0; // for debug purposes only
-                      /////////////////ATTENTION!///////////////////
-
     receiverPort = receiverPortStart + controllerID;
 
     ///////////set up Wifi
@@ -68,10 +76,25 @@ void setup()
     /////////////set up sensors
     Serial.println("setting up sensors");
     imuCollection.setupAll(controllerID);
+
+    // start OSC send task
+
+    if (true)
+    {
+        xTaskCreatePinnedToCore(
+            oscSendFun,   /* Task function. */
+            "OscSender",  /* name of task. */
+            20000,        /* Stack size of task */
+            NULL,         /* parameter of the task */
+            1,            /* priority of the task */
+            &oscSendTask, /* Task handle to keep track of created task */
+            0);           /* pin task to core 0 */
+    }
 }
 
 void loop()
 {
+    vTaskDelay(1); // to avoid starving other tasks;
     uint32_t timestamp = micros();
     imuCollection.updateAll();
 
@@ -79,12 +102,15 @@ void loop()
     Serial.print(micros() - timestamp);
     Serial.println("mus");
 
-    if ((millis() - lastReportMillis) > (reportInterval))
+    // imuCollection.sendOscAll(Udp, receiverIp, receiverPort); // this is now done by a separate task
+
+    // this is (painfully) slow...
+    if (false)
     {
-        lastReportMillis = millis();
-         //imuCollection.printSerialAll();
         timestamp = micros();
-        imuCollection.sendOscAll(Udp, receiverIp, receiverPort);
+
+        imuCollection.printSerialAll();
+
         Serial.print("print/send took ");
         Serial.print(micros() - timestamp);
         Serial.println("mus");

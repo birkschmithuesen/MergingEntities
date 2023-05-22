@@ -16,6 +16,7 @@ public:
     void printSerialAll();
     void sendOscAll(WiFiUDP& Udp,IPAddress& receiverIp,int receiverPort);
     Imu imus[N_SENSORS];
+    HardCodedCalibration calibrations[N_SENSORS] ; // these are loaded on setup
 private:
  void buildOscName(int controllerId,int sensorIndex, char*dst);    
 };

@@ -1,5 +1,5 @@
 #include <Adafruit_Sensor_Calibration.h>
-// Uses had coded values from CalibData.cpp
+// Uses hard coded values from CalibData.cpp
 
 class HardCodedCalibration: public Adafruit_Sensor_Calibration{
     public:
