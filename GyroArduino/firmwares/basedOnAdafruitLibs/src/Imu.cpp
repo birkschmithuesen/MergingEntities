@@ -166,3 +166,47 @@ void Imu::configureSensor()
     }
     lastErrorState = sensorConfigSuccess;
 }
+
+  void Imu::sendMotionCal() {
+    sensor.getEvent(&accel_event, &gyro_event,&temp_event, &mag_event);
+    // raw data format
+    Serial.print("Raw:");
+    Serial.print(int(this->accel_event.acceleration.x * 8192 / 9.8));
+    Serial.print(",");
+    Serial.print(int(this->accel_event.acceleration.y * 8192 / 9.8));
+    Serial.print(",");
+    Serial.print(int(this->accel_event.acceleration.z * 8192 / 9.8));
+    Serial.print(",");
+    Serial.print(int(this->gyro_event.gyro.x * SENSORS_RADS_TO_DPS * 16));
+    Serial.print(",");
+    Serial.print(int(this->gyro_event.gyro.y * SENSORS_RADS_TO_DPS * 16));
+    Serial.print(",");
+    Serial.print(int(this->gyro_event.gyro.z * SENSORS_RADS_TO_DPS * 16));
+    Serial.print(",");
+    Serial.print(int(this->mag_event.magnetic.x * 10));
+    Serial.print(",");
+    Serial.print(int(this->mag_event.magnetic.y * 10));
+    Serial.print(",");
+    Serial.print(int(this->mag_event.magnetic.z * 10));
+    Serial.println("");
+    // unified data format
+    Serial.print("Uni:");
+    Serial.print(this->accel_event.acceleration.x);
+    Serial.print(",");
+    Serial.print(this->accel_event.acceleration.y);
+    Serial.print(",");
+    Serial.print(this->accel_event.acceleration.z);
+    Serial.print(",");
+    Serial.print(this->gyro_event.gyro.x, 4);
+    Serial.print(",");
+    Serial.print(this->gyro_event.gyro.y, 4);
+    Serial.print(",");
+    Serial.print(this->gyro_event.gyro.z, 4);
+    Serial.print(",");
+    Serial.print(this->mag_event.magnetic.x);
+    Serial.print(",");
+    Serial.print(this->mag_event.magnetic.y);
+    Serial.print(",");
+    Serial.print(this->mag_event.magnetic.z);
+    Serial.println("");
+  }

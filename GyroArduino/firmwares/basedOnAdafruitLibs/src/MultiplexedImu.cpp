@@ -1,7 +1,7 @@
 #include "MultiplexedImu.hpp"
 #include "I2CMultiplexer.hpp"
 #include "SensorNames.hpp"
-void MultiplexedImus::setupAll(int controllerId)
+void MultiplexedImus::setupAll(int controllerId,CalibrationManager* calibrationManager)
 {
     int nImusWorking=0;
 
@@ -14,14 +14,10 @@ void MultiplexedImus::setupAll(int controllerId)
 
         // generate OSC name
         buildOscName(controllerId,i,oscNameBuffer);
-
-        // get calibration info
-        HardCodedCalibration* curCalib=&(calibrations[i]);
-        curCalib->begin(controllerId,i);
-        curCalib->loadCalibration();
         
         //let the imu do its setup 
-        imus[i].setup(oscNameBuffer, curCalib);
+        imus[i].setup(oscNameBuffer, &(calibrationManager->calibrations[i]));
+        
         if(imus[i].lastErrorState==Imu::sensorConfigSuccess)nImusWorking++;
     }
     Serial.print (nImusWorking);

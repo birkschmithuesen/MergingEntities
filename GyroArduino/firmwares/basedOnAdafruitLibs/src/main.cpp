@@ -1,4 +1,6 @@
 
+
+
 // libraries for wireless communication
 #include <WiFi.h>
 #include <WiFiUdp.h>
@@ -7,33 +9,52 @@
 // hardware support
 #include <Wire.h>
 #include <EEPROM.h>
+#include "Preferences.h"
 
 #include "PinsAndAddresses.hpp"
 #include "UserInterface.hpp"
 #include "NetworkConfig.hpp"
 #include "MultiplexedImu.hpp"
+#include "NvmStoredCalibration.h"
 
+
+
+
+//////network related stuff
 WiFiUDP Udp;                            /**< handler for UDP communication */
 TaskHandle_t oscSendTask;               /**< sends  osc updates parallel to computation*/
+
+//#define WIFI_SSID "syntheticwire"     /**< SSID / name of the wifi network to use */
+//#define WIFI_PASS "doesnotmatter"  /**< password for the wifi network to use */
+
+#define WIFI_SSID "ArtNet4Hans"     /**< SSID / name of the wifi network to use */
+#define WIFI_PASS "kaesimira"  /**< password for the wifi network to use */
+
+
 IPAddress receiverIp(192, 168, 0, 104); /**< IP address of the (target) OSC server */
+//IPAddress receiverIp(255, 255, 255, 255); /**< IP address of the (target) OSC server */
 int receiverPortStart = 8000;           /**< default UDP server port on OSC receiver (i.e. central server), gets offset by controller ID */
 int receiverPort;                       // set later according to controller ID
+#define  UDP_localPort  8888  
 
 int controllerID; // set later according to DIP-switch
-
+CalibrationManager calibrationManager;
 MultiplexedImus imuCollection;
-
-// for limiting the rate of reports
-uint32_t lastReportMillis = 0;
-uint32_t reportInterval = 10; // ms
+Preferences nvm;
+TaskHandle_t blinkTask;               /**< sends  osc updates parallel to computation*/
 
 // Task1code: blinks an LED every 1000 ms
 void oscSendFun(void *pvParameters)
 {
+    uint32_t timestamp=micros();
     while (true)
-    {
+    {   
+        //Serial.print("sending osc package. Rate is (Hz)=");
+        //Serial.println(1000000.0f/(micros()-timestamp));
+        timestamp=micros();
         imuCollection.sendOscAll(Udp, receiverIp, receiverPort);
         vTaskDelay(1); // to avoid starving other tasks;
+
     }
 }
 
@@ -49,6 +70,7 @@ void setup()
     delay(500);
 
     // determine controller ID from DIP-switch
+    UserInterface::setup();
     controllerID = UserInterface::getControllerID();
     Serial.print("This is controller no ");
     Serial.println(controllerID);
@@ -62,7 +84,8 @@ void setup()
 
     ///////////set up Wifi
     Serial.println("setting up Wifi ");
-    setupWifi(Udp);
+    setupWifi(Udp,WIFI_SSID, WIFI_PASS, UDP_localPort);
+
     Serial.print("target OSC server is ");
     Serial.print(receiverIp);
     Serial.print(" port ");
@@ -73,23 +96,36 @@ void setup()
     Wire.begin(SDA_PIN, SCL_PIN);
     I2CMultiplexer::testConnection();
 
+    // load calibrations
+    calibrationManager.setup(&nvm,controllerID,&imuCollection);
+
     /////////////set up sensors
     Serial.println("setting up sensors");
-    imuCollection.setupAll(controllerID);
+    imuCollection.setupAll(controllerID, &calibrationManager);
 
     // start OSC send task
-
-    if (true)
+    if (true) // can be disabled for test purposes
     {
         xTaskCreatePinnedToCore(
             oscSendFun,   /* Task function. */
             "OscSender",  /* name of task. */
             20000,        /* Stack size of task */
             NULL,         /* parameter of the task */
-            1,            /* priority of the task */
+            2,            /* priority of the task */
             &oscSendTask, /* Task handle to keep track of created task */
             0);           /* pin task to core 0 */
     }
+if(true){
+    // start blink Task
+        xTaskCreatePinnedToCore(
+            UserInterface::blinkFunction,   /* Task function. */
+            "Blink",  /* name of task. */
+            2000,        /* Stack size of task */
+            NULL,         /* parameter of the task */
+            1,            /* priority of the task */
+            &blinkTask, /* Task handle to keep track of created task */
+            1);           /* pin task to core 0 */
+}
 }
 
 void loop()
@@ -97,15 +133,21 @@ void loop()
     vTaskDelay(1); // to avoid starving other tasks;
     uint32_t timestamp = micros();
     imuCollection.updateAll();
-
-    Serial.print("Update took ");
-    Serial.print(micros() - timestamp);
-    Serial.println("mus");
-
     // imuCollection.sendOscAll(Udp, receiverIp, receiverPort); // this is now done by a separate task
+    
+    //support for interactive calibration
+    #ifndef USE_HARD_CODED_CALIBRATION
+    if(UserInterface::getCalibrationButtonState())calibrationManager.calibrateSequence();
+    #endif
+    /*
+        Serial.print("Update took ");
+        Serial.print(micros() - timestamp);
+        Serial.println("mus");
+    */
 
-    // this is (painfully) slow...
-    if (false)
+
+    // Serial printing is (painfully) slow...
+    if (truncate)
     {
         timestamp = micros();
 

@@ -1,15 +1,15 @@
 #include "NetworkConfig.hpp"
 
-void setupWifi(WiFiUDP &Udp)
+void setupWifi(WiFiUDP &Udp,const char* ssid,const  char* password, uint16_t localPort)
 {
     Serial.print("Connecting to wifi network \"");
-    Serial.print(WIFI_SSID);
+    Serial.print(ssid);
     Serial.print("\" .");
     // Mode of the WiFi
     //   STA = STATION MODE (connect to access point),
     //   APM = Access Point Mode (create a network)
     WiFi.mode(WIFI_STA);
-    WiFi.begin(WIFI_SSID, WIFI_PASS);
+    WiFi.begin(ssid, password);
 
     long start = millis();
     // try for ten seconds to connect every 500 ms (i.e. make 10000/500 = 20 attempts)
@@ -31,8 +31,8 @@ void setupWifi(WiFiUDP &Udp)
         Serial.println(WiFi.localIP());
 
         Serial.print("Starting UDP connection to local port ");
-        Serial.print(UDP_localPort);
-        if (0 == Udp.begin(UDP_localPort))
+        Serial.print(localPort);
+        if (0 == Udp.begin(localPort))
         {
             // no socket available for use
             Serial.println(" ... failed");

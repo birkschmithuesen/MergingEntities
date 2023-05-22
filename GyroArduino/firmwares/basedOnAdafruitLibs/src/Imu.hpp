@@ -25,6 +25,7 @@ public:
     void setup(const char *oscName, Adafruit_Sensor_Calibration* calibration);
     void update();
     void printSerial();
+    void sendMotionCal();
 
     void sendOsc(WiFiUDP& Udp,IPAddress& receiverIp,int receiverPort);
     enum ImuErrorStates

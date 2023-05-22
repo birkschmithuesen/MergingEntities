@@ -3,10 +3,6 @@
 #include <WiFiUdp.h>
 
 
-#define WIFI_SSID "syntheticwire"     /**< SSID / name of the wifi network to use */
-#define WIFI_PASS "doesnotmatter"  /**< password for the wifi network to use */
+  
 
-
-#define  UDP_localPort  8888    
-
-void setupWifi(WiFiUDP& Udp);               /**< try toconnect to Wifi */
+void setupWifi(WiFiUDP &Udp,const  char* ssid, const char* password, uint16_t localPort);              /**< try toconnect to Wifi */

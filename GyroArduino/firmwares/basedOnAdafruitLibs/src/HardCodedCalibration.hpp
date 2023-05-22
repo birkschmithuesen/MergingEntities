@@ -1,3 +1,4 @@
+#pragma once
 #include <Adafruit_Sensor_Calibration.h>
 // Uses hard coded values from CalibData.cpp
 
