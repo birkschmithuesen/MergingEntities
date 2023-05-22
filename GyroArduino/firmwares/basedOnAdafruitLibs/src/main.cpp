@@ -126,6 +126,8 @@ if(true){
             &blinkTask, /* Task handle to keep track of created task */
             1);           /* pin task to core 0 */
 }
+// test calibration
+//calibrationManager.calibrateSensor(0,&imuCollection.imus[0]);
 }
 
 void loop()
@@ -147,7 +149,7 @@ void loop()
 
 
     // Serial printing is (painfully) slow...
-    if (truncate)
+    if (false)
     {
         timestamp = micros();
 

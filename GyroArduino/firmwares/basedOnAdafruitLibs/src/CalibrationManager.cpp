@@ -30,11 +30,11 @@ void CalibrationManager::calibrateSequence()
     for (int curSensorId = 0; curSensorId < N_SENSORS; curSensorId++)
     {
 
-        calibrateSensor(curSensorId, &imus->imus[curSensorId]);
+        calibrateSensorInteractive(curSensorId, &imus->imus[curSensorId]);
     }
 }
 
-void CalibrationManager::calibrateSensor(int sensorId, Imu *imu)
+void CalibrationManager::calibrateSensorInteractive(int sensorId, Imu *imu)
 {
     Serial.print("Calibrating Sensor no");
     Serial.println(sensorId);
@@ -90,5 +90,16 @@ void CalibrationManager::calibrateSensor(int sensorId, Imu *imu)
     delay(200); // debounce
     UserInterface::currentBlinkMode = UserInterface::BlinkModeNormal;
 }
-
+void CalibrationManager::calibrateSensor(int sensorId, Imu *imu)
+{
+    // run calibration until calibration info has been received
+    NvmStoredCalibration *curCalib = &(calibrations[sensorId]);
+    I2CMultiplexer::selectI2cMultiplexerChannel(sensorId);
+    bool calibrationFinished = false;
+    while (!calibrationFinished)
+    {
+        imu->sendMotionCal();
+        calibrationFinished = curCalib->receiveCalibration();
+    }
+}
 #endif

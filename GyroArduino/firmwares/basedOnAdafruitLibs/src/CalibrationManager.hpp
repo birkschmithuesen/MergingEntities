@@ -5,7 +5,7 @@
 #include "I2CMultiplexer.hpp"
 #include "Preferences.h"
 
-#define USE_HARD_CODED_CALIBRATION
+//#define USE_HARD_CODED_CALIBRATION
 
 
 class Imu;// prototype
@@ -20,6 +20,7 @@ public:
     NvmStoredCalibration calibrations[N_SENSORS] ; // these are loaded from flash
 
     void calibrateSequence();
+    void calibrateSensorInteractive(int sensorId, Imu* imu);
     void calibrateSensor(int sensorId, Imu* imu);
 
 

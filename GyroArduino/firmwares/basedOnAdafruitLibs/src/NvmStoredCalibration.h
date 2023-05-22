@@ -15,6 +15,9 @@ public:
     bool receiveCalibration(); // returns true if Motioncal packet was received
 
 private:
+    int controllerIndex=0;
+    int sensorIndex=0;
+
     char presetName[10];
     Preferences *nvm;
 
