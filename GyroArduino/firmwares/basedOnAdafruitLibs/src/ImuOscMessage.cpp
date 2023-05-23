@@ -7,14 +7,16 @@ void ImuOscMessage::init(const char *address, int nArgs)
     std::memset(buffer, 0, ImuOscMessageBufferLength);
     // copy address
     strcpy(buffer, address);
-    int curOffset= strlen(address);
+    int curOffset= strlen(address)+1; //null termination
     if((curOffset/4)*4<curOffset)curOffset=(curOffset/4+1)*4; //padding
 
     // add type string (",fffffffff")
     buffer[curOffset] = ',';
     curOffset++;
+
     std::memset(buffer + curOffset, 'f', nArgs);
     curOffset += nArgs;
+    curOffset += 1; //null termination
 
     if((curOffset/4)*4<curOffset)curOffset=(curOffset/4+1)*4; //padding
 
@@ -27,31 +29,49 @@ void ImuOscMessage::init(const char *address, int nArgs)
 
     Serial.println(messageLength);
 }
+void ImuOscMessage::writeBigEndienFloat(char* bufStart,float value){
+    char* inBufStart=((char*) &value)+3;
+    for(int i=0;i<4;i++){
+        *bufStart=*inBufStart;
+        bufStart++;
+        inBufStart--;
+    }
+}
 
 void ImuOscMessage::setData(float qw, float qx, float qy, float qz, float roll, float pitch, float yaw, float gx, float gy, float gz)
 {
-    float *bufAsFloat = (float *)(buffer + dataStartOffset);
-    *bufAsFloat = qw;
-    bufAsFloat++;
-    *bufAsFloat = qx;
-    bufAsFloat++;
-    *bufAsFloat = qy;
-    bufAsFloat++;
-    *bufAsFloat = qz;
-    bufAsFloat++;
+    char* curDataStart=&buffer[dataStartOffset];
 
-    *bufAsFloat = roll;
-    bufAsFloat++;
-    *bufAsFloat = pitch;
-    bufAsFloat++;
-    *bufAsFloat = yaw;
-    bufAsFloat++;
+    writeBigEndienFloat(curDataStart,qw);
+    curDataStart+=4;
+
+    writeBigEndienFloat(curDataStart,qx);
+    curDataStart+=4;
+
+    writeBigEndienFloat(curDataStart,qy);
+    curDataStart+=4;
+
+    writeBigEndienFloat(curDataStart,qz);
+    curDataStart+=4;
 
 
-    *bufAsFloat = gx;
-    bufAsFloat++;
-    *bufAsFloat = gy;
-    bufAsFloat++;
-    *bufAsFloat = gz;
-    bufAsFloat++;
+
+    writeBigEndienFloat(curDataStart,roll);
+    curDataStart+=4;
+
+    writeBigEndienFloat(curDataStart,pitch);
+    curDataStart+=4;
+
+    writeBigEndienFloat(curDataStart,yaw);
+    curDataStart+=4;
+
+
+    writeBigEndienFloat(curDataStart,gx);
+    curDataStart+=4;
+
+    writeBigEndienFloat(curDataStart,gy);
+    curDataStart+=4;
+
+    writeBigEndienFloat(curDataStart,gz);
+    curDataStart+=4;
 }

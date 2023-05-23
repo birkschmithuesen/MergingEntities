@@ -24,11 +24,11 @@
 WiFiUDP Udp;                            /**< handler for UDP communication */
 TaskHandle_t oscSendTask;               /**< sends  osc updates parallel to computation*/
 
-//#define WIFI_SSID "syntheticwire"     /**< SSID / name of the wifi network to use */
-//#define WIFI_PASS "doesnotmatter"  /**< password for the wifi network to use */
+#define WIFI_SSID "syntheticwire"     /**< SSID / name of the wifi network to use */
+#define WIFI_PASS "doesnotmatter"  /**< password for the wifi network to use */
 
-#define WIFI_SSID "ArtNet4Hans"     /**< SSID / name of the wifi network to use */
-#define WIFI_PASS "kaesimira"  /**< password for the wifi network to use */
+//#define WIFI_SSID "ArtNet4Hans"     /**< SSID / name of the wifi network to use */
+//#define WIFI_PASS "kaesimira"  /**< password for the wifi network to use */
 
 
 IPAddress receiverIp(192, 168, 0, 104); /**< IP address of the (target) OSC server */
@@ -149,7 +149,7 @@ void loop()
 
 
     // Serial printing is (painfully) slow...
-    if (false)
+    if (true)
     {
         timestamp = micros();
 

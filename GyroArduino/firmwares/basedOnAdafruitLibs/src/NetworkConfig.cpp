@@ -22,7 +22,8 @@ void setupWifi(WiFiUDP &Udp,const char* ssid,const  char* password, uint16_t loc
     // print result of connection attempt(s) on serial console
     if (WiFi.status() != WL_CONNECTED)
     {
-        Serial.println(" failed");
+        Serial.print(" failed with status ");
+        Serial.println(WiFi.status());
     }
     else
     {

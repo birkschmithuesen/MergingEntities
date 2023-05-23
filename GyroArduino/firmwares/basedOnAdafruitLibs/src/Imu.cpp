@@ -46,6 +46,7 @@ void Imu::update(){
 
     oscMessageMutex.lock(); // keep "Wifi send task" from accessing data while it is written
     oscMessage.setData(qw, qx, qy, qz,roll,pitch,yaw,gx,gy,gz);
+    //oscMessage.setData(1, 2, 3, 4,5,6,7,8,9,10);
     oscMessageMutex.unlock();
 }
 
@@ -108,10 +109,12 @@ void Imu::sendOsc(WiFiUDP& Udp,IPAddress& receiverIp,int receiverPort){
 
 void Imu::configureSensor()
 {
+
     Serial.println("Connecting to Sensor...");
+    sensor.begin_I2C(); // let the library set uop its internal I2C business.
 
     lastErrorState = sensorConfigFailed;
-    // make sure a sensor is connected and responds to I2C
+    // Use a "raw I2" connect to get some more meaningful error codes
     Wire.beginTransmission(ICM_ADDRESS);
     int result = Wire.endTransmission();
     switch (result) {
@@ -168,7 +171,7 @@ void Imu::configureSensor()
 }
 
   void Imu::sendMotionCal() {
-    sensor.getEvent(&accel_event, &gyro_event,&temp_event, &mag_event);
+        sensor.getEvent(&accel_event, &gyro_event,&temp_event, &mag_event);
     // raw data format
     Serial.print("Raw:");
     Serial.print(int(this->accel_event.acceleration.x * 8192 / 9.8));

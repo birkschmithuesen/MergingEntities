@@ -9,4 +9,5 @@ public:
     char buffer[ImuOscMessageBufferLength];
     unsigned int dataStartOffset = 0;
     unsigned int messageLength = 0;
+    void writeBigEndienFloat(char* bufStart,float value);
 };
