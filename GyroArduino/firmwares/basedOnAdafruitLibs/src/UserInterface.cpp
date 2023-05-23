@@ -18,6 +18,7 @@ void UserInterface::blinkFunction(void *)
                 digitalWrite(PIN_GREENLED, HIGH);
                 delay(200);
                 digitalWrite(PIN_GREENLED, LOW);
+                delay(200);
             }
             delay(800);
             break;

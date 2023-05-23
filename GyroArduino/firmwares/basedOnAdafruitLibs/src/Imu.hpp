@@ -52,4 +52,5 @@ private:
     Adafruit_Sensor_Calibration* calibration;
     sensors_event_t mag_event, gyro_event, temp_event, accel_event;
     float gx, gy, gz; // for gyro, as these need to be converted for filtering
+    uint32_t lastUpdateMicros=0;
 };

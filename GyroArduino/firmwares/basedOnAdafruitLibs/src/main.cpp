@@ -93,7 +93,9 @@ void setup()
 
     // set up I2C communication
     Serial.print("setting up I2C pins .");
-    Wire.begin(SDA_PIN, SCL_PIN);
+
+
+    Wire.begin(SDA_PIN, SCL_PIN,(uint32_t)400000);
     I2CMultiplexer::testConnection();
 
     // load calibrations
@@ -130,37 +132,51 @@ if(true){
 //calibrationManager.calibrateSensor(0,&imuCollection.imus[0]);
 }
 
-uint32_t timestamp = micros();
+uint32_t globalTimestamp = 0;
     
 void loop()
 {
+    uint32_t timestamp = micros();
+    
+    ///update frequency
+    Serial.print(1000000/(timestamp - globalTimestamp));
+    Serial.println("Hz");
+    globalTimestamp=timestamp;
+
     vTaskDelay(1); // to avoid starving other tasks;
+    
+    timestamp = micros(); 
     imuCollection.updateAll();
+    
+        Serial.print("Update took ");
+        Serial.print(micros() - timestamp);
+        Serial.println("mus");
+    
+    
+    timestamp = micros(); 
     imuCollection.sendOscAll(Udp, receiverIp, receiverPort); // this is now done by a separate task
+    
+        Serial.print("Update took ");
+        Serial.print(micros() - timestamp);
+        Serial.println("mus");
+    
     
     //support for interactive calibration
     #ifndef USE_HARD_CODED_CALIBRATION
     if(UserInterface::getCalibrationButtonState())calibrationManager.calibrateSequence();
     #endif
-    /*
-        Serial.print("Update took ");
-        Serial.print(micros() - timestamp);
-        Serial.println("mus");
-    */
+
 
 
     // Serial printing is (painfully) slow...
-    if (true)
+    if (false)
     {
-        
-        //imuCollection.printSerialAll();
-
-        Serial.print(1000000/(micros() - timestamp));
-        Serial.println("Hz");
-        //Serial.print("print/send took ");
-        //Serial.print(micros() - timestamp);
-        //Serial.println("mus");
-        timestamp = micros();
-
+        timestamp = micros();        
+        imuCollection.printSerialAll();
+    
+        Serial.print("print/send took ");
+        Serial.print(micros() - timestamp);
+        Serial.println("mus");
     }
+    
 }

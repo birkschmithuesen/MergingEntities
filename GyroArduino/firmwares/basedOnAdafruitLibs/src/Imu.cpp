@@ -12,8 +12,12 @@ void Imu::setup (const char * oscName, Adafruit_Sensor_Calibration* calibration)
 }
 
 void Imu::update(){
-
+    //time keeping for sensor filter integration
     uint32_t timestamp = micros();
+    uint32_t microsSinceLastUpdate=timestamp-lastUpdateMicros;
+    lastUpdateMicros=timestamp;
+    float deltaT= (float)microsSinceLastUpdate/1000000.0f;
+
     sensor.getEvent(&accel_event, &gyro_event,&temp_event, &mag_event);
 #if defined(AHRS_DEBUG_OUTPUT)
   // Serial.print("I2C took "); Serial.print(micros()-timestamp); Serial.println(" mus");
@@ -32,7 +36,7 @@ void Imu::update(){
     // Update the SensorFusion filter
     filter.update(gx, gy, gz, 
         accel_event.acceleration.x, accel_event.acceleration.y, accel_event.acceleration.z, 
-        mag_event.magnetic.x, mag_event.magnetic.y, mag_event.magnetic.z);
+        mag_event.magnetic.x, mag_event.magnetic.y, mag_event.magnetic.z,deltaT);
 #if defined(AHRS_DEBUG_OUTPUT)
    // Serial.print("Update took "); Serial.print(micros()-timestamp); Serial.println("mus");
 #endif
