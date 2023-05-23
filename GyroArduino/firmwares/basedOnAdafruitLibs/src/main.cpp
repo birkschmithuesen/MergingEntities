@@ -95,7 +95,7 @@ void setup()
     Serial.print("setting up I2C pins .");
 
 
-    Wire.begin(SDA_PIN, SCL_PIN,(uint32_t)400000);
+    Wire.begin(SDA_PIN, SCL_PIN,(uint32_t)1000000);
     I2CMultiplexer::testConnection();
 
     // load calibrations
