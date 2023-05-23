@@ -98,9 +98,9 @@ void setup()
     // set up I2C communication
     Serial.print("setting up I2C pins .");
 
-
     Wire.begin(SDA_PIN, SCL_PIN,(uint32_t)400000);
     Wire.setTimeOut(1); // timeout in milllis
+
     I2CMultiplexer::testConnection();
 
     // load calibrations
