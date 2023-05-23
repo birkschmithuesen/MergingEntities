@@ -873,12 +873,13 @@ void configureICM20948(void *cfg_ptr) {
     *(config->lock) = false;
     return;
   }
-
+  Serial.println("Trying to connect");
   // accel range +/- 4g
   config->sensor->setAccelRange(ICM20948_ACCEL_RANGE_4_G);
   if (ICM20948_ACCEL_RANGE_4_G != config->sensor->getAccelRange()) {
     *(config->result) = 4;
     *(config->lock) = false;
+    Serial.println("Failed: ICM20948_ACCEL_RANGE_4_G");
     return;
   }
   // gyro 500 degree/s;

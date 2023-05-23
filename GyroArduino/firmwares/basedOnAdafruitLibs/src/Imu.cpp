@@ -112,10 +112,11 @@ void Imu::configureSensor()
 
     lastErrorState = sensorConfigFailed;
     // make sure a sensor is connected and responds to I2C
-    Wire.beginTransmission(ICM_ADDRESS);
-    int result = Wire.endTransmission();
+    //Wire.beginTransmission(ICM_ADDRESS);
+    sensor.begin_I2C();
+    int result = sensor.begin_I2C();
     switch (result) {
-    case 0:
+    case 1:
       Serial.println(".. worked");
       break;
     case 2:

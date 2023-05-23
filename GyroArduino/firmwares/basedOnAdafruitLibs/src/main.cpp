@@ -31,7 +31,7 @@ TaskHandle_t oscSendTask;               /**< sends  osc updates parallel to comp
 #define WIFI_PASS "kaesimira"  /**< password for the wifi network to use */
 
 
-IPAddress receiverIp(192, 168, 0, 104); /**< IP address of the (target) OSC server */
+IPAddress receiverIp(192, 168, 0, 2); /**< IP address of the (target) OSC server */
 //IPAddress receiverIp(255, 255, 255, 255); /**< IP address of the (target) OSC server */
 int receiverPortStart = 8000;           /**< default UDP server port on OSC receiver (i.e. central server), gets offset by controller ID */
 int receiverPort;                       // set later according to controller ID
@@ -149,7 +149,7 @@ void loop()
 
 
     // Serial printing is (painfully) slow...
-    if (false)
+    if (true)
     {
         timestamp = micros();
 
