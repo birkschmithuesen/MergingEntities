@@ -10,6 +10,8 @@
 #include <Wire.h>
 #include <EEPROM.h>
 #include "Preferences.h"
+#include "esp_log.h"
+
 
 #include "PinsAndAddresses.hpp"
 #include "UserInterface.hpp"
@@ -27,11 +29,13 @@ TaskHandle_t oscSendTask;               /**< sends  osc updates parallel to comp
 //#define WIFI_SSID "syntheticwire"     /**< SSID / name of the wifi network to use */
 //#define WIFI_PASS "doesnotmatter"  /**< password for the wifi network to use */
 
+//IPAddress receiverIp(192, 168, 0, 104); /**< IP address of the (target) OSC server */
+
 #define WIFI_SSID "ArtNet4Hans"     /**< SSID / name of the wifi network to use */
 #define WIFI_PASS "kaesimira"  /**< password for the wifi network to use */
-
-
 IPAddress receiverIp(192, 168, 0, 2); /**< IP address of the (target) OSC server */
+
+
 //IPAddress receiverIp(255, 255, 255, 255); /**< IP address of the (target) OSC server */
 int receiverPortStart = 8000;           /**< default UDP server port on OSC receiver (i.e. central server), gets offset by controller ID */
 int receiverPort;                       // set later according to controller ID
@@ -49,8 +53,8 @@ void oscSendFun(void *pvParameters)
     uint32_t timestamp=micros();
     while (true)
     {   
-        //Serial.print("sending osc package. Rate is (Hz)=");
-        //Serial.println(1000000.0f/(micros()-timestamp));
+        Serial.print("sending osc package. Rate is (Hz)=");
+        Serial.println(1000000.0f/(micros()-timestamp));
         timestamp=micros();
         imuCollection.sendOscAll(Udp, receiverIp, receiverPort);
         vTaskDelay(1); // to avoid starving other tasks;
@@ -96,6 +100,7 @@ void setup()
 
 
     Wire.begin(SDA_PIN, SCL_PIN,(uint32_t)400000);
+    Wire.setTimeOut(1); // timeout in milllis
     I2CMultiplexer::testConnection();
 
     // load calibrations
@@ -113,7 +118,7 @@ void setup()
             "OscSender",  /* name of task. */
             20000,        /* Stack size of task */
             NULL,         /* parameter of the task */
-            2,            /* priority of the task */
+            1,            /* priority of the task */
             &oscSendTask, /* Task handle to keep track of created task */
             0);           /* pin task to core 0 */
     }
@@ -130,6 +135,7 @@ if(true){
 }
 // test calibration
 //calibrationManager.calibrateSensor(0,&imuCollection.imus[0]);
+esp_log_level_set("*", ESP_LOG_NONE);  //silence all those log outputs that fill our serial out
 }
 
 uint32_t globalTimestamp = 0;
@@ -156,7 +162,7 @@ void loop()
     timestamp = micros(); 
     imuCollection.sendOscAll(Udp, receiverIp, receiverPort); // this is now done by a separate task
     
-        Serial.print("Update took ");
+        Serial.print("Osc took ");
         Serial.print(micros() - timestamp);
         Serial.println("mus");
     

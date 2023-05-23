@@ -24,6 +24,7 @@ public:
     Imu();
     void setup(const char *oscName, Adafruit_Sensor_Calibration* calibration);
     void update();
+    void checkReconnect(); // if the controller has forgotten one of its settings, reinitialize it.
     void printSerial();
     void sendMotionCal();
 
@@ -53,4 +54,5 @@ private:
     sensors_event_t mag_event, gyro_event, temp_event, accel_event;
     float gx, gy, gz; // for gyro, as these need to be converted for filtering
     uint32_t lastUpdateMicros=0;
+    int reconnectCount=0; // for limiting amount of reconnection attempts:
 };
