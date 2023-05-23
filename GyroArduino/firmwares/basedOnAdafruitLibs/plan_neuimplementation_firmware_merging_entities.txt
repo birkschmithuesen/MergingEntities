@@ -1,6 +1,4 @@
 Was fehlt noch:
-Kalibrierung: Vorschlag: Manuell über https://learn.adafruit.com/adafruit-sensorlab-magnetometer-calibration/magnetic-calibration-with-motioncal 
-Status-LEDs
 Multiplexer delay (nicht nötig?)
 
 Reconnect zu wackeligen Sensoren
