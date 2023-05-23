@@ -104,7 +104,7 @@ void setup()
     imuCollection.setupAll(controllerID, &calibrationManager);
 
     // start OSC send task
-    if (true) // can be disabled for test purposes
+    if (false) // can be disabled for test purposes
     {
         xTaskCreatePinnedToCore(
             oscSendFun,   /* Task function. */
@@ -130,12 +130,13 @@ if(true){
 //calibrationManager.calibrateSensor(0,&imuCollection.imus[0]);
 }
 
+uint32_t timestamp = micros();
+    
 void loop()
 {
     vTaskDelay(1); // to avoid starving other tasks;
-    uint32_t timestamp = micros();
     imuCollection.updateAll();
-    // imuCollection.sendOscAll(Udp, receiverIp, receiverPort); // this is now done by a separate task
+    imuCollection.sendOscAll(Udp, receiverIp, receiverPort); // this is now done by a separate task
     
     //support for interactive calibration
     #ifndef USE_HARD_CODED_CALIBRATION
@@ -151,12 +152,15 @@ void loop()
     // Serial printing is (painfully) slow...
     if (true)
     {
+        
+        //imuCollection.printSerialAll();
+
+        Serial.print(1000000/(micros() - timestamp));
+        Serial.println("Hz");
+        //Serial.print("print/send took ");
+        //Serial.print(micros() - timestamp);
+        //Serial.println("mus");
         timestamp = micros();
 
-        imuCollection.printSerialAll();
-
-        Serial.print("print/send took ");
-        Serial.print(micros() - timestamp);
-        Serial.println("mus");
     }
 }

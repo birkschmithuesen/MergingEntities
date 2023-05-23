@@ -45,8 +45,8 @@ private:
 
     Adafruit_ICM20948 sensor; /**< software handler/abstraction for ICM20948 at given channel */
     // pick your filter! slower == better quality output
-     Adafruit_NXPSensorFusion filter; // slowest
-    // Adafruit_Madgwick filter;  // faster than NXP
+    // Adafruit_NXPSensorFusion filter; // slowest
+    Adafruit_Madgwick filter;  // faster than NXP
     //Adafruit_Mahony filter; // fastest/smallest
 
     Adafruit_Sensor_Calibration* calibration;

@@ -7,7 +7,8 @@ void Imu::setup (const char * oscName, Adafruit_Sensor_Calibration* calibration)
     configureSensor();
     oscMessageMutex.lock(); // keep "Wifi send task" from accessing data while it is written
     oscMessage.init(oscName,10);
-    oscMessageMutex.unlock(); 
+    oscMessageMutex.unlock();
+    filter.begin(23);
 }
 
 void Imu::update(){
