@@ -145,8 +145,8 @@ void loop()
     uint32_t timestamp = micros();
     
     ///update frequency
-    Serial.print(1000000/(timestamp - globalTimestamp));
-    Serial.println("Hz");
+    //Serial.print(1000000/(timestamp - globalTimestamp));
+    //Serial.println("Hz");
     globalTimestamp=timestamp;
 
     vTaskDelay(1); // to avoid starving other tasks;
@@ -154,17 +154,17 @@ void loop()
     timestamp = micros(); 
     imuCollection.updateAll();
     
-        Serial.print("Update took ");
-        Serial.print(micros() - timestamp);
-        Serial.println("mus");
+    //    Serial.print("Update took ");
+    //    Serial.print(micros() - timestamp);
+    //    Serial.println("mus");
     
     
     timestamp = micros(); 
     imuCollection.sendOscAll(Udp, receiverIp, receiverPort); // this is now done by a separate task
     
-        Serial.print("Osc took ");
-        Serial.print(micros() - timestamp);
-        Serial.println("mus");
+    //    Serial.print("Osc took ");
+    //    Serial.print(micros() - timestamp);
+    //    Serial.println("mus");
     
     
     //support for interactive calibration
