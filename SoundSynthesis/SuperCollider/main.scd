@@ -27,20 +27,24 @@ s.reboot{
 }
 )
 
+
 (
-// DOMINO -
+// load Synth Defs and Pattern Defs
+~path = PathName(thisProcess.nowExecutingPath).parentPath;
+(~path++"synthlib.scd").load;
+(~path++"efxlib.scd").load;
+
+// define number of performers bodies
+~numBodies = 4;
+)
+
+
+(
+// PARTS -
 // one instrument per body part
 // each performer same instrument
 
 var scale;
-
-// load Synth Defs and Pattern Defs
-~path = PathName(thisProcess.nowExecutingPath).parentPath;
-(~path++"synthlib.scd").load;
-//(~path++"patternlib.scd").load;
-
-// define number of performers bodies
-~numBodies = 2;
 
 // create groups
 ~moogGroup = Group.new;
@@ -84,19 +88,13 @@ scale = FloatArray[48, 55, 60, 67];//some 5ths starting from c4
 
 
 (
-// MOVEMENT -
+// WHEEL -
 // one body one instrument
 // each performer has the same instrument
 
 // create groups
 ~klingGroup = Group.new;
 
-// load Synth Defs
-~path = PathName(thisProcess.nowExecutingPath).parentPath;
-(~path++"synthlib.scd").load;
-
-// define number of performers bodies
-~numBodies = 2;
 
 // create Synths
 ~klings = {arg i; Synth.head(~klingGroup, \kling, [\out, i*2])}!~numBodies;
@@ -112,14 +110,6 @@ scale = FloatArray[48, 55, 60, 67];//some 5ths starting from c4
 
 (
 // PATTERNS
-
-// load Synth Defs and Pattern Defs
-~path = PathName(thisProcess.nowExecutingPath).parentPath;
-(~path++"synthlib.scd").load;
-(~path++"efxlib.scd").load;
-
-// define number of performers bodies
-~numBodies = 4;
 
 ~tempo = 60/120 * 4; //60/90 * 4 //60sec / 128 BPM * 4 bars
 

@@ -8,7 +8,7 @@ SynthDef.new(\fx, {
 
 SynthDef.new(\reverb, {
 	arg out=0, in, mix = 0.33;
-	var sig;
+	var sig, chain;
 	sig = In.ar(in, 2);
 
 	chain = sig;    // Start with the original signal
