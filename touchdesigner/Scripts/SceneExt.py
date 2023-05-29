@@ -37,7 +37,7 @@ class SceneExt:
 		self.FillModelList()
 
 		# start the Scene "empty"
-		self.UnloadAllModelEngines()	
+		self.UnloadAllModelEngines()
 
 		# prediction toggle of the engines
 		self.Predict = tdu.Dependency(False)
@@ -62,7 +62,7 @@ class SceneExt:
 
 	def UnloadEngine(self, index):
 		model = self.Models[index]
-		model.par.Enginecomp = 0
+		model.op('destroy').run()
 		self.EngineStates.setItem(index,0)
 		self.ModelStates.setItem(index,0)
 		self.CookingStates.setItem(index,0)
@@ -76,7 +76,7 @@ class SceneExt:
 		model = self.Models[index]
 		self.EngineStates.setItem(index,0)
 		self.CookingStates.setItem(index,0)
-		model.par.Enginecomp = 1
+		model.op('create').run()
 		
 	def LoadAllModelEngines(self):
 		self.FillModelList()
