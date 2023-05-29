@@ -206,12 +206,14 @@ class MLExtension:
 				self.Model.add(LSTM(units=128, batch_input_shape=(1, self.Timesteps.val, self.Inputdim.val), stateful=True, return_sequences=True))
 				self.Model.add(LSTM(units=128, batch_input_shape=(1, self.Timesteps.val, self.Inputdim.val), stateful=True, return_sequences=False))
 				self.Model.add(Dense(units=self.Outputdim.val, activation='sigmoid'))
-				# set weights from tmp model
-				self.Model.set_weights(tmp_model_weights)
 				if self.MDNLayer.val == 'on':
 					self.Model.add(mdn.MDN(self.Outputdim.val,self.MDNDistribution.val))
+					# set weights from tmp model
+					self.Model.set_weights(tmp_model_weights)
 					self.Model.compile(loss=mdn.get_mixture_loss_func(self.Outputdim.val,self.MDNDistribution.val), optimizer=keras.optimizers.Adam())
 				else:
+					# set weights from tmp model
+					self.Model.set_weights(tmp_model_weights)
 					self.Model.compile(optimizer='rmsprop',loss='mse')
 			except ValueError as e:
 				debug("Couldn't Fit Model", e)
@@ -334,7 +336,7 @@ class MLExtension:
 		try:
 			self.MDNLayer.val = model_config.result['MDN_Layer']
 		except:
-			self.MDNLayer.val = 0
+			self.MDNLayer.val = 'off'
 			debug("Old Model without MDN Setting")
 		self.Modeltype.modified()
 		self.ModelName()
@@ -352,7 +354,7 @@ class MLExtension:
 		self.Timesteps.val = model_config.result['TIME_STEPS']
 
 	def PredictTargets(self,features):
-		if self.MDNLayer == 1:
+		if self.MDNLayer == 'on':
 			distributions = self.Model.predict(np.array([features]))
 			return np.apply_along_axis(mdn.sample_from_output,1,distributions,self.Outputdim.val,self.MDNDistribution,temp=1.0)
 		else:
