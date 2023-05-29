@@ -49,7 +49,7 @@ class MLExtension:
 		self.Modeltypes = ['linear_regression','lstm']
 		self.Modelname = self.Modeltypes[self.Modeltype.val]
 
-		self.MDNLayer = tdu.Dependency(1)
+		self.MDNLayer = tdu.Dependency('off')
 		self.MDNDistribution = tdu.Dependency(10)
 
 		self.Inputdim = tdu.Dependency(67)
@@ -155,12 +155,13 @@ class MLExtension:
 			self.Model.add(LSTM(units=128, batch_input_shape=(self.Batchsize.val, self.Timesteps.val, self.Inputdim.val), stateful=True, return_sequences=True))
 			self.Model.add(LSTM(units=128, batch_input_shape=(self.Batchsize.val, self.Timesteps.val, self.Inputdim.val), stateful=True, return_sequences=False))
 			self.Model.add(Dense(units=self.Outputdim.val, activation='sigmoid'))
-			if self.MDNLayer.val == 1:
+			if self.MDNLayer.val == 'on':
 				self.Model.add(mdn.MDN(self.Outputdim.val,self.MDNDistribution.val))
 				self.Model.compile(loss=mdn.get_mixture_loss_func(self.Outputdim.val,self.MDNDistribution.val), optimizer=keras.optimizers.Adam())
 			else:
 				self.Model.compile(optimizer='rmsprop',loss='mse')
-		debug("Built ", self.ModelName(), " Model")
+		debug("Built ", self.ModelName(), " Model. With MDN Layer: ", self.MDNLayer.val)		
+		
 
 	def LoadTrainingData(self):
 		#file_loc = str(self.TrainingFileLocation)
@@ -207,7 +208,7 @@ class MLExtension:
 				self.Model.add(Dense(units=self.Outputdim.val, activation='sigmoid'))
 				# set weights from tmp model
 				self.Model.set_weights(tmp_model_weights)
-				if self.MDNLayer.val == 1:
+				if self.MDNLayer.val == 'on':
 					self.Model.add(mdn.MDN(self.Outputdim.val,self.MDNDistribution.val))
 					self.Model.compile(loss=mdn.get_mixture_loss_func(self.Outputdim.val,self.MDNDistribution.val), optimizer=keras.optimizers.Adam())
 				else:
