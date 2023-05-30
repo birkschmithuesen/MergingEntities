@@ -49,7 +49,7 @@ class MLExtension:
 		self.Modeltypes = ['linear_regression','lstm']
 		self.Modelname = self.Modeltypes[self.Modeltype.val]
 
-		self.MDNLayer = tdu.Dependency('off')
+		self.MDNLayer = tdu.Dependency('1')
 		self.MDNDistribution = tdu.Dependency(10)
 
 		self.Inputdim = tdu.Dependency(67)
@@ -155,13 +155,13 @@ class MLExtension:
 			self.Model.add(LSTM(units=128, batch_input_shape=(self.Batchsize.val, self.Timesteps.val, self.Inputdim.val), stateful=True, return_sequences=True))
 			self.Model.add(LSTM(units=128, batch_input_shape=(self.Batchsize.val, self.Timesteps.val, self.Inputdim.val), stateful=True, return_sequences=False))
 			self.Model.add(Dense(units=self.Outputdim.val, activation='sigmoid'))
-			if self.MDNLayer.val == 'on':
+			if self.MDNLayer.val == 'on' or self.MDNLayer.val == 1 or self.MDNLayer.val == '1':
 				self.Model.add(mdn.MDN(self.Outputdim.val,self.MDNDistribution.val))
 				self.Model.compile(loss=mdn.get_mixture_loss_func(self.Outputdim.val,self.MDNDistribution.val), optimizer=keras.optimizers.Adam())
 			else:
 				self.Model.compile(optimizer='rmsprop',loss='mse')
-		debug("Built ", self.ModelName(), " Model. With MDN Layer: ", self.MDNLayer.val)		
-		
+		debug("Built ", self.ModelName(), " Model. With MDN Layer: ", ['off','on'][int(self.MDNLayer.val)])		
+
 
 	def LoadTrainingData(self):
 		#file_loc = str(self.TrainingFileLocation)
@@ -206,7 +206,7 @@ class MLExtension:
 				self.Model.add(LSTM(units=128, batch_input_shape=(1, self.Timesteps.val, self.Inputdim.val), stateful=True, return_sequences=True))
 				self.Model.add(LSTM(units=128, batch_input_shape=(1, self.Timesteps.val, self.Inputdim.val), stateful=True, return_sequences=False))
 				self.Model.add(Dense(units=self.Outputdim.val, activation='sigmoid'))
-				if self.MDNLayer.val == 'on':
+				if self.MDNLayer.val == 'on' or self.MDNLayer.val == 1 or self.MDNLayer.val == '1':
 					self.Model.add(mdn.MDN(self.Outputdim.val,self.MDNDistribution.val))
 					# set weights from tmp model
 					self.Model.set_weights(tmp_model_weights)
@@ -309,6 +309,7 @@ class MLExtension:
 		json_config = {}
 		json_config['Model_Type'] = self.Modeltype.val
 		json_config['MDN_Layer'] = self.MDNLayer.val
+		json_config['MDN_Distribution'] = self.MDNDistribution.val
 		json_config['Training_Data'] = self.Trainingdata.val
 		json_config['Selected_Features'] = self.Selectedfeatures.val
 		json_config['Selected_Targets'] = self.Selectedtargets.val
@@ -321,12 +322,15 @@ class MLExtension:
 		json_config['LEARNING_RATE'] = self.Learningrate.val
 		json_config['TIME_STEPS'] = self.Timesteps.val
 		with open(file + '/model_config.json', 'w') as jsonFile:
-			json.dump(json_config,jsonFile)
+			json.dump(json_config,jsonFile,indent=4)
 
 	def LoadModel(self):
 		model_folder = str(parent.Ml.par.Selectmodel)
-		self.Model = keras.models.load_model(model_folder)
 		self.LoadSettingsFromConfigFile()
+		if self.MDNLayer == '0':
+			self.Model = keras.models.load_model(model_folder)
+		else:
+			self.Model = keras.models.load_model(model_folder, custom_objects={'MDN': mdn.MDN, 'mdn_loss_func': mdn.get_mixture_loss_func(1, self.MDNDistribution)})	
 		debug("Loaded Model")
 
 	def LoadSettingsFromConfigFile(self):
@@ -334,10 +338,19 @@ class MLExtension:
 		model_config = op('model_config')
 		self.Modeltype.val = model_config.result['Model_Type']
 		try:
-			self.MDNLayer.val = model_config.result['MDN_Layer']
+			mdn_val = model_config.result['MDN_Layer']
+			if mdn_val == 1 or mdn_val == 'on' or mdn_val == '1':
+				self.MDNLayer.val = '1'
+			elif mdn_val == 0 or mdn_val == 'off' or mdn_val == '0':
+				self.MDNLayer.val = '0'
 		except:
-			self.MDNLayer.val = 'off'
-			debug("Old Model without MDN Setting")
+			self.MDNLayer.val = '0'
+			debug("Old Model without MDN Layer Setting. Setting to default: off.")
+		try:
+			self.MDNDistribution.val = model_config.result['MDN_Distribution']
+		except:
+			self.MDNDistribution.val = 10
+			debug("No MDN Distribution setting found. Setting to default: 10")
 		self.Modeltype.modified()
 		self.ModelName()
 		self.Trainingdata.val = model_config.result['Training_Data']
@@ -354,7 +367,7 @@ class MLExtension:
 		self.Timesteps.val = model_config.result['TIME_STEPS']
 
 	def PredictTargets(self,features):
-		if self.MDNLayer == 'on':
+		if self.MDNLayer == '1':
 			distributions = self.Model.predict(np.array([features]))
 			return np.apply_along_axis(mdn.sample_from_output,1,distributions,self.Outputdim.val,self.MDNDistribution,temp=1.0)
 		else:
