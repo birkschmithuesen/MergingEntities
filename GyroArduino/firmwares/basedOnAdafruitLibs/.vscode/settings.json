@@ -10,6 +10,9 @@
         "initializer_list": "cpp",
         "cstring": "cpp",
         "mutex": "cpp",
-        "typeinfo": "cpp"
+        "typeinfo": "cpp",
+        "*.tcc": "cpp",
+        "memory": "cpp",
+        "random": "cpp"
     }
 }

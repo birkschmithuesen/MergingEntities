@@ -9,7 +9,7 @@ void Imu::setup(const char *oscName, Adafruit_Sensor_Calibration *calibration)
   oscMessageMutex.lock(); // keep "Wifi send task" from accessing data while it is written
   oscMessage.init(oscName, 10);
   oscMessageMutex.unlock();
-  filter.begin(75); // update drewuency guess
+  filter.begin(78); // update drewuency guess
 }
 // read sensor only, don't do any processing
 void Imu::readSensor(){
@@ -173,7 +173,7 @@ void Imu::checkReconnect()
     return;
   }
   updatesSinceLastReconnectCheck=0;
-  if (reconnectCount < 20)
+  if (reconnectCount < 1000)
   {
     // try to detect sensor reconnect by checking if mag data rate is the same that we set.
     if (ICM20948_ACCEL_RANGE_4_G != sensor.getAccelRange())
@@ -189,6 +189,9 @@ void Imu::checkReconnect()
       {
         configureSensor();
         reconnectCount++;
+      }else{
+        Serial.print("Could not reach it by I2C Error Code");
+        Serial.println(result);
       }
           
     }
