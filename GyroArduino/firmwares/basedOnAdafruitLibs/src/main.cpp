@@ -149,12 +149,14 @@ void loop()
     ///update frequency
    // Serial.print(1000000/(timestamp - globalTimestamp));
    // Serial.println("Hz");
+
     globalTimestamp=timestamp;
 
     vTaskDelay(1); // to avoid starving other tasks;
     
     timestamp = micros(); 
     imuCollection.updateAll();
+
     if(false){
         Serial.print("Update took ");
         Serial.print(micros() - timestamp);
@@ -168,7 +170,7 @@ void loop()
         //Serial.print(micros() - timestamp);
         //Serial.println("mus");
     }
-    
+
     
     //support for interactive calibration
     #ifndef USE_HARD_CODED_CALIBRATION

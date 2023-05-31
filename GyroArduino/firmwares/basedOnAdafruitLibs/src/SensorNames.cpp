@@ -11,7 +11,7 @@ const char* sensorNames[]={
 };
 
 const char* controllerNames[]={
-"0",
+//"0", the computing chain after the controller start counting from 1
 "1",
 "2",
 "3",
