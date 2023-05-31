@@ -1,6 +1,9 @@
 #include "ImuOscMessage.h"
 #include <cstring>
 #include <HardwareSerial.h>
+
+unsigned long debugPackageIndex=0;// for detecting dropped osc packages at the receiver;
+
 void ImuOscMessage::init(const char *address, int nArgs)
 {
     // set buffer to zero first

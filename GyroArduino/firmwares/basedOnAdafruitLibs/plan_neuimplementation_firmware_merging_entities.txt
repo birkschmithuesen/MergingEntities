@@ -1,9 +1,14 @@
+Sensor 3 clock  auf board hat 500 ohm pullup
+ die beiden vorderen pins an der buchse haben widerstand 0 --> ein pad zu viel connectet!
 Was fehlt noch:
-Multiplexer delay (nicht nötig?)
+== Sensorfusion:
+	Gyro kalibrieren
+	Koordinatensystem nach Nord/Unten ausrichten
+https://github.com/adafruit/Adafruit_AHRS/issues/10
 
-Reconnect zu wackeligen Sensoren
-	- wie feststellen dass es klemmt?
-	- maximale Anzahl von Versuchen
-	- Timeout
+==vollständifkeit Sensoren
 
-
+A: vollständig
+B: vollständig
+C: C8 (lang) fehlt
+D: D8 fehlt

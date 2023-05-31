@@ -1,5 +1,5 @@
 #pragma once
-#define CALIB_N_PRESETS 8
+#define CALIB_N_PRESETS 8*4
 struct CalibData
 {
     int controllerIndex = 0;

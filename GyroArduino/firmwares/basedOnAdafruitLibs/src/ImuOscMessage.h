@@ -1,6 +1,9 @@
 #pragma once
 // a class to build osc messages with imu data more quickly than with the OSC library
 #define ImuOscMessageBufferLength 1024
+#
+extern unsigned long debugPackageIndex; // for keeping track of dropped packages
+
 class ImuOscMessage
 {
 public:
@@ -9,5 +12,6 @@ public:
     char buffer[ImuOscMessageBufferLength];
     unsigned int dataStartOffset = 0;
     unsigned int messageLength = 0;
+    bool hasBeenSent=false;
     void writeBigEndienFloat(char* bufStart,float value);
 };

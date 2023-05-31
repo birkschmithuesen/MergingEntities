@@ -1,13 +1,13 @@
 #include "SensorNames.hpp"
 const char* sensorNames[]={
-"right_lower_arm",
-"right_upper_arm",
-"back",
-"right_foot",
-"left_lower_arm",
-"left_upper_arm",
+"left_foot",
 "head",
-"left_foot"
+"left_upper_arm",
+"left_lower_arm",
+"right_foot",
+"back",
+"right_upper_arm",
+"right_lower_arm"
 };
 
 const char* controllerNames[]={

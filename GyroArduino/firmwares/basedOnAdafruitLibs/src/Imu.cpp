@@ -3,17 +3,16 @@
 Imu::Imu() {}
 void Imu::setup(const char *oscName, Adafruit_Sensor_Calibration *calibration)
 {
-  +strcpy(this->oscName, oscName);
+  strcpy(this->oscName, oscName);
   this->calibration = calibration;
   configureSensor();
   oscMessageMutex.lock(); // keep "Wifi send task" from accessing data while it is written
   oscMessage.init(oscName, 10);
   oscMessageMutex.unlock();
-  filter.begin(23); // update drewuency guess
+  filter.begin(75); // update drewuency guess
 }
-
-void Imu::update()
-{
+// read sensor only, don't do any processing
+void Imu::readSensor(){
   // time keeping for sensor filter integration
   uint32_t timestamp = micros();
   uint32_t microsSinceLastUpdate = timestamp - lastUpdateMicros;
@@ -21,9 +20,14 @@ void Imu::update()
   float deltaT = (float)microsSinceLastUpdate / 1000000.0f;
 
   sensor.getEvent(&accel_event, &gyro_event, &temp_event, &mag_event);
+
 #if defined(AHRS_DEBUG_OUTPUT)
   // Serial.print("I2C took "); Serial.print(micros()-timestamp); Serial.println(" mus");
 #endif
+
+}
+// process last data set read from Sensor (altering values in place)
+void Imu::processCurrentData(){
 
   calibration->calibrate(accel_event);
   calibration->calibrate(gyro_event);
@@ -36,12 +40,23 @@ void Imu::update()
   gz = gyro_event.gyro.z * SENSORS_RADS_TO_DPS;
 
   // Update the SensorFusion filter
+  /*
   filter.update(gx, gy, gz,
                 accel_event.acceleration.x, accel_event.acceleration.y, accel_event.acceleration.z,
                 mag_event.magnetic.x, mag_event.magnetic.y, mag_event.magnetic.z, deltaT);
+                */
+  filter.update(gx, gy, gz,
+                accel_event.acceleration.x, accel_event.acceleration.y, accel_event.acceleration.z,
+                mag_event.magnetic.x, mag_event.magnetic.y, mag_event.magnetic.z);
+
 #if defined(AHRS_DEBUG_OUTPUT)
   // Serial.print("Update took "); Serial.print(micros()-timestamp); Serial.println("mus");
 #endif
+
+
+}
+// put current values into osc message
+void Imu::prepareOscMessage(){
 
   // put new values into the osc Message buffer
   float roll = filter.getRoll();
@@ -53,8 +68,19 @@ void Imu::update()
 
   oscMessageMutex.lock(); // keep "Wifi send task" from accessing data while it is written
   oscMessage.setData(qw, qx, qy, qz, roll, pitch, yaw, gx, gy, gz);
+  oscMessage.hasBeenSent=false;
   // oscMessage.setData(1, 2, 3, 4,5,6,7,8,9,10);
   oscMessageMutex.unlock();
+
+}
+
+void Imu::update()
+{
+  
+  checkReconnect();
+  readSensor();
+  processCurrentData();
+  prepareOscMessage();
 }
 
 void Imu::printSerial()
@@ -116,21 +142,46 @@ void Imu::sendOsc(WiFiUDP &Udp, IPAddress &receiverIp, int receiverPort)
   message.send(Udp);
   Udp.endPacket();
   */
+ 
+    oscMessageMutex.lock();
+  if(false){
 
-  Udp.beginPacket(receiverIp, receiverPort);
-  oscMessageMutex.lock();
-  Udp.write((uint8_t *)oscMessage.buffer, oscMessage.messageLength);
-  oscMessageMutex.unlock();
-  Udp.endPacket();
+    //debug: send an index in to make it possible to detect package loss
+      debugPackageIndex++;
+      oscMessage.setData(debugPackageIndex,0,0,0,0,0,0,0,0,0);
+  }
+  if(!oscMessage.hasBeenSent){
+    Udp.beginPacket(receiverIp, receiverPort);
+    Udp.write((uint8_t *)oscMessage.buffer, oscMessage.messageLength);
+    oscMessage.hasBeenSent=true;
+    oscMessageMutex.unlock();
+    Udp.endPacket();
+
+  }else{
+    oscMessageMutex.unlock();
+  }
+  
+
+  
+
 }
 // if the controller has forgotten one of its settings, reinitialize it.
 void Imu::checkReconnect()
 {
+  if(updatesSinceLastReconnectCheck<50){
+    updatesSinceLastReconnectCheck++;
+    return;
+  }
+  updatesSinceLastReconnectCheck=0;
   if (reconnectCount < 20)
   {
     // try to detect sensor reconnect by checking if mag data rate is the same that we set.
-    if (AK09916_MAG_DATARATE_100_HZ != sensor.getMagDataRate())
+    if (ICM20948_ACCEL_RANGE_4_G != sensor.getAccelRange())
     {
+      Serial.print("Sensor ");
+      Serial.print(oscName);
+      Serial.println("is not functional - trying to revive it.");
+      
       // check if there is any connection at all
       Wire.beginTransmission(ICM_ADDRESS);
       int result = Wire.endTransmission();
@@ -139,7 +190,9 @@ void Imu::checkReconnect()
         configureSensor();
         reconnectCount++;
       }
+          
     }
+
   }
 }
 
@@ -250,4 +303,4 @@ void Imu::sendMotionCal()
   Serial.print(",");
   Serial.print(this->mag_event.magnetic.z);
   Serial.println("");
-  }
+}

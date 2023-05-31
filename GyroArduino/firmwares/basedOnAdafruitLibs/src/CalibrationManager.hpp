@@ -20,9 +20,17 @@ public:
     NvmStoredCalibration calibrations[N_SENSORS] ; // these are loaded from flash
 
     void calibrateSequence();
-    void calibrateSensorInteractive(int sensorId, Imu* imu);
-    void calibrateSensor(int sensorId, Imu* imu);
-
-
+    void calibrateGyros();
+    void calibrateMagnetometerInteractive(int sensorId, Imu* imu);
+    void calibrateMagnetometer(int sensorId, Imu* imu);
+Preferences* nvm;
+    // delete complete NVS if you have unknown namespaces (brings back around 629 free key pairs)
+    void resetNVS()
+    {
+        nvs_flash_erase(); // erase the NVS partition and...
+        delay(200); // weird nvm storage bug otherwise
+        nvs_flash_init();  // initialize the NVS partition.
+        delay(200);        // weird nvm storage bug otherwise
+    }
     #endif
 };

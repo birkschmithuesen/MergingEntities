@@ -18,7 +18,7 @@ void setupWifi(WiFiUDP &Udp,const char* ssid,const  char* password, uint16_t loc
         Serial.print(".");
         delay(500);
     }
-
+    // esp_wifi_set_ps(WIFI_PS_NONE);
     // print result of connection attempt(s) on serial console
     if (WiFi.status() != WL_CONNECTED)
     {
@@ -39,5 +39,7 @@ void setupWifi(WiFiUDP &Udp,const char* ssid,const  char* password, uint16_t loc
             Serial.println(" ... failed");
         }
         Serial.println(" ... succeeded");
+            
     }
+
 }
