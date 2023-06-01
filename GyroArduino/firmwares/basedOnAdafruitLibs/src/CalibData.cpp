@@ -82,11 +82,8 @@ CalibData calibrationSets[]{
 {1.027712,-0.026347,-0.010012,-0.026347,0.982606,0.003565,-0.010012,0.003565,0.991051},//softIron
 33.670193//magfield
 },
-
-// Controller A from Felix
-/*
 {
-0,      //controllerindex
+5,      //controllerindex
 0,      //sensorIndex
 {0.000000,0.000000,0.000000},//accelBias
 {0.000616,0.000966,-0.009676},//gyrobias
@@ -94,10 +91,9 @@ CalibData calibrationSets[]{
 {1.034776,-0.019334,0.006597,-0.019334,0.961972,0.006315,0.006597,0.006315,1.005058},//softIron
 48.525284//magfield
 },
-*/
 
 {
-0,      //controllerindex
+5,      //controllerindex
 1,      //sensorIndex
 {0.000000,0.000000,0.000000},//accelBias
 {0.007603,-0.021200,0.000050},//gyrobias
@@ -107,7 +103,7 @@ CalibData calibrationSets[]{
 },
 
 {
-0,      //controllerindex
+5,      //controllerindex
 2,      //sensorIndex
 {0.000000,0.000000,0.000000},//accelBias
 {-0.012882,-0.001582,-0.001674},//gyrobias
@@ -117,7 +113,7 @@ CalibData calibrationSets[]{
 },
 
 {
-0,      //controllerindex
+5,      //controllerindex
 3,      //sensorIndex
 {0.000000,0.000000,0.000000},//accelBias
 {-0.003839,0.015830,-0.006403},//gyrobias
@@ -127,7 +123,7 @@ CalibData calibrationSets[]{
 },
 
 {
-0,      //controllerindex
+5,      //controllerindex
 4,      //sensorIndex
 {0.000000,0.000000,0.000000},//accelBias
 {0.005796,0.000158,0.004405},//gyrobias
@@ -137,7 +133,7 @@ CalibData calibrationSets[]{
 },
 
 {
-0,      //controllerindex
+5,      //controllerindex
 5,      //sensorIndex
 {0.000000,0.000000,0.000000},//accelBias
 {-0.003597,-0.002415,-0.003647},//gyrobias
@@ -147,7 +143,7 @@ CalibData calibrationSets[]{
 },
 
 {
-0,      //controllerindex
+5,      //controllerindex
 6,      //sensorIndex
 {0.000000,0.000000,0.000000},//accelBias
 {0.000983,-0.000475,0.003214},//gyrobias
@@ -157,7 +153,7 @@ CalibData calibrationSets[]{
 },
 
 {
-0,      //controllerindex
+5,      //controllerindex
 7,      //sensorIndex
 {0.000000,0.000000,0.000000},//accelBias
 {-0.009768,-0.003497,-0.002823},//gyrobias
