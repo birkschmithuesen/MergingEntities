@@ -7,9 +7,9 @@ void Imu::setup(const char *oscName, Adafruit_Sensor_Calibration *calibration)
   this->calibration = calibration;
   configureSensor();
   oscMessageMutex.lock(); // keep "Wifi send task" from accessing data while it is written
-  oscMessage.init(oscName, 16);
+  oscMessage.init(oscName, 17);
   oscMessageMutex.unlock();
-  filter.begin(78); // update drewuency guess
+  filter.begin(78); // update frequency guess
   filter.setBeta(0.5);
 }
 // read sensor only, don't do any processing
@@ -180,28 +180,22 @@ void Imu::sendOsc(WiFiUDP &Udp, IPAddress &receiverIp, int receiverPort)
   message.send(Udp);
   Udp.endPacket();
   */
- 
-    oscMessageMutex.lock();
-  if(false){
 
-    //debug: send an index in to make it possible to detect package loss
-      debugPackageIndex++;
-      oscMessage.setData(debugPackageIndex,0,0,0,0,0,0,0,0,0);
-  }
-  if(!oscMessage.hasBeenSent){
+  oscMessageMutex.lock();
+  if (!oscMessage.hasBeenSent)
+  {
     Udp.beginPacket(receiverIp, receiverPort);
+    oscMessage.setFloat(16, debugPackageIndex);
+    debugPackageIndex++;
     Udp.write((uint8_t *)oscMessage.buffer, oscMessage.messageLength);
-    oscMessage.hasBeenSent=true;
+    oscMessage.hasBeenSent = true;
     oscMessageMutex.unlock();
     Udp.endPacket();
-
-  }else{
+  }
+  else
+  {
     oscMessageMutex.unlock();
   }
-  
-
-  
-
 }
 // if the controller has forgotten one of its settings, reinitialize it.
 void Imu::checkReconnect()

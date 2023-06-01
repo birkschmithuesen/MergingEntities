@@ -42,7 +42,7 @@ void ImuOscMessage::writeBigEndianFloat(char* bufStart,float value){
 }
 void ImuOscMessage::setFloat(int pos, float value)
 {
-    if (pos > 0 && pos < nArgsAllocated)
+    if (pos >= 0 && pos < nArgsAllocated)
     {
         char *curDataStart = buffer + dataStartOffset + 4 * pos;
         writeBigEndianFloat(curDataStart, value);

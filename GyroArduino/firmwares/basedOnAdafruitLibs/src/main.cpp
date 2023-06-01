@@ -59,8 +59,6 @@ void oscSendFun(void *pvParameters)
        // Serial.println(1000000.0f/(micros()-timestamp));
         timestamp=micros();
         imuCollection.sendOscAll(Udp, receiverIp, receiverPort);
-        vTaskDelay(10); // to avoid starving other tasks;
-
     }
 }
 
