@@ -189,5 +189,5 @@ void loop()
         Serial.print(micros() - timestamp);
         Serial.println("mus");
     }
-    
+    //imuCollection.imus[7].printSerial();
 }

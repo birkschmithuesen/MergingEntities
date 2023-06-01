@@ -8,6 +8,7 @@
 #include <Adafruit_ICM20X.h>
 #include <Adafruit_Sensor.h>
 #include <Adafruit_AHRS.h>
+
 #include <Wire.h>
 
 #include <WiFiUdp.h>
@@ -16,7 +17,7 @@
 #include "CalibData.hpp"
 #include "HardCodedCalibration.hpp"
 #include "ImuOscMessage.h"
-
+#include "Adafruit_AHRS_NXPFusion_flex_deltaT.hpp"
 #include <mutex> 
 
 class Imu
@@ -52,8 +53,8 @@ private:
 
     Adafruit_ICM20948 sensor; /**< software handler/abstraction for ICM20948 at given channel */
     // pick your filter! slower == better quality output
-    Adafruit_NXPSensorFusion filter; // slowest
-    //Adafruit_Madgwick filter;  // faster than NXP
+    //Adafruit_NXPSensorFusionFlexDeltaT filter; // slowest
+    Adafruit_Madgwick filter;  // faster than NXP
     //Adafruit_Mahony filter; // fastest/smallest
 
     Adafruit_Sensor_Calibration* calibration;

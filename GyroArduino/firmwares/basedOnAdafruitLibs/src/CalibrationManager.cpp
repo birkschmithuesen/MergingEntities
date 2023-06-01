@@ -152,7 +152,7 @@ void CalibrationManager::calibrateGyros()
         meanGz[sensorIndex] = 0;
     }
 
-    int nAverageCycles = 32;
+    int nAverageCycles = 128;
     for (int i = 0; i < nAverageCycles; i++)
     {
         for (int sensorIndex = 0; sensorIndex < N_SENSORS; sensorIndex++)

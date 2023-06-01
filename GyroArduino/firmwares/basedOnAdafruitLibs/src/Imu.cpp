@@ -7,17 +7,14 @@ void Imu::setup(const char *oscName, Adafruit_Sensor_Calibration *calibration)
   this->calibration = calibration;
   configureSensor();
   oscMessageMutex.lock(); // keep "Wifi send task" from accessing data while it is written
-  oscMessage.init(oscName, 10);
+  oscMessage.init(oscName, 16);
   oscMessageMutex.unlock();
   filter.begin(78); // update drewuency guess
 }
 // read sensor only, don't do any processing
 void Imu::readSensor(){
   // time keeping for sensor filter integration
-  uint32_t timestamp = micros();
-  uint32_t microsSinceLastUpdate = timestamp - lastUpdateMicros;
-  lastUpdateMicros = timestamp;
-  float deltaT = (float)microsSinceLastUpdate / 1000000.0f;
+
 
   sensor.getEvent(&accel_event, &gyro_event, &temp_event, &mag_event);
 
@@ -28,6 +25,13 @@ void Imu::readSensor(){
 }
 // process last data set read from Sensor (altering values in place)
 void Imu::processCurrentData(){
+  uint32_t timestamp = micros();
+  uint32_t microsSinceLastUpdate = timestamp - lastUpdateMicros;
+  lastUpdateMicros = timestamp;
+  float deltaT = (float)microsSinceLastUpdate / 1000000.0f;
+//constrain deltaT to keep the filter stable 
+if(deltaT<0.0001)deltaT=0.0001;
+if(deltaT>0.1)deltaT=0.1;
 
   calibration->calibrate(accel_event);
   calibration->calibrate(gyro_event);
@@ -37,17 +41,15 @@ void Imu::processCurrentData(){
   // the rest are not unit-important
   gx = gyro_event.gyro.x * SENSORS_RADS_TO_DPS;
   gy = gyro_event.gyro.y * SENSORS_RADS_TO_DPS;
-  gz = gyro_event.gyro.z * SENSORS_RADS_TO_DPS;
+  gz = -gyro_event.gyro.z * SENSORS_RADS_TO_DPS;
 
   // Update the SensorFusion filter
-  /*
+  
   filter.update(gx, gy, gz,
                 accel_event.acceleration.x, accel_event.acceleration.y, accel_event.acceleration.z,
                 mag_event.magnetic.x, mag_event.magnetic.y, mag_event.magnetic.z, deltaT);
-                */
-  filter.update(gx, gy, gz,
-                accel_event.acceleration.x, accel_event.acceleration.y, accel_event.acceleration.z,
-                mag_event.magnetic.x, mag_event.magnetic.y, mag_event.magnetic.z);
+                
+
 
 #if defined(AHRS_DEBUG_OUTPUT)
   // Serial.print("Update took "); Serial.print(micros()-timestamp); Serial.println("mus");
@@ -67,9 +69,27 @@ void Imu::prepareOscMessage(){
   filter.getQuaternion(&qw, &qx, &qy, &qz);
 
   oscMessageMutex.lock(); // keep "Wifi send task" from accessing data while it is written
-  oscMessage.setData(qw, qx, qy, qz, roll, pitch, yaw, gx, gy, gz);
+  oscMessage.setFloat(0,qw);
+  oscMessage.setFloat(1, qx);
+  oscMessage.setFloat(2, qy);
+  oscMessage.setFloat(3, qz);
+  oscMessage.setFloat(4, roll);
+  oscMessage.setFloat(5, pitch);
+  oscMessage.setFloat(6, yaw);
+  oscMessage.setFloat(7, gx);
+  oscMessage.setFloat(8, gy);
+  oscMessage.setFloat(9, gz);
+
+  oscMessage.setFloat(10, accel_event.acceleration.x);
+  oscMessage.setFloat(11, accel_event.acceleration.y);
+  oscMessage.setFloat(12, accel_event.acceleration.z);
+
+  oscMessage.setFloat(13, mag_event.magnetic.x);
+  oscMessage.setFloat(14,  mag_event.magnetic.y);
+  oscMessage.setFloat(15,  mag_event.magnetic.z);
+
+
   oscMessage.hasBeenSent=false;
-  // oscMessage.setData(1, 2, 3, 4,5,6,7,8,9,10);
   oscMessageMutex.unlock();
 
 }
@@ -85,28 +105,28 @@ void Imu::update()
 
 void Imu::printSerial()
 {
-  Serial.print("Timestamp: ");
-  Serial.println(accel_event.timestamp);
+  //Serial.print("Timestamp: ");
+  //Serial.println(accel_event.timestamp);
 
-  Serial.print("Raw: ");
+  Serial.print("accel: ");
   Serial.print(accel_event.acceleration.x, 4);
   Serial.print(", ");
   Serial.print(accel_event.acceleration.y, 4);
   Serial.print(", ");
   Serial.print(accel_event.acceleration.z, 4);
+  Serial.print("\tgyro: ");
+  Serial.print(gyro_event.gyro.x, 4);
   Serial.print(", ");
-  Serial.print(gx, 4);
+  Serial.print(gyro_event.gyro.y, 4);
   Serial.print(", ");
-  Serial.print(gy, 4);
-  Serial.print(", ");
-  Serial.print(gz, 4);
-  Serial.print(", ");
+  Serial.print(gyro_event.gyro.z, 4);
+  Serial.print("\tmag: "); 
   Serial.print(mag_event.magnetic.x, 4);
   Serial.print(", ");
   Serial.print(mag_event.magnetic.y, 4);
   Serial.print(", ");
   Serial.print(mag_event.magnetic.z, 4);
-  Serial.println("");
+  Serial.print("\t");
 
   float qw, qx, qy, qz;
   filter.getQuaternion(&qw, &qx, &qy, &qz);
@@ -266,6 +286,15 @@ void Imu::configureSensor()
 void Imu::sendMotionCal()
 {
   sensor.getEvent(&accel_event, &gyro_event, &temp_event, &mag_event);
+
+if(false){
+  // as a check - send calibrated values, they should come out in motioncal as "perfect"
+  calibration->calibrate(accel_event);
+  calibration->calibrate(gyro_event);
+  calibration->calibrate(temp_event);
+  calibration->calibrate(mag_event);
+}
+
   // raw data format
   Serial.print("Raw:");
   Serial.print(int(this->accel_event.acceleration.x * 8192 / 9.8));

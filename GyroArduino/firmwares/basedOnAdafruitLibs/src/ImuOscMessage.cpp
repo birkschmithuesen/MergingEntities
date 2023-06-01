@@ -29,10 +29,10 @@ void ImuOscMessage::init(const char *address, int nArgs)
     // pad message length to next multiple of 4
     if ((messageLength/4) * 4 < messageLength)
         messageLength = (messageLength/4 + 1) * 4;
-
+nArgsAllocated=nArgs;
     Serial.println(messageLength);
 }
-void ImuOscMessage::writeBigEndienFloat(char* bufStart,float value){
+void ImuOscMessage::writeBigEndianFloat(char* bufStart,float value){
     char* inBufStart=((char*) &value)+3;
     for(int i=0;i<4;i++){
         *bufStart=*inBufStart;
@@ -40,41 +40,48 @@ void ImuOscMessage::writeBigEndienFloat(char* bufStart,float value){
         inBufStart--;
     }
 }
-
+void ImuOscMessage::setFloat(int pos, float value)
+{
+    if (pos > 0 && pos < nArgsAllocated)
+    {
+        char *curDataStart = buffer + dataStartOffset + 4 * pos;
+        writeBigEndianFloat(curDataStart, value);
+    }
+}
 void ImuOscMessage::setData(float qw, float qx, float qy, float qz, float roll, float pitch, float yaw, float gx, float gy, float gz)
 {
     char* curDataStart=&buffer[dataStartOffset];
 
-    writeBigEndienFloat(curDataStart,qw);
+    writeBigEndianFloat(curDataStart,qw);
     curDataStart+=4;
 
-    writeBigEndienFloat(curDataStart,qx);
+    writeBigEndianFloat(curDataStart,qx);
     curDataStart+=4;
 
-    writeBigEndienFloat(curDataStart,qy);
+    writeBigEndianFloat(curDataStart,qy);
     curDataStart+=4;
 
-    writeBigEndienFloat(curDataStart,qz);
-    curDataStart+=4;
-
-
-
-    writeBigEndienFloat(curDataStart,roll);
-    curDataStart+=4;
-
-    writeBigEndienFloat(curDataStart,pitch);
-    curDataStart+=4;
-
-    writeBigEndienFloat(curDataStart,yaw);
+    writeBigEndianFloat(curDataStart,qz);
     curDataStart+=4;
 
 
-    writeBigEndienFloat(curDataStart,gx);
+
+    writeBigEndianFloat(curDataStart,roll);
     curDataStart+=4;
 
-    writeBigEndienFloat(curDataStart,gy);
+    writeBigEndianFloat(curDataStart,pitch);
     curDataStart+=4;
 
-    writeBigEndienFloat(curDataStart,gz);
+    writeBigEndianFloat(curDataStart,yaw);
+    curDataStart+=4;
+
+
+    writeBigEndianFloat(curDataStart,gx);
+    curDataStart+=4;
+
+    writeBigEndianFloat(curDataStart,gy);
+    curDataStart+=4;
+
+    writeBigEndianFloat(curDataStart,gz);
     curDataStart+=4;
 }
