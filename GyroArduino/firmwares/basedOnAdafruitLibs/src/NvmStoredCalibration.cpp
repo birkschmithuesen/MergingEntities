@@ -81,6 +81,8 @@ bool NvmStoredCalibration::saveCalibration()
     int waitTime=0;
     delay(waitTime);
     // open NVM as read-write
+    // skip that lousy nvm
+    /*
     if (!nvm->begin(presetName, false))
     {
         Serial.print("!!! nvm.begin failed  in save with preset Name ");
@@ -88,6 +90,7 @@ bool NvmStoredCalibration::saveCalibration()
         nvm->end();
         return false;
     }
+    */
 
     for (int o = 0; o < 3; o++)
     {

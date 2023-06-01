@@ -27,14 +27,14 @@
 WiFiUDP Udp;
 TaskHandle_t oscSendTask;               /**< sends  osc updates parallel to computation*/
 
-#define WIFI_SSID "syntheticwire"     /**< SSID / name of the wifi network to use */
-#define WIFI_PASS "doesnotmatter"  /**< password for the wifi network to use */
+//#define WIFI_SSID "syntheticwire"     /**< SSID / name of the wifi network to use */
+//#define WIFI_PASS "doesnotmatter"  /**< password for the wifi network to use */
 
-IPAddress receiverIp(192, 168, 0, 105); /**< IP address of the (target) OSC server */
+//IPAddress receiverIp(192, 168, 0, 105); /**< IP address of the (target) OSC server */
 
-//#define WIFI_SSID "ArtNet4Hans"     /**< SSID / name of the wifi network to use */
-//#define WIFI_PASS "kaesimira"  /**< password for the wifi network to use */
-//IPAddress receiverIp(192, 168, 0, 2); /**< IP address of the (target) OSC server */
+#define WIFI_SSID "ArtNet4Hans"     /**< SSID / name of the wifi network to use */
+#define WIFI_PASS "kaesimira"  /**< password for the wifi network to use */
+IPAddress receiverIp(192, 168, 0, 2); /**< IP address of the (target) OSC server */
 
 
 //IPAddress receiverIp(255, 255, 255, 255); /**< IP address of the (target) OSC server */
@@ -147,8 +147,8 @@ void loop()
     uint32_t timestamp = micros();
     
     ///update frequency
-    Serial.print(1000000/(timestamp - globalTimestamp));
-    Serial.println("Hz");
+    //Serial.print(1000000/(timestamp - globalTimestamp));
+    //Serial.println("Hz");
 
     globalTimestamp=timestamp;
 
