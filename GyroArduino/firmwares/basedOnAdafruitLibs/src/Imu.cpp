@@ -10,6 +10,7 @@ void Imu::setup(const char *oscName, Adafruit_Sensor_Calibration *calibration)
   oscMessage.init(oscName, 16);
   oscMessageMutex.unlock();
   filter.begin(78); // update drewuency guess
+  filter.setBeta(0.5);
 }
 // read sensor only, don't do any processing
 void Imu::readSensor(){
@@ -39,16 +40,33 @@ if(deltaT>0.1)deltaT=0.1;
   calibration->calibrate(mag_event);
   // Gyroscope needs to be converted from Rad/s to Degree/s
   // the rest are not unit-important
-  gx = gyro_event.gyro.x * SENSORS_RADS_TO_DPS;
+  gx =  gyro_event.gyro.x * SENSORS_RADS_TO_DPS;
   gy = gyro_event.gyro.y * SENSORS_RADS_TO_DPS;
-  gz = -gyro_event.gyro.z * SENSORS_RADS_TO_DPS;
-
+  gz = gyro_event.gyro.z * SENSORS_RADS_TO_DPS;
+///
+/*
+        float an = -a[0];
+        float ae = +a[1];
+        float ad = +a[2];
+        float gn = +g[0] * DEG_TO_RAD;
+        float ge = -g[1] * DEG_TO_RAD;
+        float gd = -g[2] * DEG_TO_RAD;
+        float mn = +m[1];
+        float me = -m[0];
+        float md = +m[2];
+        
+         filter.update(gx, -gy, -gz,
+                -accel_event.acceleration.x, accel_event.acceleration.y, accel_event.acceleration.z,
+                mag_event.magnetic.y, -mag_event.magnetic.x, mag_event.magnetic.z, deltaT);
+                */
+        ///
   // Update the SensorFusion filter
   
-  filter.update(gx, gy, gz,
+    filter.update(gx, gy, gz,
                 accel_event.acceleration.x, accel_event.acceleration.y, accel_event.acceleration.z,
-                mag_event.magnetic.x, mag_event.magnetic.y, mag_event.magnetic.z, deltaT);
-                
+                mag_event.magnetic.x, -mag_event.magnetic.y, -mag_event.magnetic.z, deltaT);
+
+          
 
 
 #if defined(AHRS_DEBUG_OUTPUT)
