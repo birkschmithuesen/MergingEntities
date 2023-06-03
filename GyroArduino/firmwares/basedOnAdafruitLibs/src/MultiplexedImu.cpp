@@ -42,8 +42,9 @@ void MultiplexedImus::sendOscAll(WiFiUDP &Udp, IPAddress &receiverIp, int receiv
     for (int i = 0; i < N_SENSORS; i++)
     {
         imus[i].sendOsc(Udp, receiverIp, receiverPort);
-        vTaskDelay(1); // to avoid starving other tasks;
+
     }
+            vTaskDelay(2); // to avoid starving other tasks;
 }
 
 void MultiplexedImus::printSerialAll()

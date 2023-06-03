@@ -7,6 +7,7 @@
 #include <OSCMessage.h>
 
 // hardware support
+#include <esp_wifi.h>
 #include <Wire.h>
 #include <EEPROM.h>
 #include "Preferences.h"
@@ -27,14 +28,14 @@
 WiFiUDP Udp;
 TaskHandle_t oscSendTask;               /**< sends  osc updates parallel to computation*/
 
-//#define WIFI_SSID "syntheticwire"     /**< SSID / name of the wifi network to use */
-//#define WIFI_PASS "doesnotmatter"  /**< password for the wifi network to use */
+#define WIFI_SSID "syntheticwire"     /**< SSID / name of the wifi network to use */
+#define WIFI_PASS "doesnotmatter"  /**< password for the wifi network to use */
 
-//IPAddress receiverIp(192, 168, 0, 105); /**< IP address of the (target) OSC server */
+IPAddress receiverIp(192, 168, 0, 104); /**< IP address of the (target) OSC server */
 
-#define WIFI_SSID "ArtNet4Hans"     /**< SSID / name of the wifi network to use */
-#define WIFI_PASS "kaesimira"  /**< password for the wifi network to use */
-IPAddress receiverIp(192, 168, 0, 2); /**< IP address of the (target) OSC server */
+//#define WIFI_SSID "ArtNet4Hans"     /**< SSID / name of the wifi network to use */
+//#define WIFI_PASS "kaesimira"  /**< password for the wifi network to use */
+//IPAddress receiverIp(192, 168, 0, 2); /**< IP address of the (target) OSC server */
 
 
 //IPAddress receiverIp(255, 255, 255, 255); /**< IP address of the (target) OSC server */
@@ -64,6 +65,7 @@ void oscSendFun(void *pvParameters)
 
 void setup()
 {
+    setCpuFrequencyMhz(240);
     Serial.begin(115200);
     // pause until serial line is available
     while (!Serial)
@@ -145,8 +147,8 @@ void loop()
     uint32_t timestamp = micros();
     
     ///update frequency
-    //Serial.print(1000000/(timestamp - globalTimestamp));
-    //Serial.println("Hz");
+   // Serial.print(1000000/(timestamp - globalTimestamp));
+   // Serial.println("Hz");
 
     globalTimestamp=timestamp;
 

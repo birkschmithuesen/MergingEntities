@@ -1,4 +1,5 @@
 #pragma once
+#include <esp_wifi.h>
 #include <WiFi.h>
 
 #include <WiFiUdp.h>
