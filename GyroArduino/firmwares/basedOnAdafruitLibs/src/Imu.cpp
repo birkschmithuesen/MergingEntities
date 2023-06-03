@@ -271,14 +271,17 @@ void Imu::configureSensor()
     Serial.println("Failed: ICM20948_ACCEL_RANGE_4_G");
     return;
   }
-  // gyro 500 degree/s;
-  sensor.setGyroRange(ICM20948_GYRO_RANGE_500_DPS);
-  if (ICM20948_GYRO_RANGE_500_DPS != sensor.getGyroRange())
+  // gyro 1000 degree/s;
+  sensor.setGyroRange(ICM20948_GYRO_RANGE_2000_DPS);
+  if (ICM20948_GYRO_RANGE_2000_DPS != sensor.getGyroRange())
   {
     lastErrorCode = 5;
-    Serial.println("Failed: ICM20948_GYRO_RANGE_500_DPS");
+    Serial.println("Failed: ICM20948_GYRO_RANGE_2000_DPS");
     return;
   }
+  // set Gyro low pass filter ( to avoid aliasing)
+  sensor.enableGyrolDLPF(true,ICM20X_GYRO_FREQ_119_5_HZ );
+
   // highest data rate (MPU9250 fifo rate 125 Hz)
   if (!sensor.setMagDataRate(AK09916_MAG_DATARATE_100_HZ))
   {
