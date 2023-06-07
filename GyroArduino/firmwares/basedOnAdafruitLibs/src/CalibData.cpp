@@ -2,88 +2,10 @@
 
 CalibData calibrationSets[]{
 
-// Controller A for testing purpose
-{
-0,      //controllerindex
-0,      //sensorIndex
-{0.000000,0.000000,0.000000},//accelBias
-{0.000000,0.000000,0.000000},//gyrobias
-{-22.309784,34.632069,-1.998663},//hardIron
-{1.049076,-0.016527,-0.010604,-0.016527,0.982334,-0.009963,-0.010604,-0.009963,0.970832},//softIron
-34.670895//magfield
-},
+// Controller A
 
 {
 0,      //controllerindex
-1,      //sensorIndex
-{0.000000,0.000000,0.000000},//accelBias
-{0.000000,0.000000,0.000000},//gyrobias
-{4.490335,-15.055762,16.319937},//hardIron
-{1.023077,-0.020309,0.010741,-0.020309,0.968477,-0.014193,0.010741,-0.014193,1.009993},//softIron
-33.839920//magfield
-},
-
-{
-0,      //controllerindex
-2,      //sensorIndex
-{0.000000,0.000000,0.000000},//accelBias
-{0.000000,0.000000,0.000000},//gyrobias
-{-8.938557,-18.333771,-15.042858},//hardIron
-{1.027766,0.009910,-0.006837,0.009910,0.983864,0.002625,-0.006837,0.002625,0.989091},//softIron
-35.080391//magfield
-},
-
-{
-0,      //controllerindex
-3,      //sensorIndex
-{0.000000,0.000000,0.000000},//accelBias
-{0.000000,0.000000,0.000000},//gyrobias
-{4.320663,-2.024136,15.457508},//hardIron
-{1.012598,-0.029107,-0.018482,-0.029107,1.005237,-0.013670,-0.018482,-0.013670,0.983770},//softIron
-32.329922//magfield
-},
-
-{
-0,      //controllerindex
-4,      //sensorIndex
-{0.000000,0.000000,0.000000},//accelBias
-{0.000000,0.000000,0.000000},//gyrobias
-{-20.750238,2.628237,-39.692886},//hardIron
-{1.040656,-0.014913,-0.015915,-0.014913,0.989629,0.005869,-0.015915,0.005869,0.971487},//softIron
-35.150177//magfield
-},
-
-{
-0,      //controllerindex
-5,      //sensorIndex
-{0.000000,0.000000,0.000000},//accelBias
-{0.000000,0.000000,0.000000},//gyrobias
-{28.861887,5.437371,41.768616},//hardIron
-{1.038859,-0.007280,-0.003225,-0.007280,0.967855,-0.002548,-0.003225,-0.002548,0.994633},//softIron
-32.356808//magfield
-},
-
-{
-0,      //controllerindex
-6,      //sensorIndex
-{0.000000,0.000000,0.000000},//accelBias
-{0.000000,0.000000,0.000000},//gyrobias
-{-20.374104,34.377129,23.934938},//hardIron
-{1.042178,0.013814,0.015849,0.013814,0.986063,-0.005018,0.015849,-0.005018,0.973540},//softIron
-32.430531//magfield
-},
-
-{
-0,      //controllerindex
-7,      //sensorIndex
-{0.000000,0.000000,0.000000},//accelBias
-{0.000000,0.000000,0.000000},//gyrobias
-{3.983593,-1.574223,-1.285341},//hardIron
-{1.027712,-0.026347,-0.010012,-0.026347,0.982606,0.003565,-0.010012,0.003565,0.991051},//softIron
-33.670193//magfield
-},
-{
-5,      //controllerindex
 0,      //sensorIndex
 {0.000000,0.000000,0.000000},//accelBias
 {0.000616,0.000966,-0.009676},//gyrobias
@@ -93,7 +15,7 @@ CalibData calibrationSets[]{
 },
 
 {
-5,      //controllerindex
+0,      //controllerindex
 1,      //sensorIndex
 {0.000000,0.000000,0.000000},//accelBias
 {0.007603,-0.021200,0.000050},//gyrobias
@@ -103,7 +25,7 @@ CalibData calibrationSets[]{
 },
 
 {
-5,      //controllerindex
+0,      //controllerindex
 2,      //sensorIndex
 {0.000000,0.000000,0.000000},//accelBias
 {-0.012882,-0.001582,-0.001674},//gyrobias
@@ -113,7 +35,7 @@ CalibData calibrationSets[]{
 },
 
 {
-5,      //controllerindex
+0,      //controllerindex
 3,      //sensorIndex
 {0.000000,0.000000,0.000000},//accelBias
 {-0.003839,0.015830,-0.006403},//gyrobias
@@ -123,7 +45,7 @@ CalibData calibrationSets[]{
 },
 
 {
-5,      //controllerindex
+0,      //controllerindex
 4,      //sensorIndex
 {0.000000,0.000000,0.000000},//accelBias
 {0.005796,0.000158,0.004405},//gyrobias
@@ -133,7 +55,7 @@ CalibData calibrationSets[]{
 },
 
 {
-5,      //controllerindex
+0,      //controllerindex
 5,      //sensorIndex
 {0.000000,0.000000,0.000000},//accelBias
 {-0.003597,-0.002415,-0.003647},//gyrobias
@@ -143,7 +65,7 @@ CalibData calibrationSets[]{
 },
 
 {
-5,      //controllerindex
+0,      //controllerindex
 6,      //sensorIndex
 {0.000000,0.000000,0.000000},//accelBias
 {0.000983,-0.000475,0.003214},//gyrobias
@@ -153,7 +75,7 @@ CalibData calibrationSets[]{
 },
 
 {
-5,      //controllerindex
+0,      //controllerindex
 7,      //sensorIndex
 {0.000000,0.000000,0.000000},//accelBias
 {-0.009768,-0.003497,-0.002823},//gyrobias

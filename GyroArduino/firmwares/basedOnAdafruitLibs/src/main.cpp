@@ -21,21 +21,21 @@
 #include "NvmStoredCalibration.h"
 
 
-
+#define CONTROLLER_ID 3
 
 //////network related stuff
 //WiFiUdp Udp;                            /**< handler for UDP communication */
 WiFiUDP Udp;
 TaskHandle_t oscSendTask;               /**< sends  osc updates parallel to computation*/
 
-#define WIFI_SSID "syntheticwire"     /**< SSID / name of the wifi network to use */
-#define WIFI_PASS "doesnotmatter"  /**< password for the wifi network to use */
+//#define WIFI_SSID "syntheticwire"     /**< SSID / name of the wifi network to use */
+//#define WIFI_PASS "doesnotmatter"  /**< password for the wifi network to use */
 
-IPAddress receiverIp(192, 168, 0, 104); /**< IP address of the (target) OSC server */
+//IPAddress receiverIp(192, 168, 0, 104); /**< IP address of the (target) OSC server */
 
-//#define WIFI_SSID "ArtNet4Hans"     /**< SSID / name of the wifi network to use */
-//#define WIFI_PASS "kaesimira"  /**< password for the wifi network to use */
-//IPAddress receiverIp(192, 168, 0, 2); /**< IP address of the (target) OSC server */
+#define WIFI_SSID "ArtNet4Hans"     /**< SSID / name of the wifi network to use */
+#define WIFI_PASS "kaesimira"  /**< password for the wifi network to use */
+IPAddress receiverIp(192, 168, 0, 2); /**< IP address of the (target) OSC server */
 
 
 //IPAddress receiverIp(255, 255, 255, 255); /**< IP address of the (target) OSC server */
@@ -77,7 +77,7 @@ void setup()
   
     // determine controller ID from DIP-switch
     UserInterface::setup();
-    controllerID = UserInterface::getControllerID();
+    controllerID = CONTROLLER_ID; //UserInterface::getControllerID();
     Serial.print("This is controller no ");
     Serial.println(controllerID);
     if (controllerID > 7)
