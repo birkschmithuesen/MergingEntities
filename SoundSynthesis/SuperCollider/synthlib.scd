@@ -102,7 +102,7 @@ SynthDef(\grain, {
 
 SynthDef.new(\sine, {
 	arg amp=1, exc = 1, freq=440, atk=0.005, rel=0.3, shape = 0, pan=0, out=0;
-	var sig, osc1, osc2, env;
+	var sig, osc1, osc2, env, addr;
 	osc1 = SinOsc.ar(freq) * exc;
 	osc2 = VarSaw.ar(freq) * exc;
 	sig = (osc1 * (1-shape)) + (osc2 * shape);
@@ -113,11 +113,12 @@ SynthDef.new(\sine, {
 }).add;
 
 
+
 SynthDef(\shaker, {
 	arg amp = 1, exc = 1, atk = 600, pan = 0.0, rel = 0.5, shape = 1, rev = 0.5, out = 0;
 	var sig, osc1, osc2, env;
 	//osc1 = BrownNoise.ar(0.3) * exc;
-	osc1 = WhiteNoise.ar(0.25) * exc;
+	osc1 = WhiteNoise.ar(1) * exc;
 	osc2 = MoogFF.ar(osc1, atk, 2);
 	sig = (osc1 * (0.2 - shape.linlin(0.0, 1.0, 0.0, 0.2)) + (osc2 * shape.linlin(0.0, 1.0, 0.5, 1.0)));
 	//sig = MoogFF.ar(sig, atk, 2);

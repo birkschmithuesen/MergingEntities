@@ -2,6 +2,7 @@
 (
 ~tripples = Pbind(
 	\instrument, \sine,
+	\address, 'tripples',
 	\dur, Pseq([1/4, 1/4, 1/4, ],inf),
 	\midinote, Pseq([60, 65, 68],inf),
 	\exc, ~exc[0],
