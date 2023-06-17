@@ -130,8 +130,8 @@ scale = FloatArray[48, 55, 60, 67];//some 5ths starting from c4
 {arg i; ~pan[i].source = 0.0}!~numBodies;
 
 // create groups
-~sourceGrp = Group.new;
-~fxGrp = Group.after(~sourceGrp);
+~patternGroup = Group.new;
+~fxGrp = Group.after(~patternGroup);
 
 // create busses
 ~efxBus = {Bus.audio(s, 2)}!~numBodies;
@@ -144,11 +144,13 @@ scale = FloatArray[48, 55, 60, 67];//some 5ths starting from c4
 ~efx[3] = Synth.new(\fx, [\in, ~efxBus[3], \out, 6], ~fxGrp);
 
 // load & play patterns
+~path = PathName(thisProcess.nowExecutingPath).parentPath;
 (~path++"patternlib.scd").load;
 
 
 // make the patterns controllable via osc
 ~oscPattern = {arg i; OscPattern.new([~exc[i], ~shape[i], ~atk[i], ~rel[i], ~pan[i]], '/sequencer/' ++ i, ~efx[i])}!~numBodies;
+//~oscPatternGroup = OscStandartGroup.new(~patternGroup, ('/pattern/group'), );
 )
 
 
