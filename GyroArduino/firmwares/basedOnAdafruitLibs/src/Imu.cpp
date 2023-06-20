@@ -1,8 +1,9 @@
 #include "Imu.hpp"
 #define AHRS_DEBUG_OUTPUT
 Imu::Imu() {}
-void Imu::setup(const char *oscName, Adafruit_Sensor_Calibration *calibration)
+void Imu::setup(const char *oscName,int id, Adafruit_Sensor_Calibration *calibration)
 {
+  sensorId=id;
   strcpy(this->oscName, oscName);
   this->calibration = calibration;
   configureSensor();
@@ -114,9 +115,18 @@ void Imu::prepareOscMessage(){
 
 void Imu::update()
 {
+  unsigned long timestamp=micros();
   
   checkReconnect();
   readSensor();
+  unsigned long timediff=micros()-timestamp;
+  if(timediff>5000){
+    Serial.print ("I2C of sensor");
+    Serial.print(sensorId+1);
+
+    Serial.print(" was slow:");
+    Serial.println(timediff);
+  }
   processCurrentData();
   prepareOscMessage();
 }
@@ -280,7 +290,7 @@ void Imu::configureSensor()
     return;
   }
   // set Gyro low pass filter ( to avoid aliasing)
-  sensor.enableGyrolDLPF(true,ICM20X_GYRO_FREQ_119_5_HZ );
+ // sensor.enableGyrolDLPF(true,ICM20X_GYRO_FREQ_196_6_HZ );
 
   // highest data rate (MPU9250 fifo rate 125 Hz)
   if (!sensor.setMagDataRate(AK09916_MAG_DATARATE_100_HZ))

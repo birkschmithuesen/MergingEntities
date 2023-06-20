@@ -24,7 +24,7 @@ class Imu
 {
 public:
     Imu();
-    void setup(const char *oscName, Adafruit_Sensor_Calibration* calibration);
+    void setup(const char *oscName, int id,Adafruit_Sensor_Calibration* calibration);
     void update(); ///< read sensor, process data, prepare Osc-Message
     void readSensor(); ///< read sensor only, don't do any processing
     void prepareOscMessage(); ///< put current values into osc message
@@ -48,6 +48,7 @@ private:
     void configureSensor();
 
     char oscName[200];
+    int sensorId=0;
     std::mutex oscMessageMutex; /**< controls access to the content of @oscMessage */
     ImuOscMessage oscMessage; /**< a buffer for a pre formed oscMessage, ready to be sent by the WiFi-send-task. lock @oscMessageMutex during access*/
 

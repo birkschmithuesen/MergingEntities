@@ -28,14 +28,14 @@
 WiFiUDP Udp;
 TaskHandle_t oscSendTask;               /**< sends  osc updates parallel to computation*/
 
-#define WIFI_SSID "syntheticwire"     /**< SSID / name of the wifi network to use */
-#define WIFI_PASS "doesnotmatter"  /**< password for the wifi network to use */
+//#define WIFI_SSID "syntheticwire"     /**< SSID / name of the wifi network to use */
+//#define WIFI_PASS "doesnotmatter"  /**< password for the wifi network to use */
 
-IPAddress receiverIp(192, 168, 0, 104); /**< IP address of the (target) OSC server */
-
-//#define WIFI_SSID "ArtNet4Hans"     /**< SSID / name of the wifi network to use */
-//#define WIFI_PASS "kaesimira"  /**< password for the wifi network to use */
-//IPAddress receiverIp(192, 168, 0, 2); /**< IP address of the (target) OSC server */
+unsigned long calibButtonTimeout= 1000*2000; // calibration button will only work if pressed in the first x seconds (value in millis)
+//IPAddress receiverIp(192, 168, 209, 56); /**< IP address of the (target) OSC server */
+#define WIFI_SSID "ArtNet4Hans"     /**< SSID / name of the wifi network to use */
+#define WIFI_PASS "kaesimira"  /**< password for the wifi network to use */
+IPAddress receiverIp(192, 168, 0, 2); /**< IP address of the (target) OSC server */
 
 
 //IPAddress receiverIp(255, 255, 255, 255); /**< IP address of the (target) OSC server */
@@ -77,7 +77,7 @@ void setup()
   
     // determine controller ID from DIP-switch
     UserInterface::setup();
-    controllerID = UserInterface::getControllerID();
+    controllerID = 2;//UserInterface::getControllerID();
     Serial.print("This is controller no ");
     Serial.println(controllerID);
     if (controllerID > 7)
@@ -162,6 +162,10 @@ void loop()
         Serial.print(micros() - timestamp);
         Serial.println("mus");
     }
+    if((micros() - timestamp)>20000){
+        Serial.println("update was slow:");
+        Serial.print(micros() - timestamp);
+    }
     
     timestamp = micros(); 
     if(!OSC_SEND_IN_SEPARATE_TASK){
@@ -174,7 +178,7 @@ void loop()
     
     //support for interactive calibration
     #ifndef USE_HARD_CODED_CALIBRATION
-    if(UserInterface::getCalibrationButtonState())calibrationManager.calibrateSequence();
+    if(UserInterface::getCalibrationButtonState()&&millis()<calibButtonTimeout)calibrationManager.calibrateSequence();
     #endif
 
 

@@ -17,7 +17,7 @@ void MultiplexedImus::setupAll(int controllerId, CalibrationManager *calibration
         buildOscName(controllerId, i, oscNameBuffer);
 
         // let the imu do its setup
-        imus[i].setup(oscNameBuffer, &(calibrationManager->calibrations[i]));
+        imus[i].setup(oscNameBuffer,i, &(calibrationManager->calibrations[i]));
 
         if (imus[i].lastErrorState == Imu::sensorConfigSuccess)
             nImusWorking++;

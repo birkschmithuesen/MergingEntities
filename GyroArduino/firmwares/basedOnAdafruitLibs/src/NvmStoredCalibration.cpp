@@ -24,7 +24,11 @@ bool NvmStoredCalibration::loadCalibration()
             Serial.print("Found matching hard coded default calibration set for controller#");
             Serial.print(calibrationSets[i].controllerIndex);
             Serial.print(" sensor# ");
-            Serial.println(calibrationSets[i].sensorIndex);
+            
+            Serial.print(calibrationSets[i].sensorIndex);
+            Serial.print(" set index# ");
+                        Serial.println(i);
+
         }
     }
     // skip that lousy nvm
