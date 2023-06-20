@@ -120,6 +120,7 @@ scale = FloatArray[48, 55, 60, 67];//some 5ths starting from c4
 ~atk = {PatternProxy.new}!~numBodies;
 ~rel = {PatternProxy.new}!~numBodies;
 ~pan = {PatternProxy.new}!~numBodies;
+~amp = {PatternProxy.new}!~numBodies;
 
 
 // initialize pattern proxies
@@ -127,7 +128,8 @@ scale = FloatArray[48, 55, 60, 67];//some 5ths starting from c4
 {arg i; ~shape[i].source = 0.5}!~numBodies;
 {arg i; ~atk[i].source = 0.1}!~numBodies;
 {arg i; ~rel[i].source = 0.5}!~numBodies;
-{arg i; ~pan[i].source = 0.0}!~numBodies;
+{arg i; ~pan[i].source = 0.5}!~numBodies;
+{arg i; ~amp[i].source = 0.0}!~numBodies;
 
 // create groups
 ~patternGroup = Group.new;
@@ -138,10 +140,10 @@ scale = FloatArray[48, 55, 60, 67];//some 5ths starting from c4
 
 // load fx
 ~efx = {0}!~numBodies;
-~efx[0] = Synth.new(\fx, [\in, ~efxBus[0], \out, 0], ~fxGrp);
-~efx[1] = Synth.new(\fx, [\in, ~efxBus[1], \out, 2], ~fxGrp);
-~efx[2] = Synth.new(\reverb, [\in, ~efxBus[2], \out, 4], ~fxGrp);
-~efx[3] = Synth.new(\fx, [\in, ~efxBus[3], \out, 6], ~fxGrp);
+~efx[0] = Synth.new(\delay, [\in, ~efxBus[0], \out, 0], ~fxGrp);
+~efx[1] = Synth.new(\delay, [\in, ~efxBus[1], \out, 2], ~fxGrp);
+~efx[2] = Synth.new(\delay, [\in, ~efxBus[2], \out, 4], ~fxGrp);
+~efx[3] = Synth.new(\delay, [\in, ~efxBus[3], \out, 6], ~fxGrp);
 
 // load & play patterns
 ~path = PathName(thisProcess.nowExecutingPath).parentPath;
@@ -149,7 +151,7 @@ scale = FloatArray[48, 55, 60, 67];//some 5ths starting from c4
 
 
 // make the patterns controllable via osc
-~oscPattern = {arg i; OscPattern.new([~exc[i], ~shape[i], ~atk[i], ~rel[i], ~pan[i]], '/sequencer/' ++ i, ~efx[i])}!~numBodies;
+~oscPattern = {arg i; OscPattern.new([~exc[i], ~shape[i], ~atk[i], ~pan[i]], '/sequencer/' ++ i, ~efx[i])}!~numBodies;
 //~oscPatternGroup = OscStandartGroup.new(~patternGroup, ('/pattern/group'), );
 )
 

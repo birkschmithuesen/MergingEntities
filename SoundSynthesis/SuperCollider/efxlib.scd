@@ -1,13 +1,30 @@
 (
 SynthDef.new(\fx, {
-	arg out=0, in, mix = 0.33;
+	arg out=0, in, mix = 0.0;
 	var sig;
 	sig = In.ar(in, 2);
 	Out.ar(out, sig);
 }).add;
 
+SynthDef.new(\delay, {
+	arg out=0, in, mix = 0.0;
+	var sig, dry, wet;
+	dry = In.ar(in, 2);
+	wet = CombN.ar(dry, ~tempo/4/4, ~tempo/4/4);
+	sig = dry + (wet * mix);
+	Out.ar(out, sig);
+}).add;
+
 SynthDef.new(\reverb, {
-	arg out=0, in, mix = 0.33;
+	arg out=0, in, mix = 0.0;
+	var sig, rev;
+	sig = In.ar(in, 2);
+	sig = FreeVerb.ar(sig, mix.linlin(0.0, 1.0, 0.0, 0.5), 0.8, 0.2);
+	Out.ar(out, sig);
+}).add;
+
+SynthDef.new(\reverb_endless, {
+	arg out=0, in, mix = 0.0;
 	var sig, chain;
 	sig = In.ar(in, 2);
 
@@ -18,16 +35,9 @@ SynthDef.new(\reverb, {
 		chain = LeakDC.ar(AllpassL.ar(LPF.ar(chain*0.9,3000), 0.2, {0.19.rand+0.01}!2, 3));
 	};
 
-	sig = 0.5 * ((sig * mix) + (chain * (1-mix)));    // dry + wet
-
-	//sig = FreeVerb.ar(sig, mix.linlin(0.0, 1.0, 0.0, 0.5), 0.8, 0.2);
+	sig = (sig * mix) + ((chain * (1-mix))*100);    // dry + wet
 	Out.ar(out, sig);
 }).add;
-
-
-
-
-
 
 
 
