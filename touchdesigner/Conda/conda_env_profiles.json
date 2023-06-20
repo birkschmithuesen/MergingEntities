@@ -18,5 +18,15 @@
 		"username": "Nina",
 		"environment-name": "td_merging-entities",
 		"environment-location": "C:/Users/Nina/anaconda3/envs/td_merging-entities"
+	},
+	"ML1":{
+		"username": "ML1",
+		"environment-name": "td_merging-entities",
+		"environment-location": "C:/Users/ML1/anaconda3/envs/td_merging-entities"
+	},
+	"ML2":{
+		"username": "ML2",
+		"environment-name": "td_merging-entities",
+		"environment-location": "C:/Users/ML2/anaconda3/envs/td_merging-entities"
 	}
  }
