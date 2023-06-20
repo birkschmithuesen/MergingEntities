@@ -43,7 +43,7 @@ OscPattern{
 
 			// amp
 			if (msg[6] != nil,
-				{pattern_proxie[4].source = msg[6].linlin(0.0, 1.0, 0.0, 2.0);
+				{// spare
 				},
 			{("received wrong OSC message length on address: " ++ address)}
 			);
