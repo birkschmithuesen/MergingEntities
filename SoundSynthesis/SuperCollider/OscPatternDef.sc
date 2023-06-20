@@ -29,21 +29,21 @@ OscPattern{
 			{("received wrong OSC message length on address: " ++ address)}
 			);
 
-			// pan
-			if (msg[4] != nil,
-				{pattern_proxie[3].source = msg[4];},
-			{("received wrong OSC message length on address: " ++ address)}
-			);
-
 			// efx mix
-			if (msg[5] != nil,
-				{efx.set(\mix, msg[5])},
+			if (msg[4] != nil,
+				{efx.set(\mix, msg[4])},
 			{("received wrong OSC message length on address: " ++ address)}
 			);
 
-			// spare
+			// pan
+			if (msg[5] != nil,
+				{pattern_proxie[3].source = msg[5];},
+			{("received wrong OSC message length on address: " ++ address)}
+			);
+
+			// amp
 			if (msg[6] != nil,
-				{//pattern_proxie[4].source = msg[7].linlin(0.0, 1.0, -1.0, 1.0);
+				{pattern_proxie[4].source = msg[6].linlin(0.0, 1.0, 0.0, 2.0);
 				},
 			{("received wrong OSC message length on address: " ++ address)}
 			);

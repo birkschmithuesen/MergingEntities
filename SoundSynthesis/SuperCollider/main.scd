@@ -29,6 +29,9 @@ s.reboot{
 
 
 (
+// set global tempo
+~tempo = 60/120 * 4; //60/90 * 4 //60sec / 128 BPM * 4 bars
+
 // load Synth Defs and Pattern Defs
 ~path = PathName(thisProcess.nowExecutingPath).parentPath;
 (~path++"synthlib.scd").load;
@@ -111,8 +114,6 @@ scale = FloatArray[48, 55, 60, 67];//some 5ths starting from c4
 (
 // PATTERNS
 
-~tempo = 60/120 * 4; //60/90 * 4 //60sec / 128 BPM * 4 bars
-
 
 // create pattern proxies
 ~exc = {PatternProxy.new}!~numBodies;
@@ -129,7 +130,7 @@ scale = FloatArray[48, 55, 60, 67];//some 5ths starting from c4
 {arg i; ~atk[i].source = 0.1}!~numBodies;
 {arg i; ~rel[i].source = 0.5}!~numBodies;
 {arg i; ~pan[i].source = 0.5}!~numBodies;
-{arg i; ~amp[i].source = 0.0}!~numBodies;
+{arg i; ~amp[i].source = 0.5}!~numBodies;
 
 // create groups
 ~patternGroup = Group.new;
@@ -151,7 +152,7 @@ scale = FloatArray[48, 55, 60, 67];//some 5ths starting from c4
 
 
 // make the patterns controllable via osc
-~oscPattern = {arg i; OscPattern.new([~exc[i], ~shape[i], ~atk[i], ~pan[i]], '/sequencer/' ++ i, ~efx[i])}!~numBodies;
+~oscPattern = {arg i; OscPattern.new([~exc[i], ~shape[i], ~atk[i], ~pan[i], ~amp[i]], '/sequencer/' ++ i, ~efx[i])}!~numBodies;
 //~oscPatternGroup = OscStandartGroup.new(~patternGroup, ('/pattern/group'), );
 )
 
