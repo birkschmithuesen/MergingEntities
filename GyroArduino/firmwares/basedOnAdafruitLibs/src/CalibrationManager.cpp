@@ -4,7 +4,7 @@
 void CalibrationManager::setup(Preferences *nvm, int controllerId, MultiplexedImus *imus)
 {
     this->imus = imus;
-    this->nvm=nvm;
+    this->nvm = nvm;
     for (int i = 0; i < N_SENSORS; i++)
     {
 #ifdef USE_HARD_CODED_CALIBRATION
@@ -26,40 +26,37 @@ void CalibrationManager::setup(Preferences *nvm, int controllerId, MultiplexedIm
 
 void CalibrationManager::calibrateSequence()
 {
-    Serial.println("Old calib values:");
-    for (int curSensorId = 0; curSensorId < N_SENSORS; curSensorId++)
-    {
-        calibrations[curSensorId].printCurrentCalibration();
-    }
 
+    printCalibrations();
     Serial.println("Starting calibration sequence.");
     Serial.println("Calibrating Gyro bias - don't move!");
-
 
     resetNVS(); // clear storage to make space for saving nvs data
     calibrateGyros();
     digitalWrite(PIN_BLUELED, HIGH); // Blue LED flash: ready to calibrate next sensor
 
     // wait until button is pressed again
-    uint32_t nCycles=0;
+    uint32_t nCycles = 0;
     while (!UserInterface::getCalibrationButtonState())
     {
         delay(10);
         nCycles++;
-        if(nCycles>200) return;
+        if (nCycles > 200)
+            return;
     }
     delay(200); // debounce
     // wait until button is released again
-    nCycles=0;
+    nCycles = 0;
     while (UserInterface::getCalibrationButtonState())
     {
         delay(10);
         nCycles++;
     }
     // if button was pressed less than one second, skip magnetometer calib
-    if(nCycles<100)return;
+    if (nCycles < 100)
+        return;
     delay(200); // debounce
-    
+
     digitalWrite(PIN_BLUELED, LOW);
     for (int curSensorId = 0; curSensorId < N_SENSORS; curSensorId++)
     {
@@ -67,6 +64,14 @@ void CalibrationManager::calibrateSequence()
         calibrateMagnetometerInteractive(curSensorId, &imus->imus[curSensorId]);
     }
     digitalWrite(PIN_BLUELED, LOW);
+}
+void CalibrationManager::printCalibrations()
+{
+    Serial.println("Old calib values:");
+    for (int curSensorId = 0; curSensorId < N_SENSORS; curSensorId++)
+    {
+        calibrations[curSensorId].printCurrentCalibration();
+    }
 }
 
 void CalibrationManager::calibrateMagnetometerInteractive(int sensorId, Imu *imu)
@@ -173,7 +178,7 @@ void CalibrationManager::calibrateGyros()
         calibrations[sensorIndex].gyro_zerorate[2] = meanGz[sensorIndex] / nAverageCycles;
         calibrations[sensorIndex].saveCalibration();
         Serial.print("Gyro bias:");
-         for (int i = 0; i < 3; i++)
+        for (int i = 0; i < 3; i++)
         {
             Serial.print(calibrations[sensorIndex].gyro_zerorate[i]);
             Serial.print("\t");

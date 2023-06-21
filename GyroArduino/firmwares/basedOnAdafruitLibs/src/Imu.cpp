@@ -106,7 +106,7 @@ void Imu::prepareOscMessage(){
   oscMessage.setFloat(13, mag_event.magnetic.x);
   oscMessage.setFloat(14,  mag_event.magnetic.y);
   oscMessage.setFloat(15,  mag_event.magnetic.z);
-
+  oscMessage.setFloat(16,  errorCounter);
 
   oscMessage.hasBeenSent=false;
   oscMessageMutex.unlock();
@@ -115,12 +115,15 @@ void Imu::prepareOscMessage(){
 
 void Imu::update()
 {
+  lastErrorCode=0;
   unsigned long timestamp=micros();
   
   checkReconnect();
   readSensor();
   unsigned long timediff=micros()-timestamp;
   if(timediff>5000){
+    lastErrorCode=1;
+    errorCounter++;
     Serial.print ("I2C of sensor");
     Serial.print(sensorId+1);
 
@@ -195,7 +198,7 @@ void Imu::sendOsc(WiFiUDP &Udp, IPAddress &receiverIp, int receiverPort)
   if (!oscMessage.hasBeenSent)
   {
     Udp.beginPacket(receiverIp, receiverPort);
-    oscMessage.setFloat(16, debugPackageIndex);
+    //oscMessage.setFloat(16, debugPackageIndex);
     debugPackageIndex++;
     Udp.write((uint8_t *)oscMessage.buffer, oscMessage.messageLength);
     oscMessage.hasBeenSent = true;
@@ -217,9 +220,12 @@ void Imu::checkReconnect()
   updatesSinceLastReconnectCheck=0;
   if (reconnectCount < 1000)
   {
+    
     // try to detect sensor reconnect by checking if mag data rate is the same that we set.
     if (ICM20948_ACCEL_RANGE_4_G != sensor.getAccelRange())
     {
+      lastErrorCode=2;
+      errorCounter++;
       Serial.print("Sensor ");
       Serial.print(oscName);
       Serial.println("is not functional - trying to revive it.");

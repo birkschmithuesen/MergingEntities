@@ -18,6 +18,8 @@ public:
     void sendOscAll(WiFiUDP& Udp,IPAddress& receiverIp,int receiverPort);
     Imu imus[N_SENSORS];
     HardCodedCalibration calibrations[N_SENSORS] ; // these are loaded on setup
+    ImuOscMessage statusMessage; // used to send error counters of all imus
+    int highestErrorCode=0; // highest error code of all imus in last update
 private:
  void buildOscName(int controllerId,int sensorIndex, char*dst);    
 };

@@ -20,6 +20,7 @@ public:
     NvmStoredCalibration calibrations[N_SENSORS] ; // these are loaded from flash
 
     void calibrateSequence();
+    void printCalibrations();
     void calibrateGyros();
     void calibrateMagnetometerInteractive(int sensorId, Imu* imu);
     void calibrateMagnetometer(int sensorId, Imu* imu);

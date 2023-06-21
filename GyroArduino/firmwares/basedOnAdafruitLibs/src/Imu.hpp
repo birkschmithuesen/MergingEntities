@@ -42,6 +42,7 @@ public:
     };
     ImuErrorStates lastErrorState;
     int lastErrorCode = 0;
+    int errorCounter=0;
     uint32_t updatesSinceLastReconnectCheck=0;
     sensors_event_t mag_event, gyro_event, temp_event, accel_event;
 private:
@@ -49,6 +50,7 @@ private:
 
     char oscName[200];
     int sensorId=0;
+
     std::mutex oscMessageMutex; /**< controls access to the content of @oscMessage */
     ImuOscMessage oscMessage; /**< a buffer for a pre formed oscMessage, ready to be sent by the WiFi-send-task. lock @oscMessageMutex during access*/
 

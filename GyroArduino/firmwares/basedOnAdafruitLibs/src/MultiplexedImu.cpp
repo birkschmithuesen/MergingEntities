@@ -17,7 +17,7 @@ void MultiplexedImus::setupAll(int controllerId, CalibrationManager *calibration
         buildOscName(controllerId, i, oscNameBuffer);
 
         // let the imu do its setup
-        imus[i].setup(oscNameBuffer,i, &(calibrationManager->calibrations[i]));
+        imus[i].setup(oscNameBuffer, i, &(calibrationManager->calibrations[i]));
 
         if (imus[i].lastErrorState == Imu::sensorConfigSuccess)
             nImusWorking++;
@@ -26,15 +26,25 @@ void MultiplexedImus::setupAll(int controllerId, CalibrationManager *calibration
     Serial.print(" out of ");
     Serial.print(N_SENSORS);
     Serial.println(" set up successfully!");
+
+    char statusAdress[50];
+    strcpy(statusAdress, "/body/");
+    strcat(statusAdress, controllerNames[controllerId]);
+    strcat(statusAdress, "/status/");
+    statusMessage.init(statusAdress, 8);
 }
 
 void MultiplexedImus::updateAll()
 {
+    highestErrorCode=0;
     for (int i = 0; i < N_SENSORS; i++)
     {
         // set multiplexer channel
         I2CMultiplexer::selectI2cMultiplexerChannel(i);
+        // get data and update sensor fusion
         imus[i].update();
+        if(highestErrorCode<imus[i].lastErrorCode)highestErrorCode=imus[i].lastErrorCode;
+        statusMessage.setFloat(i, imus[i].errorCounter);
     }
 }
 void MultiplexedImus::sendOscAll(WiFiUDP &Udp, IPAddress &receiverIp, int receiverPort)
@@ -42,9 +52,8 @@ void MultiplexedImus::sendOscAll(WiFiUDP &Udp, IPAddress &receiverIp, int receiv
     for (int i = 0; i < N_SENSORS; i++)
     {
         imus[i].sendOsc(Udp, receiverIp, receiverPort);
-
     }
-            vTaskDelay(2); // to avoid starving other tasks;
+    vTaskDelay(2); // to avoid starving other tasks;
 }
 
 void MultiplexedImus::printSerialAll()
