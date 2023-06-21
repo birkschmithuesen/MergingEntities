@@ -171,7 +171,7 @@ scale = FloatArray[48, 55, 60, 67];//some 5ths starting from c4
 ~numBodies = 1;
 
 // load samples
-~b1 = Buffer.read(s, Platform.resourceDir +/+ "sounds/a11wlk01.wav");
+~b1 = Buffer.read(s, PathName(thisProcess.nowExecutingPath).parentPath ++ "Samples/test_1.aif");
 
 // create Synths
 ~grains = {arg i; Synth.head(~grainGroup, \grain, [\out, i*2, \sndbuf, ~b1])}!~numBodies;

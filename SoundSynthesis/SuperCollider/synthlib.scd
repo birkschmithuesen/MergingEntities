@@ -91,11 +91,12 @@ SynthDef(\kling, {
 
 
 SynthDef(\grain, {
-	arg sndbuf, amp = 1, exc = 1, dur = 0.5, rate = 0.5, pos = 0, out = 0;
+	arg sndbuf, amp = 1, exc = 1, dur = 0.5, rate = 0.5, pos = 0, out = 0, pan = 0.5;
     var sig, dur_mapped, rate_mapped;
 	dur_mapped = dur.linlin(0.0, 1.0, 0.05, 0.5);
 	rate_mapped = rate.linlin(0.0, 1.0, 0.5, 1.5);
 	sig = BufGrain.ar(Impulse.kr(1/dur_mapped), dur_mapped, sndbuf, rate_mapped, pos, 2)*exc;
+	sig = Pan2.ar(sig, pan);
 	Out.ar(out, sig);
 }).add;
 

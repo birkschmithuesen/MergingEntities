@@ -262,6 +262,11 @@ OscGrain{
 				},
 				{("received wrong OSC message length on address: " ++ address).postln}
 			);
+			if (msg[5] != nil,
+				{synth.set(\pan, msg[5].linlin(0, 1, -1.0, 1.0));
+				},
+				{("received wrong OSC message length on address: " ++ address).postln}
+			);
 		},
 		(address)
 		);
