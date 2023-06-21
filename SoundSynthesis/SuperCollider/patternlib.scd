@@ -53,7 +53,7 @@
 	\dur, Pseq([1/8],inf),
 	\midinote, 72,
 	\exc, ~exc[2],
-	\amp, 0.7, //Pwhite(),
+	\amp, 1, //Pwhite(),
 	\shape, ~shape[2],
 	//\atk, ~atk[2].linlin(0.0, 1.0, 6000, 9000), // 0.005,//Pfunc { ~attack },
 	\rel, ~atk[2].linlin(0.0, 1.0, 0.08, 0.3),
@@ -68,12 +68,12 @@
 	\dur, Pseq([1/4],inf), // + Pgauss(0, 0.005)),
 	\midinote, 30,
 	\exc, 1,
-	\amp, 1.75, //Pwhite(),
+	\amp, 2, //Pwhite(),
 	\shape, 0.5,
 	\atk, 0.001, // 0.005,//Pfunc { ~attack },
 	\rel, 0.08,
 	\stretch, Pfunc{~tempo},
-	\out, 10,
+	\out, 16,
 ).play(quant:1);
 
 )

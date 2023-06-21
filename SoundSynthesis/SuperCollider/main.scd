@@ -139,10 +139,10 @@ scale = FloatArray[48, 55, 60, 67];//some 5ths starting from c4
 
 // load fx
 ~efx = {0}!~numBodies;
-~efx[0] = Synth.new(\delay, [\in, ~efxBus[0], \out, 0], ~fxGrp);
-~efx[1] = Synth.new(\delay, [\in, ~efxBus[1], \out, 2], ~fxGrp);
-~efx[2] = Synth.new(\delay, [\in, ~efxBus[2], \out, 4], ~fxGrp);
-~efx[3] = Synth.new(\delay, [\in, ~efxBus[3], \out, 6], ~fxGrp);
+~efx[0] = Synth.new(\delay, [\in, ~efxBus[0], \out, 0+8], ~fxGrp);
+~efx[1] = Synth.new(\delay, [\in, ~efxBus[1], \out, 2+8], ~fxGrp);
+~efx[2] = Synth.new(\delay, [\in, ~efxBus[2], \out, 4+8], ~fxGrp);
+~efx[3] = Synth.new(\delay, [\in, ~efxBus[3], \out, 6+8], ~fxGrp);
 
 // load & play patterns
 ~path = PathName(thisProcess.nowExecutingPath).parentPath;
