@@ -75,7 +75,7 @@ OscNoise{
 			);
 			if (msg[2] != nil,
 				{
-					synth.set(\freq, msg[2].linexp(0, 1, 200, 10000));
+					synth.set(\freq, msg[2].linexp(0, 1, 400, 10000));
 					synth.set(\freq_gain, msg[2].linexp(0, 1, 10, 1));
 				},
 				{("received wrong OSC message length on address: " ++ address).postln}
