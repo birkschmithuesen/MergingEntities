@@ -399,8 +399,9 @@ CalibData calibrationSets[]{
 48.091114//magfield
 },
 
+// exchanged F2 with B2
 {
-5,      //controllerindex
+1,      //controllerindex
 1,      //sensorIndex
 {0.000000,0.000000,0.000000},//accelBias
 {-0.001771,0.010875,0.000515},//gyrobias
