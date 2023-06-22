@@ -28,5 +28,10 @@
 		"username": "ML2",
 		"environment-name": "td_merging-entities",
 		"environment-location": "C:/Users/ML2/anaconda3/envs/td_merging-entities"
+	},
+	"data":{
+		"username": "data",
+		"environment-name": "td_merging-entities",
+		"environment-location": "C:/Users/data/anaconda3/envs/td_merging-entities"
 	}
  }
