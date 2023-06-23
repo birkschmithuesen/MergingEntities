@@ -5,7 +5,7 @@ SynthDef(\moog, {
 	freq = freq + (freq * (Rand(-1.0, 1.0) * detune));
 	sig = Pulse.ar([freq/2.98, freq], [0.3, 0.7]) * exc;
 	sig = Pan2.ar(sig[0], pan-0.3) + Pan2.ar(sig[1], pan+0.3);
-	sig = MoogFF.ar(sig, cutoff * SinOsc.ar(speed, 0.0, depth, 0.5), res * 4) * 0.2 * amp;
+	sig = MoogFF.ar(sig, cutoff * SinOsc.ar(speed, 0.0, depth, 0.5), res * 4) * 0.2 * amp * 1.6;
 	Out.ar(out, sig);
 }).add;
 
@@ -15,7 +15,7 @@ SynthDef(\noise, {
 	var sig;
 	sig = WhiteNoise.ar(0.4) * exc;
 	sig = MoogFF.ar(sig, freq, moog_gain) * freq_gain;
-	sig = sig * amp * 0.7;
+	sig = sig * amp * 0.4;
 	sig = Pan2.ar(sig, pan);
 	Out.ar(out, sig);
 }).add;
@@ -71,7 +71,7 @@ SynthDef(\lead, {
 
 	// add some 70's euro-space-rock echo
 	sig = sig * exc * 0.4;
-	sig = CombN.ar(sig, 0.2, 0.2, 0.5, 1, sig) * amp;
+	sig = CombN.ar(sig, 0.2, 0.2, 0.5, 1, sig) * amp * 1.6;
 	sig = Pan2.ar(Mix.ar(sig), pan);
 	//sig = Mix.ar(sig);
 	Out.ar(out, sig);
@@ -87,7 +87,7 @@ SynthDef(\kling, {
 		LFSaw.kr(dens, 1.0).range(freq, freq + lfodepth) * dev
 	], decay);
 	sig = Pan2.ar(sig[0], (-0.2 + pan)) + Pan2.ar(sig[1], (0.2 + pan));//Mix.new(sig * amp);
-	sig = sig * amp;
+	sig = sig * amp * 1.5;
 	Out.ar(out, sig);
 }).add;
 

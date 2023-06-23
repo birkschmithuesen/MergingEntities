@@ -58,10 +58,10 @@ OscMoog{
 
 
 OscNoise{
-	var <synth, address;
+	var <synth, address, freq_min, freq_max;
 
-	*new {arg synth, address;
-		^super.newCopyArgs(synth, address).init;
+	*new {arg synth, address, freq_min, freq_max;
+		^super.newCopyArgs(synth, address, freq_min, freq_max).init;
 	}
 
 	init {
@@ -75,7 +75,7 @@ OscNoise{
 			);
 			if (msg[2] != nil,
 				{
-					synth.set(\freq, msg[2].linexp(0, 1, 400, 10000));
+					synth.set(\freq, msg[2].linexp(0, 1, freq_min, freq_max));
 					synth.set(\freq_gain, msg[2].linexp(0, 1, 10, 1));
 				},
 				{("received wrong OSC message length on address: " ++ address).postln}
