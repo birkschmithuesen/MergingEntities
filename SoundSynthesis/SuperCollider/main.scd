@@ -150,6 +150,10 @@ scale = FloatArray[48, 55, 60, 67];//some 5ths starting from c4
 
 
 // make the patterns controllable via osc
+//~oscPattern = OscPattern.new([~exc[0], ~shape[0], ~atk[0], ~pan[0]], '/sequencer/' ++ 4, ~efx[0]);
+//~oscPattern = OscPattern.new([~exc[1], ~shape[1], ~atk[1], ~pan[1]], '/sequencer/' ++ 1, ~efx[1]);
+//~oscPattern = OscPattern.new([~exc[2], ~shape[2], ~atk[2], ~pan[2]], '/sequencer/' ++ 2, ~efx[2]);
+//~oscPattern = OscPattern.new([~exc[3], ~shape[3], ~atk[3], ~pan[3]], '/sequencer/' ++ 0, ~efx[3]);
 ~oscPattern = {arg i; OscPattern.new([~exc[i], ~shape[i], ~atk[i], ~pan[i]], '/sequencer/' ++ i, ~efx[i])}!~numBodies;
 //~oscPatternGroup = OscStandartGroup.new(~patternGroup, ('/pattern/group'), );
 )

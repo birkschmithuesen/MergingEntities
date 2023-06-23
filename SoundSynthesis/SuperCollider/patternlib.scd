@@ -20,17 +20,19 @@
 ~steady = Pbind(
 	\instrument, \sine,
 	\group, ~patternGroup,
-	\dur, Pseq([1/6],inf),
-	\midinote, 53,
+	\dur, Pseq([1/12],inf),
+	\midinote, 80,
 	\exc, ~exc[1],
 	\amp, 1, //Pwhite(),
 	\shape, ~shape[1],
-	\atk, ~atk[1].linlin(0.0, 1.0, 0.0, 0.15), // 0.005,//Pfunc { ~attack },
+	\atk, ~atk[1].linlin(0.0, 1.0, 0.0, 0.05), // 0.005,//Pfunc { ~attack },
 	\rel, 0.15, //~rel[1].linlin(0.0, 1.0, 0.0, 0.25),
 	\stretch, Pfunc{~tempo},
 	\pan, ~pan[1].linlin(0.0, 1.0, -1.0, 1.0),
 	\out, ~efxBus[1],
 ).play(quant:1);
+
+
 
 ~bass = Pbind(
 	\instrument, \sine,
@@ -41,7 +43,7 @@
 	\amp, 2.5, //Pwhite(),
 	\shape, ~shape[3],
 	\atk, ~atk[3].linlin(0.01, 1.0, 0.0, 0.15), // 0.005,//Pfunc { ~attack },
-	\rel, ~rel[3].linlin(0.0, 1.0, 0.02, 0.2),
+	\rel, 0.3, //~rel[3].linlin(0.0, 1.0, 0.02, 0.2),
 	\stretch, Pfunc{~tempo},
 	\pan, ~pan[3].linlin(0.0, 1.0, -1.0, 1.0),
 	\out, ~efxBus[3],
@@ -53,7 +55,7 @@
 	\dur, Pseq([1/8],inf),
 	\midinote, 72,
 	\exc, ~exc[2],
-	\amp, 1, //Pwhite(),
+	\amp, 1.5, //Pwhite(),
 	\shape, ~shape[2],
 	//\atk, ~atk[2].linlin(0.0, 1.0, 6000, 9000), // 0.005,//Pfunc { ~attack },
 	\rel, ~atk[2].linlin(0.0, 1.0, 0.08, 0.3),
@@ -65,9 +67,9 @@
 ~kick = Pbind(
 	\instrument, \sine,
 	\group, ~patternGroup,
-	\dur, Pseq([1/4],inf), // + Pgauss(0, 0.005)),
-	\midinote, 30,
-	\exc, 1,
+	\dur, Pseq([1/4, 1/4, 1/4, 1/8, 1/8],inf), // + Pgauss(0, 0.005)),
+	\midinote, 30, //Pseq([20, 30, 30, 30], inf),
+	\exc, Pseq([1, 1, 1, 1, 0.2], inf),
 	\amp, 2, //Pwhite(),
 	\shape, 0.5,
 	\atk, 0.001, // 0.005,//Pfunc { ~attack },
@@ -75,6 +77,21 @@
 	\stretch, Pfunc{~tempo},
 	\out, 16,
 ).play(quant:1);
+
+~marker = Pbind(
+	\instrument, \sine,
+	\group, ~patternGroup,
+	\dur, Pseq([4],inf), // + Pgauss(0, 0.005)),
+	\midinote, 40, //Pseq([20, 30, 30, 30], inf),
+	\exc, 1.2,
+	\amp, 2, //Pwhite(),
+	\shape, 0.5,
+	\atk, 0.001, // 0.005,//Pfunc { ~attack },
+	\rel, 1,
+	\stretch, Pfunc{~tempo},
+	\out, 16,
+).play(quant:1);
+
 
 )
 
