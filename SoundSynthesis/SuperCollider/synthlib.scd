@@ -15,7 +15,7 @@ SynthDef(\noise, {
 	var sig;
 	sig = WhiteNoise.ar(0.4) * exc;
 	sig = MoogFF.ar(sig, freq, moog_gain) * freq_gain;
-	sig = sig * amp * 0.4;
+	sig = sig * amp * 0.8;
 	sig = Pan2.ar(sig, pan);
 	Out.ar(out, sig);
 }).add;
@@ -71,7 +71,7 @@ SynthDef(\lead, {
 
 	// add some 70's euro-space-rock echo
 	sig = sig * exc * 0.4;
-	sig = CombN.ar(sig, 0.2, 0.2, 0.5, 1, sig) * amp * 1.6;
+	sig = CombN.ar(sig, 0.2, 0.2, 0.5, 1, sig) * amp * 2.4;
 	sig = Pan2.ar(Mix.ar(sig), pan);
 	//sig = Mix.ar(sig);
 	Out.ar(out, sig);
@@ -104,17 +104,27 @@ SynthDef(\grain, {
 
 
 SynthDef.new(\sine, {
-	arg amp=1, exc = 1, freq=440, atk=0.005, rel=0.3, shape = 0, pan=0, out=0;
+	arg amp=1, exc = 1, freq=440, atk=0.005, rel=0.3, shape = 0, pan=0, dev = 1, out=0;
 	var sig, osc1, osc2, env, addr;
-	osc1 = SinOsc.ar(freq) * exc * 1.75;
+	osc1 = SinOsc.ar([freq * dev, freq * dev.reciprocal ]) * exc * 1.75;
 	osc2 = VarSaw.ar(freq) * exc;
 	sig = (osc1 * (1-shape)) + (osc2 * shape);
 	env = EnvGen.kr(Env.new([0, 1, 0], [atk, rel], [1,-1]), doneAction:2);
-	sig = Pan2.ar(sig, pan, amp);
+	sig = Pan2.ar(Mix.ar(sig), pan, amp);
 	sig = sig * env * 0.4;
 	Out.ar(out, sig);
 }).add;
 
+SynthDef(\moog_t, {
+	arg freq = 120, atk=0.005, rel=0.3, amp = 1, exc = 0, cutoff = 2000, res = 0.5, speed = 10, depth = 0.0, detune = 0, pan = 0.5, out = 0;
+	var sig, env;
+	freq = freq + (freq * (Rand(-1.0, 1.0) * detune));
+	sig = Pulse.ar([freq/2.98, freq], [0.3, 0.7]) * exc;
+	env = EnvGen.kr(Env.new([0, 1, 0], [atk, rel], [1,-1]), doneAction:2);
+	sig = Pan2.ar(sig[0], pan-0.3) + Pan2.ar(sig[1], pan+0.3);
+	sig = MoogFF.ar(sig, cutoff * SinOsc.ar(speed, 0.0, depth, 0.5), res * 4) * 0.2 * amp * 1.6 * env;
+	Out.ar(out, sig);
+}).add;
 
 
 SynthDef(\shaker, {
@@ -122,12 +132,28 @@ SynthDef(\shaker, {
 	var sig, osc1, osc2, env;
 	//osc1 = BrownNoise.ar(0.3) * exc;
 	osc1 = WhiteNoise.ar(1) * exc;
-	osc2 = MoogFF.ar(osc1, freq, 2);
-	sig = (osc1 * (0.2 - shape.linlin(0.0, 1.0, 0.0, 0.2)) + (osc2 * shape.linlin(0.0, 1.0, 0.5, 1.0)));
+	osc2 = BrownNoise.ar(1) * exc; //MoogFF.ar(osc1, freq, 2);
+	sig = (osc1 * (0.2 - shape.linlin(0.0, 1.0, 0.0, 0.2)) + (osc2 * shape.linlin(0.0, 1.0, 0.0, 0.4)));
 	//sig = MoogFF.ar(sig, atk, 2);
 	env = EnvGen.kr(Env.new([0, 1, 0], [0.01, rel.linlin(0.0, 1.0, 0.001, 0.2)], [1,-1]), doneAction:2);
 	sig = sig * amp * 0.2;
 	sig = Pan2.ar(sig, pan, amp);
+	Out.ar(out, sig);
+}).add;
+
+
+SynthDef(\kling_t, {
+	arg amp = 1, exc = 1, dens = 1, atk=0.00, rel=0.3, freq = 1000, dev = 1.01, lfodepth = 10, decay = 1.0, wide = 0.02, pan = 0.0, out = 0;
+	var sig, env;
+	sig = {arg count; Impulse.ar(0) * LFNoise0.kr(10, 0.5, 0.5) * exc * 0.5}!2;
+	env = EnvGen.kr(Env.new([0, 1, 0], [atk, rel], [1,-1]), doneAction:2);
+	sig = Ringz.ar(sig, [
+		LFSaw.kr(dens, 0.0).range(freq - lfodepth, freq) * dev.reciprocal,
+		LFSaw.kr(dens, 1.0).range(freq, freq + lfodepth) * dev
+	], decay);
+
+	sig = Pan2.ar(sig[0], (-0.2 + pan)) + Pan2.ar(sig[1], (0.2 + pan));//Mix.new(sig * amp);
+	sig = sig * amp;
 	Out.ar(out, sig);
 }).add;
 )

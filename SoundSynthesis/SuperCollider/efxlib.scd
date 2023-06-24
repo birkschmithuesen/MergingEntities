@@ -11,7 +11,7 @@ SynthDef.new(\delay, {
 	var sig, dry, wet;
 	dry = In.ar(in, 2);
 	wet = CombN.ar(dry, ~tempo/4/4, ~tempo/4/4);
-	sig = dry + (wet * mix);
+	sig = dry + (wet * mix.lincurve(0.0, 1.0, 0.0, 0.3, 1));
 	Out.ar(out, sig);
 }).add;
 
@@ -19,7 +19,7 @@ SynthDef.new(\reverb, {
 	arg out=0, in, mix = 0.0;
 	var sig, rev;
 	sig = In.ar(in, 2);
-	sig = FreeVerb.ar(sig, mix.linlin(0.0, 1.0, 0.0, 0.5), 0.8, 0.2);
+	sig = FreeVerb.ar(sig, mix.lincurve(0.0, 1.0, 0.0, 0.5), 0.8, 0.2);
 	Out.ar(out, sig);
 }).add;
 
