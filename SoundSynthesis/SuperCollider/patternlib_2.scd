@@ -1,6 +1,7 @@
 
 (
-~tripples.stream = Pbind(
+~tripples.stop;
+~tripples = Pbind(
 	\instrument, \sine,
 	\group, ~patternGroup,
 	\address, 'tripples',
@@ -15,10 +16,11 @@
 	\dev, ~atk[0].linlin(0.0, 1.0, 1.0, 1.05),
 	\pan, ~pan[0].linlin(0.0, 1.0, -1.0, 1.0),
 	\out, ~efxBus[0],
-).asStream;
+).play(quant:4);
 
 
-~steady.stream = Pbind(
+~steady.stop;
+~steady = Pbind(
 	\instrument, \kling_t,
 	\group, ~patternGroup,
 	\dur, Pseq([1/6, 1/6, 1/12, 1/24, 1/24],inf),
@@ -33,11 +35,11 @@
 	\stretch, Pfunc{~tempo},
 	\pan, ~pan[1].linlin(0.0, 1.0, -1.0, 1.0),
 	\out, ~efxBus[1],
-).asStream;
+).play(quant:4);
 
 
-
-~bass.stream = Pbind(
+~bass.stop;
+~bass = Pbind(
 	\instrument, \moog_t,
 	\group, ~patternGroup,
 	\dur, Pseq([1/2, 1/8, 3/8, 1/2, 1/8, 1/8, 1/8, 1/8], inf),
@@ -50,9 +52,9 @@
 	\stretch, Pfunc{~tempo},
 	\pan, ~pan[3].linlin(0.0, 1.0, -1.0, 1.0),
 	\out, ~efxBus[3],
-).asStream;
+).play(quant:4);
 
-
+~shaker.stop;
 ~shaker.stream = Pbind(
 	\instrument, \shaker,
 	\group, ~patternGroup,
@@ -65,5 +67,5 @@
 	\stretch, Pfunc{~tempo},
 	\out, ~efxBus[2],
 	\pan, ~pan[2].linlin(0.0, 1.0, -1.0, 1.0),
-).asStream;
+).play(quant:4);
 )

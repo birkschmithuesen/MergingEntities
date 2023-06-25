@@ -175,7 +175,9 @@ scale = FloatArray[48, 55, 60, 67];//some 5ths starting from c4
 ~numBodies = 1;
 
 // load samples
-~b1 = Buffer.read(s, PathName(thisProcess.nowExecutingPath).parentPath ++ "Samples/test_1.aif");
+~b1 = Buffer.read(s, PathName(thisProcess.nowExecutingPath).parentPath ++ "Samples/Sample_1.aif");
+
+//~b1.play;
 
 // create Synths
 ~grains = {arg i; Synth.head(~grainGroup, \grain, [\out, i*2, \sndbuf, ~b1])}!~numBodies;
@@ -185,4 +187,34 @@ scale = FloatArray[48, 55, 60, 67];//some 5ths starting from c4
 // make the Synth controllable via OSC
 ~oscGrain = {arg i; OscGrain.new(~grains[i], ('/grain/' ++ i))}!~numBodies;
 ~oscGrainGroup = OscStandartGroup.new(~grainGroup, ('/grain/group'));
+)
+
+
+
+(
+// SAMPLE PLAYER
+
+/*
+(
+b = Dictionary.new;
+PathName(thisProcess.nowExecutingPath).parentPath ++ "Samples/").entries.do{
+	arg subfolder;
+	b.add(subfolder.folderName.asSymbol ->
+		Array.fill(
+			subfolder.entries.size,
+			{
+				arg i;
+				Buffer.read(s, subfolder.entries[i].fullPath);
+			}
+		)
+	);
+};
+)
+*/
+
+~b1 = Buffer.read(s, PathName(thisProcess.nowExecutingPath).parentPath ++ "Samples/sampler/1/Hayato_1.aif");
+
+~b1.play;
+~b1.stop;
+
 )
