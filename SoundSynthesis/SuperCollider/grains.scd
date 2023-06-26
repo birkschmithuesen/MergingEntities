@@ -28,7 +28,7 @@
 //~b1.play;
 
 // create Synths
-~grains = {arg i; Synth.head(~grainGroup, \grain, [\out, i*2, \sndbuf, ~b1[i]])}!~numGrains;
+~grains = {arg i; Synth.head(~grainGroup, \grain, [\out, 10, \sndbuf, ~b1[i]])}!~numGrains;
 {arg i; ("Created "++~grains[i]).postln}!~numBodies;
 
 

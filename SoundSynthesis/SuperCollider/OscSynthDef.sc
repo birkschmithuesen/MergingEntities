@@ -337,7 +337,7 @@ OscStandartGroup{
 		OSCFunc({
 			arg msg;
 			if (msg[1] != nil,
-				{group.set(\amp, msg[1]);},
+				{group.set(\amp, msg[1])},
 				{("received wrong OSC message length on address: " ++ address).postln}
 			);
 		},

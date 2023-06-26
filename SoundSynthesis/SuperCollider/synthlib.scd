@@ -98,7 +98,7 @@ SynthDef(\grain, {
 	dur_mapped = dur.linlin(0.0, 1.0, 0.05, 2);
 	rate_mapped = rate.linlin(0.0, 1.0, 0.2, 1);
 	sig = BufGrain.ar(Impulse.kr(1/dur_mapped), dur_mapped, sndbuf, rate_mapped, pos, 2)*exc*amp;
-	sig = Pan2.ar(sig, pan) * 0.2;
+	sig = Pan2.ar(sig, pan) * 0.3;
 	Out.ar(out, sig);
 }).add;
 
