@@ -1,7 +1,7 @@
 
 (
 // PATTERNS
-
+(~path++"grains.scd").load;
 
 // create pattern proxies
 ~exc = {PatternProxy.new}!~numBodies;

@@ -35,11 +35,12 @@ s.reboot{
 )
 
 
+// SZENE 1 WHEEL
+(~path++"wheel.scd").load;
+
 
 (~path++"parts.scd").load;
 
-(~path++"wheel.scd").load;
-
 (~path++"machine.scd").load;
+(~path++"patternlib_2.scd").load;
 
-(~path++"grains.scd").load;
