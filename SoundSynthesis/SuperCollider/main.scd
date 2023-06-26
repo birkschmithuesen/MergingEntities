@@ -79,13 +79,13 @@ scale = FloatArray[48, 55, 60, 67];//some 5ths starting from c4
 ~oscMoog = {arg i; OscMoog.new(~moogs[i], ('/moog/' ++ i), 0.0, 1.3)}!~numBodies;
 ~oscMoogGroup = OscStandartGroup.new(~moogGroup, ('/moog/group'), 0.0, 2.0);
 
-~oscNoise = {arg i; OscNoise.new(~noises[i], ('/noise/' ++ i), 400 + (1000 * i), 1000 + (2000*i))}!~numBodies;
+~oscNoise = {arg i; OscNoise.new(~noises[i], ('/noise/' ++ i), 600 + (50 * i), 1000 + (2000*i))}!~numBodies;
 ~oscNoiseGroup = OscStandartGroup.new(~noiseGroup, ('/noise/group'));
 
 //~oscSaw = {arg i; OscSaw.new(~saws[i], ('/saw/' ++ i))}!~numBodies;
 //~oscSawGroup = OscDetuneGroup.new(~sawGroup, ('/saw/group'), 1.01, 1.5);
 
-~oscLead = {arg i; OscLead.new(~leads[i], ('/lead/' ++ i), -12 + (i*5), -4 + (i*6), 0.04, 2.0)}!~numBodies;
+~oscLead = {arg i; OscLead.new(~leads[i], ('/lead/' ++ i), -8 + (i*3), 0 +(i*3), 0.04, 2.0)}!~numBodies;
 ~oscLeadGroup = OscStandartGroup.new(~leadGroup, ('/lead/group'));
 )
 
@@ -172,20 +172,29 @@ scale = FloatArray[48, 55, 60, 67];//some 5ths starting from c4
 ~grainGroup = Group.new;
 
 // define number of performers bodies
-~numBodies = 1;
+~numGrains = 3;
 
 // load samples
-~b1 = Buffer.read(s, PathName(thisProcess.nowExecutingPath).parentPath ++ "Samples/Sample_1.aif");
+~b1 = {0}!~numBodies;
+~b1[0] = Buffer.read(s, PathName(thisProcess.nowExecutingPath).parentPath ++ "Samples/sampler/grainer/1.aif");
+~b1[1] = Buffer.read(s, PathName(thisProcess.nowExecutingPath).parentPath ++ "Samples/sampler/grainer/2.aif");
+~b1[2] = Buffer.read(s, PathName(thisProcess.nowExecutingPath).parentPath ++ "Samples/sampler/grainer/3.aif");
+
+/*
+~b1[0] = Buffer.read(s, PathName(thisProcess.nowExecutingPath).parentPath ++ "Samples/sampler/1/Shar_1.aif");
+~b1[1] = Buffer.read(s, PathName(thisProcess.nowExecutingPath).parentPath ++ "Samples/sampler/2/Howool_1.aif");
+~b1[2] = Buffer.read(s, PathName(thisProcess.nowExecutingPath).parentPath ++ "Samples/sampler/2/Hayato_1.aif");
+*/
 
 //~b1.play;
 
 // create Synths
-~grains = {arg i; Synth.head(~grainGroup, \grain, [\out, i*2, \sndbuf, ~b1])}!~numBodies;
+~grains = {arg i; Synth.head(~grainGroup, \grain, [\out, i*2, \sndbuf, ~b1[i]])}!~numGrains;
 {arg i; ("Created "++~grains[i]).postln}!~numBodies;
 
 
 // make the Synth controllable via OSC
-~oscGrain = {arg i; OscGrain.new(~grains[i], ('/grain/' ++ i))}!~numBodies;
+~oscGrain = {arg i; OscGrain.new(~grains[i], ('/grain/' ++ i))}!~numGrains;
 ~oscGrainGroup = OscStandartGroup.new(~grainGroup, ('/grain/group'));
 )
 

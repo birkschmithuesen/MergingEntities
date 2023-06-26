@@ -28,7 +28,7 @@
 	//\freq, 3000,
 	\exc, ~exc[1],
 	\amp, 1, //Pwhite(),
-	\decay, ~shape[1].linlin(0.0, 1.0, 0.04, 0.2),
+	\decay, ~shape[1].linlin(0.0, 1.0, 0.04, 0.3),
 	\atk, 0.15, //~atk[1].linlin(0.0, 1.0, 0.0, 0.05), // 0.005,//Pfunc { ~attack },
 	\dev, ~atk[1].linlin(0.0, 1.0, 1.0, 1.1),
 	\rel, 0.1, //~rel[1].linlin(0.0, 1.0, 0.0, 0.25),
