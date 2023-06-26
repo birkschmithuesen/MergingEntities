@@ -23,9 +23,9 @@
 ~steady = Pbind(
 	\instrument, \kling_t,
 	\group, ~patternGroup,
-	\dur, Pseq([1/6, 1/6, 1/12, 1/24, 1/24],inf),
-	//\midinote, 70,
-	\freq, Pseq([3000, 3000, 3000, 3000, 3000, 3000, 2900],inf),
+	\dur, Pseq([1/12, 1/12],inf),
+	\midinote, Pseq([65, 64], inf),
+	//\freq, Pseq([3000, 3000, 3000, 3000, 3000, 3000, 2900],inf),
 	\exc, ~exc[1],
 	\amp, 1, //Pwhite(),
 	\decay, ~shape[1].linlin(0.0, 1.0, 0.04, 0.2),

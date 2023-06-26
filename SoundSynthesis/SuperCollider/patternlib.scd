@@ -1,5 +1,7 @@
 
 (
+
+~tripples.stop;
 ~tripples = Pbind(
 	\instrument, \sine,
 	\group, ~patternGroup,
@@ -17,13 +19,13 @@
 	\out, ~efxBus[0],
 ).play(quant:4);
 
-
+~steady.stop;
 ~steady = Pbind(
 	\instrument, \kling_t,
 	\group, ~patternGroup,
 	\dur, Pseq([1/12],inf),
-	//\midinote, 70,
-	\freq, 3000,
+	\midinote, 65,
+	//\freq, 3000,
 	\exc, ~exc[1],
 	\amp, 1, //Pwhite(),
 	\decay, ~shape[1].linlin(0.0, 1.0, 0.04, 0.2),
@@ -36,7 +38,7 @@
 ).play(quant:4);
 
 
-
+~bass.stop;
 ~bass = Pbind(
 	\instrument, \moog_t,
 	\group, ~patternGroup,
@@ -52,7 +54,7 @@
 	\out, ~efxBus[3],
 ).play(quant:4);
 
-
+~shaker.stop;
 ~shaker = Pbind(
 	\instrument, \shaker,
 	\group, ~patternGroup,
@@ -68,6 +70,7 @@
 	\pan, ~pan[2].linlin(0.0, 1.0, -1.0, 1.0),
 ).play(quant:4);
 
+~kick.stop;
 ~kick = Pbind(
 	\instrument, \sine,
 	\group, ~patternGroup,
