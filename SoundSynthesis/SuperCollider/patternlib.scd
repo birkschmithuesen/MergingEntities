@@ -82,7 +82,7 @@
 	\atk, 0.001, // 0.005,//Pfunc { ~attack },
 	\rel, 0.08,
 	\stretch, Pfunc{~tempo},
-	\out, 16,
+	\out, 8,
 ).play(quant:4);
 
 /*
