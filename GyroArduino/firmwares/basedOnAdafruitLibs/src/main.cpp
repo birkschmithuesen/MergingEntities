@@ -19,7 +19,7 @@
 #include "MultiplexedImu.hpp"
 #include "NvmStoredCalibration.h"
 
-#define CONTROLLER_ID 5
+#define CONTROLLER_ID 3
 
 //////network related stuff
 // WiFiUdp Udp;                            /**< handler for UDP communication */

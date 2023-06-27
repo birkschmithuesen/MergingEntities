@@ -300,6 +300,7 @@ CalibData calibrationSets[]{
 42.808502//magfield
 },
 
+/* Sensor D8 is dead
 {
 3,      //controllerindex
 7,      //sensorIndex
@@ -309,6 +310,8 @@ CalibData calibrationSets[]{
 {1.036276,-0.002120,-0.004021,-0.002120,0.955409,0.001358,-0.004021,0.001358,1.010054},//softIron
 40.515854//magfield
 },
+
+*/
 {
 4,      //controllerindex
 0,      //sensorIndex
@@ -379,8 +382,9 @@ CalibData calibrationSets[]{
 43.255875//magfield
 },
 
+//exchanged broken sonsor from controller D
 {
-4,      //controllerindex
+3,      //controllerindex
 7,      //sensorIndex
 {0.000000,0.000000,0.000000},//accelBias
 {0.016313,-0.011989,-0.002902},//gyrobias
@@ -388,6 +392,7 @@ CalibData calibrationSets[]{
 {1.022890,-0.007142,0.001809,-0.007142,0.978476,0.007260,0.001809,0.007260,0.999236},//softIron
 48.656448//magfield
 },
+
 
 {
 5,      //controllerindex
