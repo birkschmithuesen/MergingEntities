@@ -240,6 +240,7 @@ CalibData calibrationSets[]{
 46.307453//magfield
 },
 
+/* controller dead
 {
 3,      //controllerindex
 1,      //sensorIndex
@@ -249,6 +250,8 @@ CalibData calibrationSets[]{
 {1.013960,-0.009680,0.004089,-0.009680,0.978747,-0.009619,0.004089,-0.009619,1.007853},//softIron
 46.222439//magfield
 },
+
+*/
 
 {
 3,      //controllerindex
@@ -322,8 +325,9 @@ CalibData calibrationSets[]{
 48.342388//magfield
 },
 
+// exchanged with D2
 {
-4,      //controllerindex
+3,      //controllerindex
 1,      //sensorIndex
 {0.000000,0.000000,0.000000},//accelBias
 {-0.018391,0.002261,-0.002619},//gyrobias
